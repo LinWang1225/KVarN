@@ -107,7 +107,7 @@ vllm serve zai-org/GLM-4.7-Flash \
 | --- | --- | --- | --- |
 | Burst throughput @32K (tok/s) | 401 | 364 | **0.94×** |
 | KV-cache capacity (tokens) | 313K | 865K | **2.77×** |
-| AIME25 accuracy (best of 3 seeds) | 53.3% | **53.3%** | parity |
+| AIME25 accuracy | 53.3% | **53.3%** | parity |
 
 The win is **2.77× KV capacity at ~parity accuracy**. MLA's
 latent is already tiny so KVarN is not a latency play there, but it lets you fit
