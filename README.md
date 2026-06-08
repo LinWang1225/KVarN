@@ -90,7 +90,7 @@ vllm serve Qwen/Qwen3-32B --dtype float16 --kv-cache-dtype kvarn_k4v2_g128 --blo
 
 ### MLA models (e.g. GLM-4.7-Flash)
 
-KVarN also supports **Multi-head Latent Attention (MLA)** models — it quantizes
+KVarN also supports **Multi-head Latent Attention (MLA)** models: it quantizes
 the compressed KV latent to int4. Use the **same** `--kv-cache-dtype` you use on
 dense models; on an MLA model it automatically routes to the MLA latent path (no
 code or env changes), and the CUDA-graph fast path is on by default:
@@ -110,7 +110,7 @@ vllm serve zai-org/GLM-4.7-Flash \
 | KV-cache capacity (tokens) | 313K | 865K | **2.77×** |
 | AIME25 accuracy (best of 3 seeds) | 53.3% | **53.3%** | parity |
 
-The win is **2.77× KV capacity at ~parity accuracy and ~0.91× throughput** — MLA's
+The win is **2.77× KV capacity at ~parity accuracy and ~0.91× throughput**. MLA's
 latent is already tiny so KVarN is not a latency play there, but it lets you fit
 far more concurrent context in the same memory.
 
