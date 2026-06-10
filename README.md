@@ -78,8 +78,12 @@ Serving works the same way:
 vllm serve Qwen/Qwen3-32B --dtype float16 --kv-cache-dtype kvarn_k4v2_g128 --block-size 128
 ```
 
-> **Note:** KVarN runs in `float16` compute. The tile / page size is currently
-> fixed at 128 (one vLLM block = one KVarN tile); other page sizes are coming soon.
+> **Note:** KVarN runs in `float16` compute. One vLLM block is one KVarN tile, so
+> the tile / page size equals `--block-size`. Both **128** (default) and **64** are
+> supported, selected by the matching preset (`kvarn_k4v2_g128` / `kvarn_k4v2_g64`).
+> 128 is the design point; 64 gives finer quantization granularity at the cost of a
+> little KV capacity (more per-tile scale overhead per token), at essentially the
+> same throughput.
 
 > **Tip (capacity):** KVarN realizes its full KV-cache capacity when there is room
 > to amortize a small fixed decode workspace. On multi-GPU or generous
