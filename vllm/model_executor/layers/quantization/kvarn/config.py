@@ -325,11 +325,13 @@ class KVarNConfig:
                     with open(indexes[0]) as fh:
                         weight_map = _json.load(fh).get("weight_map", {})
                     base = os.path.dirname(indexes[0])
-                    shards = [
-                        os.path.join(base, s) for s in sorted(set(weight_map.values()))
-                    ]
-                    shards = [p for p in shards if os.path.exists(p)]
-                    if shards:
+                    names = sorted(set(weight_map.values()))
+                    shards = [os.path.join(base, s) for s in names]
+                    # Trust the manifest only when every listed shard is on
+                    # disk: a partial set would under-estimate the weights and
+                    # over-grow the pool budget, so fall through to the
+                    # conservative glob instead.
+                    if names and all(os.path.exists(p) for p in shards):
                         total = sum(os.path.getsize(p) for p in shards)
                         if total > 0:
                             return total // max(tensor_parallel_size, 1)
