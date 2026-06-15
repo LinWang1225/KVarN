@@ -163,7 +163,7 @@ once all of its tokens are accepted, so rejected draft tokens never corrupt hist
 **DFlash.** KVarN also supports [DFlash](https://github.com/z-lab/dflash), a
 parallel-drafting method whose drafter attends to the cached context with *non-causal*
 (bidirectional) cross-attention. KVarN's backend advertises non-causal support, so the
-drafter reads the quantized cache exactly as the target model does — no extra flags
+drafter reads the quantized cache exactly as the target model does, with no extra flags
 beyond the usual `--speculative-config`:
 
 ```bash
