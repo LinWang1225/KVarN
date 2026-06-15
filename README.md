@@ -137,7 +137,7 @@ The KV-cache capacity gain applies to the full-attention layers (where the cache
 lives), so a hybrid model fits far more concurrent context in the same memory at near
 parity accuracy.
 
-### Speculative decoding (MTP and draft models)
+### Speculative decoding (MTP, DFlash, and draft models)
 
 KVarN is compatible with **speculative decoding**, including Multi-Token Prediction
 (MTP). Pass `--speculative-config` exactly as you normally would, alongside the KVarN
@@ -159,6 +159,26 @@ once all of its tokens are accepted, so rejected draft tokens never corrupt hist
 > model weights, so it composes with weight-quantized checkpoints (for example
 > `compressed-tensors` / AWQ INT4) and MTP at the same time. Validated on Qwen3.6-27B
 > in both `bfloat16` and AWQ INT4.
+
+**DFlash.** KVarN also supports [DFlash](https://github.com/z-lab/dflash), a
+parallel-drafting method whose drafter attends to the cached context with *non-causal*
+(bidirectional) cross-attention. KVarN's backend advertises non-causal support, so the
+drafter reads the quantized cache exactly as the target model does — no extra flags
+beyond the usual `--speculative-config`:
+
+```bash
+vllm serve Qwen/Qwen3.6-27B \
+    --dtype bfloat16 \
+    --kv-cache-dtype kvarn_k4v2_g128 \
+    --block-size 128 \
+    --speculative-config '{"method":"dflash","model":"z-lab/Qwen3.6-27B-DFlash","num_speculative_tokens":15}'
+```
+
+Each drafting step issues a block of query tokens (the bonus token plus the speculative
+tokens) that attend over the *entire* cached context rather than a causal prefix; KVarN
+serves that block against the quantized cache and reconstructs the context the same way
+it does for ordinary decode. As with MTP, a block is committed to the quantized cache
+only once its tokens are accepted, so rejected drafts never corrupt history.
 
 ---
 
