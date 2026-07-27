@@ -8,19 +8,27 @@ PYTHON="${PYTHON:-python}"
 MODEL="${MODEL:-Qwen/Qwen3-4B}"
 NUM_SAMPLES="${NUM_SAMPLES:-100}"
 NUM_REPEATS="${NUM_REPEATS:-1}"
-MAX_TOKENS="${MAX_TOKENS:-8192}"
-MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
+MAX_TOKENS="${MAX_TOKENS:-38912}"
+MAX_MODEL_LEN="${MAX_MODEL_LEN:-131072}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.90}"
 DATASET_NAME="${DATASET_NAME:-HuggingFaceH4/MATH-500}"
 DATASET_SPLIT="${DATASET_SPLIT:-test}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-${SCRIPT_DIR}/results/math500_n${NUM_SAMPLES}}"
 KVARN_DTYPE="${KVARN_DTYPE:-kvarn_k4v2_g128}"
 BLOCK_SIZE="${BLOCK_SIZE:-128}"
+BOUNDARY_STEP="${BOUNDARY_STEP:-${BLOCK_SIZE}}"
 SEED="${SEED:-2026}"
 TP_SIZE="${TP_SIZE:-1}"
+REQUIRE_CLEAN_GIT="${REQUIRE_CLEAN_GIT:-0}"
+DEFAULT_ROPE_SCALING_JSON='{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}'
+ROPE_SCALING_JSON="${ROPE_SCALING_JSON:-${DEFAULT_ROPE_SCALING_JSON}}"
 
 if (( NUM_REPEATS < 1 )); then
   echo "NUM_REPEATS must be at least 1" >&2
+  exit 2
+fi
+if (( MAX_TOKENS >= MAX_MODEL_LEN )); then
+  echo "MAX_TOKENS must be smaller than MAX_MODEL_LEN (prompt + output)." >&2
   exit 2
 fi
 
@@ -29,6 +37,16 @@ mkdir -p "${OUTPUT_ROOT}"
 SAMPLES_FILE="${OUTPUT_ROOT}/selected_samples.json"
 
 cd "${REPO_ROOT}"
+
+if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
+  if [[ "${REQUIRE_CLEAN_GIT}" == "1" ]]; then
+    echo "Repository is dirty; commit/stash changes or set REQUIRE_CLEAN_GIT=0." >&2
+    exit 2
+  fi
+  echo "WARNING: repository has tracked uncommitted changes; the config will record them." >&2
+fi
+
+echo "MODEL=${MODEL} MAX_MODEL_LEN=${MAX_MODEL_LEN} MAX_TOKENS=${MAX_TOKENS} BLOCK_SIZE=${BLOCK_SIZE}"
 
 "${PYTHON}" "${SCRIPT_DIR}/prepare_samples.py" \
   --dataset-name "${DATASET_NAME}" \
@@ -41,19 +59,24 @@ run_generation() {
   local mode="$1"
   local run_name="$2"
   local out_dir="${OUTPUT_ROOT}/${run_name}"
-  "${PYTHON}" "${SCRIPT_DIR}/run_generation.py" \
-    --mode "${mode}" \
-    --run-name "${run_name}" \
-    --samples-file "${SAMPLES_FILE}" \
-    --output-dir "${out_dir}" \
-    --model "${MODEL}" \
-    --kvarn-kv-cache-dtype "${KVARN_DTYPE}" \
-    --block-size "${BLOCK_SIZE}" \
-    --max-tokens "${MAX_TOKENS}" \
-    --max-model-len "${MAX_MODEL_LEN}" \
-    --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}" \
-    --tensor-parallel-size "${TP_SIZE}" \
+  local generation_args=(
+    --mode "${mode}"
+    --run-name "${run_name}"
+    --samples-file "${SAMPLES_FILE}"
+    --output-dir "${out_dir}"
+    --model "${MODEL}"
+    --kvarn-kv-cache-dtype "${KVARN_DTYPE}"
+    --block-size "${BLOCK_SIZE}"
+    --max-tokens "${MAX_TOKENS}"
+    --max-model-len "${MAX_MODEL_LEN}"
+    --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}"
+    --tensor-parallel-size "${TP_SIZE}"
     --seed "${SEED}"
+  )
+  if [[ -n "${ROPE_SCALING_JSON}" ]]; then
+    generation_args+=(--rope-scaling-json "${ROPE_SCALING_JSON}")
+  fi
+  "${PYTHON}" "${SCRIPT_DIR}/run_generation.py" "${generation_args[@]}"
 }
 
 for repeat in $(seq 1 "${NUM_REPEATS}"); do
@@ -83,6 +106,7 @@ fi
 "${PYTHON}" "${SCRIPT_DIR}/plot_results.py" \
   --comparison-csv "${COMPARISON_DIR}/per_sample_comparison.csv" \
   --summary-json "${COMPARISON_DIR}/summary.json" \
-  --output-dir "${COMPARISON_DIR}/plots"
+  --output-dir "${COMPARISON_DIR}/plots" \
+  --boundary-step "${BOUNDARY_STEP}"
 
 echo "Full experiment completed: ${OUTPUT_ROOT}"

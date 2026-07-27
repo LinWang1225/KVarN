@@ -53,7 +53,7 @@ No existing KVarN source file needs to be edited.
 | `compare_trajectories.py` | Aligns records by `sample_id`, computes the longest common prefix and first divergence, summarizes length/correctness changes, and optionally checks same-mode repeat determinism. |
 | `plot_results.py` | Produces six PNG/PDF comparison plots without rerunning inference. |
 | `run_smoke_test.sh` | Runs 3 samples with 256 output tokens for FP16×2 and KVarN×2, compares results, and validates output files. |
-| `run_full_experiment.sh` | Runs the default 100-sample, 8192-output-token experiment. |
+| `run_full_experiment.sh` | Runs the default 100-sample experiment with a 131072-token total context ceiling and a 38912-token output budget. |
 | `requirements.txt` | Adds only the experiment dependencies: Hugging Face Datasets and Matplotlib. |
 
 ## Installation
@@ -76,8 +76,9 @@ The path should point into the current KVarN repository.
 ## Smoke test
 
 ```bash
-MODEL=/path/to/Qwen3-4B \
+MODEL=Qwen/Qwen3-4B \
 PYTHON=/path/to/kvarn-env/bin/python \
+BOUNDARY_STEP=128 \
 bash experiments/trajectory_divergence/run_smoke_test.sh
 ```
 
@@ -97,23 +98,39 @@ Default configuration:
 - samples: 100;
 - model: `Qwen/Qwen3-4B`;
 - thinking mode: enabled through the tokenizer chat template;
-- decoding: greedy, `temperature=0`;
-- maximum output: 8192 tokens;
+- decoding: greedy, `temperature=0`, intentionally used for deterministic
+  trajectory attribution rather than model-quality benchmarking;
+- total context capacity (`prompt + output`): 131072 tokens;
+- YaRN: factor 4 with `original_max_position_embeddings=32768`;
+- maximum generated output: 38912 tokens;
 - prefix caching: disabled;
 - FP16 mode: `kv_cache_dtype=auto`;
 - KVarN mode: `kvarn_k4v2_g128`;
 - block size: 128;
+- plot boundary spacing: 128;
 - batch size / `max_num_seqs`: 1;
 - seed: 2026.
+
+`MAX_MODEL_LEN=131072` is the 128K total sequence ceiling. It is not an
+output-only limit. Qwen recommends 38912 output tokens for difficult math and
+programming benchmarks. Static YaRN is enabled only by the full-run shell
+script; the smoke test stays in the native window unless `ROPE_SCALING_JSON`
+is explicitly supplied.
+
+The FP16 baseline has a much larger KV cache than KVarN. A 128K FP16 run may
+require multiple GPUs or more VRAM. Increase `TP_SIZE` or lower
+`MAX_MODEL_LEN` if the FP16 engine cannot allocate its cache.
 
 Run:
 
 ```bash
-MODEL=/path/to/Qwen3-4B \
+MODEL=Qwen/Qwen3-4B \
 PYTHON=/path/to/kvarn-env/bin/python \
 NUM_SAMPLES=100 \
-MAX_TOKENS=8192 \
-MAX_MODEL_LEN=32768 \
+MAX_TOKENS=38912 \
+MAX_MODEL_LEN=131072 \
+BOUNDARY_STEP=128 \
+TP_SIZE=2 \
 OUTPUT_ROOT=/path/to/results/math500_n100 \
 bash experiments/trajectory_divergence/run_full_experiment.sh
 ```
@@ -147,9 +164,10 @@ python experiments/trajectory_divergence/run_generation.py \
   --run-name fp16_run1 \
   --samples-file results/trajectory/selected_samples.json \
   --output-dir results/trajectory/fp16_run1 \
-  --model /path/to/Qwen3-4B \
-  --max-tokens 8192 \
-  --max-model-len 32768 \
+  --model Qwen/Qwen3-4B \
+  --max-tokens 38912 \
+  --max-model-len 131072 \
+  --rope-scaling-json '{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}' \
   --block-size 128
 ```
 
@@ -161,10 +179,11 @@ python experiments/trajectory_divergence/run_generation.py \
   --run-name kvarn_run1 \
   --samples-file results/trajectory/selected_samples.json \
   --output-dir results/trajectory/kvarn_run1 \
-  --model /path/to/Qwen3-4B \
+  --model Qwen/Qwen3-4B \
   --kvarn-kv-cache-dtype kvarn_k4v2_g128 \
-  --max-tokens 8192 \
-  --max-model-len 32768 \
+  --max-tokens 38912 \
+  --max-model-len 131072 \
+  --rope-scaling-json '{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}' \
   --block-size 128
 ```
 
@@ -175,7 +194,7 @@ python experiments/trajectory_divergence/compare_trajectories.py \
   --reference results/trajectory/fp16_run1/generations.jsonl \
   --candidate results/trajectory/kvarn_run1/generations.jsonl \
   --output-dir results/trajectory/comparison \
-  --tokenizer /path/to/Qwen3-4B \
+  --tokenizer Qwen/Qwen3-4B \
   --trust-remote-code \
   --block-size 128
 ```
@@ -186,7 +205,8 @@ python experiments/trajectory_divergence/compare_trajectories.py \
 python experiments/trajectory_divergence/plot_results.py \
   --comparison-csv results/trajectory/comparison/per_sample_comparison.csv \
   --summary-json results/trajectory/comparison/summary.json \
-  --output-dir results/trajectory/comparison/plots
+  --output-dir results/trajectory/comparison/plots \
+  --boundary-step 128
 ```
 
 ## Main definitions
@@ -203,10 +223,19 @@ For a diverged sample:
 
 ```text
 first_divergence_step = longest_common_prefix_length
+# Output-relative block index:
 first_divergence_block = first_divergence_step // block_size
 offset_in_block = first_divergence_step % block_size
+
+# Absolute sequence position including the prompt:
+absolute_divergence_position = fp16_input_tokens + first_divergence_step
+absolute_divergence_block = absolute_divergence_position // block_size
+absolute_offset_in_block = absolute_divergence_position % block_size
+
 length_ratio = kvarn_output_tokens / max(1, fp16_output_tokens)
 ```
+
+When either run ends with `finish_reason=length`, the pair is marked censored. Censored pairs remain visible in the output-length scatter, but are excluded from length-ratio distribution and divergence-vs-length-ratio analyses.
 
 The scripts use vLLM's returned `output_token_ids`; they do not reconstruct output IDs by retokenizing text.
 

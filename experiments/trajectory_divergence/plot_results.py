@@ -37,8 +37,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--boundary-step",
         type=int,
-        default=512,
-        help="Vertical boundary spacing in the divergence histogram.",
+        default=128,
+        help="Vertical boundary spacing in the divergence histogram; use the KV block size.",
     )
     parser.add_argument(
         "--annotate-top-k",
@@ -78,6 +78,12 @@ def load_rows(path: Path) -> list[dict[str, Any]]:
                     "fp16_output_tokens": parse_int(row.get("fp16_output_tokens")) or 0,
                     "kvarn_output_tokens": parse_int(row.get("kvarn_output_tokens")) or 0,
                     "length_ratio": parse_float(row.get("length_ratio")) or 0.0,
+                    "fp16_censored": parse_bool(row.get("fp16_censored")),
+                    "kvarn_censored": parse_bool(row.get("kvarn_censored")),
+                    "either_censored": parse_bool(row.get("either_censored")),
+                    "length_ratio_interpretable": parse_bool(
+                        row.get("length_ratio_interpretable")
+                    ),
                 }
             )
     return rows
@@ -109,8 +115,13 @@ def plot_length_scatter(
         save_figure(fig, output_dir, "figure_length_scatter")
         return
 
-    identical = [row for row in rows if not row["diverged"]]
-    diverged = [row for row in rows if row["diverged"]]
+    censored = [row for row in rows if row["either_censored"]]
+    identical = [
+        row for row in rows if not row["diverged"] and not row["either_censored"]
+    ]
+    diverged = [
+        row for row in rows if row["diverged"] and not row["either_censored"]
+    ]
     if identical:
         ax.scatter(
             [row["fp16_output_tokens"] for row in identical],
@@ -126,6 +137,14 @@ def plot_length_scatter(
             label="Diverged",
         )
 
+    if censored:
+        ax.scatter(
+            [row["fp16_output_tokens"] for row in censored],
+            [row["kvarn_output_tokens"] for row in censored],
+            alpha=0.8,
+            marker="x",
+            label="At least one run hit max_tokens",
+        )
     maximum = max(
         max(row["fp16_output_tokens"], row["kvarn_output_tokens"]) for row in rows
     )
@@ -134,7 +153,10 @@ def plot_length_scatter(
     ax.set_ylabel("KVarN output tokens")
     divergence_rate = summary.get("divergence_rate")
     rate_text = "N/A" if divergence_rate is None else f"{100 * divergence_rate:.1f}%"
-    ax.set_title(f"Output length comparison (n={len(rows)}, divergence={rate_text})")
+    ax.set_title(
+        f"Output length comparison (n={len(rows)}, divergence={rate_text}, "
+        f"censored={len(censored)})"
+    )
     ax.legend()
     ax.grid(alpha=0.25)
 
@@ -181,7 +203,11 @@ def plot_divergence_hist(
     save_figure(fig, output_dir, "figure_first_divergence_hist")
 
 
-def plot_divergence_cdf(rows: list[dict[str, Any]], output_dir: Path) -> None:
+def plot_divergence_cdf(
+    rows: list[dict[str, Any]],
+    summary: dict[str, Any],
+    output_dir: Path,
+) -> None:
     steps = sorted(
         row["first_divergence_step"]
         for row in rows
@@ -193,10 +219,17 @@ def plot_divergence_cdf(rows: list[dict[str, Any]], output_dir: Path) -> None:
     else:
         cdf = [(index + 1) / len(steps) for index in range(len(steps))]
         ax.step(steps, cdf, where="post")
-        median = steps[(len(steps) - 1) // 2]
-        p90 = steps[min(len(steps) - 1, math.ceil(0.9 * len(steps)) - 1)]
-        ax.axvline(median, linestyle="--", linewidth=1, label=f"Median={median}")
-        ax.axvline(p90, linestyle=":", linewidth=1, label=f"P90={p90}")
+        percentiles = summary.get("first_divergence_step_percentiles", {})
+        median = percentiles.get("p50")
+        p90 = percentiles.get("p90")
+        if median is not None:
+            ax.axvline(
+                median, linestyle="--", linewidth=1, label=f"Median={median:.1f}"
+            )
+        if p90 is not None:
+            ax.axvline(
+                p90, linestyle=":", linewidth=1, label=f"P90={p90:.1f}"
+            )
         ax.set_xlabel("First divergence step")
         ax.set_ylabel("Cumulative fraction of diverged samples")
         ax.set_ylim(0, 1.02)
@@ -249,21 +282,24 @@ def plot_length_ratio_hist(rows: list[dict[str, Any]], output_dir: Path) -> None
         row["length_ratio"]
         for row in rows
         if row.get("divergence_type") == "token_mismatch"
+        and row["length_ratio_interpretable"]
     ]
     length_only = [
         row["length_ratio"]
         for row in rows
         if row.get("divergence_type") == "length_only"
+        and row["length_ratio_interpretable"]
     ]
     identical = [
         row["length_ratio"]
         for row in rows
         if row.get("divergence_type") == "identical"
+        and row["length_ratio_interpretable"]
     ]
     fig, ax = plt.subplots(figsize=(7.2, 4.8))
     values = mismatch + length_only + identical
     if not values:
-        add_empty_message(ax, "No valid paired samples")
+        add_empty_message(ax, "No uncensored paired samples for length-ratio analysis")
     else:
         maximum = max(values)
         bins = min(45, max(12, int(math.sqrt(len(values)) * 4)))
@@ -289,10 +325,13 @@ def plot_divergence_vs_ratio(rows: list[dict[str, Any]], output_dir: Path) -> No
         row
         for row in rows
         if row["diverged"] and row["first_divergence_step"] is not None
+        and row["length_ratio_interpretable"]
     ]
     fig, ax = plt.subplots(figsize=(7.2, 4.8))
     if not diverged:
-        add_empty_message(ax, "No diverged samples")
+        add_empty_message(
+            ax, "No uncensored diverged samples for length-ratio analysis"
+        )
     else:
         ax.scatter(
             [row["first_divergence_step"] for row in diverged],
@@ -320,7 +359,7 @@ def main() -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     plot_length_scatter(rows, summary, args.output_dir, args.annotate_top_k)
     plot_divergence_hist(rows, args.output_dir, args.boundary_step)
-    plot_divergence_cdf(rows, args.output_dir)
+    plot_divergence_cdf(rows, summary, args.output_dir)
     plot_divergence_by_length(summary, args.output_dir)
     plot_length_ratio_hist(rows, args.output_dir)
     plot_divergence_vs_ratio(rows, args.output_dir)

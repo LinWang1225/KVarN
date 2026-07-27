@@ -4,15 +4,16 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-#PYTHON="${PYTHON:-python}"
-PYTHON="/home/wanglin/miniconda3/envs/kvarn-smoke/bin/python"
-#MODEL="${MODEL:-Qwen/Qwen3-4B}"
-MODEL="/home/wanglin/.cache/huggingface/hub/models--Qwen--Qwen3-4B-Instruct-2507/snapshots/cdbee75f17c01a7cc42f958dc650907174af0554"
+PYTHON="${PYTHON:-python}"
+MODEL="${MODEL:-Qwen/Qwen3-4B}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-${SCRIPT_DIR}/results/smoke}"
 GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.90}"
 MAX_MODEL_LEN="${MAX_MODEL_LEN:-4096}"
+SMOKE_MAX_TOKENS="${SMOKE_MAX_TOKENS:-256}"
 KVARN_DTYPE="${KVARN_DTYPE:-kvarn_k4v2_g128}"
 BLOCK_SIZE="${BLOCK_SIZE:-128}"
+BOUNDARY_STEP="${BOUNDARY_STEP:-${BLOCK_SIZE}}"
+ROPE_SCALING_JSON="${ROPE_SCALING_JSON:-}"
 SEED="${SEED:-2026}"
 
 # The repository's own validation scripts disable this sampler when testing
@@ -35,18 +36,23 @@ run_generation() {
   local mode="$1"
   local run_name="$2"
   local out_dir="${OUTPUT_ROOT}/${run_name}"
-  "${PYTHON}" "${SCRIPT_DIR}/run_generation.py" \
-    --mode "${mode}" \
-    --run-name "${run_name}" \
-    --samples-file "${SAMPLES_FILE}" \
-    --output-dir "${out_dir}" \
-    --model "${MODEL}" \
-    --kvarn-kv-cache-dtype "${KVARN_DTYPE}" \
-    --block-size "${BLOCK_SIZE}" \
-    --max-tokens 256 \
-    --max-model-len "${MAX_MODEL_LEN}" \
-    --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}" \
+  local generation_args=(
+    --mode "${mode}"
+    --run-name "${run_name}"
+    --samples-file "${SAMPLES_FILE}"
+    --output-dir "${out_dir}"
+    --model "${MODEL}"
+    --kvarn-kv-cache-dtype "${KVARN_DTYPE}"
+    --block-size "${BLOCK_SIZE}"
+    --max-tokens "${SMOKE_MAX_TOKENS}"
+    --max-model-len "${MAX_MODEL_LEN}"
+    --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}"
     --seed "${SEED}"
+  )
+  if [[ -n "${ROPE_SCALING_JSON}" ]]; then
+    generation_args+=(--rope-scaling-json "${ROPE_SCALING_JSON}")
+  fi
+  "${PYTHON}" "${SCRIPT_DIR}/run_generation.py" "${generation_args[@]}"
 }
 
 # Separate Python processes ensure that no two vLLM engines coexist in GPU memory.
@@ -70,7 +76,8 @@ PLOT_DIR="${COMPARISON_DIR}/plots"
 "${PYTHON}" "${SCRIPT_DIR}/plot_results.py" \
   --comparison-csv "${COMPARISON_DIR}/per_sample_comparison.csv" \
   --summary-json "${COMPARISON_DIR}/summary.json" \
-  --output-dir "${PLOT_DIR}"
+  --output-dir "${PLOT_DIR}" \
+  --boundary-step "${BOUNDARY_STEP}"
 
 required_files=(
   "${OUTPUT_ROOT}/fp16_run1/generations.jsonl"

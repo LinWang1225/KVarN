@@ -165,6 +165,24 @@ def compare_pair(
 
     reference_length = len(reference_ids)
     candidate_length = len(candidate_ids)
+    reference_input_tokens = int(
+        reference.get("input_tokens")
+        or len(reference.get("input_token_ids") or [])
+    )
+    candidate_input_tokens = int(
+        candidate.get("input_tokens")
+        or len(candidate.get("input_token_ids") or [])
+    )
+    reference_censored = (
+        str(reference.get("finish_reason") or "").lower() == "length"
+    )
+    candidate_censored = (
+        str(candidate.get("finish_reason") or "").lower() == "length"
+    )
+    either_censored = reference_censored or candidate_censored
+    absolute_divergence_position = (
+        reference_input_tokens + step if step is not None else None
+    )
     reference_correct = safe_bool(reference.get("approx_correct"))
     candidate_correct = safe_bool(candidate.get("approx_correct"))
     min_length = min(reference_length, candidate_length)
@@ -187,6 +205,9 @@ def compare_pair(
         "prompt_sha256_reference": reference.get("prompt_sha256"),
         "prompt_sha256_candidate": candidate.get("prompt_sha256"),
         "same_prompt_sha256": reference.get("prompt_sha256") == candidate.get("prompt_sha256"),
+        "reference_input_tokens": reference_input_tokens,
+        "candidate_input_tokens": candidate_input_tokens,
+        "same_input_token_count": reference_input_tokens == candidate_input_tokens,
         "reference_mode": reference.get("mode"),
         "candidate_mode": candidate.get("mode"),
         "reference_run_name": reference.get("run_name"),
@@ -194,6 +215,17 @@ def compare_pair(
         **relation,
         "first_divergence_block": step // block_size if step is not None else None,
         "offset_in_block": step % block_size if step is not None else None,
+        "absolute_divergence_position": absolute_divergence_position,
+        "absolute_divergence_block": (
+            absolute_divergence_position // block_size
+            if absolute_divergence_position is not None
+            else None
+        ),
+        "absolute_offset_in_block": (
+            absolute_divergence_position % block_size
+            if absolute_divergence_position is not None
+            else None
+        ),
         "lcp_ratio": relation["common_prefix_length"] / max(1, min_length),
         "reference_output_tokens": reference_length,
         "candidate_output_tokens": candidate_length,
@@ -201,6 +233,11 @@ def compare_pair(
         "kvarn_output_tokens": candidate_length,
         "length_difference": candidate_length - reference_length,
         "length_ratio": candidate_length / max(1, reference_length),
+        "fp16_censored": reference_censored,
+        "kvarn_censored": candidate_censored,
+        "either_censored": either_censored,
+        "both_censored": reference_censored and candidate_censored,
+        "length_ratio_interpretable": not either_censored,
         "reference_finish_reason": reference.get("finish_reason"),
         "candidate_finish_reason": candidate.get("finish_reason"),
         "fp16_finish_reason": reference.get("finish_reason"),
@@ -321,6 +358,15 @@ def summarize(
     ]
     length_ratios = [float(record["length_ratio"]) for record in comparisons]
     length_differences = [int(record["length_difference"]) for record in comparisons]
+    uncensored = [
+        record for record in comparisons if record["length_ratio_interpretable"]
+    ]
+    uncensored_length_ratios = [
+        float(record["length_ratio"]) for record in uncensored
+    ]
+    uncensored_length_differences = [
+        int(record["length_difference"]) for record in uncensored
+    ]
 
     buckets: dict[str, dict[str, Any]] = {}
     for label, _, _ in LENGTH_BUCKETS:
@@ -343,6 +389,11 @@ def summarize(
             "mean_length_ratio": mean_or_none(
                 float(record["length_ratio"]) for record in subset
             ),
+            "mean_length_ratio_uncensored": mean_or_none(
+                float(record["length_ratio"])
+                for record in subset
+                if record["length_ratio_interpretable"]
+            ),
             "correct_to_wrong_count": sum(
                 record.get("correctness_transition") == "correct_to_wrong"
                 for record in subset
@@ -360,7 +411,7 @@ def summarize(
     )
 
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "total_samples": len(total_sample_ids),
         "valid_pairs": len(comparisons),
         "missing_reference_count": len(missing_reference),
@@ -373,6 +424,9 @@ def summarize(
         "failed_candidate_sample_ids": failed_candidate,
         "prompt_hash_mismatch_count": sum(
             not record["same_prompt_sha256"] for record in comparisons
+        ),
+        "input_token_count_mismatch_count": sum(
+            not record["same_input_token_count"] for record in comparisons
         ),
         "identical_count": sum(record["divergence_type"] == "identical" for record in comparisons),
         "diverged_count": len(diverged),
@@ -406,6 +460,20 @@ def summarize(
         "mean_length_difference": mean_or_none(length_differences),
         "median_length_difference": median_or_none(length_differences),
         "mean_length_ratio": mean_or_none(length_ratios),
+        "fp16_censored_count": sum(record["fp16_censored"] for record in comparisons),
+        "kvarn_censored_count": sum(record["kvarn_censored"] for record in comparisons),
+        "either_censored_count": sum(record["either_censored"] for record in comparisons),
+        "both_censored_count": sum(record["both_censored"] for record in comparisons),
+        "natural_completion_pair_count": len(uncensored),
+        "mean_length_difference_uncensored": mean_or_none(
+            uncensored_length_differences
+        ),
+        "median_length_difference_uncensored": median_or_none(
+            uncensored_length_differences
+        ),
+        "mean_length_ratio_uncensored": mean_or_none(
+            uncensored_length_ratios
+        ),
         "fraction_length_ratio_gt_1_1": (
             sum(value > 1.1 for value in length_ratios) / len(length_ratios)
             if length_ratios
@@ -485,8 +553,12 @@ def write_summary_markdown(path: Path, summary: dict[str, Any]) -> None:
         f"| Mean FP16 output tokens | {format_number(summary['mean_fp16_output_tokens'], 1)} |",
         f"| Mean KVarN output tokens | {format_number(summary['mean_kvarn_output_tokens'], 1)} |",
         f"| Mean length ratio | {format_number(summary['mean_length_ratio'])} |",
+        f"| Natural-completion pairs | {summary['natural_completion_pair_count']} |",
+        f"| Mean length ratio (uncensored) | {format_number(summary['mean_length_ratio_uncensored'])} |",
+        f"| Either run hit max_tokens | {summary['either_censored_count']} |",
         f"| Correct→wrong | {summary['correct_to_wrong_count']} |",
         f"| Prompt hash mismatches | {summary['prompt_hash_mismatch_count']} |",
+        f"| Input-token count mismatches | {summary['input_token_count_mismatch_count']} |",
         "",
         "## Divergence by FP16 output length",
         "",

@@ -1,0 +1,691 @@
+diff --git a/experiments/trajectory_divergence/run_generation.py b/experiments/trajectory_divergence/run_generation.py
+index 5d93000..b9d9d00 100755
+--- a/experiments/trajectory_divergence/run_generation.py
++++ b/experiments/trajectory_divergence/run_generation.py
+@@ -39,8 +39,19 @@ def parse_args() -> argparse.Namespace:
+     parser.add_argument("--fp16-kv-cache-dtype", default="auto")
+     parser.add_argument("--kvarn-kv-cache-dtype", default="kvarn_k4v2_g128")
+     parser.add_argument("--block-size", type=int, default=128)
+-    parser.add_argument("--max-tokens", type=int, default=8192)
+-    parser.add_argument("--max-model-len", type=int, default=32768)
++    parser.add_argument("--max-tokens", type=int, default=38912)
++    parser.add_argument("--max-model-len", type=int, default=131072)
++    parser.add_argument(
++        "--rope-scaling-json",
++        default=(
++            '{"rope_type":"yarn","factor":4.0,'
++            '"original_max_position_embeddings":32768}'
++        ),
++        help=(
++            "JSON object passed to Hugging Face config as rope_scaling. "
++            "Defaults to Qwen3-4B YaRN factor 4; pass an empty string to disable."
++        ),
++    )
+     parser.add_argument("--temperature", type=float, default=0.0)
+     parser.add_argument("--top-p", type=float, default=1.0)
+     parser.add_argument("--top-k", type=int, default=-1)
+@@ -87,6 +95,18 @@ def parse_args() -> argparse.Namespace:
+     )
+     return parser.parse_args()
+ 
++def parse_json_object(value: str | None, flag_name: str) -> dict[str, Any] | None:
++    if value is None or not value.strip():
++        return None
++    try:
++        parsed = json.loads(value)
++    except json.JSONDecodeError as exc:
++        raise ValueError(f"{flag_name} must be valid JSON: {exc}") from exc
++    if not isinstance(parsed, dict):
++        raise ValueError(f"{flag_name} must decode to a JSON object")
++    return parsed
++
++
+ def package_version(name: str) -> str | None:
+     try:
+         return importlib.metadata.version(name)
+@@ -267,7 +288,10 @@ def build_prompt(
+         )
+         return str(prompt), False
+ 
+-def create_llm(args: argparse.Namespace) -> tuple[Any, str]:
++def create_llm(
++    args: argparse.Namespace,
++    rope_scaling: dict[str, Any] | None,
++) -> tuple[Any, str]:
+     try:
+         from vllm import LLM
+     except ImportError as exc:  # pragma: no cover - environment dependent
+@@ -298,6 +322,8 @@ def create_llm(args: argparse.Namespace) -> tuple[Any, str]:
+         kwargs["tokenizer_revision"] = args.tokenizer_revision
+     if args.enforce_eager:
+         kwargs["enforce_eager"] = True
++    if rope_scaling is not None:
++        kwargs["hf_overrides"] = {"rope_scaling": rope_scaling}
+     if requested_kv_dtype != "auto":
+         kwargs["kv_cache_dtype"] = requested_kv_dtype
+     LOGGER.info("Initializing %s engine with kv_cache_dtype=%s", args.mode, requested_kv_dtype)
+@@ -327,6 +353,27 @@ def main() -> None:
+         level=logging.INFO,
+         format="%(asctime)s | %(levelname)s | %(message)s",
+     )
++    if args.max_model_len <= 0 or args.max_tokens <= 0:
++        raise ValueError("--max-model-len and --max-tokens must be positive")
++    if args.max_tokens >= args.max_model_len:
++        raise ValueError(
++            "--max-tokens is the output budget and must be smaller than "
++            "--max-model-len, which covers prompt plus output."
++        )
++    rope_scaling = parse_json_object(
++        args.rope_scaling_json,
++        "--rope-scaling-json",
++    )
++    if args.enable_thinking and "instruct-2507" in args.model.lower():
++        LOGGER.warning(
++            "The selected Instruct-2507 checkpoint is not the original switchable "
++            "Qwen3-4B model. Use Qwen/Qwen3-4B for this thinking-mode experiment."
++        )
++    if args.max_model_len > 40960 and rope_scaling is None:
++        LOGGER.warning(
++            "max_model_len=%d exceeds the default Qwen3-4B window, but no RoPE "
++            "scaling override was supplied.", args.max_model_len
++        )
+     script_path = Path(__file__).resolve()
+     repo_root = script_path.parents[2]
+     args.output_dir.mkdir(parents=True, exist_ok=True)
+@@ -342,7 +387,7 @@ def main() -> None:
+     system_prompt = None
+     if args.system_prompt_file:
+         system_prompt = args.system_prompt_file.read_text(encoding="utf-8").strip()
+-    llm, requested_kv_dtype = create_llm(args)
++    llm, requested_kv_dtype = create_llm(args, rope_scaling)
+     tokenizer = llm.get_tokenizer()
+     sampling_params = create_sampling_params(args)
+     resolved_kv_dtype, resolved_path = resolve_engine_cache_dtype(llm)
+@@ -382,7 +427,8 @@ def main() -> None:
+         "backend_verified": backend_verified,
+         "block_size": args.block_size,
+         "max_tokens": args.max_tokens,
+         "max_model_len": args.max_model_len,
++        "rope_scaling": rope_scaling,
+         "temperature": args.temperature,
+         "top_p": args.top_p,
+         "top_k": args.top_k,
+@@ -444,6 +490,7 @@ def main() -> None:
+                 "top_p": args.top_p,
+                 "top_k": args.top_k,
+                 "max_tokens": args.max_tokens,
++                "max_model_len": args.max_model_len,
+             }
+             try:
+                 prompt, thinking_arg_applied = build_prompt(
+diff --git a/experiments/trajectory_divergence/run_full_experiment.sh b/experiments/trajectory_divergence/run_full_experiment.sh
+index 7611470..6b50c87 100755
+--- a/experiments/trajectory_divergence/run_full_experiment.sh
++++ b/experiments/trajectory_divergence/run_full_experiment.sh
+@@ -6,20 +6,28 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+ MODEL="${MODEL:-Qwen/Qwen3-4B}"
+ NUM_SAMPLES="${NUM_SAMPLES:-100}"
+ NUM_REPEATS="${NUM_REPEATS:-1}"
+-MAX_TOKENS="${MAX_TOKENS:-8192}"
+-MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
++MAX_TOKENS="${MAX_TOKENS:-38912}"
++MAX_MODEL_LEN="${MAX_MODEL_LEN:-131072}"
+ GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.90}"
+ DATASET_NAME="${DATASET_NAME:-HuggingFaceH4/MATH-500}"
+ DATASET_SPLIT="${DATASET_SPLIT:-test}"
+ OUTPUT_ROOT="${OUTPUT_ROOT:-${SCRIPT_DIR}/results/math500_n${NUM_SAMPLES}}"
+ KVARN_DTYPE="${KVARN_DTYPE:-kvarn_k4v2_g128}"
+ BLOCK_SIZE="${BLOCK_SIZE:-128}"
++BOUNDARY_STEP="${BOUNDARY_STEP:-${BLOCK_SIZE}}"
+ SEED="${SEED:-2026}"
+ TP_SIZE="${TP_SIZE:-1}"
++REQUIRE_CLEAN_GIT="${REQUIRE_CLEAN_GIT:-0}"
++DEFAULT_ROPE_SCALING_JSON='{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}'
++ROPE_SCALING_JSON="${ROPE_SCALING_JSON:-${DEFAULT_ROPE_SCALING_JSON}}"
+ if (( NUM_REPEATS < 1 )); then
+   echo "NUM_REPEATS must be at least 1" >&2
+   exit 2
+ fi
++if (( MAX_TOKENS >= MAX_MODEL_LEN )); then
++  echo "MAX_TOKENS must be smaller than MAX_MODEL_LEN (prompt + output)." >&2
++  exit 2
++fi
+ 
+ export VLLM_USE_FLASHINFER_SAMPLER="${VLLM_USE_FLASHINFER_SAMPLER:-0}"
+ mkdir -p "${OUTPUT_ROOT}"
+@@ -26,6 +32,16 @@ SAMPLES_FILE="${OUTPUT_ROOT}/selected_samples.json"
+ 
+ cd "${REPO_ROOT}"
+ 
++if [[ -n "$(git status --porcelain)" ]]; then
++  if [[ "${REQUIRE_CLEAN_GIT}" == "1" ]]; then
++    echo "Repository is dirty; commit/stash changes or set REQUIRE_CLEAN_GIT=0." >&2
++    exit 2
++  fi
++  echo "WARNING: repository has uncommitted changes; the config will record them." >&2
++fi
++
++echo "MODEL=${MODEL} MAX_MODEL_LEN=${MAX_MODEL_LEN} MAX_TOKENS=${MAX_TOKENS} BLOCK_SIZE=${BLOCK_SIZE}"
++
+ "${PYTHON}" "${SCRIPT_DIR}/prepare_samples.py" \
+   --dataset-name "${DATASET_NAME}" \
+   --dataset-split "${DATASET_SPLIT}" \
+@@ -36,9 +51,8 @@ cd "${REPO_ROOT}"
+ run_generation() {
+   local mode="$1"
+   local run_name="$2"
+   local out_dir="${OUTPUT_ROOT}/${run_name}"
+-  "${PYTHON}" "${SCRIPT_DIR}/run_generation.py" \
+-    --mode "${mode}" \
++  local generation_args=(--mode "${mode}" \
+     --run-name "${run_name}" \
+     --samples-file "${SAMPLES_FILE}" \
+     --output-dir "${out_dir}" \
+@@ -49,7 +63,11 @@ run_generation() {
+     --max-model-len "${MAX_MODEL_LEN}" \
+     --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}" \
+     --tensor-parallel-size "${TP_SIZE}" \
+-    --seed "${SEED}"
++    --seed "${SEED}")
++  if [[ -n "${ROPE_SCALING_JSON}" ]]; then
++    generation_args+=(--rope-scaling-json "${ROPE_SCALING_JSON}")
++  fi
++  "${PYTHON}" "${SCRIPT_DIR}/run_generation.py" "${generation_args[@]}"
+ }
+ for repeat in $(seq 1 "${NUM_REPEATS}"); do
+   run_generation fp16 "fp16_run${repeat}"
+@@ -76,6 +96,7 @@ fi
+ "${PYTHON}" "${SCRIPT_DIR}/plot_results.py" \
+   --comparison-csv "${COMPARISON_DIR}/per_sample_comparison.csv" \
+   --summary-json "${COMPARISON_DIR}/summary.json" \
+-  --output-dir "${COMPARISON_DIR}/plots"
++  --output-dir "${COMPARISON_DIR}/plots" \
++  --boundary-step "${BOUNDARY_STEP}"
+ 
+ echo "Full experiment completed: ${OUTPUT_ROOT}"
+diff --git a/experiments/trajectory_divergence/run_smoke_test.sh b/experiments/trajectory_divergence/run_smoke_test.sh
+index fefc643..f17a4aa 100755
+--- a/experiments/trajectory_divergence/run_smoke_test.sh
++++ b/experiments/trajectory_divergence/run_smoke_test.sh
+@@ -3,15 +3,15 @@
+ set -euo pipefail
+ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+-#PYTHON="${PYTHON:-python}"
+-PYTHON="/home/wanglin/miniconda3/envs/kvarn-smoke/bin/python"
+-#MODEL="${MODEL:-Qwen/Qwen3-4B}"
+-MODEL="/home/wanglin/.cache/huggingface/hub/models--Qwen--Qwen3-4B-Instruct-2507/snapshots/cdbee75f17c01a7cc42f958dc650907174af0554"
++PYTHON="${PYTHON:-python}"
++MODEL="${MODEL:-Qwen/Qwen3-4B}"
+ OUTPUT_ROOT="${OUTPUT_ROOT:-${SCRIPT_DIR}/results/smoke}"
+ GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.90}"
+ MAX_MODEL_LEN="${MAX_MODEL_LEN:-4096}"
++SMOKE_MAX_TOKENS="${SMOKE_MAX_TOKENS:-256}"
+ KVARN_DTYPE="${KVARN_DTYPE:-kvarn_k4v2_g128}"
+ BLOCK_SIZE="${BLOCK_SIZE:-128}"
++BOUNDARY_STEP="${BOUNDARY_STEP:-${BLOCK_SIZE}}"
+ SEED="${SEED:-2026}"
+ # The repository's own validation scripts disable this sampler when testing
+ # exact greedy replay. Preserve an explicit user override.
+@@ -38,7 +38,7 @@ run_generation() {
+     --model "${MODEL}" \
+     --kvarn-kv-cache-dtype "${KVARN_DTYPE}" \
+     --block-size "${BLOCK_SIZE}" \
+-    --max-tokens 256 \
++    --max-tokens "${SMOKE_MAX_TOKENS}" \
+     --max-model-len "${MAX_MODEL_LEN}" \
+     --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}" \
+     --seed "${SEED}"
+@@ -62,7 +62,8 @@ PLOT_DIR="${COMPARISON_DIR}/plots"
+ "${PYTHON}" "${SCRIPT_DIR}/plot_results.py" \
+   --comparison-csv "${COMPARISON_DIR}/per_sample_comparison.csv" \
+   --summary-json "${COMPARISON_DIR}/summary.json" \
+-  --output-dir "${PLOT_DIR}"
++  --output-dir "${PLOT_DIR}" \
++  --boundary-step "${BOUNDARY_STEP}"
+ required_files=(
+   "${OUTPUT_ROOT}/fp16_run1/generations.jsonl"
+   "${OUTPUT_ROOT}/kvarn_run1/generations.jsonl"
+diff --git a/experiments/trajectory_divergence/compare_trajectories.py b/experiments/trajectory_divergence/compare_trajectories.py
+index 8e0d924..6f104e4 100755
+--- a/experiments/trajectory_divergence/compare_trajectories.py
++++ b/experiments/trajectory_divergence/compare_trajectories.py
+@@ -153,7 +153,25 @@ def compare_pair(
+         reference_window = reference_ids[window_start:window_end]
+         candidate_window = candidate_ids[window_start:window_end]
+     reference_length = len(reference_ids)
+     candidate_length = len(candidate_ids)
++    reference_input_tokens = int(
++        reference.get("input_tokens")
++        or len(reference.get("input_token_ids") or [])
++    )
++    candidate_input_tokens = int(
++        candidate.get("input_tokens")
++        or len(candidate.get("input_token_ids") or [])
++    )
++    reference_censored = (
++        str(reference.get("finish_reason") or "").lower() == "length"
++    )
++    candidate_censored = (
++        str(candidate.get("finish_reason") or "").lower() == "length"
++    )
++    either_censored = reference_censored or candidate_censored
++    absolute_divergence_position = (
++        reference_input_tokens + step if step is not None else None
++    )
+     reference_correct = safe_bool(reference.get("approx_correct"))
+     candidate_correct = safe_bool(candidate.get("approx_correct"))
+     min_length = min(reference_length, candidate_length)
+@@ -173,6 +186,9 @@ def compare_pair(
+         "prompt_sha256_reference": reference.get("prompt_sha256"),
+         "prompt_sha256_candidate": candidate.get("prompt_sha256"),
+         "same_prompt_sha256": reference.get("prompt_sha256") == candidate.get("prompt_sha256"),
++        "reference_input_tokens": reference_input_tokens,
++        "candidate_input_tokens": candidate_input_tokens,
++        "same_input_token_count": reference_input_tokens == candidate_input_tokens,
+         "reference_mode": reference.get("mode"),
+         "candidate_mode": candidate.get("mode"),
+         "reference_run_name": reference.get("run_name"),
+@@ -180,13 +196,29 @@ def compare_pair(
+         **relation,
+         "first_divergence_block": step // block_size if step is not None else None,
+         "offset_in_block": step % block_size if step is not None else None,
++        "absolute_divergence_position": absolute_divergence_position,
++        "absolute_divergence_block": (
++            absolute_divergence_position // block_size
++            if absolute_divergence_position is not None
++            else None
++        ),
++        "absolute_offset_in_block": (
++            absolute_divergence_position % block_size
++            if absolute_divergence_position is not None
++            else None
++        ),
+         "lcp_ratio": relation["common_prefix_length"] / max(1, min_length),
+         "reference_output_tokens": reference_length,
+         "candidate_output_tokens": candidate_length,
+         "fp16_output_tokens": reference_length,
+         "kvarn_output_tokens": candidate_length,
+         "length_difference": candidate_length - reference_length,
+         "length_ratio": candidate_length / max(1, reference_length),
++        "fp16_censored": reference_censored,
++        "kvarn_censored": candidate_censored,
++        "either_censored": either_censored,
++        "both_censored": reference_censored and candidate_censored,
++        "length_ratio_interpretable": not either_censored,
+         "reference_finish_reason": reference.get("finish_reason"),
+         "candidate_finish_reason": candidate.get("finish_reason"),
+         "fp16_finish_reason": reference.get("finish_reason"),
+@@ -300,6 +327,15 @@ def summarize(
+     ]
+     length_ratios = [float(record["length_ratio"]) for record in comparisons]
+     length_differences = [int(record["length_difference"]) for record in comparisons]
++    uncensored = [
++        record for record in comparisons if record["length_ratio_interpretable"]
++    ]
++    uncensored_length_ratios = [
++        float(record["length_ratio"]) for record in uncensored
++    ]
++    uncensored_length_differences = [
++        int(record["length_difference"]) for record in uncensored
++    ]
+     buckets: dict[str, dict[str, Any]] = {}
+     for label, _, _ in LENGTH_BUCKETS:
+         subset = [
+@@ -320,8 +353,13 @@ def summarize(
+             "divergence_rate": len(subset_diverged) / len(subset) if subset else None,
+             "median_first_divergence_step": median_or_none(subset_steps),
+             "mean_length_ratio": mean_or_none(
+                 float(record["length_ratio"]) for record in subset
+             ),
++            "mean_length_ratio_uncensored": mean_or_none(
++                float(record["length_ratio"])
++                for record in subset
++                if record["length_ratio_interpretable"]
++            ),
+             "correct_to_wrong_count": sum(
+                 record.get("correctness_transition") == "correct_to_wrong"
+                 for record in subset
+@@ -337,7 +375,7 @@ def summarize(
+         str(record.get("candidate_finish_reason")) for record in comparisons
+     )
+     return {
+-        "schema_version": 1,
++        "schema_version": 2,
+         "total_samples": len(total_sample_ids),
+         "valid_pairs": len(comparisons),
+         "missing_reference_count": len(missing_reference),
+@@ -351,6 +389,9 @@ def summarize(
+         "prompt_hash_mismatch_count": sum(
+             not record["same_prompt_sha256"] for record in comparisons
+         ),
++        "input_token_count_mismatch_count": sum(
++            not record["same_input_token_count"] for record in comparisons
++        ),
+         "identical_count": sum(record["divergence_type"] == "identical" for record in comparisons),
+         "diverged_count": len(diverged),
+         "divergence_rate": len(diverged) / len(comparisons) if comparisons else None,
+@@ -383,6 +424,20 @@ def summarize(
+         "mean_length_difference": mean_or_none(length_differences),
+         "median_length_difference": median_or_none(length_differences),
+         "mean_length_ratio": mean_or_none(length_ratios),
++        "fp16_censored_count": sum(record["fp16_censored"] for record in comparisons),
++        "kvarn_censored_count": sum(record["kvarn_censored"] for record in comparisons),
++        "either_censored_count": sum(record["either_censored"] for record in comparisons),
++        "both_censored_count": sum(record["both_censored"] for record in comparisons),
++        "natural_completion_pair_count": len(uncensored),
++        "mean_length_difference_uncensored": mean_or_none(
++            uncensored_length_differences
++        ),
++        "median_length_difference_uncensored": median_or_none(
++            uncensored_length_differences
++        ),
++        "mean_length_ratio_uncensored": mean_or_none(
++            uncensored_length_ratios
++        ),
+         "fraction_length_ratio_gt_1_1": (
+             sum(value > 1.1 for value in length_ratios) / len(length_ratios)
+             if length_ratios
+@@ -457,8 +511,12 @@ def write_summary_markdown(path: Path, summary: dict[str, Any]) -> None:
+         f"| Mean FP16 output tokens | {format_number(summary['mean_fp16_output_tokens'], 1)} |",
+         f"| Mean KVarN output tokens | {format_number(summary['mean_kvarn_output_tokens'], 1)} |",
+         f"| Mean length ratio | {format_number(summary['mean_length_ratio'])} |",
++        f"| Natural-completion pairs | {summary['natural_completion_pair_count']} |",
++        f"| Mean length ratio (uncensored) | {format_number(summary['mean_length_ratio_uncensored'])} |",
++        f"| Either run hit max_tokens | {summary['either_censored_count']} |",
+         f"| Correct→wrong | {summary['correct_to_wrong_count']} |",
+         f"| Prompt hash mismatches | {summary['prompt_hash_mismatch_count']} |",
++        f"| Input-token count mismatches | {summary['input_token_count_mismatch_count']} |",
+         "",
+         "## Divergence by FP16 output length",
+         "",
+diff --git a/experiments/trajectory_divergence/plot_results.py b/experiments/trajectory_divergence/plot_results.py
+index 6044d28..901c85b 100755
+--- a/experiments/trajectory_divergence/plot_results.py
++++ b/experiments/trajectory_divergence/plot_results.py
+@@ -35,8 +35,8 @@ def parse_args() -> argparse.Namespace:
+     parser.add_argument(
+         "--boundary-step",
+         type=int,
+-        default=512,
+-        help="Vertical boundary spacing in the divergence histogram.",
++        default=128,
++        help="Vertical boundary spacing in the divergence histogram; use the KV block size.",
+     )
+     parser.add_argument(
+         "--annotate-top-k",
+@@ -73,7 +73,13 @@ def load_rows(path: Path) -> list[dict[str, Any]]:
+                     "first_divergence_step": parse_int(row.get("first_divergence_step")),
+                     "fp16_output_tokens": parse_int(row.get("fp16_output_tokens")) or 0,
+                     "kvarn_output_tokens": parse_int(row.get("kvarn_output_tokens")) or 0,
+                     "length_ratio": parse_float(row.get("length_ratio")) or 0.0,
++                    "fp16_censored": parse_bool(row.get("fp16_censored")),
++                    "kvarn_censored": parse_bool(row.get("kvarn_censored")),
++                    "either_censored": parse_bool(row.get("either_censored")),
++                    "length_ratio_interpretable": parse_bool(
++                        row.get("length_ratio_interpretable")
++                    ),
+                 }
+             )
+     return rows
+@@ -102,8 +107,13 @@ def plot_length_scatter(
+         add_empty_message(ax, "No valid paired samples")
+         save_figure(fig, output_dir, "figure_length_scatter")
+         return
+-    identical = [row for row in rows if not row["diverged"]]
+-    diverged = [row for row in rows if row["diverged"]]
++    censored = [row for row in rows if row["either_censored"]]
++    identical = [
++        row for row in rows if not row["diverged"] and not row["either_censored"]
++    ]
++    diverged = [
++        row for row in rows if row["diverged"] and not row["either_censored"]
++    ]
+     if identical:
+         ax.scatter(
+             [row["fp16_output_tokens"] for row in identical],
+@@ -118,6 +126,14 @@ def plot_length_scatter(
+             alpha=0.8,
+             label="Diverged",
+         )
++    if censored:
++        ax.scatter(
++            [row["fp16_output_tokens"] for row in censored],
++            [row["kvarn_output_tokens"] for row in censored],
++            alpha=0.8,
++            marker="x",
++            label="At least one run hit max_tokens",
++        )
+     maximum = max(
+         max(row["fp16_output_tokens"], row["kvarn_output_tokens"]) for row in rows
+     )
+@@ -126,7 +142,10 @@ def plot_length_scatter(
+     ax.set_ylabel("KVarN output tokens")
+     divergence_rate = summary.get("divergence_rate")
+     rate_text = "N/A" if divergence_rate is None else f"{100 * divergence_rate:.1f}%"
+-    ax.set_title(f"Output length comparison (n={len(rows)}, divergence={rate_text})")
++    ax.set_title(
++        f"Output length comparison (n={len(rows)}, divergence={rate_text}, "
++        f"censored={len(censored)})"
++    )
+     ax.legend()
+     ax.grid(alpha=0.25)
+     inflation = sorted(
+@@ -170,6 +189,10 @@ def plot_divergence_hist(
+     save_figure(fig, output_dir, "figure_first_divergence_hist")
+ 
+-def plot_divergence_cdf(rows: list[dict[str, Any]], output_dir: Path) -> None:
++def plot_divergence_cdf(
++    rows: list[dict[str, Any]],
++    summary: dict[str, Any],
++    output_dir: Path,
++) -> None:
+     steps = sorted(
+         row["first_divergence_step"]
+         for row in rows
+@@ -182,10 +205,17 @@ def plot_divergence_cdf(rows: list[dict[str, Any]], output_dir: Path) -> None:
+     else:
+         cdf = [(index + 1) / len(steps) for index in range(len(steps))]
+         ax.step(steps, cdf, where="post")
+-        median = steps[(len(steps) - 1) // 2]
+-        p90 = steps[min(len(steps) - 1, math.ceil(0.9 * len(steps)) - 1)]
+-        ax.axvline(median, linestyle="--", linewidth=1, label=f"Median={median}")
+-        ax.axvline(p90, linestyle=":", linewidth=1, label=f"P90={p90}")
++        percentiles = summary.get("first_divergence_step_percentiles", {})
++        median = percentiles.get("p50")
++        p90 = percentiles.get("p90")
++        if median is not None:
++            ax.axvline(
++                median, linestyle="--", linewidth=1, label=f"Median={median:.1f}"
++            )
++        if p90 is not None:
++            ax.axvline(
++                p90, linestyle=":", linewidth=1, label=f"P90={p90:.1f}"
++            )
+         ax.set_xlabel("First divergence step")
+         ax.set_ylabel("Cumulative fraction of diverged samples")
+         ax.set_ylim(0, 1.02)
+@@ -231,24 +260,27 @@ def plot_divergence_by_length(summary: dict[str, Any], output_dir: Path) -> None:
+ 
+ def plot_length_ratio_hist(rows: list[dict[str, Any]], output_dir: Path) -> None:
+     mismatch = [
+         row["length_ratio"]
+         for row in rows
+         if row.get("divergence_type") == "token_mismatch"
++        and row["length_ratio_interpretable"]
+     ]
+     length_only = [
+         row["length_ratio"]
+         for row in rows
+         if row.get("divergence_type") == "length_only"
++        and row["length_ratio_interpretable"]
+     ]
+     identical = [
+         row["length_ratio"]
+         for row in rows
+         if row.get("divergence_type") == "identical"
++        and row["length_ratio_interpretable"]
+     ]
+     fig, ax = plt.subplots(figsize=(7.2, 4.8))
+     values = mismatch + length_only + identical
+     if not values:
+-        add_empty_message(ax, "No valid paired samples")
++        add_empty_message(ax, "No uncensored paired samples for length-ratio analysis")
+     else:
+         maximum = max(values)
+         bins = min(45, max(12, int(math.sqrt(len(values)) * 4)))
+@@ -274,10 +306,13 @@ def plot_divergence_vs_ratio(rows: list[dict[str, Any]], output_dir: Path) -> None:
+         row
+         for row in rows
+         if row["diverged"] and row["first_divergence_step"] is not None
++        and row["length_ratio_interpretable"]
+     ]
+     fig, ax = plt.subplots(figsize=(7.2, 4.8))
+     if not diverged:
+-        add_empty_message(ax, "No diverged samples")
++        add_empty_message(
++            ax, "No uncensored diverged samples for length-ratio analysis"
++        )
+     else:
+         ax.scatter(
+             [row["first_divergence_step"] for row in diverged],
+@@ -303,7 +337,7 @@ def main() -> None:
+     args.output_dir.mkdir(parents=True, exist_ok=True)
+     plot_length_scatter(rows, summary, args.output_dir, args.annotate_top_k)
+     plot_divergence_hist(rows, args.output_dir, args.boundary_step)
+-    plot_divergence_cdf(rows, args.output_dir)
++    plot_divergence_cdf(rows, summary, args.output_dir)
+     plot_divergence_by_length(summary, args.output_dir)
+     plot_length_ratio_hist(rows, args.output_dir)
+     plot_divergence_vs_ratio(rows, args.output_dir)
+diff --git a/experiments/trajectory_divergence/README.md b/experiments/trajectory_divergence/README.md
+index 935fca0..9376afe 100644
+--- a/experiments/trajectory_divergence/README.md
++++ b/experiments/trajectory_divergence/README.md
+@@ -67,9 +67,9 @@ The path should point into the current KVarN repository.
+ ## Smoke test
+ 
+ ```bash
+-MODEL=/path/to/Qwen3-4B \
++MODEL=Qwen/Qwen3-4B \
+ PYTHON=/path/to/kvarn-env/bin/python \
+-bash experiments/trajectory_divergence/run_smoke_test.sh
++BOUNDARY_STEP=128 bash experiments/trajectory_divergence/run_smoke_test.sh
+ ```
+ 
+ Default smoke output:
+@@ -86,22 +86,41 @@ Default configuration:
+ - samples: 100;
+ - model: `Qwen/Qwen3-4B`;
+ - thinking mode: enabled through the tokenizer chat template;
+-- decoding: greedy, `temperature=0`;
+-- maximum output: 8192 tokens;
++- decoding: greedy, `temperature=0`, intentionally used for deterministic
++  trajectory attribution rather than model-quality benchmarking;
++- total context capacity (`prompt + output`): 131072 tokens;
++- YaRN: factor 4 with `original_max_position_embeddings=32768`;
++- maximum generated output: 38912 tokens;
+ - prefix caching: disabled;
+ - FP16 mode: `kv_cache_dtype=auto`;
+ - KVarN mode: `kvarn_k4v2_g128`;
+ - block size: 128;
++- plot boundary spacing: 128;
+ - batch size / `max_num_seqs`: 1;
+ - seed: 2026.
+ 
++`MAX_MODEL_LEN=131072` is the 128K total sequence ceiling. It is not an
++output-only limit. Setting `MAX_TOKENS=131072` would leave no room for the
++prompt and is therefore not the default. Qwen recommends 38912 output tokens
++for difficult math/programming benchmarks.
++
++Enabling static YaRN makes 128K possible but may slightly affect short-context
++quality. It also does not force a MATH-500 sample to become 128K long; the
++actual context is still `input_tokens + generated_tokens`.
++
++The FP16 baseline has a much larger KV cache than KVarN. A 128K FP16 run may
++require multiple GPUs or more VRAM. Increase `TP_SIZE` or lower
++`MAX_MODEL_LEN` if the FP16 engine cannot allocate its cache.
++
+ Run:
+ ```bash
+-MODEL=/path/to/Qwen3-4B \
++MODEL=Qwen/Qwen3-4B \
+ PYTHON=/path/to/kvarn-env/bin/python \
+ NUM_SAMPLES=100 \
+-MAX_TOKENS=8192 \
+-MAX_MODEL_LEN=32768 \
++MAX_TOKENS=38912 \
++MAX_MODEL_LEN=131072 \
++BOUNDARY_STEP=128 \
++TP_SIZE=2 \
+ OUTPUT_ROOT=/path/to/results/math500_n100 \
+ bash experiments/trajectory_divergence/run_full_experiment.sh
+ ```
+@@ -133,9 +149,10 @@ python experiments/trajectory_divergence/run_generation.py \
+   --run-name fp16_run1 \
+   --samples-file results/trajectory/selected_samples.json \
+   --output-dir results/trajectory/fp16_run1 \
+-  --model /path/to/Qwen3-4B \
+-  --max-tokens 8192 \
+-  --max-model-len 32768 \
++  --model Qwen/Qwen3-4B \
++  --max-tokens 38912 \
++  --max-model-len 131072 \
++  --rope-scaling-json '{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}' \
+   --block-size 128
+ ```
+ ### 3. KVarN KV cache
+@@ -146,10 +163,11 @@ python experiments/trajectory_divergence/run_generation.py \
+   --run-name kvarn_run1 \
+   --samples-file results/trajectory/selected_samples.json \
+   --output-dir results/trajectory/kvarn_run1 \
+-  --model /path/to/Qwen3-4B \
++  --model Qwen/Qwen3-4B \
+   --kvarn-kv-cache-dtype kvarn_k4v2_g128 \
+-  --max-tokens 8192 \
+-  --max-model-len 32768 \
++  --max-tokens 38912 \
++  --max-model-len 131072 \
++  --rope-scaling-json '{"rope_type":"yarn","factor":4.0,"original_max_position_embeddings":32768}' \
+   --block-size 128
+ ```
+ ### 4. Compare exact token trajectories
+@@ -159,7 +177,7 @@ python experiments/trajectory_divergence/compare_trajectories.py \
+   --reference results/trajectory/fp16_run1/generations.jsonl \
+   --candidate results/trajectory/kvarn_run1/generations.jsonl \
+   --output-dir results/trajectory/comparison \
+-  --tokenizer /path/to/Qwen3-4B \
++  --tokenizer Qwen/Qwen3-4B \
+   --trust-remote-code \
+   --block-size 128
+ ```
+@@ -169,6 +187,7 @@ python experiments/trajectory_divergence/plot_results.py \
+   --comparison-csv results/trajectory/comparison/per_sample_comparison.csv \
+   --summary-json results/trajectory/comparison/summary.json \
+-  --output-dir results/trajectory/comparison/plots
++  --output-dir results/trajectory/comparison/plots \
++  --boundary-step 128
+ ```
+ ## Main definitions
+ 
+@@ -184,9 +203,20 @@ The first divergence is classified as:
+ For a diverged sample:
+ ```text
+ first_divergence_step = longest_common_prefix_length
++# Output-relative block index:
+ first_divergence_block = first_divergence_step // block_size
+ offset_in_block = first_divergence_step % block_size
++
++# Absolute sequence position including the prompt:
++absolute_divergence_position = fp16_input_tokens + first_divergence_step
++absolute_divergence_block = absolute_divergence_position // block_size
++absolute_offset_in_block = absolute_divergence_position % block_size
++
+ length_ratio = kvarn_output_tokens / max(1, fp16_output_tokens)
+ ```
+ 
++When either run ends with `finish_reason=length`, the pair is marked censored.
++Such pairs remain visible in the output-length scatter, but are excluded from
++length-ratio distribution and divergence-vs-length-ratio analyses.
++
+ The scripts use vLLM's returned `output_token_ids`; they do not reconstruct output IDs by retokenizing text.

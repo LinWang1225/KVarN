@@ -42,8 +42,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fp16-kv-cache-dtype", default="auto")
     parser.add_argument("--kvarn-kv-cache-dtype", default="kvarn_k4v2_g128")
     parser.add_argument("--block-size", type=int, default=128)
-    parser.add_argument("--max-tokens", type=int, default=8192)
-    parser.add_argument("--max-model-len", type=int, default=32768)
+    parser.add_argument("--max-tokens", type=int, default=38912)
+    parser.add_argument("--max-model-len", type=int, default=131072)
+    parser.add_argument(
+        "--rope-scaling-json",
+        default="",
+        help=(
+            "Optional JSON object passed to Hugging Face config as rope_scaling. "
+            "The full experiment passes the Qwen3-4B YaRN factor-4 config; "
+            "leave empty for native-window smoke tests."
+        ),
+    )
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--top-k", type=int, default=-1)
@@ -90,6 +99,18 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     return parser.parse_args()
+
+
+def parse_json_object(value: str | None, flag_name: str) -> dict[str, Any] | None:
+    if value is None or not value.strip():
+        return None
+    try:
+        parsed = json.loads(value)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"{flag_name} must be valid JSON: {exc}") from exc
+    if not isinstance(parsed, dict):
+        raise ValueError(f"{flag_name} must decode to a JSON object")
+    return parsed
 
 
 def package_version(name: str) -> str | None:
@@ -284,7 +305,10 @@ def build_prompt(
         return str(prompt), False
 
 
-def create_llm(args: argparse.Namespace) -> tuple[Any, str]:
+def create_llm(
+    args: argparse.Namespace,
+    rope_scaling: dict[str, Any] | None,
+) -> tuple[Any, str]:
     try:
         from vllm import LLM
     except ImportError as exc:  # pragma: no cover - environment dependent
@@ -318,6 +342,8 @@ def create_llm(args: argparse.Namespace) -> tuple[Any, str]:
         kwargs["tokenizer_revision"] = args.tokenizer_revision
     if args.enforce_eager:
         kwargs["enforce_eager"] = True
+    if rope_scaling is not None:
+        kwargs["hf_overrides"] = {"rope_scaling": rope_scaling}
     if requested_kv_dtype != "auto":
         kwargs["kv_cache_dtype"] = requested_kv_dtype
 
@@ -348,6 +374,29 @@ def main() -> None:
         format="%(asctime)s | %(levelname)s | %(message)s",
     )
 
+    if args.max_model_len <= 0 or args.max_tokens <= 0:
+        raise ValueError("--max-model-len and --max-tokens must be positive")
+    if args.max_tokens >= args.max_model_len:
+        raise ValueError(
+            "--max-tokens is the output budget and must be smaller than "
+            "--max-model-len, which covers prompt plus output."
+        )
+    rope_scaling = parse_json_object(
+        args.rope_scaling_json,
+        "--rope-scaling-json",
+    )
+    if args.enable_thinking and "instruct-2507" in args.model.lower():
+        LOGGER.warning(
+            "The selected Instruct-2507 checkpoint is not the switchable "
+            "Qwen/Qwen3-4B checkpoint. Use Qwen/Qwen3-4B for this experiment."
+        )
+    if args.max_model_len > 32768 and rope_scaling is None:
+        LOGGER.warning(
+            "max_model_len=%d exceeds the native Qwen3-4B window, but no "
+            "RoPE scaling override was supplied.",
+            args.max_model_len,
+        )
+
     script_path = Path(__file__).resolve()
     repo_root = script_path.parents[2]
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -365,7 +414,7 @@ def main() -> None:
     if args.system_prompt_file:
         system_prompt = args.system_prompt_file.read_text(encoding="utf-8").strip()
 
-    llm, requested_kv_dtype = create_llm(args)
+    llm, requested_kv_dtype = create_llm(args, rope_scaling)
     tokenizer = llm.get_tokenizer()
     sampling_params = create_sampling_params(args)
     resolved_kv_dtype, resolved_path = resolve_engine_cache_dtype(llm)
@@ -408,6 +457,7 @@ def main() -> None:
         "block_size": args.block_size,
         "max_tokens": args.max_tokens,
         "max_model_len": args.max_model_len,
+        "rope_scaling": rope_scaling,
         "temperature": args.temperature,
         "top_p": args.top_p,
         "top_k": args.top_k,
@@ -472,6 +522,7 @@ def main() -> None:
                 "top_p": args.top_p,
                 "top_k": args.top_k,
                 "max_tokens": args.max_tokens,
+                "max_model_len": args.max_model_len,
             }
 
             try:
