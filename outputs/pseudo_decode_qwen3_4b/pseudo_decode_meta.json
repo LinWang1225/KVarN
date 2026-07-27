@@ -1,0 +1,46 @@
+{
+  "model_path": "/home/wanglin/.cache/huggingface/hub/models--Qwen--Qwen3-4B-Instruct-2507/snapshots/cdbee75f17c01a7cc42f958dc650907174af0554",
+  "max_seq_len": 32768,
+  "block_size": 128,
+  "sink_tokens": 128,
+  "sinkhorn_iters": 8,
+  "precision": "kvarn_k4v2_g128",
+  "prompt_tokens": 4096,
+  "num_points": 8,
+  "seed": 42,
+  "dtype": "bfloat16",
+  "results": [
+    {
+      "context_length": 410,
+      "mae": 2.9656167030334473
+    },
+    {
+      "context_length": 938,
+      "mae": 3.923732280731201
+    },
+    {
+      "context_length": 1466,
+      "mae": 3.6475069522857666
+    },
+    {
+      "context_length": 1993,
+      "mae": 4.4422454833984375
+    },
+    {
+      "context_length": 2521,
+      "mae": 3.1773722171783447
+    },
+    {
+      "context_length": 3049,
+      "mae": 4.167726516723633
+    },
+    {
+      "context_length": 3576,
+      "mae": 6.5134477615356445
+    },
+    {
+      "context_length": 4104,
+      "mae": 3.7578694820404053
+    }
+  ]
+}

@@ -1017,8 +1017,10 @@ class KVarNAttentionImpl(AttentionImpl["KVarNMetadata"]):
             self._max_model_len = 4096
 
         # Register so the metadata builder can find us (slot allocation /
-        # sink marking / flush triggers all enumerate _all_impls).
-        type(self)._all_impls.append(self)
+        # sink marking / flush triggers all enumerate _all_impls). Guard against
+        # repeated construction during config reloads / graph warmup paths.
+        if self not in type(self)._all_impls:
+            type(self)._all_impls.append(self)
 
     # ── helpers ──────────────────────────────────────────────────────────────
 

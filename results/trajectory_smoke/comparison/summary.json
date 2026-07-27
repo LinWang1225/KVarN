@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "total_samples": 3,
+  "valid_pairs": 3,
+  "missing_reference_count": 0,
+  "missing_reference_sample_ids": [],
+  "missing_candidate_count": 0,
+  "missing_candidate_sample_ids": [],
+  "failed_reference_count": 0,
+  "failed_reference_sample_ids": [],
+  "failed_candidate_count": 0,
+  "failed_candidate_sample_ids": [],
+  "prompt_hash_mismatch_count": 0,
+  "identical_count": 1,
+  "diverged_count": 2,
+  "divergence_rate": 0.6666666666666666,
+  "token_mismatch_count": 2,
+  "length_only_count": 0,
+  "mean_first_divergence_step": 217.5,
+  "median_first_divergence_step": 217.5,
+  "first_divergence_step_percentiles": {
+    "p25": 209.75,
+    "p50": 217.5,
+    "p75": 225.25,
+    "p90": 229.9
+  },
+  "mean_lcp_ratio": 0.8997395833333334,
+  "median_lcp_ratio": 0.91015625,
+  "mean_fp16_output_tokens": 256.0,
+  "mean_kvarn_output_tokens": 256.0,
+  "mean_length_difference": 0.0,
+  "median_length_difference": 0,
+  "mean_length_ratio": 1.0,
+  "fraction_length_ratio_gt_1_1": 0.0,
+  "fraction_length_ratio_gt_1_5": 0.0,
+  "fraction_length_ratio_gt_2_0": 0.0,
+  "fp16_approx_accuracy": {
+    "correct": 0,
+    "evaluated": 3,
+    "accuracy": 0.0
+  },
+  "kvarn_approx_accuracy": {
+    "correct": 0,
+    "evaluated": 3,
+    "accuracy": 0.0
+  },
+  "correctness_transition_counts": {
+    "wrong_to_wrong": 3
+  },
+  "correct_to_wrong_count": 0,
+  "wrong_to_correct_count": 0,
+  "reference_finish_reason_counts": {
+    "length": 3
+  },
+  "candidate_finish_reason_counts": {
+    "length": 3
+  },
+  "length_buckets": {
+    "[0,512)": {
+      "sample_count": 3,
+      "divergence_count": 2,
+      "divergence_rate": 0.6666666666666666,
+      "median_first_divergence_step": 217.5,
+      "mean_length_ratio": 1.0,
+      "correct_to_wrong_count": 0
+    },
+    "[512,1024)": {
+      "sample_count": 0,
+      "divergence_count": 0,
+      "divergence_rate": null,
+      "median_first_divergence_step": null,
+      "mean_length_ratio": null,
+      "correct_to_wrong_count": 0
+    },
+    "[1024,2048)": {
+      "sample_count": 0,
+      "divergence_count": 0,
+      "divergence_rate": null,
+      "median_first_divergence_step": null,
+      "mean_length_ratio": null,
+      "correct_to_wrong_count": 0
+    },
+    "[2048,4096)": {
+      "sample_count": 0,
+      "divergence_count": 0,
+      "divergence_rate": null,
+      "median_first_divergence_step": null,
+      "mean_length_ratio": null,
+      "correct_to_wrong_count": 0
+    },
+    "[4096,+inf)": {
+      "sample_count": 0,
+      "divergence_count": 0,
+      "divergence_rate": null,
+      "median_first_divergence_step": null,
+      "mean_length_ratio": null,
+      "correct_to_wrong_count": 0
+    }
+  },
+  "fp16_self_divergence": {
+    "valid_pairs": 3,
+    "diverged_count": 0,
+    "self_divergence_rate": 0.0,
+    "divergent_sample_ids": []
+  },
+  "kvarn_self_divergence": {
+    "valid_pairs": 3,
+    "diverged_count": 0,
+    "self_divergence_rate": 0.0,
+    "divergent_sample_ids": []
+  }
+}

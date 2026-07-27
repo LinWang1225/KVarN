@@ -991,7 +991,9 @@ class MLAAttention(nn.Module, AttentionLayerBase):
                 kvarn_mla_tile_layout,
             )
             kv_lora_rank = self.head_size - self.qk_rope_head_dim
-            block_size = 128
+            # group/page is encoded in the dtype suffix: dense tiles at 128, the
+            # sparse-MLA (DSA) backend pages at 64 -> '..._g64' forces block 64.
+            block_size = 64 if str(self.kv_cache_dtype).endswith("_g64") else 128
             _, _, _, _, _, _, head_size = kvarn_mla_tile_layout(
                 kv_lora_rank, self.qk_rope_head_dim, block_size, 4)
         return MLAAttentionSpec(

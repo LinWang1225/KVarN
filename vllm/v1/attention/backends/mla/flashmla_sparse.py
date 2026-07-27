@@ -94,6 +94,8 @@ class FlashMLASparseBackend(AttentionBackend):
         "bfloat16",
         "fp8_ds_mla",
         "fp8",  # alias for fp8_ds_mla
+        "kvarn_k4v2_g64",  # KVarN latent int4 (group==page==64); see
+                           # flashmla_sparse_kvarn.py
     ]
 
     @staticmethod
@@ -106,11 +108,21 @@ class FlashMLASparseBackend(AttentionBackend):
 
     @staticmethod
     def get_builder_cls() -> type["FlashMLASparseMetadataBuilder"]:
-        return FlashMLASparseMetadataBuilder
+        # KVarN subclass is a transparent pass-through for non-kvarn dtypes
+        # (lazy import avoids a circular import).
+        from vllm.v1.attention.backends.mla.flashmla_sparse_kvarn import (
+            FlashMLASparseKVarNMetadataBuilder,
+        )
+
+        return FlashMLASparseKVarNMetadataBuilder
 
     @staticmethod
     def get_impl_cls() -> type[SparseMLAAttentionImpl[Any]]:
-        return FlashMLASparseImpl
+        from vllm.v1.attention.backends.mla.flashmla_sparse_kvarn import (
+            FlashMLASparseKVarNImpl,
+        )
+
+        return FlashMLASparseKVarNImpl
 
     @classmethod
     def get_supported_head_sizes(cls) -> list[int]:
