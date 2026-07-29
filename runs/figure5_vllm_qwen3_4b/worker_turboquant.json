@@ -1,0 +1,4143 @@
+{
+  "method": "turboquant",
+  "label": "TurboQuant 3-bit NC",
+  "kv_cache_dtype": "turboquant_3bit_nc",
+  "model": "/data/wanglin/models/Qwen3-4B",
+  "block_size": 128,
+  "chunk_size": 128,
+  "eval_window": 128,
+  "points": [
+    {
+      "context_tokens": 4096,
+      "elapsed_seconds": 5.179995281621814,
+      "prompt_tokens_per_second": 790.7343110006803,
+      "window_start": 3968,
+      "window_end": 4096,
+      "window": [
+        {
+          "position": 3968,
+          "token_id": 39260,
+          "target_logprob": -6.350566864013672,
+          "target_rank": 3,
+          "top1_token_id": 13808,
+          "top1_logprob": -0.006816940847784281
+        },
+        {
+          "position": 3969,
+          "token_id": 42968,
+          "target_logprob": -0.31637030839920044,
+          "target_rank": 1,
+          "top1_token_id": 42968,
+          "top1_logprob": -0.31637030839920044
+        },
+        {
+          "position": 3970,
+          "token_id": 330,
+          "target_logprob": -0.016741730272769928,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.016741730272769928
+        },
+        {
+          "position": 3971,
+          "token_id": 320,
+          "target_logprob": -2.8650472164154053,
+          "target_rank": 6,
+          "top1_token_id": 369,
+          "top1_logprob": -1.3962972164154053
+        },
+        {
+          "position": 3972,
+          "token_id": 8908,
+          "target_logprob": -4.08983850479126,
+          "target_rank": 10,
+          "top1_token_id": 220,
+          "top1_logprob": -1.1445260047912598
+        },
+        {
+          "position": 3973,
+          "token_id": 102,
+          "target_logprob": -0.03614665940403938,
+          "target_rank": 1,
+          "top1_token_id": 102,
+          "top1_logprob": -0.03614665940403938
+        },
+        {
+          "position": 3974,
+          "token_id": 102,
+          "target_logprob": -5.090107151772827e-05,
+          "target_rank": 1,
+          "top1_token_id": 102,
+          "top1_logprob": -5.090107151772827e-05
+        },
+        {
+          "position": 3975,
+          "token_id": 99497,
+          "target_logprob": -0.0020936252549290657,
+          "target_rank": 1,
+          "top1_token_id": 99497,
+          "top1_logprob": -0.0020936252549290657
+        },
+        {
+          "position": 3976,
+          "token_id": 557,
+          "target_logprob": -17.870105743408203,
+          "target_rank": 671,
+          "top1_token_id": 873,
+          "top1_logprob": -0.4130745232105255
+        },
+        {
+          "position": 3977,
+          "token_id": 60611,
+          "target_logprob": -2.6437032222747803,
+          "target_rank": 2,
+          "top1_token_id": 72,
+          "top1_logprob": -0.08120331913232803
+        },
+        {
+          "position": 3978,
+          "token_id": 557,
+          "target_logprob": -0.3092010021209717,
+          "target_rank": 1,
+          "top1_token_id": 557,
+          "top1_logprob": -0.3092010021209717
+        },
+        {
+          "position": 3979,
+          "token_id": 145145,
+          "target_logprob": -4.672895011026412e-05,
+          "target_rank": 1,
+          "top1_token_id": 145145,
+          "top1_logprob": -4.672895011026412e-05
+        },
+        {
+          "position": 3980,
+          "token_id": 873,
+          "target_logprob": -0.09684227406978607,
+          "target_rank": 1,
+          "top1_token_id": 873,
+          "top1_logprob": -0.09684227406978607
+        },
+        {
+          "position": 3981,
+          "token_id": 659,
+          "target_logprob": -1.8422644138336182,
+          "target_rank": 5,
+          "top1_token_id": 1576,
+          "top1_logprob": -1.5610144138336182
+        },
+        {
+          "position": 3982,
+          "token_id": 576,
+          "target_logprob": -1.8281667232513428,
+          "target_rank": 3,
+          "top1_token_id": 1260,
+          "top1_logprob": -1.7812917232513428
+        },
+        {
+          "position": 3983,
+          "token_id": 1429,
+          "target_logprob": -4.6354217529296875,
+          "target_rank": 16,
+          "top1_token_id": 4647,
+          "top1_logprob": -1.361984372138977
+        },
+        {
+          "position": 3984,
+          "token_id": 5961,
+          "target_logprob": -8.545393943786621,
+          "target_rank": 152,
+          "top1_token_id": 2989,
+          "top1_logprob": -1.3266435861587524
+        },
+        {
+          "position": 3985,
+          "token_id": 13656,
+          "target_logprob": -1.0533086061477661,
+          "target_rank": 1,
+          "top1_token_id": 13656,
+          "top1_logprob": -1.0533086061477661
+        },
+        {
+          "position": 3986,
+          "token_id": 315,
+          "target_logprob": -2.0146477222442627,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -2.0146477222442627
+        },
+        {
+          "position": 3987,
+          "token_id": 806,
+          "target_logprob": -0.19459888339042664,
+          "target_rank": 1,
+          "top1_token_id": 806,
+          "top1_logprob": -0.19459888339042664
+        },
+        {
+          "position": 3988,
+          "token_id": 44219,
+          "target_logprob": -0.7831778526306152,
+          "target_rank": 2,
+          "top1_token_id": 4278,
+          "top1_logprob": -0.6581778526306152
+        },
+        {
+          "position": 3989,
+          "token_id": 525,
+          "target_logprob": -1.0587855577468872,
+          "target_rank": 2,
+          "top1_token_id": 374,
+          "top1_logprob": -0.6994105577468872
+        },
+        {
+          "position": 3990,
+          "token_id": 1846,
+          "target_logprob": -0.19550831615924835,
+          "target_rank": 1,
+          "top1_token_id": 1846,
+          "top1_logprob": -0.19550831615924835
+        },
+        {
+          "position": 3991,
+          "token_id": 40265,
+          "target_logprob": -9.135586738586426,
+          "target_rank": 58,
+          "top1_token_id": 429,
+          "top1_logprob": -0.41683682799339294
+        },
+        {
+          "position": 3992,
+          "token_id": 389,
+          "target_logprob": -0.08747058361768723,
+          "target_rank": 1,
+          "top1_token_id": 389,
+          "top1_logprob": -0.08747058361768723
+        },
+        {
+          "position": 3993,
+          "token_id": 6277,
+          "target_logprob": -6.6701226234436035,
+          "target_rank": 17,
+          "top1_token_id": 279,
+          "top1_logprob": -0.20137269794940948
+        },
+        {
+          "position": 3994,
+          "token_id": 25342,
+          "target_logprob": -10.153369903564453,
+          "target_rank": 101,
+          "top1_token_id": 20686,
+          "top1_logprob": -0.739307701587677
+        },
+        {
+          "position": 3995,
+          "token_id": 476,
+          "target_logprob": -2.9872889518737793,
+          "target_rank": 3,
+          "top1_token_id": 323,
+          "top1_logprob": -0.2841639220714569
+        },
+        {
+          "position": 3996,
+          "token_id": 279,
+          "target_logprob": -1.7998723983764648,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -1.7998723983764648
+        },
+        {
+          "position": 3997,
+          "token_id": 47088,
+          "target_logprob": -6.837490081787109,
+          "target_rank": 107,
+          "top1_token_id": 4948,
+          "top1_logprob": -2.2593653202056885
+        },
+        {
+          "position": 3998,
+          "token_id": 323,
+          "target_logprob": -0.10463932901620865,
+          "target_rank": 1,
+          "top1_token_id": 323,
+          "top1_logprob": -0.10463932901620865
+        },
+        {
+          "position": 3999,
+          "token_id": 27850,
+          "target_logprob": -0.027066396549344063,
+          "target_rank": 1,
+          "top1_token_id": 27850,
+          "top1_logprob": -0.027066396549344063
+        },
+        {
+          "position": 4000,
+          "token_id": 315,
+          "target_logprob": -0.0041287424974143505,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -0.0041287424974143505
+        },
+        {
+          "position": 4001,
+          "token_id": 279,
+          "target_logprob": -1.9730310440063477,
+          "target_rank": 2,
+          "top1_token_id": 4116,
+          "top1_logprob": -1.6449060440063477
+        },
+        {
+          "position": 4002,
+          "token_id": 3033,
+          "target_logprob": -2.0615108013153076,
+          "target_rank": 1,
+          "top1_token_id": 3033,
+          "top1_logprob": -2.0615108013153076
+        },
+        {
+          "position": 4003,
+          "token_id": 1154,
+          "target_logprob": -3.3597018718719482,
+          "target_rank": 4,
+          "top1_token_id": 659,
+          "top1_logprob": -0.7815768718719482
+        },
+        {
+          "position": 4004,
+          "token_id": 476,
+          "target_logprob": -3.083780288696289,
+          "target_rank": 6,
+          "top1_token_id": 714,
+          "top1_logprob": -1.380655288696289
+        },
+        {
+          "position": 4005,
+          "token_id": 279,
+          "target_logprob": -1.3779253959655762,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -1.3779253959655762
+        },
+        {
+          "position": 4006,
+          "token_id": 44219,
+          "target_logprob": -3.732362985610962,
+          "target_rank": 3,
+          "top1_token_id": 6305,
+          "top1_logprob": -2.654237985610962
+        },
+        {
+          "position": 4007,
+          "token_id": 315,
+          "target_logprob": -4.132440567016602,
+          "target_rank": 7,
+          "top1_token_id": 429,
+          "top1_logprob": -0.6949406266212463
+        },
+        {
+          "position": 4008,
+          "token_id": 9462,
+          "target_logprob": -7.853525161743164,
+          "target_rank": 118,
+          "top1_token_id": 279,
+          "top1_logprob": -1.087899923324585
+        },
+        {
+          "position": 4009,
+          "token_id": 892,
+          "target_logprob": -3.193979501724243,
+          "target_rank": 7,
+          "top1_token_id": 311,
+          "top1_logprob": -1.0533545017242432
+        },
+        {
+          "position": 4010,
+          "token_id": 566,
+          "target_logprob": -1.801133632659912,
+          "target_rank": 3,
+          "top1_token_id": 1033,
+          "top1_logprob": -1.137071132659912
+        },
+        {
+          "position": 4011,
+          "token_id": 6139,
+          "target_logprob": -0.4771127700805664,
+          "target_rank": 1,
+          "top1_token_id": 6139,
+          "top1_logprob": -0.4771127700805664
+        },
+        {
+          "position": 4012,
+          "token_id": 311,
+          "target_logprob": -1.3889662027359009,
+          "target_rank": 2,
+          "top1_token_id": 369,
+          "top1_logprob": -0.4827162027359009
+        },
+        {
+          "position": 4013,
+          "token_id": 279,
+          "target_logprob": -1.3086884021759033,
+          "target_rank": 2,
+          "top1_token_id": 806,
+          "top1_logprob": -1.2461884021759033
+        },
+        {
+          "position": 4014,
+          "token_id": 56783,
+          "target_logprob": -0.29756027460098267,
+          "target_rank": 1,
+          "top1_token_id": 56783,
+          "top1_logprob": -0.29756027460098267
+        },
+        {
+          "position": 4015,
+          "token_id": 659,
+          "target_logprob": -0.4761950969696045,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.4761950969696045
+        },
+        {
+          "position": 4016,
+          "token_id": 2263,
+          "target_logprob": -10.578170776367188,
+          "target_rank": 361,
+          "top1_token_id": 576,
+          "top1_logprob": -2.0625460147857666
+        },
+        {
+          "position": 4017,
+          "token_id": 1226,
+          "target_logprob": -0.07313188910484314,
+          "target_rank": 1,
+          "top1_token_id": 1226,
+          "top1_logprob": -0.07313188910484314
+        },
+        {
+          "position": 4018,
+          "token_id": 398,
+          "target_logprob": -0.0036778682842850685,
+          "target_rank": 1,
+          "top1_token_id": 398,
+          "top1_logprob": -0.0036778682842850685
+        },
+        {
+          "position": 4019,
+          "token_id": 1154,
+          "target_logprob": -0.2923080325126648,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.2923080325126648
+        },
+        {
+          "position": 4020,
+          "token_id": 566,
+          "target_logprob": -2.6125876903533936,
+          "target_rank": 4,
+          "top1_token_id": 806,
+          "top1_logprob": -0.5969626903533936
+        },
+        {
+          "position": 4021,
+          "token_id": 6139,
+          "target_logprob": -2.86159086227417,
+          "target_rank": 4,
+          "top1_token_id": 374,
+          "top1_logprob": -0.9553408622741699
+        },
+        {
+          "position": 4022,
+          "token_id": 911,
+          "target_logprob": -0.4611532390117645,
+          "target_rank": 1,
+          "top1_token_id": 911,
+          "top1_logprob": -0.4611532390117645
+        },
+        {
+          "position": 4023,
+          "token_id": 279,
+          "target_logprob": -1.7514653205871582,
+          "target_rank": 2,
+          "top1_token_id": 3840,
+          "top1_logprob": -0.4545902609825134
+        },
+        {
+          "position": 4024,
+          "token_id": 2456,
+          "target_logprob": -7.9626946449279785,
+          "target_rank": 112,
+          "top1_token_id": 3840,
+          "top1_logprob": -0.7126947641372681
+        },
+        {
+          "position": 4025,
+          "token_id": 315,
+          "target_logprob": -0.031313661485910416,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -0.031313661485910416
+        },
+        {
+          "position": 4026,
+          "token_id": 279,
+          "target_logprob": -0.8981497287750244,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.8981497287750244
+        },
+        {
+          "position": 4027,
+          "token_id": 3039,
+          "target_logprob": -9.836076736450195,
+          "target_rank": 82,
+          "top1_token_id": 1527,
+          "top1_logprob": -0.17982672154903412
+        },
+        {
+          "position": 4028,
+          "token_id": 304,
+          "target_logprob": -4.63111686706543,
+          "target_rank": 4,
+          "top1_token_id": 389,
+          "top1_logprob": -0.0998668223619461
+        },
+        {
+          "position": 4029,
+          "token_id": 892,
+          "target_logprob": -0.571151614189148,
+          "target_rank": 1,
+          "top1_token_id": 892,
+          "top1_logprob": -0.571151614189148
+        },
+        {
+          "position": 4030,
+          "token_id": 566,
+          "target_logprob": -0.03147932514548302,
+          "target_rank": 1,
+          "top1_token_id": 566,
+          "top1_logprob": -0.03147932514548302
+        },
+        {
+          "position": 4031,
+          "token_id": 12163,
+          "target_logprob": -0.008002599701285362,
+          "target_rank": 1,
+          "top1_token_id": 12163,
+          "top1_logprob": -0.008002599701285362
+        },
+        {
+          "position": 4032,
+          "token_id": 389,
+          "target_logprob": -1.663416862487793,
+          "target_rank": 2,
+          "top1_token_id": 659,
+          "top1_logprob": -0.8509168028831482
+        },
+        {
+          "position": 4033,
+          "token_id": 5561,
+          "target_logprob": -6.526209831237793,
+          "target_rank": 18,
+          "top1_token_id": 279,
+          "top1_logprob": -0.6199595928192139
+        },
+        {
+          "position": 4034,
+          "token_id": 1154,
+          "target_logprob": -2.8573691844940186,
+          "target_rank": 3,
+          "top1_token_id": 323,
+          "top1_logprob": -0.16986916959285736
+        },
+        {
+          "position": 4035,
+          "token_id": 323,
+          "target_logprob": -0.9503198862075806,
+          "target_rank": 1,
+          "top1_token_id": 323,
+          "top1_logprob": -0.9503198862075806
+        },
+        {
+          "position": 4036,
+          "token_id": 389,
+          "target_logprob": -1.4241812229156494,
+          "target_rank": 1,
+          "top1_token_id": 389,
+          "top1_logprob": -1.4241812229156494
+        },
+        {
+          "position": 4037,
+          "token_id": 279,
+          "target_logprob": -0.8088544607162476,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.8088544607162476
+        },
+        {
+          "position": 4038,
+          "token_id": 19119,
+          "target_logprob": -5.56281042098999,
+          "target_rank": 14,
+          "top1_token_id": 1251,
+          "top1_logprob": -0.4065602719783783
+        },
+        {
+          "position": 4039,
+          "token_id": 1251,
+          "target_logprob": -0.022193284705281258,
+          "target_rank": 1,
+          "top1_token_id": 1251,
+          "top1_logprob": -0.022193284705281258
+        },
+        {
+          "position": 4040,
+          "token_id": 315,
+          "target_logprob": -1.0199400186538696,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -1.0199400186538696
+        },
+        {
+          "position": 4041,
+          "token_id": 5616,
+          "target_logprob": -1.3409922122955322,
+          "target_rank": 2,
+          "top1_token_id": 279,
+          "top1_logprob": -0.512867271900177
+        },
+        {
+          "position": 4042,
+          "token_id": 659,
+          "target_logprob": -0.10150255262851715,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.10150255262851715
+        },
+        {
+          "position": 4043,
+          "token_id": 1634,
+          "target_logprob": -3.829470634460449,
+          "target_rank": 9,
+          "top1_token_id": 5301,
+          "top1_logprob": -1.3997832536697388
+        },
+        {
+          "position": 4044,
+          "token_id": 31480,
+          "target_logprob": -12.976818084716797,
+          "target_rank": 1439,
+          "top1_token_id": 264,
+          "top1_logprob": -0.5236930847167969
+        },
+        {
+          "position": 4045,
+          "token_id": 8388,
+          "target_logprob": -2.3233351707458496,
+          "target_rank": 3,
+          "top1_token_id": 2727,
+          "top1_logprob": -0.9327101111412048
+        },
+        {
+          "position": 4046,
+          "token_id": 1154,
+          "target_logprob": -0.21034252643585205,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.21034252643585205
+        },
+        {
+          "position": 4047,
+          "token_id": 419,
+          "target_logprob": -3.470991611480713,
+          "target_rank": 5,
+          "top1_token_id": 330,
+          "top1_logprob": -0.5647417306900024
+        },
+        {
+          "position": 4048,
+          "token_id": 374,
+          "target_logprob": -0.8488756418228149,
+          "target_rank": 1,
+          "top1_token_id": 374,
+          "top1_logprob": -0.8488756418228149
+        },
+        {
+          "position": 4049,
+          "token_id": 1995,
+          "target_logprob": -12.062865257263184,
+          "target_rank": 741,
+          "top1_token_id": 279,
+          "top1_logprob": -1.3831781148910522
+        },
+        {
+          "position": 4050,
+          "token_id": 330,
+          "target_logprob": -4.23043155670166,
+          "target_rank": 6,
+          "top1_token_id": 429,
+          "top1_logprob": -0.6523066759109497
+        },
+        {
+          "position": 4051,
+          "token_id": 315,
+          "target_logprob": -4.467790603637695,
+          "target_rank": 11,
+          "top1_token_id": 279,
+          "top1_logprob": -1.9521654844284058
+        },
+        {
+          "position": 4052,
+          "token_id": 264,
+          "target_logprob": -2.003239631652832,
+          "target_rank": 3,
+          "top1_token_id": 279,
+          "top1_logprob": -1.2219897508621216
+        },
+        {
+          "position": 4053,
+          "token_id": 3093,
+          "target_logprob": -1.0588150024414062,
+          "target_rank": 1,
+          "top1_token_id": 3093,
+          "top1_logprob": -1.0588150024414062
+        },
+        {
+          "position": 4054,
+          "token_id": 55352,
+          "target_logprob": -7.16840124130249,
+          "target_rank": 20,
+          "top1_token_id": 429,
+          "top1_logprob": -0.16840115189552307
+        },
+        {
+          "position": 4055,
+          "token_id": 1730,
+          "target_logprob": -0.7243702411651611,
+          "target_rank": 1,
+          "top1_token_id": 1730,
+          "top1_logprob": -0.7243702411651611
+        },
+        {
+          "position": 4056,
+          "token_id": 304,
+          "target_logprob": -0.029021840542554855,
+          "target_rank": 1,
+          "top1_token_id": 304,
+          "top1_logprob": -0.029021840542554855
+        },
+        {
+          "position": 4057,
+          "token_id": 279,
+          "target_logprob": -0.9566032290458679,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.9566032290458679
+        },
+        {
+          "position": 4058,
+          "token_id": 18562,
+          "target_logprob": -9.275718688964844,
+          "target_rank": 335,
+          "top1_token_id": 13656,
+          "top1_logprob": -1.9241557121276855
+        },
+        {
+          "position": 4059,
+          "token_id": 19697,
+          "target_logprob": -6.701632976531982,
+          "target_rank": 24,
+          "top1_token_id": 73244,
+          "top1_logprob": -0.8110078573226929
+        },
+        {
+          "position": 4060,
+          "token_id": 52110,
+          "target_logprob": -0.3698236048221588,
+          "target_rank": 1,
+          "top1_token_id": 52110,
+          "top1_logprob": -0.3698236048221588
+        },
+        {
+          "position": 4061,
+          "token_id": 315,
+          "target_logprob": -0.8737120628356934,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -0.8737120628356934
+        },
+        {
+          "position": 4062,
+          "token_id": 279,
+          "target_logprob": -0.3392985165119171,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.3392985165119171
+        },
+        {
+          "position": 4063,
+          "token_id": 11385,
+          "target_logprob": -6.5200581550598145,
+          "target_rank": 20,
+          "top1_token_id": 40362,
+          "top1_logprob": -0.512245774269104
+        },
+        {
+          "position": 4064,
+          "token_id": 330,
+          "target_logprob": -1.0485247373580933,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -1.0485247373580933
+        },
+        {
+          "position": 4065,
+          "token_id": 659,
+          "target_logprob": -0.25402340292930603,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.25402340292930603
+        },
+        {
+          "position": 4066,
+          "token_id": 14731,
+          "target_logprob": -5.412527084350586,
+          "target_rank": 34,
+          "top1_token_id": 576,
+          "top1_logprob": -1.998464822769165
+        },
+        {
+          "position": 4067,
+          "token_id": 15687,
+          "target_logprob": -2.8978991508483887,
+          "target_rank": 4,
+          "top1_token_id": 284,
+          "top1_logprob": -0.5853990316390991
+        },
+        {
+          "position": 4068,
+          "token_id": 29253,
+          "target_logprob": -0.0005290300468914211,
+          "target_rank": 1,
+          "top1_token_id": 29253,
+          "top1_logprob": -0.0005290300468914211
+        },
+        {
+          "position": 4069,
+          "token_id": 364,
+          "target_logprob": -0.6374326348304749,
+          "target_rank": 1,
+          "top1_token_id": 364,
+          "top1_logprob": -0.6374326348304749
+        },
+        {
+          "position": 4070,
+          "token_id": 82,
+          "target_logprob": -3.2186455882765586e-06,
+          "target_rank": 1,
+          "top1_token_id": 82,
+          "top1_logprob": -3.2186455882765586e-06
+        },
+        {
+          "position": 4071,
+          "token_id": 4948,
+          "target_logprob": -5.481287002563477,
+          "target_rank": 26,
+          "top1_token_id": 44219,
+          "top1_logprob": -1.8562867641448975
+        },
+        {
+          "position": 4072,
+          "token_id": 6042,
+          "target_logprob": -6.957990646362305,
+          "target_rank": 68,
+          "top1_token_id": 323,
+          "top1_logprob": -1.8173655271530151
+        },
+        {
+          "position": 4073,
+          "token_id": 525,
+          "target_logprob": -0.9355663657188416,
+          "target_rank": 1,
+          "top1_token_id": 525,
+          "top1_logprob": -0.9355663657188416
+        },
+        {
+          "position": 4074,
+          "token_id": 3118,
+          "target_logprob": -6.696613788604736,
+          "target_rank": 90,
+          "top1_token_id": 3545,
+          "top1_logprob": -1.5950512886047363
+        },
+        {
+          "position": 4075,
+          "token_id": 389,
+          "target_logprob": -0.16424329578876495,
+          "target_rank": 1,
+          "top1_token_id": 389,
+          "top1_logprob": -0.16424329578876495
+        },
+        {
+          "position": 4076,
+          "token_id": 19772,
+          "target_logprob": -10.44770336151123,
+          "target_rank": 333,
+          "top1_token_id": 806,
+          "top1_logprob": -0.627390444278717
+        },
+        {
+          "position": 4077,
+          "token_id": 4751,
+          "target_logprob": -1.724717378616333,
+          "target_rank": 2,
+          "top1_token_id": 323,
+          "top1_logprob": -0.5372173190116882
+        },
+        {
+          "position": 4078,
+          "token_id": 1091,
+          "target_logprob": -0.00038818930624984205,
+          "target_rank": 1,
+          "top1_token_id": 1091,
+          "top1_logprob": -0.00038818930624984205
+        },
+        {
+          "position": 4079,
+          "token_id": 21937,
+          "target_logprob": -4.899604320526123,
+          "target_rank": 18,
+          "top1_token_id": 389,
+          "top1_logprob": -0.7980419993400574
+        },
+        {
+          "position": 4080,
+          "token_id": 549,
+          "target_logprob": -2.3019356727600098,
+          "target_rank": 3,
+          "top1_token_id": 659,
+          "top1_logprob": -0.6456855535507202
+        },
+        {
+          "position": 4081,
+          "token_id": 806,
+          "target_logprob": -2.5599021911621094,
+          "target_rank": 4,
+          "top1_token_id": 566,
+          "top1_logprob": -0.8567770719528198
+        },
+        {
+          "position": 4082,
+          "token_id": 64735,
+          "target_logprob": -10.148594856262207,
+          "target_rank": 802,
+          "top1_token_id": 44219,
+          "top1_logprob": -1.007969856262207
+        },
+        {
+          "position": 4083,
+          "token_id": 614,
+          "target_logprob": -5.873793601989746,
+          "target_rank": 16,
+          "top1_token_id": 525,
+          "top1_logprob": -0.7800434827804565
+        },
+        {
+          "position": 4084,
+          "token_id": 1012,
+          "target_logprob": -0.8291001319885254,
+          "target_rank": 1,
+          "top1_token_id": 1012,
+          "top1_logprob": -0.8291001319885254
+        },
+        {
+          "position": 4085,
+          "token_id": 62230,
+          "target_logprob": -11.204202651977539,
+          "target_rank": 2786,
+          "top1_token_id": 803,
+          "top1_logprob": -1.6143590211868286
+        },
+        {
+          "position": 4086,
+          "token_id": 81,
+          "target_logprob": -0.021117720752954483,
+          "target_rank": 1,
+          "top1_token_id": 81,
+          "top1_logprob": -0.021117720752954483
+        },
+        {
+          "position": 4087,
+          "token_id": 1475,
+          "target_logprob": -8.260862523457035e-05,
+          "target_rank": 1,
+          "top1_token_id": 1475,
+          "top1_logprob": -8.260862523457035e-05
+        },
+        {
+          "position": 4088,
+          "token_id": 438,
+          "target_logprob": -1.2112270593643188,
+          "target_rank": 1,
+          "top1_token_id": 438,
+          "top1_logprob": -1.2112270593643188
+        },
+        {
+          "position": 4089,
+          "token_id": 1154,
+          "target_logprob": -4.511777877807617,
+          "target_rank": 7,
+          "top1_token_id": 330,
+          "top1_logprob": -0.44927793741226196
+        },
+        {
+          "position": 4090,
+          "token_id": 330,
+          "target_logprob": -0.023487558588385582,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.023487558588385582
+        },
+        {
+          "position": 4091,
+          "token_id": 6771,
+          "target_logprob": -3.8042826652526855,
+          "target_rank": 5,
+          "top1_token_id": 279,
+          "top1_logprob": -2.4527201652526855
+        },
+        {
+          "position": 4092,
+          "token_id": 601,
+          "target_logprob": -1.818629503250122,
+          "target_rank": 2,
+          "top1_token_id": 279,
+          "top1_logprob": -0.5686294436454773
+        },
+        {
+          "position": 4093,
+          "token_id": 678,
+          "target_logprob": -2.9847583770751953,
+          "target_rank": 3,
+          "top1_token_id": 537,
+          "top1_logprob": -1.6566332578659058
+        },
+        {
+          "position": 4094,
+          "token_id": 387,
+          "target_logprob": -0.6943815350532532,
+          "target_rank": 1,
+          "top1_token_id": 387,
+          "top1_logprob": -0.6943815350532532
+        },
+        {
+          "position": 4095,
+          "token_id": 2686,
+          "target_logprob": -7.374338626861572,
+          "target_rank": 184,
+          "top1_token_id": 10745,
+          "top1_logprob": -2.3743386268615723
+        }
+      ]
+    },
+    {
+      "context_tokens": 8192,
+      "elapsed_seconds": 18.590431788936257,
+      "prompt_tokens_per_second": 440.6567901707003,
+      "window_start": 8064,
+      "window_end": 8192,
+      "window": [
+        {
+          "position": 8064,
+          "token_id": 51390,
+          "target_logprob": -9.778772354125977,
+          "target_rank": 179,
+          "top1_token_id": 323,
+          "top1_logprob": -1.0443971157073975
+        },
+        {
+          "position": 8065,
+          "token_id": 287,
+          "target_logprob": -8.630380034446716e-05,
+          "target_rank": 1,
+          "top1_token_id": 287,
+          "top1_logprob": -8.630380034446716e-05
+        },
+        {
+          "position": 8066,
+          "token_id": 432,
+          "target_logprob": -3.5670807361602783,
+          "target_rank": 3,
+          "top1_token_id": 279,
+          "top1_logprob": -0.7389556765556335
+        },
+        {
+          "position": 8067,
+          "token_id": 4438,
+          "target_logprob": -18.201383590698242,
+          "target_rank": 2642,
+          "top1_token_id": 438,
+          "top1_logprob": -0.244353249669075
+        },
+        {
+          "position": 8068,
+          "token_id": 2673,
+          "target_logprob": -0.0007917130133137107,
+          "target_rank": 1,
+          "top1_token_id": 2673,
+          "top1_logprob": -0.0007917130133137107
+        },
+        {
+          "position": 8069,
+          "token_id": 659,
+          "target_logprob": -2.950901508331299,
+          "target_rank": 4,
+          "top1_token_id": 323,
+          "top1_logprob": -0.716526448726654
+        },
+        {
+          "position": 8070,
+          "token_id": 362,
+          "target_logprob": -4.035494327545166,
+          "target_rank": 5,
+          "top1_token_id": 576,
+          "top1_logprob": -1.3089319467544556
+        },
+        {
+          "position": 8071,
+          "token_id": 55514,
+          "target_logprob": -2.2583580017089844,
+          "target_rank": 4,
+          "top1_token_id": 3395,
+          "top1_logprob": -1.5864830017089844
+        },
+        {
+          "position": 8072,
+          "token_id": 369,
+          "target_logprob": -1.1499438285827637,
+          "target_rank": 2,
+          "top1_token_id": 504,
+          "top1_logprob": -0.4468187987804413
+        },
+        {
+          "position": 8073,
+          "token_id": 61099,
+          "target_logprob": -6.7286696434021,
+          "target_rank": 28,
+          "top1_token_id": 576,
+          "top1_logprob": -0.41616958379745483
+        },
+        {
+          "position": 8074,
+          "token_id": 5398,
+          "target_logprob": -0.6367223262786865,
+          "target_rank": 1,
+          "top1_token_id": 5398,
+          "top1_logprob": -0.6367223262786865
+        },
+        {
+          "position": 8075,
+          "token_id": 7481,
+          "target_logprob": -2.5618643760681152,
+          "target_rank": 4,
+          "top1_token_id": 2598,
+          "top1_logprob": -1.5149892568588257
+        },
+        {
+          "position": 8076,
+          "token_id": 279,
+          "target_logprob": -0.4346882700920105,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.4346882700920105
+        },
+        {
+          "position": 8077,
+          "token_id": 3754,
+          "target_logprob": -0.7696866393089294,
+          "target_rank": 2,
+          "top1_token_id": 5492,
+          "top1_logprob": -0.6759366393089294
+        },
+        {
+          "position": 8078,
+          "token_id": 364,
+          "target_logprob": -4.175477027893066,
+          "target_rank": 2,
+          "top1_token_id": 438,
+          "top1_logprob": -0.019227083772420883
+        },
+        {
+          "position": 8079,
+          "token_id": 82,
+          "target_logprob": -4.017272294731811e-05,
+          "target_rank": 1,
+          "top1_token_id": 82,
+          "top1_logprob": -4.017272294731811e-05
+        },
+        {
+          "position": 8080,
+          "token_id": 68335,
+          "target_logprob": -7.432408332824707,
+          "target_rank": 114,
+          "top1_token_id": 330,
+          "top1_logprob": -1.1745960712432861
+        },
+        {
+          "position": 8081,
+          "token_id": 2142,
+          "target_logprob": -0.3651907742023468,
+          "target_rank": 1,
+          "top1_token_id": 2142,
+          "top1_logprob": -0.3651907742023468
+        },
+        {
+          "position": 8082,
+          "token_id": 438,
+          "target_logprob": -0.41781342029571533,
+          "target_rank": 1,
+          "top1_token_id": 438,
+          "top1_logprob": -0.41781342029571533
+        },
+        {
+          "position": 8083,
+          "token_id": 330,
+          "target_logprob": -0.1386776715517044,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.1386776715517044
+        },
+        {
+          "position": 8084,
+          "token_id": 80676,
+          "target_logprob": -12.320137023925781,
+          "target_rank": 7162,
+          "top1_token_id": 264,
+          "top1_logprob": -2.9841995239257812
+        },
+        {
+          "position": 8085,
+          "token_id": 569,
+          "target_logprob": -5.540578365325928,
+          "target_rank": 3,
+          "top1_token_id": 304,
+          "top1_logprob": -0.27495357394218445
+        },
+        {
+          "position": 8086,
+          "token_id": 12,
+          "target_logprob": -0.00021062063751742244,
+          "target_rank": 1,
+          "top1_token_id": 12,
+          "top1_logprob": -0.00021062063751742244
+        },
+        {
+          "position": 8087,
+          "token_id": 31,
+          "target_logprob": -0.00021824838768225163,
+          "target_rank": 1,
+          "top1_token_id": 31,
+          "top1_logprob": -0.00021824838768225163
+        },
+        {
+          "position": 8088,
+          "token_id": 95711,
+          "target_logprob": -8.361894607543945,
+          "target_rank": 11,
+          "top1_token_id": 304,
+          "top1_logprob": -0.025957267731428146
+        },
+        {
+          "position": 8089,
+          "token_id": 330,
+          "target_logprob": -0.08055858314037323,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.08055858314037323
+        },
+        {
+          "position": 8090,
+          "token_id": 1154,
+          "target_logprob": -2.451674461364746,
+          "target_rank": 3,
+          "top1_token_id": 323,
+          "top1_logprob": -0.5766744017601013
+        },
+        {
+          "position": 8091,
+          "token_id": 323,
+          "target_logprob": -0.765423059463501,
+          "target_rank": 1,
+          "top1_token_id": 323,
+          "top1_logprob": -0.765423059463501
+        },
+        {
+          "position": 8092,
+          "token_id": 8224,
+          "target_logprob": -10.958491325378418,
+          "target_rank": 834,
+          "top1_token_id": 2598,
+          "top1_logprob": -1.9663041830062866
+        },
+        {
+          "position": 8093,
+          "token_id": 67836,
+          "target_logprob": -10.905750274658203,
+          "target_rank": 1063,
+          "top1_token_id": 26234,
+          "top1_logprob": -2.0307505130767822
+        },
+        {
+          "position": 8094,
+          "token_id": 7891,
+          "target_logprob": -4.2630720138549805,
+          "target_rank": 8,
+          "top1_token_id": 2923,
+          "top1_logprob": -0.8802597522735596
+        },
+        {
+          "position": 8095,
+          "token_id": 315,
+          "target_logprob": -0.2808628976345062,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -0.2808628976345062
+        },
+        {
+          "position": 8096,
+          "token_id": 77864,
+          "target_logprob": -6.708994388580322,
+          "target_rank": 18,
+          "top1_token_id": 576,
+          "top1_logprob": -0.5449317097663879
+        },
+        {
+          "position": 8097,
+          "token_id": 850,
+          "target_logprob": -1.6731992959976196,
+          "target_rank": 3,
+          "top1_token_id": 14418,
+          "top1_logprob": -1.3294492959976196
+        },
+        {
+          "position": 8098,
+          "token_id": 6139,
+          "target_logprob": -2.628239631652832,
+          "target_rank": 5,
+          "top1_token_id": 2598,
+          "top1_logprob": -0.9563647508621216
+        },
+        {
+          "position": 8099,
+          "token_id": 429,
+          "target_logprob": -0.04730673506855965,
+          "target_rank": 1,
+          "top1_token_id": 429,
+          "top1_logprob": -0.04730673506855965
+        },
+        {
+          "position": 8100,
+          "token_id": 330,
+          "target_logprob": -2.267181873321533,
+          "target_rank": 3,
+          "top1_token_id": 279,
+          "top1_logprob": -0.42343199253082275
+        },
+        {
+          "position": 8101,
+          "token_id": 43630,
+          "target_logprob": -0.7291228771209717,
+          "target_rank": 1,
+          "top1_token_id": 43630,
+          "top1_logprob": -0.7291228771209717
+        },
+        {
+          "position": 8102,
+          "token_id": 1446,
+          "target_logprob": -1.1324817933200393e-05,
+          "target_rank": 1,
+          "top1_token_id": 1446,
+          "top1_logprob": -1.1324817933200393e-05
+        },
+        {
+          "position": 8103,
+          "token_id": 330,
+          "target_logprob": -0.02678847499191761,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.02678847499191761
+        },
+        {
+          "position": 8104,
+          "token_id": 374,
+          "target_logprob": -0.8221415877342224,
+          "target_rank": 1,
+          "top1_token_id": 374,
+          "top1_logprob": -0.8221415877342224
+        },
+        {
+          "position": 8105,
+          "token_id": 77888,
+          "target_logprob": -12.495382308959961,
+          "target_rank": 933,
+          "top1_token_id": 264,
+          "top1_logprob": -0.9953820705413818
+        },
+        {
+          "position": 8106,
+          "token_id": 264,
+          "target_logprob": -3.487530469894409,
+          "target_rank": 5,
+          "top1_token_id": 803,
+          "top1_logprob": -0.6359679102897644
+        },
+        {
+          "position": 8107,
+          "token_id": 2498,
+          "target_logprob": -5.42936372756958,
+          "target_rank": 28,
+          "top1_token_id": 803,
+          "top1_logprob": -1.81217622756958
+        },
+        {
+          "position": 8108,
+          "token_id": 569,
+          "target_logprob": -0.12211371213197708,
+          "target_rank": 1,
+          "top1_token_id": 569,
+          "top1_logprob": -0.12211371213197708
+        },
+        {
+          "position": 8109,
+          "token_id": 12,
+          "target_logprob": -2.396077979938127e-05,
+          "target_rank": 1,
+          "top1_token_id": 12,
+          "top1_logprob": -2.396077979938127e-05
+        },
+        {
+          "position": 8110,
+          "token_id": 31,
+          "target_logprob": -3.3378546504536644e-06,
+          "target_rank": 1,
+          "top1_token_id": 31,
+          "top1_logprob": -3.3378546504536644e-06
+        },
+        {
+          "position": 8111,
+          "token_id": 700,
+          "target_logprob": -7.271740287251305e-06,
+          "target_rank": 1,
+          "top1_token_id": 700,
+          "top1_logprob": -7.271740287251305e-06
+        },
+        {
+          "position": 8112,
+          "token_id": 3754,
+          "target_logprob": -0.037733811885118484,
+          "target_rank": 1,
+          "top1_token_id": 3754,
+          "top1_logprob": -0.037733811885118484
+        },
+        {
+          "position": 8113,
+          "token_id": 389,
+          "target_logprob": -0.6461889147758484,
+          "target_rank": 1,
+          "top1_token_id": 389,
+          "top1_logprob": -0.6461889147758484
+        },
+        {
+          "position": 8114,
+          "token_id": 1181,
+          "target_logprob": -8.263700485229492,
+          "target_rank": 10,
+          "top1_token_id": 279,
+          "top1_logprob": -0.5137008428573608
+        },
+        {
+          "position": 8115,
+          "token_id": 2681,
+          "target_logprob": -14.403097152709961,
+          "target_rank": 291,
+          "top1_token_id": 8017,
+          "top1_logprob": -0.020284472033381462
+        },
+        {
+          "position": 8116,
+          "token_id": 8017,
+          "target_logprob": -0.0012723454274237156,
+          "target_rank": 1,
+          "top1_token_id": 8017,
+          "top1_logprob": -0.0012723454274237156
+        },
+        {
+          "position": 8117,
+          "token_id": 659,
+          "target_logprob": -0.2002253383398056,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.2002253383398056
+        },
+        {
+          "position": 8118,
+          "token_id": 10978,
+          "target_logprob": -7.617984771728516,
+          "target_rank": 131,
+          "top1_token_id": 576,
+          "top1_logprob": -1.0476722717285156
+        },
+        {
+          "position": 8119,
+          "token_id": 17416,
+          "target_logprob": -1.17118501663208,
+          "target_rank": 1,
+          "top1_token_id": 17416,
+          "top1_logprob": -1.17118501663208
+        },
+        {
+          "position": 8120,
+          "token_id": 55621,
+          "target_logprob": -3.172482967376709,
+          "target_rank": 4,
+          "top1_token_id": 386,
+          "top1_logprob": -1.836545467376709
+        },
+        {
+          "position": 8121,
+          "token_id": 1154,
+          "target_logprob": -4.876145839691162,
+          "target_rank": 5,
+          "top1_token_id": 315,
+          "top1_logprob": -0.18864578008651733
+        },
+        {
+          "position": 8122,
+          "token_id": 4378,
+          "target_logprob": -2.398385524749756,
+          "target_rank": 3,
+          "top1_token_id": 264,
+          "top1_logprob": -0.8202604055404663
+        },
+        {
+          "position": 8123,
+          "token_id": 369,
+          "target_logprob": -0.10866590589284897,
+          "target_rank": 1,
+          "top1_token_id": 369,
+          "top1_logprob": -0.10866590589284897
+        },
+        {
+          "position": 8124,
+          "token_id": 15882,
+          "target_logprob": -6.770733833312988,
+          "target_rank": 25,
+          "top1_token_id": 576,
+          "top1_logprob": -0.45823389291763306
+        },
+        {
+          "position": 8125,
+          "token_id": 25958,
+          "target_logprob": -4.214661598205566,
+          "target_rank": 6,
+          "top1_token_id": 4270,
+          "top1_logprob": -0.6755992770195007
+        },
+        {
+          "position": 8126,
+          "token_id": 1154,
+          "target_logprob": -0.14268149435520172,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.14268149435520172
+        },
+        {
+          "position": 8127,
+          "token_id": 26361,
+          "target_logprob": -6.4163312911987305,
+          "target_rank": 44,
+          "top1_token_id": 10342,
+          "top1_logprob": -1.6819565296173096
+        },
+        {
+          "position": 8128,
+          "token_id": 279,
+          "target_logprob": -0.3418048620223999,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.3418048620223999
+        },
+        {
+          "position": 8129,
+          "token_id": 5492,
+          "target_logprob": -0.7087256908416748,
+          "target_rank": 1,
+          "top1_token_id": 5492,
+          "top1_logprob": -0.7087256908416748
+        },
+        {
+          "position": 8130,
+          "token_id": 438,
+          "target_logprob": -0.16830937564373016,
+          "target_rank": 1,
+          "top1_token_id": 438,
+          "top1_logprob": -0.16830937564373016
+        },
+        {
+          "position": 8131,
+          "token_id": 330,
+          "target_logprob": -0.9427847862243652,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.9427847862243652
+        },
+        {
+          "position": 8132,
+          "token_id": 264,
+          "target_logprob": -0.8406234383583069,
+          "target_rank": 1,
+          "top1_token_id": 264,
+          "top1_logprob": -0.8406234383583069
+        },
+        {
+          "position": 8133,
+          "token_id": 293,
+          "target_logprob": -5.824049472808838,
+          "target_rank": 54,
+          "top1_token_id": 1602,
+          "top1_logprob": -3.245924472808838
+        },
+        {
+          "position": 8134,
+          "token_id": 81301,
+          "target_logprob": -0.9197940230369568,
+          "target_rank": 1,
+          "top1_token_id": 81301,
+          "top1_logprob": -0.9197940230369568
+        },
+        {
+          "position": 8135,
+          "token_id": 1154,
+          "target_logprob": -0.3531597852706909,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.3531597852706909
+        },
+        {
+          "position": 8136,
+          "token_id": 14346,
+          "target_logprob": -8.19848918914795,
+          "target_rank": 322,
+          "top1_token_id": 2464,
+          "top1_logprob": -2.370364189147949
+        },
+        {
+          "position": 8137,
+          "token_id": 49500,
+          "target_logprob": -10.131114959716797,
+          "target_rank": 500,
+          "top1_token_id": 481,
+          "top1_logprob": -1.5100207328796387
+        },
+        {
+          "position": 8138,
+          "token_id": 294,
+          "target_logprob": -9.807000160217285,
+          "target_rank": 136,
+          "top1_token_id": 3754,
+          "top1_logprob": -0.9788751602172852
+        },
+        {
+          "position": 8139,
+          "token_id": 22814,
+          "target_logprob": -0.01390378549695015,
+          "target_rank": 1,
+          "top1_token_id": 22814,
+          "top1_logprob": -0.01390378549695015
+        },
+        {
+          "position": 8140,
+          "token_id": 1154,
+          "target_logprob": -4.653810501098633,
+          "target_rank": 6,
+          "top1_token_id": 330,
+          "top1_logprob": -0.3100605905056
+        },
+        {
+          "position": 8141,
+          "token_id": 330,
+          "target_logprob": -3.9494223594665527,
+          "target_rank": 7,
+          "top1_token_id": 448,
+          "top1_logprob": -1.3634848594665527
+        },
+        {
+          "position": 8142,
+          "token_id": 1393,
+          "target_logprob": -1.2917762994766235,
+          "target_rank": 2,
+          "top1_token_id": 323,
+          "top1_logprob": -0.6355262994766235
+        },
+        {
+          "position": 8143,
+          "token_id": 11266,
+          "target_logprob": -4.806790351867676,
+          "target_rank": 14,
+          "top1_token_id": 26305,
+          "top1_logprob": -2.213040351867676
+        },
+        {
+          "position": 8144,
+          "token_id": 1446,
+          "target_logprob": -11.604740142822266,
+          "target_rank": 1857,
+          "top1_token_id": 434,
+          "top1_logprob": -2.0695841312408447
+        },
+        {
+          "position": 8145,
+          "token_id": 10810,
+          "target_logprob": -6.638128280639648,
+          "target_rank": 19,
+          "top1_token_id": 77,
+          "top1_logprob": -0.9740657210350037
+        },
+        {
+          "position": 8146,
+          "token_id": 1154,
+          "target_logprob": -4.245851039886475,
+          "target_rank": 4,
+          "top1_token_id": 315,
+          "top1_logprob": -0.18335093557834625
+        },
+        {
+          "position": 8147,
+          "token_id": 264,
+          "target_logprob": -3.467195749282837,
+          "target_rank": 6,
+          "top1_token_id": 4378,
+          "top1_logprob": -0.7484456896781921
+        },
+        {
+          "position": 8148,
+          "token_id": 9741,
+          "target_logprob": -2.327497720718384,
+          "target_rank": 2,
+          "top1_token_id": 4627,
+          "top1_logprob": -1.6399977207183838
+        },
+        {
+          "position": 8149,
+          "token_id": 504,
+          "target_logprob": -1.028353214263916,
+          "target_rank": 2,
+          "top1_token_id": 369,
+          "top1_logprob": -0.7471031546592712
+        },
+        {
+          "position": 8150,
+          "token_id": 220,
+          "target_logprob": -5.303412437438965,
+          "target_rank": 9,
+          "top1_token_id": 576,
+          "top1_logprob": -0.897162675857544
+        },
+        {
+          "position": 8151,
+          "token_id": 19,
+          "target_logprob": -3.6026809215545654,
+          "target_rank": 5,
+          "top1_token_id": 16,
+          "top1_logprob": -0.47768083214759827
+        },
+        {
+          "position": 8152,
+          "token_id": 24128,
+          "target_logprob": -3.8948912620544434,
+          "target_rank": 11,
+          "top1_token_id": 16,
+          "top1_logprob": -1.8480162620544434
+        },
+        {
+          "position": 8153,
+          "token_id": 1154,
+          "target_logprob": -0.21807175874710083,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.21807175874710083
+        },
+        {
+          "position": 8154,
+          "token_id": 24636,
+          "target_logprob": -4.7233171463012695,
+          "target_rank": 13,
+          "top1_token_id": 2598,
+          "top1_logprob": -1.2389421463012695
+        },
+        {
+          "position": 8155,
+          "token_id": 432,
+          "target_logprob": -0.2853340208530426,
+          "target_rank": 1,
+          "top1_token_id": 432,
+          "top1_logprob": -0.2853340208530426
+        },
+        {
+          "position": 8156,
+          "token_id": 458,
+          "target_logprob": -3.8690497875213623,
+          "target_rank": 5,
+          "top1_token_id": 330,
+          "top1_logprob": -0.3377997577190399
+        },
+        {
+          "position": 8157,
+          "token_id": 330,
+          "target_logprob": -0.1145857721567154,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.1145857721567154
+        },
+        {
+          "position": 8158,
+          "token_id": 7897,
+          "target_logprob": -5.342458724975586,
+          "target_rank": 37,
+          "top1_token_id": 84673,
+          "top1_logprob": -2.162771463394165
+        },
+        {
+          "position": 8159,
+          "token_id": 2420,
+          "target_logprob": -2.3759100437164307,
+          "target_rank": 4,
+          "top1_token_id": 3754,
+          "top1_logprob": -1.7196600437164307
+        },
+        {
+          "position": 8160,
+          "token_id": 5492,
+          "target_logprob": -0.5232893824577332,
+          "target_rank": 1,
+          "top1_token_id": 5492,
+          "top1_logprob": -0.5232893824577332
+        },
+        {
+          "position": 8161,
+          "token_id": 330,
+          "target_logprob": -0.18659663200378418,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.18659663200378418
+        },
+        {
+          "position": 8162,
+          "token_id": 1154,
+          "target_logprob": -4.994405269622803,
+          "target_rank": 6,
+          "top1_token_id": 659,
+          "top1_logprob": -0.13503047823905945
+        },
+        {
+          "position": 8163,
+          "token_id": 1187,
+          "target_logprob": -8.194368362426758,
+          "target_rank": 99,
+          "top1_token_id": 323,
+          "top1_logprob": -0.7959305047988892
+        },
+        {
+          "position": 8164,
+          "token_id": 50767,
+          "target_logprob": -0.001111128251068294,
+          "target_rank": 1,
+          "top1_token_id": 50767,
+          "top1_logprob": -0.001111128251068294
+        },
+        {
+          "position": 8165,
+          "token_id": 279,
+          "target_logprob": -1.5022246837615967,
+          "target_rank": 2,
+          "top1_token_id": 1181,
+          "top1_logprob": -0.40847474336624146
+        },
+        {
+          "position": 8166,
+          "token_id": 1874,
+          "target_logprob": -3.587703227996826,
+          "target_rank": 7,
+          "top1_token_id": 3754,
+          "top1_logprob": -1.2361407279968262
+        },
+        {
+          "position": 8167,
+          "token_id": 364,
+          "target_logprob": -0.03577751666307449,
+          "target_rank": 1,
+          "top1_token_id": 364,
+          "top1_logprob": -0.03577751666307449
+        },
+        {
+          "position": 8168,
+          "token_id": 82,
+          "target_logprob": -8.22540732769994e-06,
+          "target_rank": 1,
+          "top1_token_id": 82,
+          "top1_logprob": -8.22540732769994e-06
+        },
+        {
+          "position": 8169,
+          "token_id": 25484,
+          "target_logprob": -7.645662784576416,
+          "target_rank": 131,
+          "top1_token_id": 5726,
+          "top1_logprob": -1.255037784576416
+        },
+        {
+          "position": 8170,
+          "token_id": 746,
+          "target_logprob": -0.0003475538978818804,
+          "target_rank": 1,
+          "top1_token_id": 746,
+          "top1_logprob": -0.0003475538978818804
+        },
+        {
+          "position": 8171,
+          "token_id": 983,
+          "target_logprob": -0.00752566521987319,
+          "target_rank": 1,
+          "top1_token_id": 983,
+          "top1_logprob": -0.00752566521987319
+        },
+        {
+          "position": 8172,
+          "token_id": 323,
+          "target_logprob": -2.593539237976074,
+          "target_rank": 5,
+          "top1_token_id": 46096,
+          "top1_logprob": -0.9841643571853638
+        },
+        {
+          "position": 8173,
+          "token_id": 1181,
+          "target_logprob": -4.748970985412598,
+          "target_rank": 11,
+          "top1_token_id": 25407,
+          "top1_logprob": -0.9520957469940186
+        },
+        {
+          "position": 8174,
+          "token_id": 330,
+          "target_logprob": -1.8338911533355713,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -1.8338911533355713
+        },
+        {
+          "position": 8175,
+          "token_id": 1968,
+          "target_logprob": -7.8218770027160645,
+          "target_rank": 413,
+          "top1_token_id": 1550,
+          "top1_logprob": -3.7437520027160645
+        },
+        {
+          "position": 8176,
+          "token_id": 569,
+          "target_logprob": -3.3029837608337402,
+          "target_rank": 3,
+          "top1_token_id": 88,
+          "top1_logprob": -0.22485870122909546
+        },
+        {
+          "position": 8177,
+          "token_id": 12,
+          "target_logprob": -2.288792165927589e-05,
+          "target_rank": 1,
+          "top1_token_id": 12,
+          "top1_logprob": -2.288792165927589e-05
+        },
+        {
+          "position": 8178,
+          "token_id": 31,
+          "target_logprob": -2.9802276912960224e-06,
+          "target_rank": 1,
+          "top1_token_id": 31,
+          "top1_logprob": -2.9802276912960224e-06
+        },
+        {
+          "position": 8179,
+          "token_id": 86111,
+          "target_logprob": -4.0420684814453125,
+          "target_rank": 10,
+          "top1_token_id": 49849,
+          "top1_logprob": -1.2920687198638916
+        },
+        {
+          "position": 8180,
+          "token_id": 22268,
+          "target_logprob": -6.998383045196533,
+          "target_rank": 54,
+          "top1_token_id": 330,
+          "top1_logprob": -1.0999456644058228
+        },
+        {
+          "position": 8181,
+          "token_id": 8111,
+          "target_logprob": -0.0006316096987575293,
+          "target_rank": 1,
+          "top1_token_id": 8111,
+          "top1_logprob": -0.0006316096987575293
+        },
+        {
+          "position": 8182,
+          "token_id": 330,
+          "target_logprob": -4.5422444343566895,
+          "target_rank": 10,
+          "top1_token_id": 4271,
+          "top1_logprob": -1.089119553565979
+        },
+        {
+          "position": 8183,
+          "token_id": 55810,
+          "target_logprob": -3.6795217990875244,
+          "target_rank": 7,
+          "top1_token_id": 4271,
+          "top1_logprob": -0.6482718586921692
+        },
+        {
+          "position": 8184,
+          "token_id": 659,
+          "target_logprob": -0.020536528900265694,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.020536528900265694
+        },
+        {
+          "position": 8185,
+          "token_id": 14731,
+          "target_logprob": -4.223297595977783,
+          "target_rank": 7,
+          "top1_token_id": 576,
+          "top1_logprob": -1.4264225959777832
+        },
+        {
+          "position": 8186,
+          "token_id": 284,
+          "target_logprob": -0.22465388476848602,
+          "target_rank": 1,
+          "top1_token_id": 284,
+          "top1_logprob": -0.22465388476848602
+        },
+        {
+          "position": 8187,
+          "token_id": 284,
+          "target_logprob": -0.0008385241380892694,
+          "target_rank": 1,
+          "top1_token_id": 284,
+          "top1_logprob": -0.0008385241380892694
+        },
+        {
+          "position": 8188,
+          "token_id": 27843,
+          "target_logprob": -4.613201141357422,
+          "target_rank": 7,
+          "top1_token_id": 10717,
+          "top1_logprob": -1.0116386413574219
+        },
+        {
+          "position": 8189,
+          "token_id": 5068,
+          "target_logprob": -0.2629135549068451,
+          "target_rank": 1,
+          "top1_token_id": 5068,
+          "top1_logprob": -0.2629135549068451
+        },
+        {
+          "position": 8190,
+          "token_id": 284,
+          "target_logprob": -0.04129768908023834,
+          "target_rank": 1,
+          "top1_token_id": 284,
+          "top1_logprob": -0.04129768908023834
+        },
+        {
+          "position": 8191,
+          "token_id": 284,
+          "target_logprob": 0.0,
+          "target_rank": 1,
+          "top1_token_id": 284,
+          "top1_logprob": 0.0
+        }
+      ]
+    },
+    {
+      "context_tokens": 16384,
+      "elapsed_seconds": 71.01971038430929,
+      "prompt_tokens_per_second": 230.69651947806017,
+      "window_start": 16256,
+      "window_end": 16384,
+      "window": [
+        {
+          "position": 16256,
+          "token_id": 10275,
+          "target_logprob": -1.8200916051864624,
+          "target_rank": 3,
+          "top1_token_id": 7407,
+          "top1_logprob": -1.0700916051864624
+        },
+        {
+          "position": 16257,
+          "token_id": 304,
+          "target_logprob": -0.8000883460044861,
+          "target_rank": 1,
+          "top1_token_id": 304,
+          "top1_logprob": -0.8000883460044861
+        },
+        {
+          "position": 16258,
+          "token_id": 279,
+          "target_logprob": -0.030071474611759186,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.030071474611759186
+        },
+        {
+          "position": 16259,
+          "token_id": 4741,
+          "target_logprob": -7.756496906280518,
+          "target_rank": 78,
+          "top1_token_id": 14678,
+          "top1_logprob": -1.0689969062805176
+        },
+        {
+          "position": 16260,
+          "token_id": 14418,
+          "target_logprob": -4.62469482421875,
+          "target_rank": 10,
+          "top1_token_id": 27625,
+          "top1_logprob": -0.7184450626373291
+        },
+        {
+          "position": 16261,
+          "token_id": 315,
+          "target_logprob": -3.2022275924682617,
+          "target_rank": 7,
+          "top1_token_id": 3082,
+          "top1_logprob": -1.5459775924682617
+        },
+        {
+          "position": 16262,
+          "token_id": 350,
+          "target_logprob": -4.506825923919678,
+          "target_rank": 2,
+          "top1_token_id": 279,
+          "top1_logprob": -0.022450920194387436
+        },
+        {
+          "position": 16263,
+          "token_id": 41354,
+          "target_logprob": -0.007270899601280689,
+          "target_rank": 1,
+          "top1_token_id": 41354,
+          "top1_logprob": -0.007270899601280689
+        },
+        {
+          "position": 16264,
+          "token_id": 2308,
+          "target_logprob": -0.006678285542875528,
+          "target_rank": 1,
+          "top1_token_id": 2308,
+          "top1_logprob": -0.006678285542875528
+        },
+        {
+          "position": 16265,
+          "token_id": 13,
+          "target_logprob": -0.00032360086333937943,
+          "target_rank": 1,
+          "top1_token_id": 13,
+          "top1_logprob": -0.00032360086333937943
+        },
+        {
+          "position": 16266,
+          "token_id": 220,
+          "target_logprob": -0.0008937893435359001,
+          "target_rank": 1,
+          "top1_token_id": 220,
+          "top1_logprob": -0.0008937893435359001
+        },
+        {
+          "position": 16267,
+          "token_id": 21,
+          "target_logprob": -1.8537248373031616,
+          "target_rank": 2,
+          "top1_token_id": 20,
+          "top1_logprob": -0.33809980750083923
+        },
+        {
+          "position": 16268,
+          "token_id": 311,
+          "target_logprob": -4.5915398597717285,
+          "target_rank": 4,
+          "top1_token_id": 659,
+          "top1_logprob": -0.6071648001670837
+        },
+        {
+          "position": 16269,
+          "token_id": 3410,
+          "target_logprob": -1.462926983833313,
+          "target_rank": 1,
+          "top1_token_id": 3410,
+          "top1_logprob": -1.462926983833313
+        },
+        {
+          "position": 16270,
+          "token_id": 1817,
+          "target_logprob": -10.266641616821289,
+          "target_rank": 425,
+          "top1_token_id": 264,
+          "top1_logprob": -1.51664137840271
+        },
+        {
+          "position": 16271,
+          "token_id": 14135,
+          "target_logprob": -2.988970994949341,
+          "target_rank": 2,
+          "top1_token_id": 8284,
+          "top1_logprob": -0.14522098004817963
+        },
+        {
+          "position": 16272,
+          "token_id": 448,
+          "target_logprob": -0.07585115730762482,
+          "target_rank": 1,
+          "top1_token_id": 448,
+          "top1_logprob": -0.07585115730762482
+        },
+        {
+          "position": 16273,
+          "token_id": 3322,
+          "target_logprob": -2.923139810562134,
+          "target_rank": 3,
+          "top1_token_id": 220,
+          "top1_logprob": -0.8606398105621338
+        },
+        {
+          "position": 16274,
+          "token_id": 10416,
+          "target_logprob": -0.034255221486091614,
+          "target_rank": 1,
+          "top1_token_id": 10416,
+          "top1_logprob": -0.034255221486091614
+        },
+        {
+          "position": 16275,
+          "token_id": 369,
+          "target_logprob": -0.37301862239837646,
+          "target_rank": 1,
+          "top1_token_id": 369,
+          "top1_logprob": -0.37301862239837646
+        },
+        {
+          "position": 16276,
+          "token_id": 2326,
+          "target_logprob": -5.725430965423584,
+          "target_rank": 17,
+          "top1_token_id": 264,
+          "top1_logprob": -0.4754308760166168
+        },
+        {
+          "position": 16277,
+          "token_id": 3378,
+          "target_logprob": -5.61995792388916,
+          "target_rank": 15,
+          "top1_token_id": 2849,
+          "top1_logprob": -0.8230831623077393
+        },
+        {
+          "position": 16278,
+          "token_id": 550,
+          "target_logprob": -7.271502545336261e-05,
+          "target_rank": 1,
+          "top1_token_id": 550,
+          "top1_logprob": -7.271502545336261e-05
+        },
+        {
+          "position": 16279,
+          "token_id": 659,
+          "target_logprob": -0.4148320257663727,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.4148320257663727
+        },
+        {
+          "position": 16280,
+          "token_id": 2014,
+          "target_logprob": -5.970495700836182,
+          "target_rank": 23,
+          "top1_token_id": 576,
+          "top1_logprob": -0.5720583200454712
+        },
+        {
+          "position": 16281,
+          "token_id": 11731,
+          "target_logprob": -8.176063537597656,
+          "target_rank": 140,
+          "top1_token_id": 5358,
+          "top1_logprob": -2.0198140144348145
+        },
+        {
+          "position": 16282,
+          "token_id": 279,
+          "target_logprob": -0.6413710713386536,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.6413710713386536
+        },
+        {
+          "position": 16283,
+          "token_id": 14135,
+          "target_logprob": -0.09755531698465347,
+          "target_rank": 1,
+          "top1_token_id": 14135,
+          "top1_logprob": -0.09755531698465347
+        },
+        {
+          "position": 16284,
+          "token_id": 279,
+          "target_logprob": -7.107439994812012,
+          "target_rank": 16,
+          "top1_token_id": 504,
+          "top1_logprob": -0.24806492030620575
+        },
+        {
+          "position": 16285,
+          "token_id": 42023,
+          "target_logprob": -9.92603588104248,
+          "target_rank": 553,
+          "top1_token_id": 14135,
+          "top1_logprob": -1.1838483810424805
+        },
+        {
+          "position": 16286,
+          "token_id": 1238,
+          "target_logprob": -4.935142715112306e-05,
+          "target_rank": 1,
+          "top1_token_id": 1238,
+          "top1_logprob": -4.935142715112306e-05
+        },
+        {
+          "position": 16287,
+          "token_id": 72947,
+          "target_logprob": -1.082165241241455,
+          "target_rank": 2,
+          "top1_token_id": 220,
+          "top1_logprob": -0.6446651816368103
+        },
+        {
+          "position": 16288,
+          "token_id": 33733,
+          "target_logprob": -13.799311637878418,
+          "target_rank": 1550,
+          "top1_token_id": 572,
+          "top1_logprob": -0.7250931859016418
+        },
+        {
+          "position": 16289,
+          "token_id": 389,
+          "target_logprob": -3.1014161109924316,
+          "target_rank": 3,
+          "top1_token_id": 1483,
+          "top1_logprob": -0.22641606628894806
+        },
+        {
+          "position": 16290,
+          "token_id": 279,
+          "target_logprob": -0.10088393092155457,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.10088393092155457
+        },
+        {
+          "position": 16291,
+          "token_id": 57544,
+          "target_logprob": -0.10790371149778366,
+          "target_rank": 1,
+          "top1_token_id": 57544,
+          "top1_logprob": -0.10790371149778366
+        },
+        {
+          "position": 16292,
+          "token_id": 572,
+          "target_logprob": -0.06622069329023361,
+          "target_rank": 1,
+          "top1_token_id": 572,
+          "top1_logprob": -0.06622069329023361
+        },
+        {
+          "position": 16293,
+          "token_id": 7726,
+          "target_logprob": -1.1114485263824463,
+          "target_rank": 1,
+          "top1_token_id": 7726,
+          "top1_logprob": -1.1114485263824463
+        },
+        {
+          "position": 16294,
+          "token_id": 705,
+          "target_logprob": -5.427874565124512,
+          "target_rank": 7,
+          "top1_token_id": 311,
+          "top1_logprob": -0.5841245651245117
+        },
+        {
+          "position": 16295,
+          "token_id": 311,
+          "target_logprob": -0.18328732252120972,
+          "target_rank": 1,
+          "top1_token_id": 311,
+          "top1_logprob": -0.18328732252120972
+        },
+        {
+          "position": 16296,
+          "token_id": 279,
+          "target_logprob": -0.008794858120381832,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.008794858120381832
+        },
+        {
+          "position": 16297,
+          "token_id": 2635,
+          "target_logprob": -7.998743057250977,
+          "target_rank": 40,
+          "top1_token_id": 10971,
+          "top1_logprob": -0.29561784863471985
+        },
+        {
+          "position": 16298,
+          "token_id": 3108,
+          "target_logprob": -0.06757702678442001,
+          "target_rank": 1,
+          "top1_token_id": 3108,
+          "top1_logprob": -0.06757702678442001
+        },
+        {
+          "position": 16299,
+          "token_id": 315,
+          "target_logprob": -0.4178028106689453,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -0.4178028106689453
+        },
+        {
+          "position": 16300,
+          "token_id": 279,
+          "target_logprob": -0.0003813969960901886,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.0003813969960901886
+        },
+        {
+          "position": 16301,
+          "token_id": 10971,
+          "target_logprob": -0.23416277766227722,
+          "target_rank": 1,
+          "top1_token_id": 10971,
+          "top1_logprob": -0.23416277766227722
+        },
+        {
+          "position": 16302,
+          "token_id": 9530,
+          "target_logprob": -5.340433563105762e-05,
+          "target_rank": 1,
+          "top1_token_id": 9530,
+          "top1_logprob": -5.340433563105762e-05
+        },
+        {
+          "position": 16303,
+          "token_id": 659,
+          "target_logprob": -1.5010578632354736,
+          "target_rank": 2,
+          "top1_token_id": 323,
+          "top1_logprob": -0.5010579228401184
+        },
+        {
+          "position": 16304,
+          "token_id": 13293,
+          "target_logprob": -7.660426139831543,
+          "target_rank": 45,
+          "top1_token_id": 576,
+          "top1_logprob": -0.5276138782501221
+        },
+        {
+          "position": 16305,
+          "token_id": 72947,
+          "target_logprob": -0.9943140745162964,
+          "target_rank": 1,
+          "top1_token_id": 72947,
+          "top1_logprob": -0.9943140745162964
+        },
+        {
+          "position": 16306,
+          "token_id": 572,
+          "target_logprob": -0.19275757670402527,
+          "target_rank": 1,
+          "top1_token_id": 572,
+          "top1_logprob": -0.19275757670402527
+        },
+        {
+          "position": 16307,
+          "token_id": 10602,
+          "target_logprob": -11.359381675720215,
+          "target_rank": 227,
+          "top1_token_id": 10275,
+          "top1_logprob": -0.8828187584877014
+        },
+        {
+          "position": 16308,
+          "token_id": 389,
+          "target_logprob": -5.54165506362915,
+          "target_rank": 3,
+          "top1_token_id": 311,
+          "top1_logprob": -0.26040488481521606
+        },
+        {
+          "position": 16309,
+          "token_id": 279,
+          "target_logprob": -0.0023883646354079247,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.0023883646354079247
+        },
+        {
+          "position": 16310,
+          "token_id": 6774,
+          "target_logprob": -0.016703395172953606,
+          "target_rank": 1,
+          "top1_token_id": 6774,
+          "top1_logprob": -0.016703395172953606
+        },
+        {
+          "position": 16311,
+          "token_id": 2482,
+          "target_logprob": -6.198863957251888e-06,
+          "target_rank": 1,
+          "top1_token_id": 2482,
+          "top1_logprob": -6.198863957251888e-06
+        },
+        {
+          "position": 16312,
+          "token_id": 3108,
+          "target_logprob": -0.002514655003324151,
+          "target_rank": 1,
+          "top1_token_id": 3108,
+          "top1_logprob": -0.002514655003324151
+        },
+        {
+          "position": 16313,
+          "token_id": 1154,
+          "target_logprob": -1.7203993797302246,
+          "target_rank": 3,
+          "top1_token_id": 315,
+          "top1_logprob": -1.2516493797302246
+        },
+        {
+          "position": 16314,
+          "token_id": 714,
+          "target_logprob": -0.023947399109601974,
+          "target_rank": 1,
+          "top1_token_id": 714,
+          "top1_logprob": -0.023947399109601974
+        },
+        {
+          "position": 16315,
+          "token_id": 432,
+          "target_logprob": -0.9595905542373657,
+          "target_rank": 1,
+          "top1_token_id": 432,
+          "top1_logprob": -0.9595905542373657
+        },
+        {
+          "position": 16316,
+          "token_id": 572,
+          "target_logprob": -0.03523297980427742,
+          "target_rank": 1,
+          "top1_token_id": 572,
+          "top1_logprob": -0.03523297980427742
+        },
+        {
+          "position": 16317,
+          "token_id": 2581,
+          "target_logprob": -1.0003759860992432,
+          "target_rank": 2,
+          "top1_token_id": 537,
+          "top1_logprob": -0.5785009264945984
+        },
+        {
+          "position": 16318,
+          "token_id": 28341,
+          "target_logprob": -6.223728656768799,
+          "target_rank": 10,
+          "top1_token_id": 5798,
+          "top1_logprob": -0.49716612696647644
+        },
+        {
+          "position": 16319,
+          "token_id": 659,
+          "target_logprob": -0.20264694094657898,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.20264694094657898
+        },
+        {
+          "position": 16320,
+          "token_id": 14731,
+          "target_logprob": -4.635798454284668,
+          "target_rank": 7,
+          "top1_token_id": 576,
+          "top1_logprob": -0.38579830527305603
+        },
+        {
+          "position": 16321,
+          "token_id": 576,
+          "target_logprob": -2.9951865673065186,
+          "target_rank": 2,
+          "top1_token_id": 284,
+          "top1_logprob": -0.07331158965826035
+        },
+        {
+          "position": 16322,
+          "token_id": 17727,
+          "target_logprob": -2.8047637939453125,
+          "target_rank": 3,
+          "top1_token_id": 10971,
+          "top1_logprob": -1.1328887939453125
+        },
+        {
+          "position": 16323,
+          "token_id": 1030,
+          "target_logprob": -1.8760102987289429,
+          "target_rank": 2,
+          "top1_token_id": 1033,
+          "top1_logprob": -0.5791352987289429
+        },
+        {
+          "position": 16324,
+          "token_id": 458,
+          "target_logprob": -2.8875041007995605,
+          "target_rank": 4,
+          "top1_token_id": 264,
+          "top1_logprob": -0.7468791604042053
+        },
+        {
+          "position": 16325,
+          "token_id": 3720,
+          "target_logprob": -2.7990312576293945,
+          "target_rank": 3,
+          "top1_token_id": 5107,
+          "top1_logprob": -1.8615312576293945
+        },
+        {
+          "position": 16326,
+          "token_id": 1874,
+          "target_logprob": -5.569910049438477,
+          "target_rank": 18,
+          "top1_token_id": 2566,
+          "top1_logprob": -1.0620973110198975
+        },
+        {
+          "position": 16327,
+          "token_id": 315,
+          "target_logprob": -0.12140562385320663,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -0.12140562385320663
+        },
+        {
+          "position": 16328,
+          "token_id": 220,
+          "target_logprob": -1.2684975862503052,
+          "target_rank": 1,
+          "top1_token_id": 220,
+          "top1_logprob": -1.2684975862503052
+        },
+        {
+          "position": 16329,
+          "token_id": 16,
+          "target_logprob": -0.4040372371673584,
+          "target_rank": 1,
+          "top1_token_id": 16,
+          "top1_logprob": -0.4040372371673584
+        },
+        {
+          "position": 16330,
+          "token_id": 16,
+          "target_logprob": -2.85567569732666,
+          "target_rank": 6,
+          "top1_token_id": 17,
+          "top1_logprob": -0.9963008165359497
+        },
+        {
+          "position": 16331,
+          "token_id": 1817,
+          "target_logprob": -10.477919578552246,
+          "target_rank": 253,
+          "top1_token_id": 14135,
+          "top1_logprob": -0.8997945785522461
+        },
+        {
+          "position": 16332,
+          "token_id": 315,
+          "target_logprob": -3.3868701457977295,
+          "target_rank": 9,
+          "top1_token_id": 1154,
+          "top1_logprob": -1.7306201457977295
+        },
+        {
+          "position": 16333,
+          "token_id": 93536,
+          "target_logprob": -7.966916084289551,
+          "target_rank": 112,
+          "top1_token_id": 2224,
+          "top1_logprob": -0.9825408458709717
+        },
+        {
+          "position": 16334,
+          "token_id": 436,
+          "target_logprob": -0.00024387246230617166,
+          "target_rank": 1,
+          "top1_token_id": 436,
+          "top1_logprob": -0.00024387246230617166
+        },
+        {
+          "position": 16335,
+          "token_id": 25196,
+          "target_logprob": -2.4676019165781327e-05,
+          "target_rank": 1,
+          "top1_token_id": 25196,
+          "top1_logprob": -2.4676019165781327e-05
+        },
+        {
+          "position": 16336,
+          "token_id": 422,
+          "target_logprob": -9.177273750305176,
+          "target_rank": 19,
+          "top1_token_id": 468,
+          "top1_logprob": -0.01321121584624052
+        },
+        {
+          "position": 16337,
+          "token_id": 19,
+          "target_logprob": -0.8187594413757324,
+          "target_rank": 2,
+          "top1_token_id": 18,
+          "top1_logprob": -0.8031344413757324
+        },
+        {
+          "position": 16338,
+          "token_id": 56,
+          "target_logprob": -0.001977275824174285,
+          "target_rank": 1,
+          "top1_token_id": 56,
+          "top1_logprob": -0.001977275824174285
+        },
+        {
+          "position": 16339,
+          "token_id": 29863,
+          "target_logprob": -9.568425178527832,
+          "target_rank": 80,
+          "top1_token_id": 16,
+          "top1_logprob": -0.9824874401092529
+        },
+        {
+          "position": 16340,
+          "token_id": 68820,
+          "target_logprob": -0.00568831292912364,
+          "target_rank": 1,
+          "top1_token_id": 68820,
+          "top1_logprob": -0.00568831292912364
+        },
+        {
+          "position": 16341,
+          "token_id": 320,
+          "target_logprob": -3.3730995655059814,
+          "target_rank": 2,
+          "top1_token_id": 323,
+          "top1_logprob": -0.060599491000175476
+        },
+        {
+          "position": 16342,
+          "token_id": 60755,
+          "target_logprob": -9.147198677062988,
+          "target_rank": 397,
+          "top1_token_id": 422,
+          "top1_logprob": -1.5690735578536987
+        },
+        {
+          "position": 16343,
+          "token_id": 12827,
+          "target_logprob": -5.002665042877197,
+          "target_rank": 6,
+          "top1_token_id": 2038,
+          "top1_logprob": -0.26828986406326294
+        },
+        {
+          "position": 16344,
+          "token_id": 829,
+          "target_logprob": -0.00014208737411536276,
+          "target_rank": 1,
+          "top1_token_id": 829,
+          "top1_logprob": -0.00014208737411536276
+        },
+        {
+          "position": 16345,
+          "token_id": 330,
+          "target_logprob": -3.1976852416992188,
+          "target_rank": 3,
+          "top1_token_id": 25,
+          "top1_logprob": -0.4789353311061859
+        },
+        {
+          "position": 16346,
+          "token_id": 54058,
+          "target_logprob": -2.764078140258789,
+          "target_rank": 3,
+          "top1_token_id": 55011,
+          "top1_logprob": -1.662515640258789
+        },
+        {
+          "position": 16347,
+          "token_id": 330,
+          "target_logprob": -0.0574638657271862,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.0574638657271862
+        },
+        {
+          "position": 16348,
+          "token_id": 873,
+          "target_logprob": -0.027415456250309944,
+          "target_rank": 1,
+          "top1_token_id": 873,
+          "top1_logprob": -0.027415456250309944
+        },
+        {
+          "position": 16349,
+          "token_id": 323,
+          "target_logprob": -0.03213084861636162,
+          "target_rank": 1,
+          "top1_token_id": 323,
+          "top1_logprob": -0.03213084861636162
+        },
+        {
+          "position": 16350,
+          "token_id": 362,
+          "target_logprob": -4.6926045417785645,
+          "target_rank": 6,
+          "top1_token_id": 43229,
+          "top1_logprob": -0.2863544225692749
+        },
+        {
+          "position": 16351,
+          "token_id": 40552,
+          "target_logprob": -1.125759482383728,
+          "target_rank": 2,
+          "top1_token_id": 21,
+          "top1_logprob": -0.4382595121860504
+        },
+        {
+          "position": 16352,
+          "token_id": 468,
+          "target_logprob": -10.21314811706543,
+          "target_rank": 9,
+          "top1_token_id": 422,
+          "top1_logprob": -0.00221055606380105
+        },
+        {
+          "position": 16353,
+          "token_id": 16,
+          "target_logprob": -0.00015984688070602715,
+          "target_rank": 1,
+          "top1_token_id": 16,
+          "top1_logprob": -0.00015984688070602715
+        },
+        {
+          "position": 16354,
+          "token_id": 21,
+          "target_logprob": -9.950095176696777,
+          "target_rank": 11,
+          "top1_token_id": 16,
+          "top1_logprob": -0.0438448041677475
+        },
+        {
+          "position": 16355,
+          "token_id": 32,
+          "target_logprob": -2.3280043601989746,
+          "target_rank": 4,
+          "top1_token_id": 56,
+          "top1_logprob": -0.8123793005943298
+        },
+        {
+          "position": 16356,
+          "token_id": 87505,
+          "target_logprob": -6.5974626541137695,
+          "target_rank": 28,
+          "top1_token_id": 16,
+          "top1_logprob": -0.5115250945091248
+        },
+        {
+          "position": 16357,
+          "token_id": 14135,
+          "target_logprob": -5.990670680999756,
+          "target_rank": 2,
+          "top1_token_id": 2224,
+          "top1_logprob": -0.006295610684901476
+        },
+        {
+          "position": 16358,
+          "token_id": 320,
+          "target_logprob": -0.48476624488830566,
+          "target_rank": 1,
+          "top1_token_id": 320,
+          "top1_logprob": -0.48476624488830566
+        },
+        {
+          "position": 16359,
+          "token_id": 60755,
+          "target_logprob": -1.2870274782180786,
+          "target_rank": 2,
+          "top1_token_id": 330,
+          "top1_logprob": -0.4120274484157562
+        },
+        {
+          "position": 16360,
+          "token_id": 12827,
+          "target_logprob": -0.029086340218782425,
+          "target_rank": 1,
+          "top1_token_id": 12827,
+          "top1_logprob": -0.029086340218782425
+        },
+        {
+          "position": 16361,
+          "token_id": 829,
+          "target_logprob": -0.0019219514215365052,
+          "target_rank": 1,
+          "top1_token_id": 829,
+          "top1_logprob": -0.0019219514215365052
+        },
+        {
+          "position": 16362,
+          "token_id": 330,
+          "target_logprob": -0.001846038969233632,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.001846038969233632
+        },
+        {
+          "position": 16363,
+          "token_id": 6898,
+          "target_logprob": -12.754400253295898,
+          "target_rank": 1724,
+          "top1_token_id": 350,
+          "top1_logprob": -0.957525372505188
+        },
+        {
+          "position": 16364,
+          "token_id": 330,
+          "target_logprob": -5.991260528564453,
+          "target_rank": 13,
+          "top1_token_id": 482,
+          "top1_logprob": -0.38188570737838745
+        },
+        {
+          "position": 16365,
+          "token_id": 873,
+          "target_logprob": -0.024940282106399536,
+          "target_rank": 1,
+          "top1_token_id": 873,
+          "top1_logprob": -0.024940282106399536
+        },
+        {
+          "position": 16366,
+          "token_id": 11733,
+          "target_logprob": -14.357866287231445,
+          "target_rank": 1137,
+          "top1_token_id": 659,
+          "top1_logprob": -0.701616108417511
+        },
+        {
+          "position": 16367,
+          "token_id": 14135,
+          "target_logprob": -1.6854045391082764,
+          "target_rank": 2,
+          "top1_token_id": 1033,
+          "top1_logprob": -1.2010295391082764
+        },
+        {
+          "position": 16368,
+          "token_id": 1030,
+          "target_logprob": -1.9424614906311035,
+          "target_rank": 2,
+          "top1_token_id": 1033,
+          "top1_logprob": -0.28621143102645874
+        },
+        {
+          "position": 16369,
+          "token_id": 4401,
+          "target_logprob": -11.75312328338623,
+          "target_rank": 1575,
+          "top1_token_id": 264,
+          "top1_logprob": -0.5734362006187439
+        },
+        {
+          "position": 16370,
+          "token_id": 5322,
+          "target_logprob": -3.722454071044922,
+          "target_rank": 7,
+          "top1_token_id": 323,
+          "top1_logprob": -1.8552665710449219
+        },
+        {
+          "position": 16371,
+          "token_id": 323,
+          "target_logprob": -0.6242099404335022,
+          "target_rank": 1,
+          "top1_token_id": 323,
+          "top1_logprob": -0.6242099404335022
+        },
+        {
+          "position": 16372,
+          "token_id": 13866,
+          "target_logprob": -6.3781819343566895,
+          "target_rank": 39,
+          "top1_token_id": 1033,
+          "top1_logprob": -0.5188068747520447
+        },
+        {
+          "position": 16373,
+          "token_id": 3720,
+          "target_logprob": -9.646891593933105,
+          "target_rank": 116,
+          "top1_token_id": 572,
+          "top1_logprob": -0.6625165939331055
+        },
+        {
+          "position": 16374,
+          "token_id": 1874,
+          "target_logprob": -0.04040621966123581,
+          "target_rank": 1,
+          "top1_token_id": 1874,
+          "top1_logprob": -0.04040621966123581
+        },
+        {
+          "position": 16375,
+          "token_id": 3512,
+          "target_logprob": -5.092292785644531,
+          "target_rank": 10,
+          "top1_token_id": 572,
+          "top1_logprob": -0.24854302406311035
+        },
+        {
+          "position": 16376,
+          "token_id": 1030,
+          "target_logprob": -4.3957929611206055,
+          "target_rank": 12,
+          "top1_token_id": 8643,
+          "top1_logprob": -1.3020429611206055
+        },
+        {
+          "position": 16377,
+          "token_id": 678,
+          "target_logprob": -7.793778896331787,
+          "target_rank": 27,
+          "top1_token_id": 803,
+          "top1_logprob": -0.5906540155410767
+        },
+        {
+          "position": 16378,
+          "token_id": 315,
+          "target_logprob": -0.6818668842315674,
+          "target_rank": 1,
+          "top1_token_id": 315,
+          "top1_logprob": -0.6818668842315674
+        },
+        {
+          "position": 16379,
+          "token_id": 1181,
+          "target_logprob": -0.15265300869941711,
+          "target_rank": 1,
+          "top1_token_id": 1181,
+          "top1_logprob": -0.15265300869941711
+        },
+        {
+          "position": 16380,
+          "token_id": 10602,
+          "target_logprob": -6.547116279602051,
+          "target_rank": 21,
+          "top1_token_id": 14135,
+          "top1_logprob": -0.9924290180206299
+        },
+        {
+          "position": 16381,
+          "token_id": 14135,
+          "target_logprob": -0.5789203643798828,
+          "target_rank": 1,
+          "top1_token_id": 14135,
+          "top1_logprob": -0.5789203643798828
+        },
+        {
+          "position": 16382,
+          "token_id": 659,
+          "target_logprob": -1.0652440786361694,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -1.0652440786361694
+        },
+        {
+          "position": 16383,
+          "token_id": 18232,
+          "target_logprob": -13.577150344848633,
+          "target_rank": 2199,
+          "top1_token_id": 576,
+          "top1_logprob": -0.4794938564300537
+        }
+      ]
+    },
+    {
+      "context_tokens": 32768,
+      "elapsed_seconds": 278.60635048151016,
+      "prompt_tokens_per_second": 117.6139737782993,
+      "window_start": 32640,
+      "window_end": 32768,
+      "window": [
+        {
+          "position": 32640,
+          "token_id": 279,
+          "target_logprob": -0.06691743433475494,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.06691743433475494
+        },
+        {
+          "position": 32641,
+          "token_id": 46342,
+          "target_logprob": -1.0847458839416504,
+          "target_rank": 2,
+          "top1_token_id": 1874,
+          "top1_logprob": -0.5066208839416504
+        },
+        {
+          "position": 32642,
+          "token_id": 1521,
+          "target_logprob": -4.181987285614014,
+          "target_rank": 11,
+          "top1_token_id": 1033,
+          "top1_logprob": -0.9476124048233032
+        },
+        {
+          "position": 32643,
+          "token_id": 1154,
+          "target_logprob": -7.180871486663818,
+          "target_rank": 25,
+          "top1_token_id": 537,
+          "top1_logprob": -0.19649656116962433
+        },
+        {
+          "position": 32644,
+          "token_id": 4764,
+          "target_logprob": -0.00344635546207428,
+          "target_rank": 1,
+          "top1_token_id": 4764,
+          "top1_logprob": -0.00344635546207428
+        },
+        {
+          "position": 32645,
+          "token_id": 1154,
+          "target_logprob": -0.006737846881151199,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.006737846881151199
+        },
+        {
+          "position": 32646,
+          "token_id": 11731,
+          "target_logprob": -2.4255146980285645,
+          "target_rank": 2,
+          "top1_token_id": 10091,
+          "top1_logprob": -1.105202317237854
+        },
+        {
+          "position": 32647,
+          "token_id": 504,
+          "target_logprob": -5.42000675201416,
+          "target_rank": 17,
+          "top1_token_id": 1045,
+          "top1_logprob": -0.6778191924095154
+        },
+        {
+          "position": 32648,
+          "token_id": 264,
+          "target_logprob": -4.378780364990234,
+          "target_rank": 4,
+          "top1_token_id": 279,
+          "top1_logprob": -0.16003020107746124
+        },
+        {
+          "position": 32649,
+          "token_id": 5943,
+          "target_logprob": -6.6297149658203125,
+          "target_rank": 27,
+          "top1_token_id": 2421,
+          "top1_logprob": -0.4890902042388916
+        },
+        {
+          "position": 32650,
+          "token_id": 1865,
+          "target_logprob": -6.362854480743408,
+          "target_rank": 24,
+          "top1_token_id": 315,
+          "top1_logprob": -0.6128544211387634
+        },
+        {
+          "position": 32651,
+          "token_id": 2937,
+          "target_logprob": -2.6591947078704834,
+          "target_rank": 3,
+          "top1_token_id": 553,
+          "top1_logprob": -0.9404447078704834
+        },
+        {
+          "position": 32652,
+          "token_id": 518,
+          "target_logprob": -4.318291664123535,
+          "target_rank": 7,
+          "top1_token_id": 304,
+          "top1_logprob": -0.490166574716568
+        },
+        {
+          "position": 32653,
+          "token_id": 220,
+          "target_logprob": -0.25275948643684387,
+          "target_rank": 1,
+          "top1_token_id": 220,
+          "top1_logprob": -0.25275948643684387
+        },
+        {
+          "position": 32654,
+          "token_id": 16,
+          "target_logprob": -0.2074311375617981,
+          "target_rank": 1,
+          "top1_token_id": 16,
+          "top1_logprob": -0.2074311375617981
+        },
+        {
+          "position": 32655,
+          "token_id": 24,
+          "target_logprob": -1.9738999605178833,
+          "target_rank": 4,
+          "top1_token_id": 22,
+          "top1_logprob": -1.4895249605178833
+        },
+        {
+          "position": 32656,
+          "token_id": 549,
+          "target_logprob": -0.0017199022695422173,
+          "target_rank": 1,
+          "top1_token_id": 549,
+          "top1_logprob": -0.0017199022695422173
+        },
+        {
+          "position": 32657,
+          "token_id": 220,
+          "target_logprob": -0.00037949037505313754,
+          "target_rank": 1,
+          "top1_token_id": 220,
+          "top1_logprob": -0.00037949037505313754
+        },
+        {
+          "position": 32658,
+          "token_id": 15,
+          "target_logprob": -0.19659557938575745,
+          "target_rank": 1,
+          "top1_token_id": 15,
+          "top1_logprob": -0.19659557938575745
+        },
+        {
+          "position": 32659,
+          "token_id": 15,
+          "target_logprob": -0.007497269194573164,
+          "target_rank": 1,
+          "top1_token_id": 15,
+          "top1_logprob": -0.007497269194573164
+        },
+        {
+          "position": 32660,
+          "token_id": 1045,
+          "target_logprob": -11.03003978729248,
+          "target_rank": 109,
+          "top1_token_id": 429,
+          "top1_logprob": -1.1628522872924805
+        },
+        {
+          "position": 32661,
+          "token_id": 16720,
+          "target_logprob": -4.286887168884277,
+          "target_rank": 5,
+          "top1_token_id": 315,
+          "top1_logprob": -0.6150122284889221
+        },
+        {
+          "position": 32662,
+          "token_id": 323,
+          "target_logprob": -1.4272671937942505,
+          "target_rank": 2,
+          "top1_token_id": 659,
+          "top1_logprob": -0.9585171937942505
+        },
+        {
+          "position": 32663,
+          "token_id": 36668,
+          "target_logprob": -3.462186813354492,
+          "target_rank": 6,
+          "top1_token_id": 264,
+          "top1_logprob": -0.868436872959137
+        },
+        {
+          "position": 32664,
+          "token_id": 659,
+          "target_logprob": -0.2141464799642563,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.2141464799642563
+        },
+        {
+          "position": 32665,
+          "token_id": 9679,
+          "target_logprob": -10.912471771240234,
+          "target_rank": 590,
+          "top1_token_id": 576,
+          "top1_logprob": -1.2640345096588135
+        },
+        {
+          "position": 32666,
+          "token_id": 5512,
+          "target_logprob": -0.5488656759262085,
+          "target_rank": 1,
+          "top1_token_id": 5512,
+          "top1_logprob": -0.5488656759262085
+        },
+        {
+          "position": 32667,
+          "token_id": 3228,
+          "target_logprob": -0.0021228890400379896,
+          "target_rank": 1,
+          "top1_token_id": 3228,
+          "top1_logprob": -0.0021228890400379896
+        },
+        {
+          "position": 32668,
+          "token_id": 15115,
+          "target_logprob": -5.270064830780029,
+          "target_rank": 18,
+          "top1_token_id": 35202,
+          "top1_logprob": -0.801314651966095
+        },
+        {
+          "position": 32669,
+          "token_id": 431,
+          "target_logprob": -2.992143154144287,
+          "target_rank": 6,
+          "top1_token_id": 386,
+          "top1_logprob": -2.374955654144287
+        },
+        {
+          "position": 32670,
+          "token_id": 13,
+          "target_logprob": -0.00972143653780222,
+          "target_rank": 1,
+          "top1_token_id": 13,
+          "top1_logprob": -0.00972143653780222
+        },
+        {
+          "position": 32671,
+          "token_id": 506,
+          "target_logprob": -4.664170742034912,
+          "target_rank": 15,
+          "top1_token_id": 472,
+          "top1_logprob": -3.765733242034912
+        },
+        {
+          "position": 32672,
+          "token_id": 4000,
+          "target_logprob": -7.377553462982178,
+          "target_rank": 61,
+          "top1_token_id": 6,
+          "top1_logprob": -1.0494285821914673
+        },
+        {
+          "position": 32673,
+          "token_id": 9809,
+          "target_logprob": -0.5322083830833435,
+          "target_rank": 1,
+          "top1_token_id": 9809,
+          "top1_logprob": -0.5322083830833435
+        },
+        {
+          "position": 32674,
+          "token_id": 1154,
+          "target_logprob": -0.6893812417984009,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.6893812417984009
+        },
+        {
+          "position": 32675,
+          "token_id": 315,
+          "target_logprob": -3.143531084060669,
+          "target_rank": 6,
+          "top1_token_id": 879,
+          "top1_logprob": -1.081031084060669
+        },
+        {
+          "position": 32676,
+          "token_id": 472,
+          "target_logprob": -3.7633461952209473,
+          "target_rank": 4,
+          "top1_token_id": 279,
+          "top1_logprob": -0.37272122502326965
+        },
+        {
+          "position": 32677,
+          "token_id": 8188,
+          "target_logprob": -0.002713571535423398,
+          "target_rank": 1,
+          "top1_token_id": 8188,
+          "top1_logprob": -0.002713571535423398
+        },
+        {
+          "position": 32678,
+          "token_id": 1154,
+          "target_logprob": -0.08821369707584381,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.08821369707584381
+        },
+        {
+          "position": 32679,
+          "token_id": 2115,
+          "target_logprob": -7.26043701171875,
+          "target_rank": 86,
+          "top1_token_id": 572,
+          "top1_logprob": -0.8541867733001709
+        },
+        {
+          "position": 32680,
+          "token_id": 279,
+          "target_logprob": -0.24830135703086853,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.24830135703086853
+        },
+        {
+          "position": 32681,
+          "token_id": 46342,
+          "target_logprob": -0.16319803893566132,
+          "target_rank": 1,
+          "top1_token_id": 46342,
+          "top1_logprob": -0.16319803893566132
+        },
+        {
+          "position": 32682,
+          "token_id": 311,
+          "target_logprob": -0.8157998919487,
+          "target_rank": 1,
+          "top1_token_id": 311,
+          "top1_logprob": -0.8157998919487
+        },
+        {
+          "position": 32683,
+          "token_id": 9567,
+          "target_logprob": -4.633695125579834,
+          "target_rank": 17,
+          "top1_token_id": 633,
+          "top1_logprob": -0.7352577447891235
+        },
+        {
+          "position": 32684,
+          "token_id": 9893,
+          "target_logprob": -7.072678089141846,
+          "target_rank": 40,
+          "top1_token_id": 16720,
+          "top1_logprob": -0.78361576795578
+        },
+        {
+          "position": 32685,
+          "token_id": 1154,
+          "target_logprob": -2.8237967491149902,
+          "target_rank": 5,
+          "top1_token_id": 323,
+          "top1_logprob": -0.8862968683242798
+        },
+        {
+          "position": 32686,
+          "token_id": 36668,
+          "target_logprob": -6.121925354003906,
+          "target_rank": 14,
+          "top1_token_id": 323,
+          "top1_logprob": -0.5125504732131958
+        },
+        {
+          "position": 32687,
+          "token_id": 1154,
+          "target_logprob": -0.6094411611557007,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.6094411611557007
+        },
+        {
+          "position": 32688,
+          "token_id": 323,
+          "target_logprob": -0.0065695736557245255,
+          "target_rank": 1,
+          "top1_token_id": 323,
+          "top1_logprob": -0.0065695736557245255
+        },
+        {
+          "position": 32689,
+          "token_id": 78959,
+          "target_logprob": -8.684032440185547,
+          "target_rank": 101,
+          "top1_token_id": 16720,
+          "top1_logprob": -1.019970417022705
+        },
+        {
+          "position": 32690,
+          "token_id": 504,
+          "target_logprob": -1.4895503520965576,
+          "target_rank": 2,
+          "top1_token_id": 659,
+          "top1_logprob": -1.0676753520965576
+        },
+        {
+          "position": 32691,
+          "token_id": 279,
+          "target_logprob": -0.10049448162317276,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.10049448162317276
+        },
+        {
+          "position": 32692,
+          "token_id": 4787,
+          "target_logprob": -7.85172700881958,
+          "target_rank": 81,
+          "top1_token_id": 264,
+          "top1_logprob": -1.0157896280288696
+        },
+        {
+          "position": 32693,
+          "token_id": 16134,
+          "target_logprob": -0.04534392058849335,
+          "target_rank": 1,
+          "top1_token_id": 16134,
+          "top1_logprob": -0.04534392058849335
+        },
+        {
+          "position": 32694,
+          "token_id": 5593,
+          "target_logprob": -0.37836411595344543,
+          "target_rank": 1,
+          "top1_token_id": 5593,
+          "top1_logprob": -0.37836411595344543
+        },
+        {
+          "position": 32695,
+          "token_id": 659,
+          "target_logprob": -0.6847860217094421,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.6847860217094421
+        },
+        {
+          "position": 32696,
+          "token_id": 1913,
+          "target_logprob": -4.152226448059082,
+          "target_rank": 7,
+          "top1_token_id": 1260,
+          "top1_logprob": -0.4178514778614044
+        },
+        {
+          "position": 32697,
+          "token_id": 3807,
+          "target_logprob": -8.98953914642334,
+          "target_rank": 18,
+          "top1_token_id": 806,
+          "top1_logprob": -0.3411012887954712
+        },
+        {
+          "position": 32698,
+          "token_id": 24930,
+          "target_logprob": -0.08323867619037628,
+          "target_rank": 1,
+          "top1_token_id": 24930,
+          "top1_logprob": -0.08323867619037628
+        },
+        {
+          "position": 32699,
+          "token_id": 566,
+          "target_logprob": -0.4522050619125366,
+          "target_rank": 1,
+          "top1_token_id": 566,
+          "top1_logprob": -0.4522050619125366
+        },
+        {
+          "position": 32700,
+          "token_id": 572,
+          "target_logprob": -0.9304282665252686,
+          "target_rank": 1,
+          "top1_token_id": 572,
+          "top1_logprob": -0.9304282665252686
+        },
+        {
+          "position": 32701,
+          "token_id": 18349,
+          "target_logprob": -2.6294021606445312,
+          "target_rank": 4,
+          "top1_token_id": 6552,
+          "top1_logprob": -1.5669022798538208
+        },
+        {
+          "position": 32702,
+          "token_id": 1154,
+          "target_logprob": -4.170873165130615,
+          "target_rank": 3,
+          "top1_token_id": 553,
+          "top1_logprob": -0.13962310552597046
+        },
+        {
+          "position": 32703,
+          "token_id": 323,
+          "target_logprob": -2.2086284160614014,
+          "target_rank": 2,
+          "top1_token_id": 714,
+          "top1_logprob": -0.20862841606140137
+        },
+        {
+          "position": 32704,
+          "token_id": 389,
+          "target_logprob": -1.4702239036560059,
+          "target_rank": 1,
+          "top1_token_id": 389,
+          "top1_logprob": -1.4702239036560059
+        },
+        {
+          "position": 32705,
+          "token_id": 825,
+          "target_logprob": -0.4559434652328491,
+          "target_rank": 1,
+          "top1_token_id": 825,
+          "top1_logprob": -0.4559434652328491
+        },
+        {
+          "position": 32706,
+          "token_id": 1741,
+          "target_logprob": -1.9258918762207031,
+          "target_rank": 3,
+          "top1_token_id": 13101,
+          "top1_logprob": -0.5821418762207031
+        },
+        {
+          "position": 32707,
+          "token_id": 13101,
+          "target_logprob": -0.2215903401374817,
+          "target_rank": 1,
+          "top1_token_id": 13101,
+          "top1_logprob": -0.2215903401374817
+        },
+        {
+          "position": 32708,
+          "token_id": 264,
+          "target_logprob": -3.6077752113342285,
+          "target_rank": 4,
+          "top1_token_id": 566,
+          "top1_logprob": -0.6468377709388733
+        },
+        {
+          "position": 32709,
+          "token_id": 4787,
+          "target_logprob": -0.5507614016532898,
+          "target_rank": 1,
+          "top1_token_id": 4787,
+          "top1_logprob": -0.5507614016532898
+        },
+        {
+          "position": 32710,
+          "token_id": 16134,
+          "target_logprob": -0.00020144341397099197,
+          "target_rank": 1,
+          "top1_token_id": 16134,
+          "top1_logprob": -0.00020144341397099197
+        },
+        {
+          "position": 32711,
+          "token_id": 26110,
+          "target_logprob": -0.5913894772529602,
+          "target_rank": 1,
+          "top1_token_id": 26110,
+          "top1_logprob": -0.5913894772529602
+        },
+        {
+          "position": 32712,
+          "token_id": 14843,
+          "target_logprob": -7.782541751861572,
+          "target_rank": 149,
+          "top1_token_id": 6552,
+          "top1_logprob": -1.2591042518615723
+        },
+        {
+          "position": 32713,
+          "token_id": 18349,
+          "target_logprob": -2.3010494709014893,
+          "target_rank": 3,
+          "top1_token_id": 6552,
+          "top1_logprob": -1.7385494709014893
+        },
+        {
+          "position": 32714,
+          "token_id": 506,
+          "target_logprob": -3.905395269393921,
+          "target_rank": 3,
+          "top1_token_id": 1435,
+          "top1_logprob": -0.07727031409740448
+        },
+        {
+          "position": 32715,
+          "token_id": 4000,
+          "target_logprob": -0.0002849888114724308,
+          "target_rank": 1,
+          "top1_token_id": 4000,
+          "top1_logprob": -0.0002849888114724308
+        },
+        {
+          "position": 32716,
+          "token_id": 9809,
+          "target_logprob": -1.5735502529423684e-05,
+          "target_rank": 1,
+          "top1_token_id": 9809,
+          "top1_logprob": -1.5735502529423684e-05
+        },
+        {
+          "position": 32717,
+          "token_id": 1154,
+          "target_logprob": -2.245363235473633,
+          "target_rank": 4,
+          "top1_token_id": 504,
+          "top1_logprob": -1.4016132354736328
+        },
+        {
+          "position": 32718,
+          "token_id": 879,
+          "target_logprob": -0.5384618043899536,
+          "target_rank": 1,
+          "top1_token_id": 879,
+          "top1_logprob": -0.5384618043899536
+        },
+        {
+          "position": 32719,
+          "token_id": 7425,
+          "target_logprob": -6.6489176750183105,
+          "target_rank": 38,
+          "top1_token_id": 572,
+          "top1_logprob": -0.4692299962043762
+        },
+        {
+          "position": 32720,
+          "token_id": 279,
+          "target_logprob": -3.0111544132232666,
+          "target_rank": 2,
+          "top1_token_id": 1435,
+          "top1_logprob": -0.05802939459681511
+        },
+        {
+          "position": 32721,
+          "token_id": 4787,
+          "target_logprob": -3.1708555221557617,
+          "target_rank": 5,
+          "top1_token_id": 30710,
+          "top1_logprob": -0.8271056413650513
+        },
+        {
+          "position": 32722,
+          "token_id": 16134,
+          "target_logprob": -0.00019703354337252676,
+          "target_rank": 1,
+          "top1_token_id": 16134,
+          "top1_logprob": -0.00019703354337252676
+        },
+        {
+          "position": 32723,
+          "token_id": 304,
+          "target_logprob": -2.4667861461639404,
+          "target_rank": 3,
+          "top1_token_id": 448,
+          "top1_logprob": -0.4511612057685852
+        },
+        {
+          "position": 32724,
+          "token_id": 1424,
+          "target_logprob": -3.6238715648651123,
+          "target_rank": 4,
+          "top1_token_id": 656,
+          "top1_logprob": -0.5613715648651123
+        },
+        {
+          "position": 32725,
+          "token_id": 569,
+          "target_logprob": -6.755373001098633,
+          "target_rank": 3,
+          "top1_token_id": 311,
+          "top1_logprob": -0.09912315011024475
+        },
+        {
+          "position": 32726,
+          "token_id": 12,
+          "target_logprob": -5.960446742392378e-06,
+          "target_rank": 1,
+          "top1_token_id": 12,
+          "top1_logprob": -5.960446742392378e-06
+        },
+        {
+          "position": 32727,
+          "token_id": 31,
+          "target_logprob": -1.1205610462639015e-05,
+          "target_rank": 1,
+          "top1_token_id": 31,
+          "top1_logprob": -1.1205610462639015e-05
+        },
+        {
+          "position": 32728,
+          "token_id": 311,
+          "target_logprob": -9.536697689327411e-06,
+          "target_rank": 1,
+          "top1_token_id": 311,
+          "top1_logprob": -9.536697689327411e-06
+        },
+        {
+          "position": 32729,
+          "token_id": 569,
+          "target_logprob": -0.00955059565603733,
+          "target_rank": 1,
+          "top1_token_id": 569,
+          "top1_logprob": -0.00955059565603733
+        },
+        {
+          "position": 32730,
+          "token_id": 12,
+          "target_logprob": -8.344646857949556e-07,
+          "target_rank": 1,
+          "top1_token_id": 12,
+          "top1_logprob": -8.344646857949556e-07
+        },
+        {
+          "position": 32731,
+          "token_id": 31,
+          "target_logprob": -5.245071224635467e-05,
+          "target_rank": 1,
+          "top1_token_id": 31,
+          "top1_logprob": -5.245071224635467e-05
+        },
+        {
+          "position": 32732,
+          "token_id": 1424,
+          "target_logprob": -0.00019167017308063805,
+          "target_rank": 1,
+          "top1_token_id": 1424,
+          "top1_logprob": -0.00019167017308063805
+        },
+        {
+          "position": 32733,
+          "token_id": 12610,
+          "target_logprob": -0.43562138080596924,
+          "target_rank": 1,
+          "top1_token_id": 12610,
+          "top1_logprob": -0.43562138080596924
+        },
+        {
+          "position": 32734,
+          "token_id": 659,
+          "target_logprob": -0.13059617578983307,
+          "target_rank": 1,
+          "top1_token_id": 659,
+          "top1_logprob": -0.13059617578983307
+        },
+        {
+          "position": 32735,
+          "token_id": 14731,
+          "target_logprob": -5.833486557006836,
+          "target_rank": 28,
+          "top1_token_id": 506,
+          "top1_logprob": -1.208486557006836
+        },
+        {
+          "position": 32736,
+          "token_id": 2938,
+          "target_logprob": -5.288825988769531,
+          "target_rank": 14,
+          "top1_token_id": 1913,
+          "top1_logprob": -1.1013259887695312
+        },
+        {
+          "position": 32737,
+          "token_id": 1852,
+          "target_logprob": -2.7524547576904297,
+          "target_rank": 3,
+          "top1_token_id": 3729,
+          "top1_logprob": -0.23682987689971924
+        },
+        {
+          "position": 32738,
+          "token_id": 13354,
+          "target_logprob": -1.5386227369308472,
+          "target_rank": 2,
+          "top1_token_id": 1899,
+          "top1_logprob": -0.9448727369308472
+        },
+        {
+          "position": 32739,
+          "token_id": 1154,
+          "target_logprob": -0.501215398311615,
+          "target_rank": 1,
+          "top1_token_id": 1154,
+          "top1_logprob": -0.501215398311615
+        },
+        {
+          "position": 32740,
+          "token_id": 279,
+          "target_logprob": -0.9740248918533325,
+          "target_rank": 1,
+          "top1_token_id": 279,
+          "top1_logprob": -0.9740248918533325
+        },
+        {
+          "position": 32741,
+          "token_id": 4787,
+          "target_logprob": -0.35510995984077454,
+          "target_rank": 1,
+          "top1_token_id": 4787,
+          "top1_logprob": -0.35510995984077454
+        },
+        {
+          "position": 32742,
+          "token_id": 69711,
+          "target_logprob": -0.03613148257136345,
+          "target_rank": 1,
+          "top1_token_id": 69711,
+          "top1_logprob": -0.03613148257136345
+        },
+        {
+          "position": 32743,
+          "token_id": 3208,
+          "target_logprob": -5.216954708099365,
+          "target_rank": 23,
+          "top1_token_id": 18349,
+          "top1_logprob": -0.9513298273086548
+        },
+        {
+          "position": 32744,
+          "token_id": 458,
+          "target_logprob": -2.3743224143981934,
+          "target_rank": 2,
+          "top1_token_id": 264,
+          "top1_logprob": -0.5305724740028381
+        },
+        {
+          "position": 32745,
+          "token_id": 3693,
+          "target_logprob": -8.065715789794922,
+          "target_rank": 91,
+          "top1_token_id": 3359,
+          "top1_logprob": -0.7766529321670532
+        },
+        {
+          "position": 32746,
+          "token_id": 41850,
+          "target_logprob": -6.9454731941223145,
+          "target_rank": 56,
+          "top1_token_id": 5181,
+          "top1_logprob": -0.8907855153083801
+        },
+        {
+          "position": 32747,
+          "token_id": 705,
+          "target_logprob": -7.8202996253967285,
+          "target_rank": 47,
+          "top1_token_id": 315,
+          "top1_logprob": -1.156237244606018
+        },
+        {
+          "position": 32748,
+          "token_id": 279,
+          "target_logprob": -1.2297693490982056,
+          "target_rank": 2,
+          "top1_token_id": 311,
+          "top1_logprob": -0.47976934909820557
+        },
+        {
+          "position": 32749,
+          "token_id": 23946,
+          "target_logprob": -0.07808289676904678,
+          "target_rank": 1,
+          "top1_token_id": 23946,
+          "top1_logprob": -0.07808289676904678
+        },
+        {
+          "position": 32750,
+          "token_id": 311,
+          "target_logprob": -0.43604448437690735,
+          "target_rank": 1,
+          "top1_token_id": 311,
+          "top1_logprob": -0.43604448437690735
+        },
+        {
+          "position": 32751,
+          "token_id": 5016,
+          "target_logprob": -5.771642208099365,
+          "target_rank": 14,
+          "top1_token_id": 279,
+          "top1_logprob": -0.20132951438426971
+        },
+        {
+          "position": 32752,
+          "token_id": 23692,
+          "target_logprob": -7.867782187531702e-06,
+          "target_rank": 1,
+          "top1_token_id": 23692,
+          "top1_logprob": -7.867782187531702e-06
+        },
+        {
+          "position": 32753,
+          "token_id": 448,
+          "target_logprob": -4.584029197692871,
+          "target_rank": 8,
+          "top1_token_id": 659,
+          "top1_logprob": -0.39652934670448303
+        },
+        {
+          "position": 32754,
+          "token_id": 279,
+          "target_logprob": -2.299938678741455,
+          "target_rank": 3,
+          "top1_token_id": 264,
+          "top1_logprob": -0.2999385893344879
+        },
+        {
+          "position": 32755,
+          "token_id": 1943,
+          "target_logprob": -0.9695714712142944,
+          "target_rank": 1,
+          "top1_token_id": 1943,
+          "top1_logprob": -0.9695714712142944
+        },
+        {
+          "position": 32756,
+          "token_id": 1154,
+          "target_logprob": -2.4154129028320312,
+          "target_rank": 4,
+          "top1_token_id": 429,
+          "top1_logprob": -0.5716629028320312
+        },
+        {
+          "position": 32757,
+          "token_id": 330,
+          "target_logprob": -0.03396742418408394,
+          "target_rank": 1,
+          "top1_token_id": 330,
+          "top1_logprob": -0.03396742418408394
+        },
+        {
+          "position": 32758,
+          "token_id": 1446,
+          "target_logprob": -2.085742473602295,
+          "target_rank": 2,
+          "top1_token_id": 1205,
+          "top1_logprob": -1.4216800928115845
+        },
+        {
+          "position": 32759,
+          "token_id": 614,
+          "target_logprob": -1.6624865531921387,
+          "target_rank": 2,
+          "top1_token_id": 525,
+          "top1_logprob": -0.42811161279678345
+        },
+        {
+          "position": 32760,
+          "token_id": 825,
+          "target_logprob": -5.03884220123291,
+          "target_rank": 14,
+          "top1_token_id": 311,
+          "top1_logprob": -1.687279462814331
+        },
+        {
+          "position": 32761,
+          "token_id": 6460,
+          "target_logprob": -2.3575901985168457,
+          "target_rank": 4,
+          "top1_token_id": 1537,
+          "top1_logprob": -1.1544651985168457
+        },
+        {
+          "position": 32762,
+          "token_id": 311,
+          "target_logprob": -0.244881734251976,
+          "target_rank": 1,
+          "top1_token_id": 311,
+          "top1_logprob": -0.244881734251976
+        },
+        {
+          "position": 32763,
+          "token_id": 31759,
+          "target_logprob": -1.1297096014022827,
+          "target_rank": 2,
+          "top1_token_id": 633,
+          "top1_logprob": -0.8172096014022827
+        },
+        {
+          "position": 32764,
+          "token_id": 476,
+          "target_logprob": -0.3488704562187195,
+          "target_rank": 1,
+          "top1_token_id": 476,
+          "top1_logprob": -0.3488704562187195
+        },
+        {
+          "position": 32765,
+          "token_id": 387,
+          "target_logprob": -0.6785980463027954,
+          "target_rank": 1,
+          "top1_token_id": 387,
+          "top1_logprob": -0.6785980463027954
+        },
+        {
+          "position": 32766,
+          "token_id": 35474,
+          "target_logprob": -6.187229633331299,
+          "target_rank": 9,
+          "top1_token_id": 7425,
+          "top1_logprob": -0.4528547525405884
+        },
+        {
+          "position": 32767,
+          "token_id": 311,
+          "target_logprob": -3.623732328414917,
+          "target_rank": 2,
+          "top1_token_id": 705,
+          "top1_logprob": -0.045607391744852066
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "schema_version": 2,
+  "total_samples": 20,
+  "valid_pairs": 20,
+  "missing_reference_count": 0,
+  "missing_reference_sample_ids": [],
+  "missing_candidate_count": 0,
+  "missing_candidate_sample_ids": [],
+  "failed_reference_count": 0,
+  "failed_reference_sample_ids": [],
+  "failed_candidate_count": 0,
+  "failed_candidate_sample_ids": [],
+  "prompt_hash_mismatch_count": 0,
+  "input_token_count_mismatch_count": 0,
+  "identical_count": 0,
+  "diverged_count": 20,
+  "divergence_rate": 1.0,
+  "token_mismatch_count": 20,
+  "length_only_count": 0,
+  "mean_first_divergence_step": 253.4,
+  "median_first_divergence_step": 229.0,
+  "first_divergence_step_percentiles": {
+    "p25": 214.5,
+    "p50": 229.0,
+    "p75": 261.25,
+    "p90": 357.50000000000006
+  },
+  "mean_lcp_ratio": 0.07193788517936414,
+  "median_lcp_ratio": 0.06975157698539847,
+  "mean_fp16_output_tokens": 6248.65,
+  "mean_kvarn_output_tokens": 7227.5,
+  "mean_length_difference": 978.85,
+  "median_length_difference": 200.0,
+  "mean_length_ratio": 1.0893589890977649,
+  "fp16_censored_count": 0,
+  "kvarn_censored_count": 1,
+  "either_censored_count": 1,
+  "both_censored_count": 0,
+  "natural_completion_pair_count": 19,
+  "mean_length_difference_uncensored": 124.52631578947368,
+  "median_length_difference_uncensored": 149,
+  "mean_length_ratio_uncensored": 1.0523201415608106,
+  "fraction_length_ratio_gt_1_1": 0.4,
+  "fraction_length_ratio_gt_1_5": 0.1,
+  "fraction_length_ratio_gt_2_0": 0.0,
+  "fp16_approx_accuracy": {
+    "correct": 12,
+    "evaluated": 20,
+    "accuracy": 0.6
+  },
+  "kvarn_approx_accuracy": {
+    "correct": 11,
+    "evaluated": 20,
+    "accuracy": 0.55
+  },
+  "correctness_transition_counts": {
+    "correct_to_wrong": 1,
+    "wrong_to_wrong": 8,
+    "correct_to_correct": 11
+  },
+  "correct_to_wrong_count": 1,
+  "wrong_to_correct_count": 0,
+  "reference_finish_reason_counts": {
+    "stop": 20
+  },
+  "candidate_finish_reason_counts": {
+    "length": 1,
+    "stop": 19
+  },
+  "length_buckets": {
+    "[0,512)": {
+      "sample_count": 0,
+      "divergence_count": 0,
+      "divergence_rate": null,
+      "median_first_divergence_step": null,
+      "mean_length_ratio": null,
+      "mean_length_ratio_uncensored": null,
+      "correct_to_wrong_count": 0
+    },
+    "[512,1024)": {
+      "sample_count": 0,
+      "divergence_count": 0,
+      "divergence_rate": null,
+      "median_first_divergence_step": null,
+      "mean_length_ratio": null,
+      "mean_length_ratio_uncensored": null,
+      "correct_to_wrong_count": 0
+    },
+    "[1024,2048)": {
+      "sample_count": 3,
+      "divergence_count": 3,
+      "divergence_rate": 1.0,
+      "median_first_divergence_step": 228,
+      "mean_length_ratio": 1.1166319180360493,
+      "mean_length_ratio_uncensored": 1.1166319180360493,
+      "correct_to_wrong_count": 0
+    },
+    "[2048,4096)": {
+      "sample_count": 7,
+      "divergence_count": 7,
+      "divergence_rate": 1.0,
+      "median_first_divergence_step": 227,
+      "mean_length_ratio": 1.0113082791076093,
+      "mean_length_ratio_uncensored": 1.0113082791076093,
+      "correct_to_wrong_count": 0
+    },
+    "[4096,+inf)": {
+      "sample_count": 10,
+      "divergence_count": 10,
+      "divergence_rate": 1.0,
+      "median_first_divergence_step": 241.5,
+      "mean_length_ratio": 1.1358126074093882,
+      "mean_length_ratio_uncensored": 1.0627809979771097,
+      "correct_to_wrong_count": 1
+    }
+  },
+  "fp16_self_divergence": {
+    "valid_pairs": 20,
+    "diverged_count": 0,
+    "self_divergence_rate": 0.0,
+    "divergent_sample_ids": []
+  },
+  "kvarn_self_divergence": {
+    "valid_pairs": 20,
+    "diverged_count": 20,
+    "self_divergence_rate": 1.0,
+    "divergent_sample_ids": [
+      "003cd5e9c95a474e9431",
+      "05bdc1901a5bcbcd8361",
+      "1886f57e31114f1719d6",
+      "19da3838f3a463bab64e",
+      "1d8ac3dc721f5bffc4e3",
+      "40b0bb7426f9a7d0f265",
+      "4a422b3fdbfe13a33e16",
+      "5c8840b61958ad4caef7",
+      "6865f599c6c0d9a53d0b",
+      "706db9033372be2a17d8",
+      "8ffe40959752def39d11",
+      "95a915884d11ffcc8534",
+      "96b65be99ec3bc4c407f",
+      "ab6e90a57c013da0e038",
+      "af25489f8c0c57e591bc",
+      "bc0ebd5a3f8bc465de9e",
+      "bf1328c295bece4ac011",
+      "c18640ec8402577e23b4",
+      "c6c880408c31b81131f3",
+      "ecc05401fb65fe7a6f62"
+    ]
+  }
+}

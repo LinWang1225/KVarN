@@ -1,0 +1,1688 @@
+diff --git a/vllm/v1/attention/backends/kvarn_attn.py b/vllm/v1/attention/backends/kvarn_attn.py
+--- a/vllm/v1/attention/backends/kvarn_attn.py
++++ b/vllm/v1/attention/backends/kvarn_attn.py
+@@ -1740,6 +1740,21 @@ class KVarNAttentionImpl(AttentionImpl["KVarNMetadata"]):
+             attn_out = self._mixed_batch_path(
+                 q, key[:N], value[:N], kv_cache, attn_metadata
+             )
++        # Benchmark-only Figure 5 probe. Normal serving never imports or calls
++        # the probe because the environment variable is absent.
++        if os.environ.get("VLLM_FIGURE5_PROBE_OUTPUT"):
++            from vllm.v1.attention.figure5_probe import probe_attention_output
++
++            attn_out = probe_attention_output(
++                method="kvarn",
++                impl=self,
++                layer=layer,
++                query=q,
++                key=key[:N].view(N, self.num_kv_heads, self.head_size),
++                value=value[:N].view(N, self.num_kv_heads, self.head_size),
++                attn_metadata=attn_metadata,
++                native_output=attn_out,
++            )
+         if output.ndim == 3:
+             output[:N] = attn_out.to(output.dtype)
+         else:
+diff --git a/vllm/v1/attention/backends/turboquant_attn.py b/vllm/v1/attention/backends/turboquant_attn.py
+--- a/vllm/v1/attention/backends/turboquant_attn.py
++++ b/vllm/v1/attention/backends/turboquant_attn.py
+@@ -15,6 +15,7 @@ Per-head per-position slot layout:
+ 
+ import functools
+ import math
++import os
+ from dataclasses import dataclass
+ from typing import Any, ClassVar
+ 
+@@ -482,6 +483,21 @@ class TurboQuantAttentionImpl(AttentionImpl["TurboQuantMetadata"]):
+                 PiT,
+                 layer=layer,
+             )
++        # Benchmark-only Figure 5 probe. Normal serving never imports or calls
++        # the probe because the environment variable is absent.
++        if os.environ.get("VLLM_FIGURE5_PROBE_OUTPUT"):
++            from vllm.v1.attention.figure5_probe import probe_attention_output
++
++            attn_out = probe_attention_output(
++                method="turboquant",
++                impl=self,
++                layer=layer,
++                query=q,
++                key=key[:N].view(N, self.num_kv_heads, self.head_size),
++                value=value[:N].view(N, self.num_kv_heads, self.head_size),
++                attn_metadata=attn_metadata,
++                native_output=attn_out,
++            )
+         # Write into output buffer: attn_out is (N, Hq, D)
+         # output may be 2D (N, Hq*D) or 3D (N, Hq, D)
+         if output.ndim == 3:
+diff --git a/benchmarks/kvarn_figure5/ATTENTION_FIGURE5.md b/benchmarks/kvarn_figure5/ATTENTION_FIGURE5.md
+new file mode 100644
+index 0000000..e1cce18
+--- /dev/null
++++ b/benchmarks/kvarn_figure5/ATTENTION_FIGURE5.md
+@@ -0,0 +1,145 @@
++# Figure 5 protocol with native vLLM kernels
++
++This patch keeps the deployment presets requested for this repository:
++
++| Method | Native vLLM `kv_cache_dtype` |
++|---|---|
++| KVarN | `kvarn_k4v2_g128` |
++| TurboQuant | `turboquant_3bit_nc` |
++
++There is no KIVI implementation and no benchmark-local quantizer. Cache storage,
++packing, dequantization and attention all remain in the repository's native
++KVarN/TurboQuant backends and Triton kernels.
++
++## What changed from the old benchmark
++
++The existing `run_figure5.py` measures final-model log-probability drift,
++top-1 agreement and prompt-scoring throughput. Those are useful endpoint
++metrics, but they are not the quantities in paper Figure 5.
++
++`run_attention_figure5.py` adds the paper's measurement protocol:
++
++1. **Panel (a)**: element-weighted mean absolute reconstruction error over
++   every 128-token pseudo-decode chunk and every attention-layer output, for
++   both **static** and **accumulated** runs.
++2. **Panel (b)**: `MAE_KVarN - MAE_TurboQuant` under each regime.
++3. **Panel (c)**: `(KVarN-TurboQuant)_static -
++   (KVarN-TurboQuant)_accumulated`.
++
++The native backend output (the `softmax(QK^T)V` result before the model's
++output projection) is compared with a shadow FP16 KV history:
++
++- **Accumulated** returns the native quantized-cache attention output, so its
++  error changes later hidden states and later cache entries.
++- **Static** still executes the same native quantized cache path and records
++  its local error, but returns the shadow FP16 attention output to the model.
++  The local error therefore cannot propagate into later layers or chunks.
++
++The benchmark records every chunk rather than only the final 128 tokens, then
++uses several deterministic WikiText-2 windows and reports paired sample means
++and 95% confidence intervals. This removes the earlier single-window/final-block
++content confound and makes panels (b) and (c) paired at the sample level.
++
++## Scope and naming
++
++This is a **Figure-5 protocol-aligned adaptation**, not a numerical recreation
++of the paper's K2/V2 comparison. The paper compares KVarN K2/V2 with KIVI K2/V2.
++This patch deliberately retains the released native presets:
++
++- KVarN K4/V2 G128
++- TurboQuant K3/V3 with norm correction
++
++Accordingly, panel (b) uses TurboQuant instead of KIVI. It tests the same error
++accumulation hypothesis but cannot be expected to reproduce the paper's exact
++values or method gap.
++
++## Apply and install
++
++From the repository root:
++
++```bash
++git apply --check /path/to/kvarn_figure5_native_attention.patch
++git apply /path/to/kvarn_figure5_native_attention.patch
++VLLM_USE_PRECOMPILED=1 pip install -e .
++pip install -r benchmarks/kvarn_figure5/requirements.txt
++```
++
++The backend hook is dormant unless the benchmark sets
++`VLLM_FIGURE5_PROBE_OUTPUT`, so normal serving behavior is unchanged.
++
++## Smoke test
++
++```bash
++python benchmarks/kvarn_figure5/run_attention_figure5.py \
++  --model /data/wanglin/models/Qwen3-4B \
++  --methods kvarn turboquant \
++  --context-lengths 1024 2048 4096 \
++  --num-samples 1 \
++  --text-file /data/corpora/sample.txt \
++  --repeat-short-text \
++  --output-dir runs/figure5_attention_smoke \
++  --overwrite
++```
++
++## Full run
++
++```bash
++MODEL=/data/wanglin/models/Qwen3-4B \
++NUM_SAMPLES=4 \
++GPU_MEMORY_UTILIZATION=0.90 \
++SHADOW_MEMORY_SAFETY_GIB=1.0 \
++OUTPUT_DIR=runs/figure5_native_attention_qwen3_4b \
++bash benchmarks/kvarn_figure5/run_attention_figure5.sh
++```
++
++For a smoother context curve, use more observation points:
++
++```bash
++python benchmarks/kvarn_figure5/run_attention_figure5.py \
++  --model /data/wanglin/models/Qwen3-4B \
++  --methods kvarn turboquant \
++  --context-lengths 2048 4096 6144 8192 12288 16384 24576 32768 \
++  --num-samples 4 \
++  --output-dir runs/figure5_native_attention_dense \
++  --overwrite
++```
++
++## Outputs
++
++```text
++config_attention_figure5.json
++input_samples.json
++worker_kvarn_static.jsonl
++worker_kvarn_accumulated.jsonl
++worker_turboquant_static.jsonl
++worker_turboquant_accumulated.jsonl
++figure5_attention_layer_raw.csv
++figure5_attention_sample.csv
++figure5_attention_summary.csv
++figure5_native_attention_reconstruction.png
++figure5_native_attention_reconstruction.pdf
++figure5_native_attention_reconstruction.svg
++```
++
++`figure5_attention_layer_raw.csv` contains one row per method, regime, sample,
++context, 128-token chunk and attention layer. Layers intentionally kept in FP16
++by a preset are included as zero-error layers when averaging over all model
++attention layers. `figure5_attention_sample.csv` contains the full-sequence,
++all-layer MAE for each paired sample.
++
++## Resource note
++
++Both regimes keep a shadow FP16 KV history on GPU and evaluate an FP16 attention
++reference for every 128-token chunk. Before creating vLLM, the worker estimates
++that shadow allocation from the model configuration and automatically subtracts
++it—plus `--shadow-memory-safety-gib`—from the requested vLLM GPU-memory
++utilization. For Qwen3-4B at 32K, the shadow cache is roughly several GiB; this
++automatic reservation avoids the OOM that would occur if vLLM first consumed
++90% of the GPU. The worker prints the requested and effective utilization and
++records them in `config_attention_figure5.json`.
++
++The probe currently requires `--tensor-parallel-size 1`. `enforce_eager=True` is
++set internally because Python-side probe state and JSONL recording must not be
++captured by CUDA graphs. This benchmark is deliberately much more expensive
++than normal serving, but the KVarN and TurboQuant store/dequant/attention Triton
++kernels themselves remain the repository's native implementations.
+diff --git a/benchmarks/kvarn_figure5/attention_metrics.py b/benchmarks/kvarn_figure5/attention_metrics.py
+new file mode 100644
+index 0000000..bb27721
+--- /dev/null
++++ b/benchmarks/kvarn_figure5/attention_metrics.py
+@@ -0,0 +1,320 @@
++# SPDX-License-Identifier: Apache-2.0
++"""Aggregation for the native-kernel Figure 5 attention probe."""
++
++from __future__ import annotations
++
++import csv
++import json
++import math
++from collections import defaultdict
++from pathlib import Path
++from statistics import mean, stdev
++from typing import Any, Iterable
++
++METHOD_ORDER = ("kvarn", "turboquant")
++REGIME_ORDER = ("accumulated", "static")
++
++
++def read_jsonl(paths: Iterable[Path]) -> list[dict[str, Any]]:
++    rows: list[dict[str, Any]] = []
++    for path in paths:
++        with path.open(encoding="utf-8") as handle:
++            for line_number, line in enumerate(handle, start=1):
++                if not line.strip():
++                    continue
++                try:
++                    rows.append(json.loads(line))
++                except json.JSONDecodeError as error:
++                    raise ValueError(f"Invalid JSONL at {path}:{line_number}") from error
++    if not rows:
++        raise ValueError("No attention probe rows were produced")
++    return rows
++
++
++def _summary(values: list[float]) -> dict[str, float | int]:
++    if not values:
++        raise ValueError("Cannot summarize an empty sample")
++    average = mean(values)
++    sample_std = stdev(values) if len(values) > 1 else 0.0
++    sem = sample_std / math.sqrt(len(values)) if values else 0.0
++    half = 1.96 * sem
++    return {
++        "num_samples": len(values),
++        "mean": average,
++        "sample_std": sample_std,
++        "sem": sem,
++        "ci95_low": average - half,
++        "ci95_high": average + half,
++    }
++
++
++def _complete_fp16_layers(
++    raw_rows: list[dict[str, Any]],
++    *,
++    num_hidden_layers: int,
++) -> list[dict[str, Any]]:
++    """Add zero-error rows for preset layers intentionally kept in FP16.
++
++    TurboQuant presets may route first/last layers to the normal FP16 backend,
++    so the native TurboQuant hook is not called for them.  Figure 5 averages
++    over all attention layers; missing layers are therefore included with zero
++    reconstruction error.  A missing layer is filled only when the observed
++    layer set is stable for every request of that method/regime.
++    """
++    groups: dict[tuple[str, str, int, int, int, int, int], list[dict[str, Any]]] = defaultdict(list)
++    for row in raw_rows:
++        groups[
++            (
++                str(row["method"]),
++                str(row["regime"]),
++                int(row["request_index"]),
++                int(row["sample_id"]),
++                int(row["context_tokens"]),
++                int(row["chunk_start"]),
++                int(row["chunk_end"]),
++            )
++        ].append(row)
++
++    completed = list(raw_rows)
++    observed_sets: dict[tuple[str, str], set[int]] = {}
++    for key, rows in groups.items():
++        (
++            method,
++            regime,
++            request_index,
++            sample_id,
++            context_tokens,
++            chunk_start,
++            chunk_end,
++        ) = key
++        observed = {int(row["layer_index"]) for row in rows if int(row["layer_index"]) >= 0}
++        signature = (method, regime)
++        previous = observed_sets.setdefault(signature, observed)
++        if observed != previous:
++            raise ValueError(
++                f"Observed layer set changes for {signature}: {sorted(previous)} vs "
++                f"{sorted(observed)}. Refusing to interpret missing layers as FP16 skips."
++            )
++        if any(int(row["layer_index"]) < 0 for row in rows):
++            raise ValueError(f"Could not parse one or more layer indices for {key}")
++        missing = sorted(set(range(num_hidden_layers)) - observed)
++        if not missing:
++            continue
++        template_numel = int(rows[0]["num_elements"])
++        query_tokens = int(rows[0]["query_tokens"])
++        for layer_index in missing:
++            completed.append(
++                {
++                    "method": method,
++                    "regime": regime,
++                    "request_index": request_index,
++                    "sample_id": sample_id,
++                    "context_tokens": context_tokens,
++                    "chunk_start": chunk_start,
++                    "chunk_end": chunk_end,
++                    "layer_name": f"synthetic_fp16_layer.{layer_index}",
++                    "layer_index": layer_index,
++                    "query_tokens": query_tokens,
++                    "sum_abs_error": 0.0,
++                    "num_elements": template_numel,
++                    "attention_output_mae": 0.0,
++                    "max_abs_error": 0.0,
++                    "synthetic_fp16_layer": True,
++                }
++            )
++    return completed
++
++
++def aggregate_figure5(
++    raw_rows: list[dict[str, Any]],
++    *,
++    num_hidden_layers: int,
++) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
++    completed = _complete_fp16_layers(
++        raw_rows, num_hidden_layers=num_hidden_layers
++    )
++
++    layer_keys: set[tuple[str, str, int, int, int, int, int]] = set()
++    for row in completed:
++        key = (
++            str(row["method"]),
++            str(row["regime"]),
++            int(row["request_index"]),
++            int(row["sample_id"]),
++            int(row["context_tokens"]),
++            int(row["chunk_end"]),
++            int(row["layer_index"]),
++        )
++        if key in layer_keys:
++            raise ValueError(f"Duplicate layer observation: {key}")
++        layer_keys.add(key)
++
++    grouped: dict[tuple[str, str, int, int], list[dict[str, Any]]] = defaultdict(list)
++    for row in completed:
++        grouped[
++            (
++                str(row["method"]),
++                str(row["regime"]),
++                int(row["sample_id"]),
++                int(row["context_tokens"]),
++            )
++        ].append(row)
++
++    sample_rows: list[dict[str, Any]] = []
++    expected_layers = set(range(num_hidden_layers))
++    for (method, regime, sample_id, context_tokens), rows in sorted(grouped.items()):
++        by_chunk: dict[tuple[int, int], list[dict[str, Any]]] = defaultdict(list)
++        for row in rows:
++            by_chunk[(int(row["chunk_start"]), int(row["chunk_end"]))].append(row)
++
++        chunk_ranges = sorted(by_chunk)
++        if not chunk_ranges or chunk_ranges[0][0] != 0:
++            raise ValueError(
++                f"Chunk coverage does not start at zero for "
++                f"{(method, regime, sample_id, context_tokens)}: {chunk_ranges[:3]}"
++            )
++        for previous, current in zip(chunk_ranges, chunk_ranges[1:]):
++            if previous[1] != current[0]:
++                raise ValueError(
++                    f"Non-contiguous chunk coverage for "
++                    f"{(method, regime, sample_id, context_tokens)}: "
++                    f"{previous} then {current}"
++                )
++        if chunk_ranges[-1][1] != context_tokens:
++            raise ValueError(
++                f"Chunk coverage ends at {chunk_ranges[-1][1]}, expected "
++                f"{context_tokens} for {(method, regime, sample_id)}"
++            )
++
++        for chunk_range, chunk_rows in by_chunk.items():
++            indices = {int(row["layer_index"]) for row in chunk_rows}
++            if indices != expected_layers:
++                raise ValueError(
++                    f"Expected {num_hidden_layers} layers for "
++                    f"{(method, regime, sample_id, context_tokens, chunk_range)}, "
++                    f"got {sorted(indices)}"
++                )
++
++        sum_abs = sum(float(row["sum_abs_error"]) for row in rows)
++        numel = sum(int(row["num_elements"]) for row in rows)
++        sample_rows.append(
++            {
++                "method": method,
++                "regime": regime,
++                "sample_id": sample_id,
++                "context_tokens": context_tokens,
++                "num_layers": num_hidden_layers,
++                "num_chunks": len(chunk_ranges),
++                "sum_abs_error": sum_abs,
++                "num_elements": numel,
++                "attention_output_mae": sum_abs / numel,
++            }
++        )
++
++    curve_values: dict[tuple[str, str, int], list[float]] = defaultdict(list)
++    sample_lookup: dict[tuple[str, str, int, int], float] = {}
++    for row in sample_rows:
++        method = str(row["method"])
++        regime = str(row["regime"])
++        context = int(row["context_tokens"])
++        sample_id = int(row["sample_id"])
++        value = float(row["attention_output_mae"])
++        curve_values[(method, regime, context)].append(value)
++        sample_lookup[(method, regime, sample_id, context)] = value
++
++    summary_rows: list[dict[str, Any]] = []
++    for (method, regime, context), values in sorted(curve_values.items()):
++        stats = _summary(values)
++        summary_rows.append(
++            {
++                "method": method,
++                "regime": regime,
++                "context_tokens": context,
++                "num_samples": stats["num_samples"],
++                "mean_attention_output_mae": stats["mean"],
++                "sample_std": stats["sample_std"],
++                "sem": stats["sem"],
++                "ci95_low": stats["ci95_low"],
++                "ci95_high": stats["ci95_high"],
++            }
++        )
++
++    contexts = sorted({int(row["context_tokens"]) for row in sample_rows})
++    sample_ids = sorted({int(row["sample_id"]) for row in sample_rows})
++    difference_rows: list[dict[str, Any]] = []
++    for context in contexts:
++        regime_gaps: dict[str, list[float]] = {regime: [] for regime in REGIME_ORDER}
++        paired_by_sample: dict[int, dict[str, float]] = defaultdict(dict)
++        for regime in REGIME_ORDER:
++            for sample_id in sample_ids:
++                kvarn_key = ("kvarn", regime, sample_id, context)
++                turbo_key = ("turboquant", regime, sample_id, context)
++                if kvarn_key not in sample_lookup or turbo_key not in sample_lookup:
++                    raise ValueError(
++                        f"Missing paired observation at context={context}, sample={sample_id}, regime={regime}"
++                    )
++                gap = sample_lookup[kvarn_key] - sample_lookup[turbo_key]
++                regime_gaps[regime].append(gap)
++                paired_by_sample[sample_id][regime] = gap
++            stats = _summary(regime_gaps[regime])
++            difference_rows.append(
++                {
++                    "panel": "method_gap",
++                    "regime": regime,
++                    "context_tokens": context,
++                    "num_samples": stats["num_samples"],
++                    "mean_difference": stats["mean"],
++                    "sample_std": stats["sample_std"],
++                    "sem": stats["sem"],
++                    "ci95_low": stats["ci95_low"],
++                    "ci95_high": stats["ci95_high"],
++                    "definition": "MAE_KVarN - MAE_TurboQuant",
++                }
++            )
++
++        static_minus_accumulated = [
++            paired_by_sample[sample_id]["static"]
++            - paired_by_sample[sample_id]["accumulated"]
++            for sample_id in sample_ids
++        ]
++        stats = _summary(static_minus_accumulated)
++        difference_rows.append(
++            {
++                "panel": "regime_gap",
++                "regime": "static_minus_accumulated",
++                "context_tokens": context,
++                "num_samples": stats["num_samples"],
++                "mean_difference": stats["mean"],
++                "sample_std": stats["sample_std"],
++                "sem": stats["sem"],
++                "ci95_low": stats["ci95_low"],
++                "ci95_high": stats["ci95_high"],
++                "definition": "(KVarN-TurboQuant)_static - (KVarN-TurboQuant)_accumulated",
++            }
++        )
++
++    completed.sort(
++        key=lambda row: (
++            str(row["method"]),
++            str(row["regime"]),
++            int(row["sample_id"]),
++            int(row["context_tokens"]),
++            int(row["chunk_end"]),
++            int(row["layer_index"]),
++        )
++    )
++    return completed, sample_rows, summary_rows + difference_rows
++
++
++def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
++    if not rows:
++        raise ValueError(f"No rows for {path}")
++    fieldnames: list[str] = []
++    for row in rows:
++        for key in row:
++            if key not in fieldnames:
++                fieldnames.append(key)
++    with path.open("w", newline="", encoding="utf-8") as handle:
++        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore")
++        writer.writeheader()
++        writer.writerows(rows)
+diff --git a/benchmarks/kvarn_figure5/plot_attention_figure5.py b/benchmarks/kvarn_figure5/plot_attention_figure5.py
+new file mode 100644
+index 0000000..79119e9
+--- /dev/null
++++ b/benchmarks/kvarn_figure5/plot_attention_figure5.py
+@@ -0,0 +1,113 @@
++# SPDX-License-Identifier: Apache-2.0
++"""Render the three panels used by the Figure 5 protocol."""
++
++from __future__ import annotations
++
++import csv
++from pathlib import Path
++from typing import Any
++
++import matplotlib.pyplot as plt
++
++METHOD_LABELS = {
++    "kvarn": "KVarN K4/V2 G128",
++    "turboquant": "TurboQuant 3-bit NC",
++}
++REGIME_LABELS = {"accumulated": "Accumulated", "static": "Static"}
++
++
++def _read(path: Path) -> list[dict[str, Any]]:
++    with path.open(newline="", encoding="utf-8") as handle:
++        return list(csv.DictReader(handle))
++
++
++def _curve(rows: list[dict[str, Any]], predicate) -> list[dict[str, Any]]:
++    selected = [row for row in rows if predicate(row)]
++    return sorted(selected, key=lambda row: int(row["context_tokens"]))
++
++
++def _plot_with_ci(ax, rows, *, label: str, linestyle: str, marker: str) -> None:
++    x = [int(row["context_tokens"]) / 1000.0 for row in rows]
++    y = [float(row.get("mean_attention_output_mae") or row["mean_difference"]) for row in rows]
++    low = [float(row["ci95_low"]) for row in rows]
++    high = [float(row["ci95_high"]) for row in rows]
++    line = ax.plot(x, y, label=label, linestyle=linestyle, marker=marker)[0]
++    ax.fill_between(x, low, high, alpha=0.12, color=line.get_color())
++
++
++def plot_figure5(summary_csv: Path, output_prefix: Path, *, title: str) -> None:
++    rows = _read(summary_csv)
++    figure, axes = plt.subplots(1, 3, figsize=(17.2, 4.8))
++
++    ax = axes[0]
++    for method, marker in (("kvarn", "o"), ("turboquant", "s")):
++        for regime, linestyle in (("accumulated", "-"), ("static", "--")):
++            curve = _curve(
++                rows,
++                lambda row, m=method, r=regime: row.get("method") == m
++                and row.get("regime") == r
++                and row.get("mean_attention_output_mae", "") != "",
++            )
++            _plot_with_ci(
++                ax,
++                curve,
++                label=f"{METHOD_LABELS[method]} — {REGIME_LABELS[regime]}",
++                linestyle=linestyle,
++                marker=marker,
++            )
++    ax.set_title("(a) Average attention-output reconstruction error")
++    ax.set_xlabel("Context length (kTokens)")
++    ax.set_ylabel("MAE(attention-output)")
++    ax.grid(alpha=0.25)
++    ax.legend(fontsize=8)
++
++    ax = axes[1]
++    for regime, linestyle, marker in (
++        ("accumulated", "-", "o"),
++        ("static", "--", "s"),
++    ):
++        curve = _curve(
++            rows,
++            lambda row, r=regime: row.get("panel") == "method_gap"
++            and row.get("regime") == r,
++        )
++        _plot_with_ci(
++            ax,
++            curve,
++            label=REGIME_LABELS[regime],
++            linestyle=linestyle,
++            marker=marker,
++        )
++    ax.axhline(0.0, linewidth=1.0, linestyle=":")
++    ax.set_title("(b) Difference of KVarN to TurboQuant")
++    ax.set_xlabel("Context length (kTokens)")
++    ax.set_ylabel(r"MAE$_{KVarN}$ − MAE$_{TurboQuant}$")
++    ax.grid(alpha=0.25)
++    ax.legend(fontsize=8)
++
++    ax = axes[2]
++    curve = _curve(
++        rows,
++        lambda row: row.get("panel") == "regime_gap"
++        and row.get("regime") == "static_minus_accumulated",
++    )
++    _plot_with_ci(
++        ax,
++        curve,
++        label="Static − accumulated",
++        linestyle="-",
++        marker="o",
++    )
++    ax.axhline(0.0, linewidth=1.0, linestyle=":")
++    ax.set_title("(c) Difference between the two curves in (b)")
++    ax.set_xlabel("Context length (kTokens)")
++    ax.set_ylabel("Static − accumulated")
++    ax.grid(alpha=0.25)
++    ax.legend(fontsize=8)
++
++    figure.suptitle(title)
++    figure.tight_layout()
++    output_prefix.parent.mkdir(parents=True, exist_ok=True)
++    for suffix in ("png", "pdf", "svg"):
++        figure.savefig(output_prefix.with_suffix(f".{suffix}"), dpi=220, bbox_inches="tight")
++    plt.close(figure)
+diff --git a/benchmarks/kvarn_figure5/run_attention_figure5.py b/benchmarks/kvarn_figure5/run_attention_figure5.py
+new file mode 100644
+index 0000000..0304381
+--- /dev/null
++++ b/benchmarks/kvarn_figure5/run_attention_figure5.py
+@@ -0,0 +1,536 @@
++# SPDX-License-Identifier: Apache-2.0
++"""Paper-protocol Figure 5 adaptation using native vLLM cache kernels.
++
++The released backends are intentionally retained:
++  * KVarN: ``kvarn_k4v2_g128``
++  * TurboQuant: ``turboquant_3bit_nc``
++
++KIVI is not introduced.  The script measures attention-output MAE in static
++and accumulated regimes and renders the same three statistical panels as the
++paper.  Since the compared methods/bit allocations differ from the paper, the
++result is a protocol-aligned adaptation rather than a numerical reproduction.
++"""
++
++from __future__ import annotations
++
++import argparse
++import json
++import os
++import subprocess
++import sys
++from pathlib import Path
++from typing import Any
++
++if __package__ in (None, ""):
++    sys.path.insert(0, str(Path(__file__).resolve().parent))
++    from attention_metrics import aggregate_figure5, read_jsonl, write_csv
++    from plot_attention_figure5 import plot_figure5
++else:
++    from .attention_metrics import aggregate_figure5, read_jsonl, write_csv
++    from .plot_attention_figure5 import plot_figure5
++
++METHOD_SPECS = {
++    "kvarn": {"label": "KVarN K4/V2 G128", "kv_cache_dtype": "kvarn_k4v2_g128"},
++    "turboquant": {"label": "TurboQuant 3-bit NC", "kv_cache_dtype": "turboquant_3bit_nc"},
++}
++REGIMES = ("static", "accumulated")
++
++
++def estimate_shadow_cache_bytes(model_config: Any, max_context: int) -> int:
++    """Estimate the FP16 K+V shadow history allocated by the probe."""
++    num_layers = int(model_config.num_hidden_layers)
++    num_attention_heads = int(model_config.num_attention_heads)
++    num_kv_heads = int(
++        getattr(model_config, "num_key_value_heads", num_attention_heads)
++    )
++    head_dim = int(
++        getattr(
++            model_config,
++            "head_dim",
++            int(model_config.hidden_size) // num_attention_heads,
++        )
++    )
++    fp16_bytes = 2
++    # Two tensors (K and V), one FP16 element per token/head/channel/layer.
++    return 2 * num_layers * max_context * num_kv_heads * head_dim * fp16_bytes
++
++
++def reserve_probe_memory(
++    *,
++    requested_utilization: float,
++    shadow_bytes: int,
++    total_gpu_bytes: int,
++    safety_bytes: int,
++) -> float:
++    """Lower vLLM's reservation so the probe's shadow cache cannot OOM it."""
++    if total_gpu_bytes <= 0:
++        raise ValueError("total_gpu_bytes must be positive")
++    effective = requested_utilization - (shadow_bytes + safety_bytes) / total_gpu_bytes
++    if effective < 0.35:
++        required_gib = (shadow_bytes + safety_bytes) / (1024**3)
++        total_gib = total_gpu_bytes / (1024**3)
++        raise RuntimeError(
++            "Insufficient headroom for the Figure 5 FP16 shadow cache: "
++            f"reserve={required_gib:.2f} GiB, total={total_gib:.2f} GiB, "
++            f"requested utilization={requested_utilization:.3f}. "
++            "Use a shorter maximum context or a GPU with more memory."
++        )
++    return effective
++
++
++def parse_int_list(values: list[str]) -> list[int]:
++    parsed = sorted(
++        {int(value.replace("k", "000").replace("K", "000")) for value in values}
++    )
++    if not parsed or parsed[0] < 256:
++        raise ValueError("context lengths must contain values >= 256")
++    return parsed
++
++
++def load_documents(args: argparse.Namespace) -> list[str]:
++    if args.text_file is not None:
++        return [args.text_file.read_text(encoding="utf-8")]
++    try:
++        from datasets import load_dataset
++    except ImportError as error:
++        raise RuntimeError("Install datasets or pass --text-file") from error
++    dataset = load_dataset(
++        args.dataset,
++        args.dataset_config,
++        split=args.dataset_split,
++        cache_dir=str(args.dataset_cache_dir) if args.dataset_cache_dir else None,
++    )
++    return [
++        str(row[args.dataset_text_column])
++        for row in dataset
++        if str(row[args.dataset_text_column]).strip()
++    ]
++
++
++def prepare_samples(args: argparse.Namespace, output_path: Path) -> list[dict[str, Any]]:
++    from transformers import AutoTokenizer
++
++    tokenizer = AutoTokenizer.from_pretrained(
++        args.tokenizer or args.model,
++        trust_remote_code=args.trust_remote_code,
++        revision=args.tokenizer_revision or args.revision,
++    )
++    # Tokenize document-by-document to avoid the misleading model_max_length
++    # warning produced by encoding the entire WikiText corpus as one sequence.
++    token_ids: list[int] = []
++    for document in load_documents(args):
++        token_ids.extend(
++            int(token) for token in tokenizer.encode(document, add_special_tokens=False)
++        )
++    bos_id = tokenizer.bos_token_id
++    max_context = max(args.context_lengths)
++    if bos_id is not None:
++        segment_length = max_context - 1
++    else:
++        segment_length = max_context
++    if segment_length <= 0:
++        raise ValueError("Maximum context is too short for the BOS token")
++
++    if len(token_ids) < segment_length:
++        if not args.repeat_short_text or not token_ids:
++            raise ValueError(
++                f"Corpus has {len(token_ids)} tokens but {segment_length} are required"
++            )
++        repeats = (segment_length + len(token_ids) - 1) // len(token_ids)
++        token_ids = token_ids * repeats
++
++    max_start = len(token_ids) - segment_length
++    if args.sample_offsets:
++        offsets = [int(value) for value in args.sample_offsets]
++        if len(offsets) != args.num_samples:
++            raise ValueError("--sample-offsets count must equal --num-samples")
++    elif args.num_samples == 1:
++        offsets = [0]
++    else:
++        offsets = [round(index * max_start / (args.num_samples - 1)) for index in range(args.num_samples)]
++
++    samples: list[dict[str, Any]] = []
++    for sample_id, offset in enumerate(offsets):
++        if offset < 0 or offset + segment_length > len(token_ids):
++            raise ValueError(f"Sample offset {offset} is outside the tokenized corpus")
++        segment = token_ids[offset : offset + segment_length]
++        if bos_id is not None:
++            segment = [int(bos_id), *segment]
++        samples.append(
++            {
++                "sample_id": sample_id,
++                "token_offset": offset,
++                "token_ids": segment[:max_context],
++            }
++        )
++    output_path.write_text(json.dumps(samples), encoding="utf-8")
++    return samples
++
++
++def _atomic_json(path: Path, payload: dict[str, Any]) -> None:
++    temporary = path.with_suffix(path.suffix + ".tmp")
++    temporary.write_text(json.dumps(payload), encoding="utf-8")
++    os.replace(temporary, path)
++
++
++def run_worker(args: argparse.Namespace) -> None:
++    method = args.worker_method
++    regime = args.worker_regime
++    if method is None or regime is None:
++        raise ValueError("Worker mode requires method and regime")
++    spec = METHOD_SPECS[method]
++    samples = json.loads(args.sample_file.read_text(encoding="utf-8"))
++
++    trace_path = args.worker_trace.resolve()
++    control_path = args.worker_control.resolve()
++    trace_path.parent.mkdir(parents=True, exist_ok=True)
++    if trace_path.exists():
++        trace_path.unlink()
++
++    # Environment is inherited by EngineCore. The control file changes between
++    # synchronous generate calls and tells each layer which full context it is
++    # currently observing.
++    os.environ["VLLM_FIGURE5_PROBE_OUTPUT"] = str(trace_path)
++    os.environ["VLLM_FIGURE5_PROBE_CONTROL"] = str(control_path)
++    os.environ["VLLM_FIGURE5_PROBE_METHOD"] = method
++    os.environ["VLLM_FIGURE5_PROBE_REGIME"] = regime
++    os.environ["VLLM_FIGURE5_PROBE_MAX_CONTEXT"] = str(max(args.context_lengths))
++
++    # The probe retains an unquantized FP16 K/V history for every attention
++    # layer. vLLM must not reserve that memory for its native KV pool first.
++    import torch
++    from transformers import AutoConfig
++
++    model_config = AutoConfig.from_pretrained(
++        args.model,
++        trust_remote_code=args.trust_remote_code,
++        revision=args.revision,
++    )
++    shadow_bytes = estimate_shadow_cache_bytes(
++        model_config, max(args.context_lengths)
++    )
++    total_gpu_bytes = int(torch.cuda.get_device_properties(0).total_memory)
++    safety_bytes = int(args.shadow_memory_safety_gib * 1024**3)
++    effective_gpu_memory_utilization = reserve_probe_memory(
++        requested_utilization=args.gpu_memory_utilization,
++        shadow_bytes=shadow_bytes,
++        total_gpu_bytes=total_gpu_bytes,
++        safety_bytes=safety_bytes,
++    )
++    print(
++        f"[{method}/{regime}] reserving "
++        f"{shadow_bytes / (1024**3):.2f} GiB shadow + "
++        f"{args.shadow_memory_safety_gib:.2f} GiB safety; "
++        f"vLLM gpu_memory_utilization={effective_gpu_memory_utilization:.3f}",
++        flush=True,
++    )
++
++    from vllm import LLM, SamplingParams
++
++    llm_kwargs: dict[str, Any] = {
++        "model": args.model,
++        "tokenizer": args.tokenizer,
++        "skip_tokenizer_init": True,
++        "dtype": "float16",
++        "kv_cache_dtype": spec["kv_cache_dtype"],
++        "block_size": args.block_size,
++        "max_model_len": max(args.context_lengths) + 1,
++        "tensor_parallel_size": args.tensor_parallel_size,
++        "gpu_memory_utilization": effective_gpu_memory_utilization,
++        "trust_remote_code": args.trust_remote_code,
++        "revision": args.revision,
++        "tokenizer_revision": args.tokenizer_revision,
++        "enable_chunked_prefill": True,
++        "max_num_batched_tokens": args.chunk_size,
++        "max_num_seqs": 1,
++        "enable_prefix_caching": False,
++        # Python-side shadow-cache state and JSONL recording are deliberately
++        # benchmark-only and must not be captured by torch.compile/CUDA graphs.
++        # Native KVarN/TurboQuant Triton store/decode kernels remain unchanged.
++        "enforce_eager": True,
++        "seed": args.seed,
++        "disable_log_stats": True,
++    }
++    llm = LLM(**llm_kwargs)
++    sampling = SamplingParams(
++        temperature=0.0,
++        max_tokens=1,
++        ignore_eos=True,
++        detokenize=False,
++    )
++
++    request_index = 0
++    for sample in samples:
++        sample_id = int(sample["sample_id"])
++        tokens = [int(token) for token in sample["token_ids"]]
++        for context_tokens in args.context_lengths:
++            _atomic_json(
++                control_path,
++                {
++                    "request_index": request_index,
++                    "sample_id": sample_id,
++                    "target_context": context_tokens,
++                },
++            )
++            llm.generate(
++                [{"prompt_token_ids": tokens[:context_tokens]}],
++                sampling,
++                use_tqdm=False,
++            )
++            print(
++                f"[{method}/{regime}] sample={sample_id} context={context_tokens}",
++                flush=True,
++            )
++            request_index += 1
++
++    if not trace_path.exists() or trace_path.stat().st_size == 0:
++        raise RuntimeError(
++            f"No probe output was written to {trace_path}. Confirm that the backend hook patch is applied."
++        )
++    args.worker_output.write_text(
++        json.dumps(
++            {
++                "method": method,
++                "regime": regime,
++                "kv_cache_dtype": spec["kv_cache_dtype"],
++                "num_requests": request_index,
++                "trace": str(trace_path),
++                "shadow_cache_bytes": shadow_bytes,
++                "shadow_memory_safety_bytes": safety_bytes,
++                "requested_gpu_memory_utilization": args.gpu_memory_utilization,
++                "effective_gpu_memory_utilization": effective_gpu_memory_utilization,
++            },
++            indent=2,
++        ),
++        encoding="utf-8",
++    )
++
++
++def append_worker_args(command: list[str], args: argparse.Namespace) -> None:
++    command.extend(
++        [
++            "--model",
++            args.model,
++            "--sample-file",
++            str(args.sample_file),
++            "--worker-output",
++            str(args.worker_output),
++            "--worker-trace",
++            str(args.worker_trace),
++            "--worker-control",
++            str(args.worker_control),
++            "--block-size",
++            str(args.block_size),
++            "--chunk-size",
++            str(args.chunk_size),
++            "--tensor-parallel-size",
++            str(args.tensor_parallel_size),
++            "--gpu-memory-utilization",
++            str(args.gpu_memory_utilization),
++            "--shadow-memory-safety-gib",
++            str(args.shadow_memory_safety_gib),
++            "--seed",
++            str(args.seed),
++            "--context-lengths",
++            *map(str, args.context_lengths),
++        ]
++    )
++    if args.tokenizer:
++        command.extend(["--tokenizer", args.tokenizer])
++    if args.revision:
++        command.extend(["--revision", args.revision])
++    if args.tokenizer_revision:
++        command.extend(["--tokenizer-revision", args.tokenizer_revision])
++    if args.trust_remote_code:
++        command.append("--trust-remote-code")
++
++
++def launch_worker(method: str, regime: str, args: argparse.Namespace) -> tuple[Path, Path]:
++    stem = f"worker_{method}_{regime}"
++    worker_output = args.output_dir / f"{stem}.json"
++    worker_trace = args.output_dir / f"{stem}.jsonl"
++    worker_control = args.output_dir / f"{stem}_control.json"
++    if worker_output.exists() and worker_trace.exists() and not args.overwrite:
++        print(f"Reusing {worker_trace}")
++        return worker_output, worker_trace
++
++    command = [
++        sys.executable,
++        str(Path(__file__).resolve()),
++        "--worker-method",
++        method,
++        "--worker-regime",
++        regime,
++    ]
++    worker_args = argparse.Namespace(**vars(args))
++    worker_args.sample_file = args.output_dir / "input_samples.json"
++    worker_args.worker_output = worker_output
++    worker_args.worker_trace = worker_trace
++    worker_args.worker_control = worker_control
++    append_worker_args(command, worker_args)
++    env = os.environ.copy()
++    env.setdefault("TOKENIZERS_PARALLELISM", "false")
++    subprocess.run(command, check=True, env=env)
++    return worker_output, worker_trace
++
++
++def run_controller(args: argparse.Namespace) -> None:
++    args.output_dir.mkdir(parents=True, exist_ok=True)
++    sample_path = args.output_dir / "input_samples.json"
++    prepare_samples(args, sample_path)
++
++    trace_paths: list[Path] = []
++    worker_metadata: list[dict[str, Any]] = []
++    for method in args.methods:
++        for regime in REGIMES:
++            worker_output, trace = launch_worker(method, regime, args)
++            trace_paths.append(trace)
++            worker_metadata.append(json.loads(worker_output.read_text(encoding="utf-8")))
++
++    from transformers import AutoConfig
++
++    model_config = AutoConfig.from_pretrained(
++        args.model,
++        trust_remote_code=args.trust_remote_code,
++        revision=args.revision,
++    )
++    num_hidden_layers = int(model_config.num_hidden_layers)
++    raw_rows = read_jsonl(trace_paths)
++    completed, sample_rows, combined_summary = aggregate_figure5(
++        raw_rows,
++        num_hidden_layers=num_hidden_layers,
++    )
++
++    raw_csv = args.output_dir / "figure5_attention_layer_raw.csv"
++    sample_csv = args.output_dir / "figure5_attention_sample.csv"
++    summary_csv = args.output_dir / "figure5_attention_summary.csv"
++    write_csv(raw_csv, completed)
++    write_csv(sample_csv, sample_rows)
++    write_csv(summary_csv, combined_summary)
++
++    config = {
++        key: str(value) if isinstance(value, Path) else value
++        for key, value in vars(args).items()
++        if not key.startswith("worker_")
++    }
++    config.update(
++        {
++            "num_hidden_layers": num_hidden_layers,
++            "protocol": "paper-Figure-5-aligned native-vLLM adaptation",
++            "panel_a": (
++                "element-weighted mean attention-output MAE over every "
++                "128-token chunk and all attention layers"
++            ),
++            "panel_b": "MAE_KVarN - MAE_TurboQuant, static and accumulated",
++            "panel_c": "panel-b static - accumulated",
++            "important_difference_from_paper": (
++                "Released KVarN K4/V2 and TurboQuant K3/V3 replace the paper's "
++                "KVarN K2/V2 and KIVI K2/V2 comparison."
++            ),
++            "worker_metadata": worker_metadata,
++        }
++    )
++    (args.output_dir / "config_attention_figure5.json").write_text(
++        json.dumps(config, indent=2), encoding="utf-8"
++    )
++    plot_figure5(
++        summary_csv,
++        args.output_dir / "figure5_native_attention_reconstruction",
++        title=f"{args.model}: Figure 5 protocol with native vLLM kernels",
++    )
++    print(f"Wrote Figure 5 attention results to {args.output_dir}")
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--model", default="Qwen/Qwen3-4B")
++    parser.add_argument("--tokenizer", default=None)
++    parser.add_argument("--revision", default=None)
++    parser.add_argument("--tokenizer-revision", default=None)
++    parser.add_argument("--trust-remote-code", action="store_true")
++    parser.add_argument(
++        "--methods",
++        nargs="+",
++        choices=list(METHOD_SPECS),
++        default=list(METHOD_SPECS),
++    )
++    parser.add_argument(
++        "--context-lengths",
++        nargs="+",
++        default=["4096", "8192", "16384", "32768"],
++    )
++    parser.add_argument("--num-samples", type=int, default=4)
++    parser.add_argument("--sample-offsets", nargs="+", default=None)
++    parser.add_argument("--block-size", type=int, default=128)
++    parser.add_argument("--chunk-size", type=int, default=128)
++    parser.add_argument("--tensor-parallel-size", type=int, default=1)
++    parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
++    parser.add_argument(
++        "--shadow-memory-safety-gib",
++        type=float,
++        default=1.0,
++        help="Extra memory left outside vLLM in addition to the estimated FP16 shadow cache",
++    )
++    parser.add_argument("--seed", type=int, default=0)
++    parser.add_argument(
++        "--output-dir", type=Path, default=Path("runs/figure5_native_attention")
++    )
++    parser.add_argument("--overwrite", action="store_true")
++    parser.add_argument("--text-file", type=Path, default=None)
++    parser.add_argument("--repeat-short-text", action="store_true")
++    parser.add_argument("--dataset", default="Salesforce/wikitext")
++    parser.add_argument("--dataset-config", default="wikitext-2-raw-v1")
++    parser.add_argument("--dataset-split", default="test")
++    parser.add_argument("--dataset-text-column", default="text")
++    parser.add_argument("--dataset-cache-dir", type=Path, default=None)
++
++    parser.add_argument("--worker-method", choices=list(METHOD_SPECS), default=None)
++    parser.add_argument("--worker-regime", choices=REGIMES, default=None)
++    parser.add_argument("--sample-file", type=Path, default=None)
++    parser.add_argument("--worker-output", type=Path, default=None)
++    parser.add_argument("--worker-trace", type=Path, default=None)
++    parser.add_argument("--worker-control", type=Path, default=None)
++
++    args = parser.parse_args()
++    args.context_lengths = parse_int_list(args.context_lengths)
++    if args.block_size != 128:
++        raise ValueError("kvarn_k4v2_g128 requires block_size=128")
++    if args.chunk_size != 128:
++        raise ValueError("Use chunk_size=128 to match the paper pseudo-decode block size")
++    if args.num_samples < 1:
++        raise ValueError("num_samples must be positive")
++    if args.tensor_parallel_size != 1:
++        raise ValueError(
++            "The Python-side Figure 5 probe currently supports tensor_parallel_size=1 only"
++        )
++    if not 0.0 <= args.shadow_memory_safety_gib:
++        raise ValueError("shadow_memory_safety_gib must be non-negative")
++    if not 0.0 < args.gpu_memory_utilization <= 1.0:
++        raise ValueError("gpu_memory_utilization must be in (0, 1]")
++    if any(length % args.chunk_size for length in args.context_lengths):
++        raise ValueError("Every context length must be divisible by chunk_size=128")
++    if len(args.methods) != len(METHOD_SPECS) or set(args.methods) != set(METHOD_SPECS):
++        raise ValueError(
++            "All three Figure 5 panels require paired KVarN and TurboQuant runs; "
++            "keep --methods kvarn turboquant"
++        )
++    # Normalize order so paired worker outputs and legends are deterministic.
++    args.methods = list(METHOD_SPECS)
++    return args
++
++
++if __name__ == "__main__":
++    parsed = parse_args()
++    if parsed.worker_method is not None:
++        required = (
++            parsed.worker_regime,
++            parsed.sample_file,
++            parsed.worker_output,
++            parsed.worker_trace,
++            parsed.worker_control,
++        )
++        if any(value is None for value in required):
++            raise ValueError("Worker mode is missing one or more internal arguments")
++        run_worker(parsed)
++    else:
++        run_controller(parsed)
+diff --git a/benchmarks/kvarn_figure5/run_attention_figure5.sh b/benchmarks/kvarn_figure5/run_attention_figure5.sh
+new file mode 100755
+index 0000000..eaa1b3c
+--- /dev/null
++++ b/benchmarks/kvarn_figure5/run_attention_figure5.sh
+@@ -0,0 +1,20 @@
++#!/usr/bin/env bash
++set -euo pipefail
++
++MODEL="${MODEL:-Qwen/Qwen3-4B}"
++OUTPUT_DIR="${OUTPUT_DIR:-runs/figure5_native_attention_qwen3_4b}"
++NUM_SAMPLES="${NUM_SAMPLES:-4}"
++GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.90}"
++SHADOW_MEMORY_SAFETY_GIB="${SHADOW_MEMORY_SAFETY_GIB:-1.0}"
++
++python benchmarks/kvarn_figure5/run_attention_figure5.py \
++  --model "$MODEL" \
++  --methods kvarn turboquant \
++  --context-lengths 4096 8192 16384 32768 \
++  --num-samples "$NUM_SAMPLES" \
++  --block-size 128 \
++  --chunk-size 128 \
++  --gpu-memory-utilization "$GPU_MEMORY_UTILIZATION" \
++  --shadow-memory-safety-gib "$SHADOW_MEMORY_SAFETY_GIB" \
++  --output-dir "$OUTPUT_DIR" \
++  --overwrite
+diff --git a/benchmarks/kvarn_figure5/tests/test_attention_metrics.py b/benchmarks/kvarn_figure5/tests/test_attention_metrics.py
+new file mode 100644
+index 0000000..405eb39
+--- /dev/null
++++ b/benchmarks/kvarn_figure5/tests/test_attention_metrics.py
+@@ -0,0 +1,87 @@
++# SPDX-License-Identifier: Apache-2.0
++
++from benchmarks.kvarn_figure5.attention_metrics import aggregate_figure5
++
++
++def _row(method, regime, sample, context, layer, error, *, chunk_start=0, chunk_end=None):
++    if chunk_end is None:
++        chunk_end = context
++    return {
++        "method": method,
++        "regime": regime,
++        "request_index": sample,
++        "sample_id": sample,
++        "context_tokens": context,
++        "chunk_start": chunk_start,
++        "chunk_end": chunk_end,
++        "layer_name": f"model.layers.{layer}.self_attn",
++        "layer_index": layer,
++        "query_tokens": 2,
++        "sum_abs_error": error * 4,
++        "num_elements": 4,
++        "attention_output_mae": error,
++        "max_abs_error": error,
++    }
++
++
++def test_figure5_differences_are_paired():
++    rows = []
++    for sample in (0, 1):
++        for method, base in (("kvarn", 1.0), ("turboquant", 3.0)):
++            for regime, offset in (("static", 0.0), ("accumulated", 1.0)):
++                rows.append(_row(method, regime, sample, 4096, 0, base + offset))
++                rows.append(_row(method, regime, sample, 4096, 1, base + offset))
++    _, sample_rows, summary = aggregate_figure5(rows, num_hidden_layers=2)
++    assert len(sample_rows) == 8
++    gaps = [row for row in summary if row.get("panel") == "method_gap"]
++    assert {row["mean_difference"] for row in gaps} == {-2.0}
++    panel_c = [row for row in summary if row.get("panel") == "regime_gap"]
++    assert len(panel_c) == 1
++    assert panel_c[0]["mean_difference"] == 0.0
++
++
++def test_missing_preset_layer_is_counted_as_zero_error():
++    rows = []
++    for method in ("kvarn", "turboquant"):
++        for regime in ("static", "accumulated"):
++            # Layer 1 is intentionally absent, as for an FP16 skip layer.
++            rows.append(_row(method, regime, 0, 4096, 0, 2.0))
++    completed, sample_rows, _ = aggregate_figure5(rows, num_hidden_layers=2)
++    assert len(completed) == 8
++    assert all(row["attention_output_mae"] == 1.0 for row in sample_rows)
++
++
++def test_all_chunks_are_element_weighted():
++    rows = []
++    for method in ("kvarn", "turboquant"):
++        for regime in ("static", "accumulated"):
++            # Two contiguous chunks and two layers. The first chunk has MAE 1,
++            # the second MAE 3, so the full-sequence mean is 2.
++            for layer in (0, 1):
++                rows.append(
++                    _row(
++                        method,
++                        regime,
++                        0,
++                        256,
++                        layer,
++                        1.0,
++                        chunk_start=0,
++                        chunk_end=128,
++                    )
++                )
++                rows.append(
++                    _row(
++                        method,
++                        regime,
++                        0,
++                        256,
++                        layer,
++                        3.0,
++                        chunk_start=128,
++                        chunk_end=256,
++                    )
++                )
++    _, sample_rows, _ = aggregate_figure5(rows, num_hidden_layers=2)
++    assert all(row["num_chunks"] == 2 for row in sample_rows)
++    assert all(row["attention_output_mae"] == 2.0 for row in sample_rows)
+diff --git a/benchmarks/kvarn_figure5/tests/test_run_attention_figure5.py b/benchmarks/kvarn_figure5/tests/test_run_attention_figure5.py
+new file mode 100644
+index 0000000..1e22f6e
+--- /dev/null
++++ b/benchmarks/kvarn_figure5/tests/test_run_attention_figure5.py
+@@ -0,0 +1,31 @@
++# SPDX-License-Identifier: Apache-2.0
++
++from types import SimpleNamespace
++
++from benchmarks.kvarn_figure5.run_attention_figure5 import (
++    estimate_shadow_cache_bytes,
++    reserve_probe_memory,
++)
++
++
++def test_shadow_cache_estimate():
++    config = SimpleNamespace(
++        num_hidden_layers=36,
++        num_attention_heads=32,
++        num_key_value_heads=8,
++        hidden_size=4096,
++        head_dim=128,
++    )
++    expected = 2 * 36 * 32768 * 8 * 128 * 2
++    assert estimate_shadow_cache_bytes(config, 32768) == expected
++
++
++def test_vllm_memory_reservation_subtracts_shadow_and_safety():
++    gib = 1024**3
++    effective = reserve_probe_memory(
++        requested_utilization=0.9,
++        shadow_bytes=4 * gib,
++        total_gpu_bytes=24 * gib,
++        safety_bytes=1 * gib,
++    )
++    assert abs(effective - (0.9 - 5 / 24)) < 1e-12
+diff --git a/vllm/v1/attention/figure5_probe.py b/vllm/v1/attention/figure5_probe.py
+new file mode 100644
+index 0000000..e859fca
+--- /dev/null
++++ b/vllm/v1/attention/figure5_probe.py
+@@ -0,0 +1,330 @@
++# SPDX-License-Identifier: Apache-2.0
++"""Benchmark-only probe for paper-style Figure 5 measurements.
++
++The probe is dormant unless ``VLLM_FIGURE5_PROBE_OUTPUT`` is set.  It is
++called from the native KVarN and TurboQuant attention backends *after* their
++normal cache kernels have produced an attention result.
++
++Two regimes are supported:
++
++``accumulated``
++    Return the native quantized-cache result, so its error propagates through
++    later layers and later chunks.  A shadow FP16 KV history is used only to
++    compute the local reference at the requested observation point.
++
++``static``
++    Compute the same native quantized-cache result, measure it against a
++    shadow FP16 reference, but return the FP16 reference to the model.  This
++    prevents the local cache error from changing subsequent hidden states,
++    matching the static/local reconstruction protocol used in Figure 5.
++
++The benchmark pins one request per batch, disables prefix caching and uses
++128-token chunked prefill.  Supporting general mixed batches here would add
++substantial state-management complexity and is intentionally rejected.
++"""
++
++from __future__ import annotations
++
++import json
++import os
++import re
++from dataclasses import dataclass
++from pathlib import Path
++from typing import Any
++
++import torch
++import torch.nn.functional as F
++
++
++@dataclass
++class _LayerState:
++    key: torch.Tensor
++    value: torch.Tensor
++    request_index: int = -1
++    sample_id: int = -1
++    target_context: int = -1
++
++
++_LAYER_STATES: dict[str, _LayerState] = {}
++_RECORDED: set[tuple[str, str, int, int, int, str]] = set()
++_CU_CACHE: dict[tuple[str, int, int], tuple[torch.Tensor, torch.Tensor]] = {}
++
++
++def _single_int(value: Any) -> int:
++    if isinstance(value, torch.Tensor):
++        if value.numel() != 1:
++            raise RuntimeError(f"Expected one sequence length, got shape {tuple(value.shape)}")
++        return int(value.reshape(-1)[0].item())
++    if hasattr(value, "tolist"):
++        converted = value.tolist()
++        if isinstance(converted, list):
++            if len(converted) != 1:
++                raise RuntimeError(f"Expected one sequence length, got {converted!r}")
++            return int(converted[0])
++        return int(converted)
++    if isinstance(value, (list, tuple)):
++        if len(value) != 1:
++            raise RuntimeError(f"Expected one sequence length, got {value!r}")
++        return int(value[0])
++    return int(value)
++
++
++def _sequence_length(attn_metadata: Any) -> int:
++    cpu_value = getattr(attn_metadata, "seq_lens_cpu", None)
++    if cpu_value is not None:
++        return _single_int(cpu_value)
++    return _single_int(attn_metadata.seq_lens)
++
++
++def _query_length(attn_metadata: Any, actual_tokens: int) -> int:
++    cpu_value = getattr(attn_metadata, "query_start_loc_cpu", None)
++    if cpu_value is None:
++        cpu_value = getattr(attn_metadata, "query_start_loc", None)
++    if cpu_value is None:
++        return actual_tokens
++    if isinstance(cpu_value, torch.Tensor):
++        values = cpu_value.tolist()
++    elif hasattr(cpu_value, "tolist"):
++        values = cpu_value.tolist()
++    else:
++        values = list(cpu_value)
++    if len(values) != 2:
++        raise RuntimeError(
++            "Figure 5 probe requires max_num_seqs=1; "
++            f"query_start_loc has {len(values) - 1} requests"
++        )
++    q_len = int(values[1]) - int(values[0])
++    if q_len != actual_tokens:
++        raise RuntimeError(
++            "Figure 5 probe requires a single unmixed request; "
++            f"q_len={q_len}, num_actual_tokens={actual_tokens}"
++        )
++    return q_len
++
++
++def _read_control() -> dict[str, int]:
++    path = os.environ.get("VLLM_FIGURE5_PROBE_CONTROL")
++    if not path:
++        raise RuntimeError("VLLM_FIGURE5_PROBE_CONTROL is not set")
++    with open(path, encoding="utf-8") as handle:
++        payload = json.load(handle)
++    required = ("request_index", "sample_id", "target_context")
++    missing = [name for name in required if name not in payload]
++    if missing:
++        raise RuntimeError(f"Probe control file is missing {missing}: {path}")
++    return {name: int(payload[name]) for name in required}
++
++
++def _layer_name(method: str, impl: Any, layer: Any) -> str:
++    for owner in (impl, layer):
++        name = getattr(owner, "layer_name", None)
++        if name:
++            return str(name)
++    return f"{method}.impl_{id(impl)}"
++
++
++def _layer_index(name: str) -> int:
++    matches = re.findall(r"(?:layers|layer)\.(\d+)", name)
++    return int(matches[-1]) if matches else -1
++
++
++def _cu_pair(device: torch.device, q_len: int, kv_len: int) -> tuple[torch.Tensor, torch.Tensor]:
++    key = (str(device), q_len, kv_len)
++    pair = _CU_CACHE.get(key)
++    if pair is None:
++        pair = (
++            torch.tensor([0, q_len], device=device, dtype=torch.int32),
++            torch.tensor([0, kv_len], device=device, dtype=torch.int32),
++        )
++        _CU_CACHE[key] = pair
++    return pair
++
++
++def _sdpa_reference(
++    impl: Any,
++    query: torch.Tensor,
++    key: torch.Tensor,
++    value: torch.Tensor,
++) -> torch.Tensor:
++    """Bottom-right causal SDPA fallback for q_len <= kv_len."""
++    q_len = query.shape[0]
++    kv_len = key.shape[0]
++    q = query.transpose(0, 1).unsqueeze(0)
++    k = key.transpose(0, 1).unsqueeze(0)
++    v = value.transpose(0, 1).unsqueeze(0)
++    # Query row i represents absolute position kv_len - q_len + i.
++    q_positions = torch.arange(
++        kv_len - q_len, kv_len, device=query.device, dtype=torch.int64
++    ).unsqueeze(1)
++    k_positions = torch.arange(kv_len, device=query.device, dtype=torch.int64).unsqueeze(0)
++    allowed = k_positions <= q_positions
++    out = F.scaled_dot_product_attention(
++        q,
++        k,
++        v,
++        attn_mask=allowed,
++        is_causal=False,
++        scale=float(getattr(impl, "scale", query.shape[-1] ** -0.5)),
++        enable_gqa=key.shape[1] < query.shape[1],
++    )
++    return out.squeeze(0).transpose(0, 1)
++
++
++def _fp16_reference(
++    impl: Any,
++    query: torch.Tensor,
++    key: torch.Tensor,
++    value: torch.Tensor,
++) -> torch.Tensor:
++    """Compute the FP16 attention output on the shadow unquantized history."""
++    q_len = int(query.shape[0])
++    kv_len = int(key.shape[0])
++    cu_q, cu_k = _cu_pair(query.device, q_len, kv_len)
++
++    # Reuse the backend's own FlashAttention wrapper where possible.  This keeps
++    # mask orientation, GQA handling and softmax scaling aligned with the native
++    # first-prefill path while leaving KV quantization entirely to the backend.
++    if hasattr(impl, "_flash_varlen"):
++        return impl._flash_varlen(
++            query,
++            key,
++            value,
++            cu_q,
++            cu_k,
++            q_len,
++            kv_len,
++            causal=True,
++        )
++    if hasattr(impl, "_flash_attn_varlen"):
++        return impl._flash_attn_varlen(
++            q=query,
++            k=key,
++            v=value,
++            cu_seqlens_q=cu_q,
++            cu_seqlens_k=cu_k,
++            max_seqlen_q=q_len,
++            max_seqlen_k=kv_len,
++        )
++    return _sdpa_reference(impl, query, key, value)
++
++
++def _append_record(record: dict[str, Any]) -> None:
++    path = Path(os.environ["VLLM_FIGURE5_PROBE_OUTPUT"])
++    path.parent.mkdir(parents=True, exist_ok=True)
++    with path.open("a", encoding="utf-8") as handle:
++        handle.write(json.dumps(record, sort_keys=True) + "\n")
++
++
++def probe_attention_output(
++    *,
++    method: str,
++    impl: Any,
++    layer: Any,
++    query: torch.Tensor,
++    key: torch.Tensor,
++    value: torch.Tensor,
++    attn_metadata: Any,
++    native_output: torch.Tensor,
++) -> torch.Tensor:
++    """Record paper-style attention-output MAE and return the selected regime.
++
++    This function is invoked only when the environment variable checked by the
++    backend is present.  It intentionally raises on unsupported batching rather
++    than silently reporting a different metric.
++    """
++    regime = os.environ.get("VLLM_FIGURE5_PROBE_REGIME", "accumulated")
++    if regime not in {"static", "accumulated"}:
++        raise RuntimeError(f"Unsupported Figure 5 regime: {regime!r}")
++
++    actual_tokens = int(query.shape[0])
++    q_len = _query_length(attn_metadata, actual_tokens)
++    seq_len = _sequence_length(attn_metadata)
++    start = seq_len - q_len
++    if start < 0:
++        raise RuntimeError(f"Invalid seq_len={seq_len}, q_len={q_len}")
++
++    max_context = int(os.environ.get("VLLM_FIGURE5_PROBE_MAX_CONTEXT", seq_len))
++    if seq_len > max_context + 1:
++        raise RuntimeError(
++            f"Probe sequence {seq_len} exceeds configured maximum {max_context}"
++        )
++
++    name = _layer_name(method, impl, layer)
++    state = _LAYER_STATES.get(name)
++    shape = (max_context, key.shape[1], key.shape[2])
++    if (
++        state is None
++        or tuple(state.key.shape) != shape
++        or state.key.device != key.device
++        or state.key.dtype != key.dtype
++    ):
++        state = _LayerState(
++            key=torch.empty(shape, device=key.device, dtype=key.dtype),
++            value=torch.empty(shape, device=value.device, dtype=value.dtype),
++        )
++        _LAYER_STATES[name] = state
++
++    if start == 0:
++        control = _read_control()
++        state.request_index = control["request_index"]
++        state.sample_id = control["sample_id"]
++        state.target_context = control["target_context"]
++
++    if state.target_context <= 0:
++        raise RuntimeError(f"Probe state for {name} was not initialized by a first chunk")
++    if seq_len > state.target_context:
++        # The one generated token after prompt scoring is outside Figure 5.
++        return native_output
++
++    state.key[start:seq_len].copy_(key[:q_len])
++    state.value[start:seq_len].copy_(value[:q_len])
++
++    # Figure 5 averages attention-output reconstruction error across the
++    # sequence and all attention layers, not only the final 128-token block.
++    # Compute a local FP16-cache reference for every pseudo-decode chunk.
++    reference = _fp16_reference(
++        impl,
++        query[:q_len],
++        state.key[:seq_len],
++        state.value[:seq_len],
++    )
++
++    record_key = (
++        method,
++        regime,
++        state.request_index,
++        state.target_context,
++        seq_len,
++        name,
++    )
++    if record_key not in _RECORDED:
++        difference = native_output[:q_len].float() - reference.float()
++        absolute = difference.abs()
++        sum_abs = float(absolute.sum().item())
++        numel = int(absolute.numel())
++        _append_record(
++            {
++                "method": method,
++                "regime": regime,
++                "request_index": state.request_index,
++                "sample_id": state.sample_id,
++                "context_tokens": state.target_context,
++                "chunk_start": start,
++                "chunk_end": seq_len,
++                "layer_name": name,
++                "layer_index": _layer_index(name),
++                "query_tokens": q_len,
++                "sum_abs_error": sum_abs,
++                "num_elements": numel,
++                "attention_output_mae": sum_abs / numel,
++                "max_abs_error": float(absolute.max().item()),
++            }
++        )
++        _RECORDED.add(record_key)
++
++    # In the static regime, feed the FP16 local reference forward.  The native
++    # backend still wrote and read its compressed cache, so the measured local
++    # error is real, but it cannot perturb later Q/K/V tensors.
++    if regime == "static":
++        return reference.to(native_output.dtype)
++    return native_output

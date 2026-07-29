@@ -1,0 +1,36 @@
+{
+  "model": "/data/wanglin/models/Qwen3-4B",
+  "tokenizer": null,
+  "revision": null,
+  "tokenizer_revision": null,
+  "trust_remote_code": false,
+  "methods": [
+    "kvarn",
+    "turboquant"
+  ],
+  "context_lengths": [
+    4096,
+    8192,
+    16384,
+    32768
+  ],
+  "block_size": 128,
+  "chunk_size": 128,
+  "eval_window": 128,
+  "warmup_length": 512,
+  "repeats": 1,
+  "tensor_parallel_size": 1,
+  "gpu_memory_utilization": 0.9,
+  "enforce_eager": false,
+  "seed": 0,
+  "output_dir": "runs/figure5_vllm_qwen3_4b",
+  "overwrite": true,
+  "text_file": null,
+  "repeat_short_text": false,
+  "dataset": "Salesforce/wikitext",
+  "dataset_config": "wikitext-2-raw-v1",
+  "dataset_split": "test",
+  "dataset_text_column": "text",
+  "dataset_cache_dir": null,
+  "token_file": null
+}

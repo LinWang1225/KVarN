@@ -18,6 +18,7 @@ Per-head per-position slot layout:
 
 import functools
 import math
+import os
 from dataclasses import dataclass
 from typing import Any, ClassVar
 
@@ -523,6 +524,21 @@ class TurboQuantAttentionImpl(AttentionImpl["TurboQuantMetadata"]):
                 layer=layer,
             )
 
+        # Benchmark-only Figure 5 probe. Normal serving never imports or calls
+        # the probe because the environment variable is absent.
+        if os.environ.get("VLLM_FIGURE5_PROBE_OUTPUT"):
+            from vllm.v1.attention.figure5_probe import probe_attention_output
+
+            attn_out = probe_attention_output(
+                method="turboquant",
+                impl=self,
+                layer=layer,
+                query=q,
+                key=key[:N].view(N, self.num_kv_heads, self.head_size),
+                value=value[:N].view(N, self.num_kv_heads, self.head_size),
+                attn_metadata=attn_metadata,
+                native_output=attn_out,
+            )
         # Write into output buffer: attn_out is (N, Hq, D)
         # output may be 2D (N, Hq*D) or 3D (N, Hq, D)
         if output.ndim == 3:
