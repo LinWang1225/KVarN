@@ -1,0 +1,104 @@
+
+
+To determine the modulo 4 remainder of the sum:
+
+$$
+1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12
+$$
+
+we can approach this in a few different ways, all of which lead to the same conclusion.
+
+---
+
+### **Method 1: Use the Formula for the Sum of an Arithmetic Sequence**
+
+The sum of the first $ n $ natural numbers is given by the formula:
+
+$$
+S = \frac{n(n + 1)}{2}
+$$
+
+For $ n = 12 $:
+
+$$
+S = \frac{12 \times 13}{2} = 6 \times 13 = 78
+$$
+
+Now, compute $ 78 \mod 4 $:
+
+$$
+78 \div 4 = 19 \text{ remainder } 2
+$$
+
+So, $ 78 \mod 4 = 2 $
+
+---
+
+### **Method 2: Direct Computation with Modulo 4**
+
+We can compute the sum step by step, taking modulo 4 at each step to simplify:
+
+$$
+\begin{align*}
+1 &\rightarrow 1 \mod 4 = 1 \\
+1 + 2 &= 3 \mod 4 = 3 \\
+3 + 3 &= 6 \mod 4 = 2 \\
+2 + 4 &= 6 \mod 4 = 2 \\
+2 + 5 &= 7 \mod 4 = 3 \\
+3 + 6 &= 9 \mod 4 = 1 \\
+1 + 7 &= 8 \mod 4 = 0 \\
+0 + 8 &= 8 \mod 4 = 0 \\
+0 + 9 &= 9 \mod 4 = 1 \\
+1 + 10 &= 11 \mod 4 = 3 \\
+3 + 11 &= 14 \mod 4 = 2 \\
+2 + 12 &= 14 \mod 4 = 2
+\end{align*}
+$$
+
+Final result: $ 2 \mod 4 = 2 $
+
+---
+
+### **Method 3: Grouping by Modulo 4 Cycles**
+
+Since modulo 4 repeats every 4 numbers, we can group the numbers into sets of 4:
+
+- $ 1 + 2 + 3 + 4 = 10 \mod 4 = 2 $
+- $ 5 + 6 + 7 + 8 = 26 \mod 4 = 2 $
+- $ 9 + 10 + 11 + 12 = 42 \mod 4 = 2 $
+
+Each group contributes 2, and there are 3 such groups:
+
+$$
+2 + 2 + 2 = 6 \mod 4 = 2
+$$
+
+---
+
+### **Method 4: Sum of Remainders Modulo 4**
+
+Compute the remainder of each number modulo 4:
+
+$$
+1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0
+$$
+
+Add them:
+
+$$
+1 + 2 + 3 + 0 + 1 + 2 + 3 + 0 + 1 + 2 + 3 + 0 = 18
+$$
+
+$$
+18 \mod 4 = 2
+$$
+
+---
+
+### **Conclusion**
+
+All methods consistently yield the same result. Therefore, the modulo 4 remainder of the sum is:
+
+$$
+\boxed{2}
+$$

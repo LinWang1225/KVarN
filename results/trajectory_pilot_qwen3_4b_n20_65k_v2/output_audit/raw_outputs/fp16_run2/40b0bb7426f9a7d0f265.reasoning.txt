@@ -1,0 +1,419 @@
+
+Okay, so I need to find the maximum value of the expression |1 + z| + |1 - z + z²| where z is a complex number with |z| = 1. Hmm, let me start by recalling some properties of complex numbers on the unit circle. Since |z| = 1, z can be represented as e^(iθ) where θ is the argument of z, right? So maybe I can write z in terms of cosine and sine. Let me try that.
+
+Let me denote z = e^(iθ) = cosθ + i sinθ. Then, I can compute each term separately. First, let's compute |1 + z|. That would be |1 + cosθ + i sinθ|. The modulus of a complex number a + ib is sqrt(a² + b²), so here it would be sqrt[(1 + cosθ)² + (sinθ)²]. Let me expand that:
+
+(1 + cosθ)² + sin²θ = 1 + 2cosθ + cos²θ + sin²θ. Since cos²θ + sin²θ = 1, this simplifies to 1 + 2cosθ + 1 = 2 + 2cosθ. Therefore, |1 + z| = sqrt(2 + 2cosθ) = sqrt(2(1 + cosθ)). I remember that 1 + cosθ can be written as 2cos²(θ/2), so substituting that in, we get sqrt(2 * 2cos²(θ/2)) = sqrt(4cos²(θ/2)) = 2|cos(θ/2)|. Since modulus is non-negative, that's 2|cos(θ/2)|. But since θ is any real number, cos(θ/2) can be positive or negative, but the absolute value makes it 2|cos(θ/2)|. However, since we are looking for maximum value, maybe we can consider θ in [0, 2π) and then take the maximum over that interval. But maybe there's a better way.
+
+Alternatively, maybe I can use the identity that |1 + z| = 2|cos(θ/2)|. Let me check that again. If z = e^(iθ), then 1 + z = 1 + e^(iθ) = e^(iθ/2)(e^(-iθ/2) + e^(iθ/2)) = e^(iθ/2) * 2cos(θ/2). Therefore, the modulus is 2|cos(θ/2)|. Yes, that's correct. So |1 + z| = 2|cos(θ/2)|.
+
+Now, moving on to the second term: |1 - z + z²|. Let me try to simplify this expression. Let me write z² as e^(i2θ), so 1 - z + z² = 1 - e^(iθ) + e^(i2θ). Maybe I can combine these terms. Let me think. Alternatively, maybe factor it or find a way to express it in terms of modulus.
+
+Alternatively, perhaps I can write 1 - z + z² as z² - z + 1. Let me see if this quadratic can be factored or simplified. The quadratic equation z² - z + 1. The roots of this equation would be [1 ± sqrt(1 - 4)] / 2 = [1 ± sqrt(-3)] / 2 = [1 ± i√3]/2. So the roots are complex numbers, but maybe that's not helpful here.
+
+Alternatively, maybe I can write this expression in terms of modulus. Let me compute |1 - z + z²|. Let me try to compute it directly. Let me write z = e^(iθ), so:
+
+1 - z + z² = 1 - e^(iθ) + e^(i2θ). Let me compute the modulus squared to make it easier. The modulus squared is (1 - e^(iθ) + e^(i2θ))(1 - e^(-iθ) + e^(-i2θ)). Hmm, that might get complicated, but let me try expanding it.
+
+Alternatively, maybe there's a trigonometric identity or another approach. Let me think. Let me note that z² - z + 1 can be rewritten. Let me try to express it as z² + 1 - z. Since z is on the unit circle, z² is also on the unit circle. Maybe I can use some geometric interpretation?
+
+Alternatively, maybe I can write 1 - z + z² as (z² + 1) - z. Since |z² + 1| is |z² + 1|, but z² is also on the unit circle. Wait, but maybe that's not helpful. Alternatively, maybe I can use the fact that z² = conjugate(z)^2? Wait, no, since |z| = 1, then conjugate(z) = 1/z. So z² = conjugate(z)^(-2)? Not sure if that helps.
+
+Alternatively, maybe I can write 1 - z + z² as 1 - z + z². Let me try to compute this expression for z = e^(iθ):
+
+1 - e^(iθ) + e^(i2θ). Let me write this as e^(i2θ) - e^(iθ) + 1. Maybe I can factor this expression. Let me think. Let me consider it as a quadratic in e^(iθ). Let me denote w = e^(iθ). Then the expression is w² - w + 1. Maybe I can factor this? Let me check the discriminant: (-1)^2 - 4*1*1 = 1 - 4 = -3. So it doesn't factor over real numbers, but maybe over complex numbers? The roots are [1 ± i√3]/2, which are complex numbers on the unit circle? Let me check. The modulus of [1 + i√3]/2 is sqrt( (1/2)^2 + (√3/2)^2 ) = sqrt(1/4 + 3/4) = sqrt(1) = 1. Yes, so those roots are on the unit circle. Therefore, w² - w + 1 = (w - [1 + i√3]/2)(w - [1 - i√3]/2). But since z is on the unit circle, maybe this helps?
+
+Alternatively, maybe I can compute the modulus of w² - w + 1. Let me try that. Let me compute |w² - w + 1| where |w| = 1. Let me write w = e^(iθ). Then:
+
+w² - w + 1 = e^(i2θ) - e^(iθ) + 1. Let me compute the modulus squared:
+
+|e^(i2θ) - e^(iθ) + 1|² = [e^(i2θ) - e^(iθ) + 1][e^(-i2θ) - e^(-iθ) + 1].
+
+Let me compute this product. Let me denote A = e^(i2θ) - e^(iθ) + 1 and B = e^(-i2θ) - e^(-iθ) + 1. Then A * B = ?
+
+First, expand A * B:
+
+= [e^(i2θ) - e^(iθ) + 1][e^(-i2θ) - e^(-iθ) + 1]
+
+Let me multiply term by term:
+
+First term: e^(i2θ) * e^(-i2θ) = 1
+
+Second term: e^(i2θ) * (-e^(-iθ)) = -e^(iθ)
+
+Third term: e^(i2θ) * 1 = e^(i2θ)
+
+Fourth term: -e^(iθ) * e^(-i2θ) = -e^(-iθ)
+
+Fifth term: -e^(iθ) * (-e^(-iθ)) = e^(iθ - iθ) = e^0 = 1
+
+Sixth term: -e^(iθ) * 1 = -e^(iθ)
+
+Seventh term: 1 * e^(-i2θ) = e^(-i2θ)
+
+Eighth term: 1 * (-e^(-iθ)) = -e^(-iθ)
+
+Ninth term: 1 * 1 = 1
+
+So adding all these terms:
+
+1 - e^(iθ) + e^(i2θ) - e^(-iθ) + 1 - e^(iθ) + e^(-i2θ) - e^(-iθ) + 1.
+
+Wait, let me check again. Wait, when expanding, there are 9 terms. Let me list them again:
+
+1. e^(i2θ) * e^(-i2θ) = 1
+
+2. e^(i2θ) * (-e^(-iθ)) = -e^(iθ)
+
+3. e^(i2θ) * 1 = e^(i2θ)
+
+4. -e^(iθ) * e^(-i2θ) = -e^(-iθ)
+
+5. -e^(iθ) * (-e^(-iθ)) = e^(iθ - iθ) = 1
+
+6. -e^(iθ) * 1 = -e^(iθ)
+
+7. 1 * e^(-i2θ) = e^(-i2θ)
+
+8. 1 * (-e^(-iθ)) = -e^(-iθ)
+
+9. 1 * 1 = 1
+
+So combining all terms:
+
+1 + 1 + 1 + (-e^(iθ) - e^(iθ)) + (-e^(-iθ) - e^(-iθ)) + e^(i2θ) + e^(-i2θ)
+
+Wait, that is:
+
+1 + 1 + 1 = 3
+
+Then, -e^(iθ) - e^(iθ) = -2e^(iθ)
+
+Similarly, -e^(-iθ) - e^(-iθ) = -2e^(-iθ)
+
+Then, e^(i2θ) + e^(-i2θ) = 2cos(2θ)
+
+So overall, the modulus squared is 3 - 2e^(iθ) - 2e^(-iθ) + 2cos(2θ)
+
+But e^(iθ) + e^(-iθ) = 2cosθ, so -2e^(iθ) - 2e^(-iθ) = -4cosθ. Therefore, modulus squared is 3 - 4cosθ + 2cos(2θ).
+
+So |1 - z + z²|² = 3 - 4cosθ + 2cos(2θ). Therefore, |1 - z + z²| is sqrt(3 - 4cosθ + 2cos(2θ)).
+
+Hmm, okay. So now, the original expression is |1 + z| + |1 - z + z²| = 2|cos(θ/2)| + sqrt(3 - 4cosθ + 2cos(2θ)).
+
+Now, maybe I can simplify the expression under the square root. Let me recall that cos(2θ) = 2cos²θ - 1. Let me substitute that in:
+
+3 - 4cosθ + 2*(2cos²θ - 1) = 3 - 4cosθ + 4cos²θ - 2 = (3 - 2) + 4cos²θ - 4cosθ = 1 + 4cos²θ - 4cosθ.
+
+So that simplifies to 4cos²θ - 4cosθ + 1. Let me check that again:
+
+Original expression: 3 - 4cosθ + 2cos(2θ)
+
+Replace cos(2θ) with 2cos²θ - 1:
+
+3 - 4cosθ + 2*(2cos²θ - 1) = 3 - 4cosθ + 4cos²θ - 2 = 1 + 4cos²θ - 4cosθ. Yes, that's correct.
+
+So 4cos²θ - 4cosθ + 1. Let me see if this is a perfect square. Let me check:
+
+Let me write 4cos²θ - 4cosθ + 1. Let me think of it as (2cosθ - 1)^2. Let me compute that:
+
+(2cosθ - 1)^2 = 4cos²θ - 4cosθ + 1. Yes! Perfect square. Therefore, |1 - z + z²| = sqrt( (2cosθ - 1)^2 ) = |2cosθ - 1|.
+
+Therefore, the second term simplifies to |2cosθ - 1|. Therefore, the original expression is 2|cos(θ/2)| + |2cosθ - 1|.
+
+So now, the problem reduces to finding the maximum of 2|cos(θ/2)| + |2cosθ - 1| for θ in [0, 2π). That seems more manageable.
+
+So now, I need to maximize f(θ) = 2|cos(θ/2)| + |2cosθ - 1|.
+
+Hmm. Let me think about how to approach this. Since there are absolute values, maybe I can consider different intervals where the expressions inside the absolute values are positive or negative, and then analyze each case.
+
+First, let me note that θ is in [0, 2π). Let me consider θ/2 in [0, π). So θ/2 ranges from 0 to π, so cos(θ/2) is positive in [0, π/2) and negative in (π/2, π]. Therefore, |cos(θ/2)| is cos(θ/2) when θ ∈ [0, π) and -cos(θ/2) when θ ∈ (π, 2π). Wait, but θ is in [0, 2π), so θ/2 is in [0, π). Therefore, cos(θ/2) is non-negative in [0, π], so |cos(θ/2)| = cos(θ/2) for θ ∈ [0, π], and |cos(θ/2)| = -cos(θ/2) for θ ∈ [π, 2π). Wait, but cos(θ/2) is positive in [0, π) and negative in (π, 2π). Wait, θ/2 is in [0, π), so cos(θ/2) is positive when θ/2 ∈ [0, π/2), i.e., θ ∈ [0, π), and negative when θ/2 ∈ (π/2, π), i.e., θ ∈ (π, 2π). Therefore, |cos(θ/2)| is cos(θ/2) for θ ∈ [0, π], and -cos(θ/2) for θ ∈ [π, 2π). Wait, but θ ∈ [π, 2π) would make θ/2 ∈ [π/2, π), so cos(θ/2) is negative there, so |cos(θ/2)| = -cos(θ/2). Therefore, f(θ) can be written as:
+
+For θ ∈ [0, π]: f(θ) = 2cos(θ/2) + |2cosθ - 1|
+
+For θ ∈ [π, 2π): f(θ) = -2cos(θ/2) + |2cosθ - 1|
+
+But I need to check the sign of 2cosθ - 1 in these intervals. Let me analyze that.
+
+First, let's consider θ ∈ [0, π]. Then cosθ is decreasing from 1 to -1. So 2cosθ - 1 ranges from 2*1 - 1 = 1 to 2*(-1) - 1 = -3. Therefore, 2cosθ - 1 is positive when cosθ > 1/2, which is when θ ∈ [0, π/3), since cos(π/3) = 1/2. Then, it is negative when θ ∈ (π/3, π]. Therefore, in θ ∈ [0, π/3), |2cosθ - 1| = 2cosθ - 1, and in θ ∈ [π/3, π], |2cosθ - 1| = -(2cosθ - 1) = 1 - 2cosθ.
+
+Similarly, for θ ∈ [π, 2π), cosθ is increasing from -1 to 1. So 2cosθ - 1 ranges from 2*(-1) - 1 = -3 to 2*1 - 1 = 1. Therefore, 2cosθ - 1 is negative when θ ∈ (π, 5π/3), since cosθ = 1/2 at θ = π/3 and θ = 5π/3. Wait, but θ is in [π, 2π). So cosθ = 1/2 at θ = 5π/3 (which is in [π, 2π)), and cosθ = -1/2 at θ = 4π/3. Therefore, 2cosθ - 1 is negative when θ ∈ [π, 5π/3), and positive when θ ∈ (5π/3, 2π). Therefore, in θ ∈ [π, 5π/3), |2cosθ - 1| = -(2cosθ - 1) = 1 - 2cosθ, and in θ ∈ [5π/3, 2π), |2cosθ - 1| = 2cosθ - 1.
+
+Therefore, we can split the function f(θ) into different intervals:
+
+Case 1: θ ∈ [0, π/3): f(θ) = 2cos(θ/2) + 2cosθ - 1
+
+Case 2: θ ∈ [π/3, π]: f(θ) = 2cos(θ/2) + 1 - 2cosθ
+
+Case 3: θ ∈ [π, 5π/3): f(θ) = -2cos(θ/2) + 1 - 2cosθ
+
+Case 4: θ ∈ [5π/3, 2π): f(θ) = -2cos(θ/2) + 2cosθ - 1
+
+So now, I need to analyze each of these four cases and find the maximum value.
+
+Alternatively, maybe I can use substitution variables. Let me consider θ in [0, π/3), then θ/2 is in [0, π/6). Similarly, for other intervals. But maybe it's easier to handle each case separately.
+
+Let me start with Case 1: θ ∈ [0, π/3). So f(θ) = 2cos(θ/2) + 2cosθ - 1.
+
+Let me compute this function. Maybe take derivative to find maximum? Since θ is in [0, π/3), which is a closed interval, but the maximum could be at critical points or endpoints.
+
+Alternatively, maybe express everything in terms of cos(θ/2). Let me note that cosθ can be written as 2cos²(θ/2) - 1. Let me substitute that:
+
+f(θ) = 2cos(θ/2) + 2*(2cos²(θ/2) - 1) - 1 = 2cos(θ/2) + 4cos²(θ/2) - 2 - 1 = 4cos²(θ/2) + 2cos(θ/2) - 3.
+
+Let me denote x = cos(θ/2). Since θ ∈ [0, π/3), θ/2 ∈ [0, π/6), so x ∈ [cos(π/6), cos(0)] = [√3/2, 1]. Therefore, x ∈ [√3/2, 1].
+
+So f(θ) becomes 4x² + 2x - 3, where x ∈ [√3/2, 1]. Let me find the maximum of this quadratic function on the interval [√3/2, 1]. Since the quadratic coefficient is positive (4), the function is convex, so its maximum occurs at one of the endpoints.
+
+Compute f at x = √3/2:
+
+4*( (√3)/2 )² + 2*(√3)/2 - 3 = 4*(3/4) + √3 - 3 = 3 + √3 - 3 = √3 ≈ 1.732.
+
+At x = 1:
+
+4*(1)^2 + 2*1 - 3 = 4 + 2 - 3 = 3.
+
+Therefore, in Case 1, the maximum is 3, achieved at θ = 0 (since x = cos(θ/2) = 1 when θ = 0). Wait, θ = 0 is in [0, π/3), so yes. Therefore, in this case, the maximum is 3.
+
+Case 2: θ ∈ [π/3, π]. Here, f(θ) = 2cos(θ/2) + 1 - 2cosθ.
+
+Again, let me express cosθ in terms of cos(θ/2). As before, cosθ = 2cos²(θ/2) - 1. Therefore:
+
+f(θ) = 2cos(θ/2) + 1 - 2*(2cos²(θ/2) - 1) = 2cos(θ/2) + 1 - 4cos²(θ/2) + 2 = -4cos²(θ/2) + 2cos(θ/2) + 3.
+
+Let me denote x = cos(θ/2). Now, θ ∈ [π/3, π], so θ/2 ∈ [π/6, π/2]. Therefore, x ∈ [cos(π/2), cos(π/6)] = [0, √3/2]. Wait, cos(π/2) is 0, and cos(π/6) is √3/2. Therefore, x ∈ [0, √3/2].
+
+So f(θ) is -4x² + 2x + 3, with x ∈ [0, √3/2]. Again, this is a quadratic function in x, opening downward (since coefficient of x² is -4). Therefore, its maximum occurs at the vertex. The vertex is at x = -b/(2a) = -2/(2*(-4)) = 1/4. Since 1/4 is within [0, √3/2] (since √3 ≈ 1.732, so √3/2 ≈ 0.866, and 1/4 = 0.25), so the maximum is at x = 1/4.
+
+Compute f at x = 1/4:
+
+-4*(1/4)^2 + 2*(1/4) + 3 = -4*(1/16) + 1/2 + 3 = -1/4 + 1/2 + 3 = 1/4 + 3 = 13/4 = 3.25.
+
+Then check endpoints:
+
+At x = 0: -4*(0)^2 + 2*0 + 3 = 3.
+
+At x = √3/2: -4*( (√3)/2 )² + 2*(√3)/2 + 3 = -4*(3/4) + √3 + 3 = -3 + √3 + 3 = √3 ≈ 1.732.
+
+Therefore, the maximum in Case 2 is 13/4 = 3.25, which is higher than the previous case's maximum of 3. So that's a candidate for the overall maximum.
+
+Case 3: θ ∈ [π, 5π/3). Here, f(θ) = -2cos(θ/2) + 1 - 2cosθ.
+
+Again, let me express cosθ in terms of cos(θ/2). So cosθ = 2cos²(θ/2) - 1. Therefore:
+
+f(θ) = -2cos(θ/2) + 1 - 2*(2cos²(θ/2) - 1) = -2cos(θ/2) + 1 - 4cos²(θ/2) + 2 = -4cos²(θ/2) - 2cos(θ/2) + 3.
+
+Let me denote x = cos(θ/2). Now, θ ∈ [π, 5π/3), so θ/2 ∈ [π/2, 5π/6). Therefore, cos(θ/2) is in [cos(5π/6), cos(π/2)] = [ -√3/2, 0 ].
+
+Therefore, x ∈ [ -√3/2, 0 ].
+
+So f(θ) is -4x² - 2x + 3, with x ∈ [ -√3/2, 0 ].
+
+This is a quadratic function in x, opening downward (coefficient of x² is -4). The vertex is at x = -b/(2a) = -(-2)/(2*(-4)) = 2 / (-8) = -1/4. Since -1/4 is within [ -√3/2 ≈ -0.866, 0 ], so the maximum occurs at x = -1/4.
+
+Compute f at x = -1/4:
+
+-4*(-1/4)^2 - 2*(-1/4) + 3 = -4*(1/16) + 1/2 + 3 = -1/4 + 1/2 + 3 = 1/4 + 3 = 13/4 = 3.25.
+
+Check endpoints:
+
+At x = -√3/2:
+
+-4*( (√3)/2 )² - 2*(-√3/2) + 3 = -4*(3/4) + √3 + 3 = -3 + √3 + 3 = √3 ≈ 1.732.
+
+At x = 0:
+
+-4*(0)^2 - 2*(0) + 3 = 3.
+
+Therefore, the maximum in Case 3 is also 13/4 = 3.25, same as Case 2.
+
+Case 4: θ ∈ [5π/3, 2π). Here, f(θ) = -2cos(θ/2) + 2cosθ - 1.
+
+Again, express cosθ in terms of cos(θ/2):
+
+cosθ = 2cos²(θ/2) - 1. Therefore:
+
+f(θ) = -2cos(θ/2) + 2*(2cos²(θ/2) - 1) - 1 = -2cos(θ/2) + 4cos²(θ/2) - 2 - 1 = 4cos²(θ/2) - 2cos(θ/2) - 3.
+
+Let me denote x = cos(θ/2). Now, θ ∈ [5π/3, 2π), so θ/2 ∈ [5π/6, π). Therefore, cos(θ/2) is in [cos(π), cos(5π/6)] = [ -1, -√3/2 ].
+
+Therefore, x ∈ [ -1, -√3/2 ].
+
+So f(θ) is 4x² - 2x - 3, with x ∈ [ -1, -√3/2 ].
+
+This is a quadratic function in x, opening upwards (coefficient of x² is 4). Therefore, its minimum is at the vertex, but since we are looking for maximum, it will occur at one of the endpoints.
+
+Compute f at x = -1:
+
+4*(-1)^2 - 2*(-1) - 3 = 4 + 2 - 3 = 3.
+
+At x = -√3/2:
+
+4*( (√3)/2 )² - 2*(-√3/2) - 3 = 4*(3/4) + √3 - 3 = 3 + √3 - 3 = √3 ≈ 1.732.
+
+Therefore, the maximum in Case 4 is 3, achieved at x = -1, which corresponds to θ = 2π (but θ is in [5π/3, 2π), so θ approaching 2π from the left, which is allowed. However, θ = 2π is equivalent to θ = 0, but since θ is in [5π/3, 2π), θ = 2π is not included. However, the limit as θ approaches 2π is 3, which is the same as the value at θ = 0. So in this case, the maximum is 3.
+
+Therefore, summarizing the four cases:
+
+Case 1: max 3
+
+Case 2: max 13/4 = 3.25
+
+Case 3: max 13/4 = 3.25
+
+Case 4: max 3
+
+Therefore, the overall maximum is 13/4, which is 3.25. However, let me check if there are any other critical points in Cases 2 and 3. Wait, in Cases 2 and 3, we found that the maximum occurs at x = 1/4 and x = -1/4, respectively. Let me check if those correspond to valid θ in their respective intervals.
+
+For Case 2: x = cos(θ/2) = 1/4. Therefore, θ/2 = arccos(1/4), so θ = 2 arccos(1/4). Let me check if this θ is in [π/3, π]. Since arccos(1/4) is in [0, π/2], because 1/4 is between 0 and 1. Therefore, θ = 2 arccos(1/4) is in [0, π]. But since in Case 2, θ ∈ [π/3, π], we need to check if 2 arccos(1/4) is in that interval.
+
+Compute arccos(1/4). Since cos(π/3) = 1/2, which is larger than 1/4, so arccos(1/4) is greater than π/3. Therefore, θ = 2 arccos(1/4) is greater than 2π/3. Since π/3 ≈ 1.047, 2π/3 ≈ 2.094. Let me compute arccos(1/4) numerically. Let me recall that cos(π/3) = 0.5, cos(π/2) = 0. So arccos(1/4) is between π/3 and π/2. Therefore, θ = 2 arccos(1/4) is between 2π/3 and π. Therefore, it is within [π/3, π], so valid. Therefore, that critical point is indeed in Case 2.
+
+Similarly, for Case 3: x = cos(θ/2) = -1/4. Therefore, θ/2 = arccos(-1/4). Since arccos(-1/4) is in [π/2, π], because -1/4 is negative. Therefore, θ = 2 arccos(-1/4) is in [π, 2π). But θ is in [π, 5π/3). Let me check if arccos(-1/4) is in [π/2, 5π/6). Since cos(π/2) = 0, cos(5π/6) = -√3/2 ≈ -0.866. Since -1/4 is between -√3/2 and 0, arccos(-1/4) is between π/2 and 5π/6. Therefore, θ = 2 arccos(-1/4) is between π and 5π/3. Therefore, valid in Case 3.
+
+Therefore, the maximum value is 13/4. However, let me check if there are any other critical points or if I made a mistake in the calculation.
+
+Alternatively, maybe I can check the value of 13/4. 13/4 is 3.25. Let me check if that's indeed the maximum. Let me also check some specific points.
+
+For example, when θ = π/3, which is the boundary between Case 1 and Case 2. Let me compute f(π/3):
+
+First, compute |1 + z| + |1 - z + z²|.
+
+z = e^(iπ/3) = cos(π/3) + i sin(π/3) = 1/2 + i(√3/2).
+
+Compute |1 + z|: |1 + 1/2 + i√3/2| = |3/2 + i√3/2| = sqrt( (3/2)^2 + (√3/2)^2 ) = sqrt(9/4 + 3/4) = sqrt(12/4) = sqrt(3) ≈ 1.732.
+
+Compute |1 - z + z²|. Let me compute z²: e^(i2π/3) = cos(2π/3) + i sin(2π/3) = -1/2 + i(√3/2). Then 1 - z + z² = 1 - (1/2 + i√3/2) + (-1/2 + i√3/2) = 1 - 1/2 - 1/2 + i√3/2 - i√3/2 = 1 - 1 + 0i = 0. Therefore, |0| = 0. Therefore, total expression is sqrt(3) + 0 ≈ 1.732. But according to our previous calculation, in Case 2, the maximum is 13/4 = 3.25. So that seems contradictory? Wait, but θ = π/3 is in Case 2, but according to the calculation in Case 2, when θ = π/3, x = cos(θ/2) = cos(π/6) = √3/2 ≈ 0.866. Then f(θ) = -4x² + 2x + 3. Wait, but in Case 2, we had f(θ) = -4x² + 2x + 3, where x is in [0, √3/2]. Wait, but when θ = π/3, x = cos(π/6) = √3/2 ≈ 0.866. Then f(θ) = -4*( (√3)/2 )² + 2*(√3)/2 + 3 = -4*(3/4) + √3 + 3 = -3 + √3 + 3 = √3 ≈ 1.732, which matches the direct calculation. However, the maximum in Case 2 is 13/4, which is higher. Therefore, that seems okay.
+
+Wait, but when θ is such that x = 1/4, which is in Case 2, then f(θ) = 13/4. Let me check that. Let me compute θ where cos(θ/2) = 1/4. Let me compute θ/2 = arccos(1/4), so θ = 2 arccos(1/4). Let me compute the value of the original expression.
+
+Alternatively, maybe I can compute |1 + z| + |1 - z + z²| at θ = 2 arccos(1/4). But that might be complicated. Alternatively, maybe I can check if 13/4 is indeed the maximum.
+
+Alternatively, maybe I can check another point. For example, θ = π/2. Let me compute f(π/2):
+
+First, |1 + z| where z = e^(iπ/2) = i. So |1 + i| = sqrt(1 + 1) = √2 ≈ 1.414.
+
+Then |1 - z + z²|. z² = e^(iπ) = -1. Therefore, 1 - z + z² = 1 - i + (-1) = -i. Therefore, | -i | = 1. Therefore, total expression is √2 + 1 ≈ 2.414, which is less than 3.25. So that's okay.
+
+Another point: θ = π. Let me compute f(π):
+
+z = e^(iπ) = -1. Then |1 + z| = |1 - 1| = 0. Then |1 - z + z²| = |1 - (-1) + (-1)^2| = |1 + 1 + 1| = |3| = 3. Therefore, total expression is 0 + 3 = 3, which is less than 13/4.
+
+Another point: θ = 2π/3. Let me compute f(2π/3):
+
+z = e^(i2π/3) = cos(2π/3) + i sin(2π/3) = -1/2 + i(√3/2). Then |1 + z| = |1 - 1/2 + i√3/2| = |1/2 + i√3/2| = sqrt( (1/2)^2 + (√3/2)^2 ) = sqrt(1/4 + 3/4) = 1. Then |1 - z + z²|. Let me compute z² = e^(i4π/3) = cos(4π/3) + i sin(4π/3) = -1/2 - i√3/2. Then 1 - z + z² = 1 - (-1/2 + i√3/2) + (-1/2 - i√3/2) = 1 + 1/2 - 1/2 + i√3/2 - i√3/2 = 1 + 0i = 1. Therefore, |1| = 1. Therefore, total expression is 1 + 1 = 2, which is less than 13/4.
+
+Alternatively, maybe check θ where x = -1/4. Let me compute θ = 2 arccos(-1/4). Let me compute cos(θ/2) = -1/4. Therefore, θ/2 is in [π/2, π], so θ is in [π, 2π]. Let me compute |1 + z| + |1 - z + z²|. Let me compute z = e^(iθ). Let me compute |1 + z| = 2|cos(θ/2)| = 2*(1/4) = 1/2? Wait, no. Wait, earlier we had |1 + z| = 2|cos(θ/2)|. But in Case 3, θ ∈ [π, 5π/3), so θ/2 ∈ [π/2, 5π/6). Therefore, cos(θ/2) is negative, so |cos(θ/2)| = -cos(θ/2). Therefore, |1 + z| = 2*(-cos(θ/2)) = -2cos(θ/2). But in Case 3, we have f(θ) = -2cos(θ/2) + |2cosθ - 1|. But when x = cos(θ/2) = -1/4, then |1 + z| = 2|cos(θ/2)| = 2*(1/4) = 1/2? Wait, no. Wait, if cos(θ/2) = -1/4, then |cos(θ/2)| = 1/4, so |1 + z| = 2*(1/4) = 1/2. Then |2cosθ - 1|. Let me compute cosθ. Since θ/2 = arccos(-1/4), then θ = 2 arccos(-1/4). Let me compute cosθ using double angle formula: cosθ = 2cos²(θ/2) - 1 = 2*(1/16) - 1 = 1/8 - 1 = -7/8. Therefore, 2cosθ - 1 = 2*(-7/8) - 1 = -7/4 - 1 = -11/4. Therefore, |2cosθ - 1| = 11/4. Therefore, total expression is 1/2 + 11/4 = 13/4 = 3.25. Which matches our previous result. Therefore, that seems correct.
+
+Therefore, the maximum value is 13/4. However, let me check if there are other points where the expression could be higher. For example, maybe θ where the two terms are maximized? But since they are dependent on θ, it's not straightforward.
+
+Alternatively, maybe I can consider another approach. Let me think. Since z is on the unit circle, maybe parametrize z as cosθ + i sinθ, and then write the expression in terms of θ, then take derivative. But since we already did that by splitting into cases, and found that the maximum is 13/4, which is 3.25, but let me check if that is indeed the maximum.
+
+Alternatively, maybe there's a geometric interpretation. Let me think. The expression is |1 + z| + |1 - z + z²|. Let me try to interpret these terms geometrically.
+
+First, |1 + z| is the distance from z to -1 on the complex plane. Wait, no. Wait, |1 + z| is the distance from z to -1? Wait, no. The modulus |1 + z| is the distance from z to -1? Wait, if you have |z - (-1)|, that would be |z + 1|. So yes, |1 + z| is the distance from z to -1. Similarly, |1 - z + z²|. Let me see if I can write that as |z² - z + 1|. Maybe there's a geometric meaning here.
+
+Alternatively, maybe consider that z² - z + 1. Let me think of this as a quadratic in z. But since |z| = 1, maybe we can find some relation. Alternatively, maybe write z² - z + 1 = z² + 1 - z. Since |z| = 1, z² is also on the unit circle. But not sure.
+
+Alternatively, maybe consider that z² - z + 1 = z² - z + 1. Let me multiply numerator and denominator by something? Not sure.
+
+Alternatively, maybe write z² - z + 1 = z² + 1 - z. Since z is on the unit circle, z² + 1 is a complex number. But again, not sure.
+
+Alternatively, maybe think of z² - z + 1 as a function. Let me note that z² - z + 1 = 0 has roots at [1 ± i√3]/2, which are on the unit circle as we saw before. Therefore, if z is not one of these roots, then z² - z + 1 is non-zero. But maybe that's not helpful here.
+
+Alternatively, maybe consider that for |z| = 1, z² - z + 1 can be written as z² + 1 - z. Since |z| = 1, then 1/z = conjugate(z). Therefore, z² - z + 1 = z² + 1 - z. Let me multiply by z: z³ - z² + z. But not sure.
+
+Alternatively, maybe use triangle inequality? But since we need the maximum of the sum of two moduli, triangle inequality might not directly help, but maybe.
+
+Alternatively, maybe consider specific points. For example, when z = 1, then |1 + z| = |2| = 2, and |1 - z + z²| = |1 - 1 + 1| = |1| = 1. So total is 3. Which is less than 13/4 = 3.25.
+
+When z = -1, |1 + z| = 0, |1 - z + z²| = |1 - (-1) + 1| = |3| = 3. Total is 3.
+
+When z = i, |1 + i| = √2 ≈ 1.414, |1 - i + (-1)| = |-i| = 1. Total ≈ 2.414.
+
+When z = e^(iθ) where θ is such that we get 13/4, which is 3.25. So that seems higher.
+
+Alternatively, maybe check θ where cos(θ/2) = 1/4. Let me compute θ/2 = arccos(1/4). Let me compute θ ≈ 2 * arccos(1/4). Let me compute arccos(1/4) ≈ 1.318 radians (since cos(1.318) ≈ 0.25). Therefore, θ ≈ 2.636 radians. Let me check if that's in [π/3 ≈ 1.047, π ≈ 3.1416]. Yes, 2.636 is between π/3 and π. Therefore, that's valid.
+
+Alternatively, maybe check θ = 2 arccos(1/4). Let me compute the exact value of |1 + z| + |1 - z + z²|. As we did before, it's 2|cos(θ/2)| + |2cosθ - 1|. Since θ/2 = arccos(1/4), then cos(θ/2) = 1/4, so |1 + z| = 2*(1/4) = 1/2. Then cosθ = 2cos²(θ/2) - 1 = 2*(1/16) - 1 = 1/8 - 1 = -7/8. Therefore, 2cosθ - 1 = 2*(-7/8) - 1 = -7/4 - 1 = -11/4. Therefore, |2cosθ - 1| = 11/4. Therefore, total is 1/2 + 11/4 = 13/4. So that's correct.
+
+Alternatively, maybe check θ where cosθ = 1/2, which is θ = π/3 or 5π/3. But we saw that at θ = π/3, the value is √3 ≈ 1.732, and at θ = 5π/3, which is in Case 3, let me compute f(5π/3):
+
+z = e^(i5π/3) = cos(5π/3) + i sin(5π/3) = 1/2 - i√3/2.
+
+Compute |1 + z| = |1 + 1/2 - i√3/2| = |3/2 - i√3/2| = sqrt( (3/2)^2 + (√3/2)^2 ) = sqrt(9/4 + 3/4) = sqrt(12/4) = sqrt(3) ≈ 1.732.
+
+Compute |1 - z + z²|. Let me compute z² = e^(i10π/3) = e^(i(3π + π/3)) = e^(iπ/3) * e^(i3π) = e^(iπ/3)*(-1) = -cos(π/3) - i sin(π/3) = -1/2 - i√3/2. Therefore, 1 - z + z² = 1 - (1/2 - i√3/2) + (-1/2 - i√3/2) = 1 - 1/2 + 1/2 + i√3/2 - i√3/2 = 1 + 0i = 1. Therefore, |1| = 1. Therefore, total expression is sqrt(3) + 1 ≈ 1.732 + 1 = 2.732, which is less than 13/4 = 3.25.
+
+Therefore, seems like 13/4 is indeed the maximum. However, let me check another point. For example, θ where cosθ = -1/2, which is θ = 2π/3 or 4π/3. Let me check θ = 4π/3. Then z = e^(i4π/3) = -1/2 - i√3/2.
+
+Compute |1 + z| = |1 - 1/2 - i√3/2| = |1/2 - i√3/2| = sqrt( (1/2)^2 + (√3/2)^2 ) = 1.
+
+Compute |1 - z + z²|. Let me compute z² = e^(i8π/3) = e^(i(2π + 2π/3)) = e^(i2π/3) = -1/2 + i√3/2. Therefore, 1 - z + z² = 1 - (-1/2 - i√3/2) + (-1/2 + i√3/2) = 1 + 1/2 + 1/2 + (-i√3/2 + i√3/2) = 2 + 0i = 2. Therefore, |2| = 2. Therefore, total expression is 1 + 2 = 3, which is less than 13/4.
+
+Alternatively, maybe check θ where the two terms are balanced. But I think our previous analysis is thorough.
+
+Alternatively, maybe check if 13/4 is indeed the maximum. Let me think of another approach. Let me consider that we have f(θ) = 2|cos(θ/2)| + |2cosθ - 1|. Let me consider θ in [0, π], since the function is symmetric? Wait, not sure. Let me check.
+
+Alternatively, maybe use substitution. Let me set φ = θ/2. Then θ = 2φ, and φ ∈ [0, π]. Then, cosθ = cos(2φ) = 2cos²φ - 1. Therefore, the expression becomes:
+
+f(φ) = 2|cosφ| + |2*(2cos²φ - 1) - 1| = 2|cosφ| + |4cos²φ - 2 - 1| = 2|cosφ| + |4cos²φ - 3|.
+
+So f(φ) = 2|cosφ| + |4cos²φ - 3|, where φ ∈ [0, π].
+
+Now, since φ ∈ [0, π], cosφ is non-negative in [0, π/2] and non-positive in [π/2, π]. Therefore, |cosφ| = cosφ for φ ∈ [0, π/2], and -cosφ for φ ∈ [π/2, π].
+
+Therefore, we can split into two cases:
+
+Case A: φ ∈ [0, π/2], so f(φ) = 2cosφ + |4cos²φ - 3|.
+
+Case B: φ ∈ [π/2, π], so f(φ) = -2cosφ + |4cos²φ - 3|.
+
+Now, let me analyze Case A first. Let me consider 4cos²φ - 3. Let me find when this is positive or negative.
+
+4cos²φ - 3 ≥ 0 => cos²φ ≥ 3/4 => |cosφ| ≥ √3/2 ≈ 0.866. Since φ ∈ [0, π/2], cosφ is decreasing from 1 to 0. Therefore, cosφ ≥ √3/2 when φ ∈ [0, π/6], since cos(π/6) = √3/2. Therefore, in Case A:
+
+For φ ∈ [0, π/6], 4cos²φ - 3 ≥ 0, so f(φ) = 2cosφ + 4cos²φ - 3.
+
+For φ ∈ [π/6, π/2], 4cos²φ - 3 ≤ 0, so f(φ) = 2cosφ - (4cos²φ - 3) = 2cosφ - 4cos²φ + 3.
+
+Similarly, for Case B: φ ∈ [π/2, π], cosφ is negative, so |cosφ| = -cosφ. Also, 4cos²φ - 3. Since cosφ is negative, but squared is positive. Let me check when 4cos²φ - 3 is positive or negative. Since cos²φ is between 0 and 1, 4cos²φ - 3 is between -3 and 1. Therefore, 4cos²φ - 3 ≥ 0 when cos²φ ≥ 3/4, which is when |cosφ| ≥ √3/2. Since φ ∈ [π/2, π], cosφ is between -1 and 0. Therefore, cosφ ≤ -√3/2 when φ ∈ [5π/6, π], since cos(5π/6) = -√3/2. Therefore, in Case B:
+
+For φ ∈ [5π/6, π], 4cos²φ - 3 ≥ 0, so f(φ) = -2cosφ + 4cos²φ - 3.
+
+For φ ∈ [π/2, 5π/6), 4cos²φ - 3 < 0, so f(φ) = -2cosφ - (4cos²φ - 3) = -2cosφ - 4cos²φ + 3.
+
+Therefore, now we have four subcases:
+
+Case A1: φ ∈ [0, π/6], f(φ) = 4cos²φ + 2cosφ - 3.
+
+Case A2: φ ∈ [π/6, π/2], f(φ) = -4cos²φ + 2cosφ + 3.
+
+Case B1: φ ∈ [5π/6, π], f(φ) = 4cos²φ - 2cosφ - 3.
+
+Case B2: φ ∈ [π/2, 5π/6), f(φ) = -4cos²φ - 2cosφ + 3.
+
+Now, let me analyze each subcase.
+
+Case A1: φ ∈ [0, π/6], f(φ) = 4cos²φ + 2cosφ - 3. Let me denote x = cosφ, which is in [cos(π/6), cos(0)] = [√3/2, 1]. Therefore, x ∈ [√3/2, 1]. Then f(φ) = 4x² + 2x - 3. As before, this is a quadratic in x, opening upwards, so maximum at endpoints. At x = √3/2, f = 4*(3/4) + 2*(√3/2) - 3 = 3 + √3 - 3 = √3 ≈ 1.732. At x = 1, f = 4 + 2 - 3 = 3. So maximum is 3.
+
+Case A2: φ ∈ [π/6, π/2], f(φ) = -4cos²φ + 2cosφ + 3. Let me denote x = cosφ, which is in [0, √3/2]. Then f(x) = -4x² + 2x + 3. This is a quadratic in x, opening downward, with maximum at x = -b/(2a) = -2/(2*(-4)) = 1/4. Since 1/4 is in [0, √3/2], then maximum is at x = 1/4. Compute f(1/4) = -4*(1/16) + 2*(1/4) + 3 = -1/4 + 1/2 + 3 = 1/4 + 3 = 13/4 = 3.25. Then endpoints: at x = 0, f = 0 + 0 + 3 = 3. At x = √3/2, f = -4*(3/4) + 2*(√3/2) + 3 = -3 + √3 + 3 = √3 ≈ 1.732. Therefore, maximum is 13/4.
+
+Case B1: φ ∈ [5π/6, π], f(φ) = 4cos²φ - 2cosφ - 3. Let me denote x = cosφ, which is in [cos(π), cos(5π/6)] = [-1, -√3/2]. Therefore, x ∈ [-1, -√3/2]. Then f(x) = 4x² - 2x - 3. This is a quadratic in x, opening upwards. Therefore, maximum occurs at endpoints. At x = -1: 4*1 - 2*(-1) - 3 = 4 + 2 - 3 = 3. At x = -√3/2: 4*(3/4) - 2*(-√3/2) - 3 = 3 + √3 - 3 = √3 ≈ 1.732. Therefore, maximum is 3.
+
+Case B2: φ ∈ [π/2, 5π/6), f(φ) = -4cos²φ - 2cosφ + 3. Let me denote x = cosφ, which is in [-√3/2, 0]. Therefore, f(x) = -4x² - 2x + 3. This is a quadratic in x, opening downward. Therefore, maximum at vertex x = -b/(2a) = -(-2)/(2*(-4)) = 2 / (-8) = -1/4. Since -1/4 is in [-√3/2, 0], then maximum is at x = -1/4. Compute f(-1/4) = -4*(1/16) - 2*(-1/4) + 3 = -1/4 + 1/2 + 3 = 1/4 + 3 = 13/4 = 3.25. Endpoints: at x = -√3/2, f = -4*(3/4) - 2*(-√3/2) + 3 = -3 + √3 + 3 = √3 ≈ 1.732. At x = 0, f = 0 - 0 + 3 = 3. Therefore, maximum is 13/4.
+
+Therefore, same conclusion as before. Therefore, the maximum value is 13/4. Therefore, the answer is 13/4, which is 3.25. Therefore, boxed, it's \boxed{\dfrac{13}{4}}.
+
+But let me check once more if there's a possibility that the maximum is higher. For example, if I consider θ where both terms are maximized. However, since |1 + z| is maximized when z = 1, giving 2, and |1 - z + z²| is maximized when z = -1, giving 3. But when z = 1, the second term is 1, and when z = -1, the first term is 0. So the sum is 3 in both cases, but 13/4 is 3.25 which is higher. Therefore, that seems correct.
+
+Alternatively, maybe check θ where the two terms are both contributing positively. For example, when θ is such that both |1 + z| and |1 - z + z²| are large. But according to our analysis, the maximum occurs when one term is 1/2 and the other is 11/4, adding to 13/4. So that seems to be the case.
+
+Alternatively, maybe think of this as an optimization problem with calculus. Let me try that approach for Case A2 and Case B2, where we have the maximum at 13/4.
+
+But since we already did that, and confirmed with substitution, I think that's solid.
+
+Therefore, I think the maximum value is 13/4.
+
+**Final Answer**
+\boxed{\dfrac{13}{4}}

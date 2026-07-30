@@ -1,0 +1,4 @@
+<|im_start|>user
+Let
+\[f(x) = (\arccos x)^2 + (\arcsin x)^2.\]Find the range of $f(x).$  All functions are in radians.<|im_end|>
+<|im_start|>assistant

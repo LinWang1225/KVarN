@@ -1,0 +1,83 @@
+
+
+To find the value of the expression $ x^3 - 2x + 1 $, we are given the quadratic equation:
+
+$$
+x^2 - x - 1 = 0
+$$
+
+---
+
+### Step 1: Express $ x^2 $ in terms of $ x $
+
+From the given equation, we can rearrange it to:
+
+$$
+x^2 = x + 1
+$$
+
+This is a key identity that allows us to reduce higher powers of $ x $ in terms of lower powers.
+
+---
+
+### Step 2: Compute $ x^3 $
+
+We multiply both sides of the equation $ x^2 = x + 1 $ by $ x $:
+
+$$
+x^3 = x \cdot x^2 = x(x + 1) = x^2 + x
+$$
+
+Now substitute $ x^2 = x + 1 $ into the expression:
+
+$$
+x^3 = (x + 1) + x = 2x + 1
+$$
+
+---
+
+### Step 3: Substitute into the original expression
+
+We now substitute $ x^3 = 2x + 1 $ into the expression $ x^3 - 2x + 1 $:
+
+$$
+x^3 - 2x + 1 = (2x + 1) - 2x + 1
+$$
+
+Simplify the expression:
+
+$$
+(2x + 1) - 2x + 1 = 2x - 2x + 1 + 1 = 2
+$$
+
+---
+
+### Step 4: Verification via polynomial division
+
+We can also verify this by performing polynomial division of $ x^3 - 2x + 1 $ by $ x^2 - x - 1 $:
+
+- Divide $ x^3 - 2x + 1 $ by $ x^2 - x - 1 $, the quotient is $ x $, and the remainder is:
+
+$$
+(x^3 - 2x + 1) - x(x^2 - x - 1) = x^3 - 2x + 1 - (x^3 - x^2 - x) = x^2 - x + 1
+$$
+
+Now, since $ x^2 = x + 1 $, we substitute:
+
+$$
+x^2 - x + 1 = (x + 1) - x + 1 = 2
+$$
+
+Thus, the remainder is 2, and since the divisor is zero, the value of the expression is:
+
+$$
+x^3 - 2x + 1 = 2
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{2}
+$$

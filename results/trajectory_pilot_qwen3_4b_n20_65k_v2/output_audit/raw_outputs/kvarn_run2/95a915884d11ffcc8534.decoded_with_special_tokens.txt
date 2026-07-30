@@ -1,0 +1,226 @@
+<think>
+Okay, so I need to solve this problem where a two-digit number has digits that add up to 13, and when you subtract the reversed number from the original number, you get 27. Then I have to find the sum of the original number and the reversed number. Hmm, let me think step by step.
+
+First, let me recall that a two-digit number can be represented as 10 times the tens digit plus the units digit. Let me denote the tens digit as 'a' and the units digit as 'b'. So the original number would be 10a + b. When we reverse the digits, the number becomes 10b + a. 
+
+The problem says the sum of the digits is 13. That means a + b = 13. Got that. Then, the difference between the original number and the reversed number is 27. So, original number minus reversed number equals 27. That would be (10a + b) - (10b + a) = 27. Let me write that down:
+
+Equation 1: a + b = 13
+
+Equation 2: (10a + b) - (10b + a) = 27
+
+Let me simplify Equation 2. Let's subtract the two terms:
+
+10a + b - 10b - a = 27
+
+Combine like terms:
+
+(10a - a) + (b - 10b) = 27
+
+Which is:
+
+9a - 9b = 27
+
+Hmm, so 9(a - b) = 27. Dividing both sides by 9:
+
+a - b = 3
+
+So now I have two equations:
+
+1. a + b = 13
+
+2. a - b = 3
+
+I can solve these two equations simultaneously. Let me add them together. If I add equation 1 and equation 2:
+
+(a + b) + (a - b) = 13 + 3
+
+Simplify:
+
+2a = 16
+
+Therefore, a = 8. Then, substituting back into equation 1:
+
+8 + b = 13 => b = 13 - 8 = 5.
+
+So the original number is 10a + b = 10*8 + 5 = 85. The reversed number is 10b + a = 10*5 + 8 = 58. Let me check if these numbers satisfy the given conditions.
+
+First, the sum of digits: 8 + 5 = 13. That's correct. Then, the difference between the original number and reversed number: 85 - 58 = 27. Perfect, that matches the second condition.
+
+Now, the question asks for the sum of the original number and the reversed number. So that would be 85 + 58. Let me calculate that:
+
+85 + 58. 80 + 50 is 130, 5 + 8 is 13, so total is 130 + 13 = 143. Wait, is that right? Let me check again:
+
+85 + 58:
+
+5 + 8 = 13, 80 + 50 = 130, so 130 + 13 = 143. Yes, that seems correct.
+
+Alternatively, since the original number is 10a + b and reversed is 10b + a, their sum is 10a + b + 10b + a = 11a + 11b = 11(a + b). Since we know a + b = 13, then the sum is 11*13. Let me compute that:
+
+11*13. Well, 10*13 = 130, plus 1*13 = 13, so 130 + 13 = 143. Yep, same answer. So that's a quicker way. So regardless of the individual digits, the sum is 11 times the sum of the digits. Since the sum of digits is 13, the answer is 143.
+
+But let me just make sure that there isn't another possible pair of digits that satisfy the given conditions. For example, could there be another solution?
+
+We had a + b = 13 and a - b = 3. Solving these equations, we found a = 8, b = 5. Let me check if there are other integer solutions where a and b are digits (so between 0 and 9, inclusive). Since a is the tens digit, it can't be 0. Similarly, b is the units digit, so it can be 0-9.
+
+From a + b = 13, since a and b are digits, the maximum value for a is 9, so b would be 13 - 9 = 4. But wait, if a is 9, then b is 4, but then a - b would be 5, which is not 3. Similarly, if a is 8, then b is 5, which gives a - b = 3. If a is 7, then b is 6, so a - b = 1. If a is 9, b is 4, difference is 5. If a is 10, but that's not possible because a is a single digit. So the only possible solution is a=8, b=5. Therefore, the original number is 85, reversed is 58, sum is 143. So that's the answer.
+
+Alternatively, maybe I can think of the two-digit numbers whose digits add up to 13. Let me list them. The possible two-digit numbers with digits adding to 13:
+
+Starting with a=4, b=9: 49
+
+a=5, b=8: 58
+
+a=6, b=7: 67
+
+a=7, b=6: 76
+
+a=8, b=5: 85
+
+a=9, b=4: 94
+
+So those are the numbers: 49, 58, 67, 76, 85, 94.
+
+Now, check which of these numbers, when subtracted by their reverses, gives 27.
+
+Let me check each:
+
+49 reversed is 94. 49 - 94 = -45. Not 27.
+
+58 reversed is 85. 58 - 85 = -27. Not 27.
+
+67 reversed is 76. 67 - 76 = -9. Not 27.
+
+76 reversed is 67. 76 - 67 = 9. Not 27.
+
+85 reversed is 58. 85 - 58 = 27. Yes, that's correct.
+
+94 reversed is 49. 94 - 49 = 45. Not 27.
+
+So only 85 and 58 satisfy the difference of 27. Therefore, the original number is 85, reversed is 58, sum is 85 + 58 = 143. So that's the answer.
+
+Alternatively, if I think about the difference between the original number and reversed number being 27. Since the original number is larger than the reversed number, so original number is 85, reversed is 58. So that's consistent.
+
+Alternatively, if I didn't think of the equations, but just thought of the difference. Let me think. The difference between the original number and reversed number is 27. Since original number is 10a + b, reversed is 10b + a. So difference is 9a - 9b = 9(a - b) = 27. Therefore, a - b = 3. So that's the same as before.
+
+So given that a + b = 13 and a - b = 3, solving gives a = 8, b = 5. So that's the only solution. Therefore, the sum is 11*(a + b) = 11*13 = 143.
+
+Therefore, the answer is 143.
+
+**Final Answer**
+The sum of the original number and the reversed number is \boxed{143}.
+</think>
+
+To solve the problem, we are given two conditions about a two-digit number:
+
+1. The **sum of its digits is 13**.
+2. The **difference between the number and its reversed version is 27**.
+
+We are to find the **sum of the original number and its reversed version**.
+
+---
+
+### Step 1: Represent the Number Algebraically
+
+Let the original two-digit number be represented as:
+
+$$
+N = 10a + b
+$$
+
+Where:
+- $ a $ is the tens digit (must be between 1 and 9, since it's a two-digit number),
+- $ b $ is the units digit (must be between 0 and 9).
+
+The reversed number is:
+
+$$
+R = 10b + a
+$$
+
+---
+
+### Step 2: Use the Given Conditions
+
+**Condition 1:** The sum of the digits is 13.
+
+$$
+a + b = 13 \tag{1}
+$$
+
+**Condition 2:** The difference between the original number and the reversed number is 27.
+
+$$
+(10a + b) - (10b + a) = 27
+$$
+
+Simplify the left-hand side:
+
+$$
+10a + b - 10b - a = 9a - 9b = 27
+$$
+
+$$
+9(a - b) = 27 \Rightarrow a - b = 3 \tag{2}
+$$
+
+---
+
+### Step 3: Solve the System of Equations
+
+We now have two equations:
+
+- $ a + b = 13 $ (Equation 1)
+- $ a - b = 3 $ (Equation 2)
+
+Add the two equations:
+
+$$
+(a + b) + (a - b) = 13 + 3 \Rightarrow 2a = 16 \Rightarrow a = 8
+$$
+
+Substitute $ a = 8 $ into Equation 1:
+
+$$
+8 + b = 13 \Rightarrow b = 5
+$$
+
+So the original number is:
+
+$$
+N = 10a + b = 10 \cdot 8 + 5 = 85
+$$
+
+The reversed number is:
+
+$$
+R = 10b + a = 10 \cdot 5 + 8 = 58
+$$
+
+---
+
+### Step 4: Find the Sum of the Original and Reversed Numbers
+
+$$
+N + R = 85 + 58 = 143
+$$
+
+Alternatively, we can use a general formula:
+
+$$
+N + R = (10a + b) + (10b + a) = 11a + 11b = 11(a + b)
+$$
+
+Since $ a + b = 13 $, the sum is:
+
+$$
+11 \cdot 13 = 143
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{143}
+$$<|im_end|>

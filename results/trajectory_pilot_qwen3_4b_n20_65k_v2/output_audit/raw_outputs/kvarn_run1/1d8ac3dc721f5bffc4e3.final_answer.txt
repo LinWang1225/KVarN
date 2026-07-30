@@ -1,0 +1,55 @@
+
+
+To solve the problem, we need to determine the number of students, $ N $, who attended the archery class this week, given the following conditions:
+
+1. **The number of students is between 30 and 50.**
+2. **Normally, the students can be divided into groups of equal size.** This implies that $ N $ is **not prime**, because a prime number cannot be divided into equal groups of more than one (except for 1 and itself).
+3. **This week, Betty noticed that she could not break the students into groups of equal size.** This means that $ N $ is **prime**.
+4. **When Betty and Wilma joined the students, the total number of archers was still not divisible into equal groups.** So, $ N + 2 $ is also **prime**.
+
+---
+
+### Step-by-step Analysis:
+
+- The number of students, $ N $, is **between 30 and 50**.
+- Since the students **usually** form groups of equal size, $ N $ is **not prime**.
+- But this week, **Betty could not** form equal groups, so $ N $ is **prime**.
+- Then, **Wilma noticed** that even after adding 2 (Betty and Wilma), the total number $ N + 2 $ is still **not divisible into equal groups**, so $ N + 2 $ is also **prime**.
+
+This means that $ N $ is a **prime number** such that $ N + 2 $ is also **prime**. These are known as **twin primes**.
+
+---
+
+### Step 1: List all prime numbers between 30 and 50
+
+The prime numbers in this range are:
+
+- 31
+- 37
+- 41
+- 43
+- 47
+
+---
+
+### Step 2: Check which of these primes have $ N + 2 $ also prime
+
+- $ 31 + 2 = 33 $ → Not prime
+- $ 37 + 2 = 39 $ → Not prime
+- $ 41 + 2 = 43 $ → **Prime**
+- $ 43 + 2 = 45 $ → Not prime
+- $ 47 + 2 = 49 $ → Not prime
+
+Only **41** and **43** are twin primes in this range. Since $ N + 2 = 43 $ is also prime, and $ N = 41 $ is between 30 and 50, this fits all the conditions.
+
+---
+
+### Final Conclusion:
+
+The only number between 30 and 50 that is a prime and such that $ N + 2 $ is also prime is **41**.
+
+Thus, the number of students who showed up to the archery class this week is:
+
+$$
+\boxed{41}
+$$

@@ -1,0 +1,89 @@
+
+
+We are given the expression:
+
+$$
+a(2a + b) - 2a^2 + ab
+$$
+
+where $ a $ and $ b $ are **different prime numbers greater than 2**. Our goal is to determine the number of **whole-number divisors** of the resulting integer.
+
+---
+
+### Step 1: Simplify the Expression
+
+Start by expanding the first term:
+
+$$
+a(2a + b) = 2a^2 + ab
+$$
+
+Now substitute back into the original expression:
+
+$$
+2a^2 + ab - 2a^2 + ab
+$$
+
+Simplify by combining like terms:
+
+$$
+(2a^2 - 2a^2) + (ab + ab) = 0 + 2ab = 2ab
+$$
+
+So the expression simplifies to:
+
+$$
+2ab
+$$
+
+---
+
+### Step 2: Analyze the Structure of the Number
+
+We are now looking at the number $ 2ab $, where:
+
+- $ a $ and $ b $ are **distinct primes greater than 2**, so they are **odd primes**.
+- $ 2 $ is a **prime number**, and since $ a $ and $ b $ are not 2, the prime factorization of $ 2ab $ is:
+
+$$
+2ab = 2^1 \cdot a^1 \cdot b^1
+$$
+
+This is the product of **three distinct prime factors**: 2, $ a $, and $ b $, each raised to the first power.
+
+---
+
+### Step 3: Use the Divisor Count Formula
+
+The number of **positive divisors** of a number is determined by the formula:
+
+$$
+\text{Number of divisors} = (e_1 + 1)(e_2 + 1)\cdots(e_n + 1)
+$$
+
+where $ e_i $ are the exponents in the prime factorization.
+
+In this case, the prime factorization is $ 2^1 \cdot a^1 \cdot b^1 $, so:
+
+$$
+(1 + 1)(1 + 1)(1 + 1) = 2 \cdot 2 \cdot 2 = 8
+$$
+
+---
+
+### Step 4: Confirm with Examples
+
+Let’s test with specific values of $ a $ and $ b $:
+
+- If $ a = 3 $, $ b = 5 $, then $ 2ab = 2 \cdot 3 \cdot 5 = 30 $, and the divisors of 30 are: 1, 2, 3, 5, 6, 10, 15, 30 → 8 divisors.
+- If $ a = 5 $, $ b = 7 $, then $ 2ab = 2 \cdot 5 \cdot 7 = 70 $, and the divisors of 70 are: 1, 2, 5, 7, 10, 14, 35, 70 → 8 divisors.
+
+This confirms that regardless of the specific primes $ a $ and $ b $ (as long as they are distinct and greater than 2), the number $ 2ab $ always has exactly 8 positive divisors.
+
+---
+
+### Final Answer
+
+$$
+\boxed{8}
+$$

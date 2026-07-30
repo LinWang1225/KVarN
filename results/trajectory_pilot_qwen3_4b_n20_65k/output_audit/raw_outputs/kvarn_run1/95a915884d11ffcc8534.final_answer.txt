@@ -1,0 +1,95 @@
+
+
+To solve the problem, we begin by defining the two-digit number in terms of its digits. Let the tens digit be $ a $ and the units digit be $ b $. Then, the original number is:
+
+$$
+10a + b
+$$
+
+When the digits are reversed, the number becomes:
+
+$$
+10b + a
+$$
+
+---
+
+### Step 1: Use the given conditions
+
+We are told two things:
+
+1. The **sum of the digits** is 13:
+   $$
+   a + b = 13
+   $$
+
+2. The **difference between the original number and the reversed number** is 27:
+   $$
+   (10a + b) - (10b + a) = 27
+   $$
+
+Simplify the second equation:
+
+$$
+10a + b - 10b - a = 27 \\
+9a - 9b = 27 \\
+9(a - b) = 27 \\
+a - b = 3
+$$
+
+---
+
+### Step 2: Solve the system of equations
+
+We now have the system:
+
+$$
+\begin{cases}
+a + b = 13 \\
+a - b = 3
+\end{cases}
+$$
+
+Add the two equations:
+
+$$
+(a + b) + (a - b) = 13 + 3 \\
+2a = 16 \\
+a = 8
+$$
+
+Substitute $ a = 8 $ into $ a + b = 13 $:
+
+$$
+8 + b = 13 \\
+b = 5
+$$
+
+---
+
+### Step 3: Find the original and reversed numbers
+
+- Original number: $ 10a + b = 10 \cdot 8 + 5 = 85 $
+- Reversed number: $ 10b + a = 10 \cdot 5 + 8 = 58 $
+
+---
+
+### Step 4: Compute the sum of the original and reversed numbers
+
+$$
+85 + 58 = 143
+$$
+
+Alternatively, we can use a shortcut:
+
+$$
+(10a + b) + (10b + a) = 11a + 11b = 11(a + b) = 11 \cdot 13 = 143
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{143}
+$$

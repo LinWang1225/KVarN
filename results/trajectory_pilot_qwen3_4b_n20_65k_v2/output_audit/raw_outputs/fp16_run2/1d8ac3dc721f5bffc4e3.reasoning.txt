@@ -1,0 +1,81 @@
+
+Okay, let's try to figure out this archery class problem. So, the question is: Each week, between 30 and 50 students show up for an archery class run by Betty and Wilma. Usually, the students break up into groups of equal size for target practice. However, this week, Betty noticed that she couldn't break the students up into multiple groups of equal size. Then Wilma noticed that if she and Betty both joined the students in practicing, they still couldn't break the archers up into groups of equal size. We need to find out how many students showed up this week.
+
+First, let me parse the problem again. The number of students is between 30 and 50. Normally, they can be divided into groups of equal size. But this week, Betty couldn't do that. Then, when Betty and Wilma join the students, they still can't divide them into equal groups. Wait, so Betty and Wilma are two people, right? So, if they join the students, that would be adding 2 more people to the original number of students. So the total number of archers would be original students plus 2. But even then, they still can't divide into equal groups. So, the original number of students is such that it can't be divided into equal groups, but when you add 2, it still can't be divided into equal groups. But wait, the problem says "usually the students break up into groups of equal size." So, normally, the number of students is divisible by some number (probably the number of groups). But this week, the number of students is not divisible by any number (except 1 and itself?), but when you add Betty and Wilma, which is 2 more people, the total number is still not divisible by any number? Wait, but that seems contradictory. Because if the original number is not divisible by any number, then it's a prime number. But adding 2 to a prime number might not necessarily make it prime. Wait, but the problem says that Betty couldn't break the students into groups of equal size. So that means that the original number of students is not divisible by any number other than 1 and itself. But then, if you add 2, it's still not divisible by any number. But that would mean that the original number is a prime number, and adding 2 to it also gives a prime number. But primes are numbers greater than 1 that have no divisors other than 1 and themselves. So, if the original number is a prime, and adding 2 gives another prime. But the original number is between 30 and 50. So, we need to find a prime number between 30 and 50 such that when you add 2, the result is also a prime number. But wait, let me check if that's the case.
+
+But hold on, maybe I need to think more carefully. The problem says that Betty noticed that she couldn't break the students up into multiple groups of equal size. So, that means that the number of students is not divisible by any integer greater than 1. So, that would mean that the number is prime. But then, when Wilma and Betty join, meaning adding 2 people, the total number is still not divisible by any integer greater than 1. So, that would mean that the original number plus 2 is also prime. Therefore, we need a prime number between 30 and 50 such that when you add 2, it's also prime. So, let's list primes between 30 and 50.
+
+Primes between 30 and 50 are: 31, 37, 41, 43, 47. Let me check each of these.
+
+First, 31: 31 + 2 = 33. 33 is 3*11, so not prime. So that doesn't work.
+
+Next, 37: 37 + 2 = 39. 39 is 3*13, not prime. Not good.
+
+Next, 41: 41 + 2 = 43. 43 is prime. So that works. So 41 is a prime, and 43 is also a prime. So that would be a candidate.
+
+Next, 43: 43 + 2 = 45. 45 is 9*5, not prime.
+
+Next, 47: 47 + 2 = 49. 49 is 7*7, not prime. So only 41 is such that adding 2 gives another prime. Therefore, the number of students is 41?
+
+But wait, hold on. Let me check again. The problem says that Betty noticed that she couldn't break the students up into multiple groups of equal size. So, that would mean that the number of students is not divisible by any number other than 1 and itself. So, that is, the number is prime. Then, when Betty and Wilma join, meaning adding 2 people, the total number is still not divisible by any number other than 1 and itself. Therefore, the total number is also prime. Therefore, the original number is a prime, and original number + 2 is also prime. So, twin primes? So, the original number is 41, and 43 is the next prime. So, 41 is between 30 and 50, and 43 is also a prime. Therefore, the answer is 41?
+
+But wait, let me check if there are other possibilities. Maybe the original number is not prime? Wait, but if the original number is not prime, then it can be divided into groups of equal size. But Betty noticed that she couldn't. Therefore, the original number must be a prime. Therefore, the original number is a prime between 30 and 50, and adding 2 gives another prime. So, only 41 and 43. So, 41 is the original number. Therefore, the answer is 41?
+
+But let me think again. Maybe the problem is not that the number is prime, but that it cannot be divided into groups of equal size. So, maybe the number is not divisible by any number except 1 and itself. But maybe the number is composite, but cannot be divided into groups of equal size? Wait, but if the number is composite, then it can be divided into groups of equal size. For example, if there are 30 students, they can be divided into groups of 2, 3, 5, 6, 10, 15, etc. So, if the number is composite, then it can be divided into groups. Therefore, Betty noticed that she couldn't break them into groups of equal size, so the number must be prime. Therefore, original number is prime. Then, when Betty and Wilma join, meaning adding 2, the total number is still not divisible into equal groups. Therefore, original number + 2 is also prime. Therefore, the original number is a prime between 30 and 50, and original number + 2 is also prime. Therefore, the only such number is 41. Because 41 is prime, 43 is prime. The other primes when adding 2 give composite numbers. Therefore, the answer is 41.
+
+But let me check again. Let me list all primes between 30 and 50:
+
+31, 37, 41, 43, 47.
+
+Check 31: 31 + 2 = 33, which is 3*11. Not prime.
+
+37: 37 + 2 = 39, which is 3*13. Not prime.
+
+41: 41 + 2 = 43, which is prime.
+
+43: 43 + 2 = 45, which is 9*5. Not prime.
+
+47: 47 + 2 = 49, which is 7*7. Not prime.
+
+So, only 41. Therefore, the answer is 41. Therefore, the number of students is 41.
+
+But wait, let me check if there's another interpretation. Maybe the problem is not that the number is prime, but that it cannot be divided into groups of equal size, but maybe the number of groups is not specified. So, maybe the original number is not prime, but it cannot be divided into groups of equal size. Wait, but if the number is composite, then it can be divided into groups. For example, if the number is 30, you can divide into 2 groups of 15, or 3 groups of 10, etc. So, if the number is composite, then it can be divided into groups. Therefore, Betty noticed that she couldn't break them into groups of equal size, so the number must be prime. Therefore, original number is prime. Then, adding 2, the total number is still not divisible into groups of equal size. Therefore, original number + 2 is also prime. Therefore, the answer is 41.
+
+But let me check if there's another way. Maybe the problem is that the number of students is not divisible by any number except 1 and itself, but when you add 2, it's not divisible by any number except 1 and itself. Therefore, the original number is prime, and original number + 2 is also prime. Therefore, the answer is 41. So, 41 students.
+
+But let me check if there's another possible number. For example, suppose the original number is 37. Then, 37 is prime. Then, adding 2 gives 39, which is not prime. So, that doesn't work. Similarly, 31 + 2 = 33, not prime. 43 + 2 = 45, not prime. 47 + 2 = 49, not prime. So, only 41. Therefore, the answer is 41.
+
+But wait, let me think again. Maybe the problem is not that the number is prime, but that it cannot be divided into groups of equal size. But maybe the number of groups is not specified. For example, maybe the number is not divisible by 2, 3, 4, etc., but maybe it's possible to divide into some other number of groups. Wait, but if the number is composite, then it can be divided into groups. For example, if the number is 49, which is 7*7. So, you can divide into 7 groups of 7. But if the number is 49, then Betty couldn't divide into groups of equal size. Wait, but 49 is composite. So, that would contradict the previous reasoning. Wait, but the problem says that "usually the students break up into groups of equal size." So, maybe "usually" implies that the number of students is such that it can be divided into groups of equal size. But this week, Betty noticed that she couldn't. So, that would mean that the number is not divisible by any number except 1 and itself. Therefore, the number is prime. Therefore, the original number is prime. Therefore, adding 2, the total is also prime. Therefore, 41.
+
+But if the original number is 49, which is composite, but Betty couldn't divide into groups. But that would be a problem. Because 49 can be divided into groups of 7. So, if the number is 49, then Betty could divide into groups of 7. Therefore, 49 is not a candidate. Therefore, the original number must be prime. Therefore, the answer is 41.
+
+But let me check if there is a prime number between 30 and 50 where adding 2 gives another prime. So, 41 is the only one. Therefore, the answer is 41. Therefore, the number of students is 41.
+
+But let me check if there's another way. Maybe the problem is that the number of students is not divisible by any number except 1 and itself, but when you add 2, it's not divisible by any number except 1 and itself. Therefore, the original number is prime, and original number + 2 is also prime. Therefore, the answer is 41. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that the number of students is not divisible by any number except 1 and itself, but when you add 2, it's not divisible by any number except 1 and itself. Therefore, the original number is prime, and original number + 2 is also prime. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that the number of students is not divisible by any number except 1 and itself, but when you add 2, it's not divisible by any number except 1 and itself. Therefore, the original number is prime, and original number + 2 is also prime. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that the number of students is not divisible by any number except 1 and itself, but when you add 2, it's not divisible by any number except 1 and itself. Therefore, the original number is prime, and original number + 2 is also prime. Therefore, the answer is 41.
+
+Therefore, I think the answer is 41. Therefore, the number of students is 41.
+
+But let me check again. Let me check if 41 is between 30 and 50. Yes, 41 is between 30 and 50. So, that's okay. Then, Betty couldn't divide into groups of equal size. So, 41 is prime. Then, when Betty and Wilma join, so 41 + 2 = 43, which is also prime. Therefore, they still can't divide into groups. Therefore, that's the answer.
+
+But wait, maybe the problem is not that the number is prime, but that it cannot be divided into groups of equal size. So, maybe the number is not divisible by any number except 1 and itself. But maybe the number is not prime? Wait, no. If a number is not prime, then it's composite, so it can be divided into groups. Therefore, the original number must be prime. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that the number of students is not divisible by any number except 1 and itself, but when you add 2, it's not divisible by any number except 1 and itself. Therefore, the original number is prime, and original number + 2 is also prime. Therefore, the answer is 41.
+
+Therefore, I think the answer is 41. Therefore, the number of students is 41.
+
+But let me check if there's another possible prime. For example, 2 is prime, but 2 + 2 = 4, which is not prime. But 2 is not between 30 and 50. Similarly, 3 is prime, 3 + 2 = 5, which is prime. But 3 is not between 30 and 50. So, no. Therefore, the only number between 30 and 50 is 41. Therefore, the answer is 41.
+
+But let me check if there's another way. Maybe the problem is not that the number is prime, but that it cannot be divided into groups of equal size. So, maybe the number is not divisible by any number except 1 and itself. But maybe the number is 1? But 1 is not between 30 and 50. So, no. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that the number of students is not divisible by any number except 1 and itself, but when you add 2, it's not divisible by any number except 1 and itself. Therefore, the original number is prime, and original number + 2 is also prime. Therefore, the answer is 41.
+
+Therefore, I think the answer is 41. Therefore, the number of students is 41.
+
+**Final Answer**
+The number of students who showed up to the archery class this week is \boxed{41}.

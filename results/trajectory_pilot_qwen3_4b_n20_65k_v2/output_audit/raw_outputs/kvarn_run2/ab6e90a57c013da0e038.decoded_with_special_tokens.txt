@@ -1,0 +1,248 @@
+<think>
+Okay, so I need to solve the equation $10^x - 10 = 9990$ for $x$. Hmm, let me think. First, maybe I should isolate the term with the exponent. That usually helps when dealing with equations like this. 
+
+So, starting with the original equation: $10^x - 10 = 9990$. If I add 10 to both sides, that should get rid of the -10 on the left. Let me do that:
+
+$10^x - 10 + 10 = 9990 + 10$
+
+Simplifying both sides:
+
+$10^x = 10000$
+
+Wait, 9990 + 10 is 10000? Let me check that. 9990 + 10 is indeed 10000. Okay, so now the equation is $10^x = 10000$. 
+
+Now, I need to solve for $x$. Since the base is 10, maybe I can express 10000 as a power of 10. Let me recall that $10^1 = 10$, $10^2 = 100$, $10^3 = 1000$, $10^4 = 10000$. Oh, right! So $10^4 = 10000$. 
+
+Therefore, if $10^x = 10^4$, then $x$ must be 4. Is that right? Let me verify. If I plug $x = 4$ back into the original equation:
+
+Left side: $10^4 - 10 = 10000 - 10 = 9990$, which matches the right side of the equation. 
+
+So, that seems correct. But wait, let me make sure I didn't skip any steps or make any mistakes. Let me go through it again. 
+
+Original equation: $10^x - 10 = 9990$. Adding 10 to both sides gives $10^x = 9990 + 10 = 10000$. Then, since 10 to the power of 4 is 10000, $x = 4$. 
+
+Alternatively, maybe I can use logarithms to solve for $x$? Let me try that method to cross-verify. 
+
+Taking the logarithm base 10 of both sides:
+
+$\log_{10}(10^x) = \log_{10}(10000)$
+
+Simplifying the left side: $\log_{10}(10^x) = x$, because logarithm and exponentiation are inverse operations. 
+
+On the right side, $\log_{10}(10000)$. Since 10000 is $10^4$, then $\log_{10}(10^4) = 4$. 
+
+Therefore, $x = 4$. 
+
+Same answer. So that seems to confirm it. 
+
+But just to be thorough, let me think if there's another way to approach this. Maybe by expressing 9990 in terms of 10^x? 
+
+Alternatively, maybe I can factor something out? Let me see. 
+
+Original equation: $10^x - 10 = 9990$. 
+
+Alternatively, factor 10 out of the left side? Let's try:
+
+$10(10^{x-1} - 1) = 9990$. 
+
+Divide both sides by 10:
+
+$10^{x - 1} - 1 = 999$. 
+
+Then, add 1 to both sides:
+
+$10^{x - 1} = 1000$. 
+
+Now, 1000 is $10^3$, so:
+
+$10^{x - 1} = 10^3$. 
+
+Therefore, $x - 1 = 3$, so $x = 4$. 
+
+Same result again. So that seems to confirm that x is indeed 4. 
+
+Alternatively, maybe I can think about the number 9990. Let me see. 9990 is 10000 - 10, which is exactly what the original equation is. So, $10^x = 10000$, so x is 4. 
+
+Is there a possibility that there's another solution? For example, if the equation was $10^x - 10 = 9990$, could there be another value of x that satisfies this? 
+
+Well, the function $10^x$ is an exponential function, which is strictly increasing. That means that for each value of $10^x$, there is exactly one real number x that satisfies it. Therefore, there can't be another solution. 
+
+So, x must be 4. 
+
+Alternatively, if I didn't remember that $10^4 = 10000$, maybe I can compute it step by step. Let's see:
+
+We know that $10^1 = 10$
+
+$10^2 = 100$
+
+$10^3 = 1000$
+
+$10^4 = 10,000$. 
+
+Yes, so that's straightforward. 
+
+Alternatively, if I didn't know that, maybe I can use logarithms. Let me try that again. 
+
+Starting from $10^x = 10000$. Taking log base 10:
+
+$x = \log_{10}(10000)$. 
+
+But $\log_{10}(10000)$ is the exponent you need to raise 10 to in order to get 10000. Since 10^4 is 10000, that's 4. 
+
+Alternatively, if I didn't know that, I could use the change of base formula. 
+
+$\log_{10}(10000) = \frac{\ln(10000)}{\ln(10)}$. 
+
+But maybe that's overcomplicating. Since 10000 is 10^4, it's straightforward. 
+
+Alternatively, if I didn't know that, maybe I can write 10000 as 10*10*10*10, which is 10^4. 
+
+So, regardless of the method, it seems that x is 4. 
+
+Wait, but let me check if I made any mistake in the initial steps. 
+
+Original equation: $10^x - 10 = 9990$. 
+
+Adding 10: $10^x = 9990 + 10$. 
+
+9990 + 10 is 10000. Correct. 
+
+So, 10^x = 10000. 
+
+So, x is 4. 
+
+Alternatively, if I think about decimal exponents? For example, if x was a decimal, but in this case, since 10^x is 10000, which is a power of 10, x must be an integer. 
+
+But even if x wasn't an integer, the equation would still have a unique solution. However, in this case, since 10000 is a power of 10, x is an integer. 
+
+Alternatively, maybe I can use logarithms with a different base? For example, natural logarithm. 
+
+Let me try that. 
+
+Starting from $10^x = 10000$. Take natural logarithm on both sides:
+
+$\ln(10^x) = \ln(10000)$
+
+Which simplifies to:
+
+$x \ln(10) = \ln(10000)$
+
+Therefore, $x = \frac{\ln(10000)}{\ln(10)}$
+
+Now, $\ln(10000)$ is $\ln(10^4)$ which is 4 ln(10). Therefore, $x = \frac{4 \ln(10)}{\ln(10)} = 4$. 
+
+Same answer again. 
+
+So, regardless of the method, I get x = 4. 
+
+Therefore, I think that's the correct answer. 
+
+But just to be absolutely sure, let me plug x = 4 back into the original equation:
+
+Left side: $10^4 - 10 = 10000 - 10 = 9990$. 
+
+Right side: 9990. 
+
+Yes, they match. 
+
+Alternatively, if I tried x = 3, then 10^3 - 10 = 1000 - 10 = 990, which is not 9990. 
+
+If I tried x = 5, 10^5 - 10 = 100000 - 10 = 99990, which is way bigger than 9990. 
+
+So, x must be between 3 and 5, but since 10^4 is exactly 10000, which gives 9990 when subtracting 10, that's the correct value. 
+
+Therefore, I think x is definitely 4. 
+
+I don't see any other possible way this could be solved, and all methods lead to the same answer. 
+
+So, I think the answer is 4.
+
+**Final Answer**
+The value of $ x $ is \boxed{4}.
+</think>
+
+To solve the equation:
+
+$$
+10^x - 10 = 9990
+$$
+
+we begin by isolating the exponential term. This is a standard approach when dealing with equations involving exponents.
+
+---
+
+### Step 1: Isolate the Exponential Term
+
+Add 10 to both sides of the equation:
+
+$$
+10^x - 10 + 10 = 9990 + 10
+$$
+
+$$
+10^x = 10000
+$$
+
+---
+
+### Step 2: Express 10000 as a Power of 10
+
+We recognize that:
+
+$$
+10^4 = 10000
+$$
+
+So, we can equate the two expressions:
+
+$$
+10^x = 10^4
+$$
+
+Since the bases are the same, the exponents must be equal:
+
+$$
+x = 4
+$$
+
+---
+
+### Step 3: Verify the Solution
+
+Substitute $ x = 4 $ back into the original equation:
+
+$$
+10^4 - 10 = 10000 - 10 = 9990
+$$
+
+This matches the right-hand side of the equation, confirming that the solution is correct.
+
+---
+
+### Step 4: Alternative Verification Using Logarithms
+
+We can also solve this using logarithms. Taking the base-10 logarithm of both sides:
+
+$$
+\log_{10}(10^x) = \log_{10}(10000)
+$$
+
+$$
+x = \log_{10}(10000)
+$$
+
+Since $ 10000 = 10^4 $, we have:
+
+$$
+x = \log_{10}(10^4) = 4
+$$
+
+This again confirms that $ x = 4 $.
+
+---
+
+### Final Answer
+
+$$
+\boxed{4}
+$$<|im_end|>

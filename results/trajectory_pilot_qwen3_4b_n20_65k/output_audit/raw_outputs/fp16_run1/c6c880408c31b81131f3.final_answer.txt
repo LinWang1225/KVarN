@@ -1,0 +1,95 @@
+
+
+We are given the expression:
+
+$$
+a(2a + b) - 2a^2 + ab
+$$
+
+where $ a $ and $ b $ are **different prime numbers greater than 2**. Our goal is to determine how many **whole-number divisors** this expression has.
+
+---
+
+### Step 1: Simplify the Expression
+
+Start by expanding the first term:
+
+$$
+a(2a + b) = 2a^2 + ab
+$$
+
+Now substitute back into the original expression:
+
+$$
+2a^2 + ab - 2a^2 + ab
+$$
+
+Simplify by combining like terms:
+
+$$
+(2a^2 - 2a^2) + (ab + ab) = 0 + 2ab = 2ab
+$$
+
+So the expression simplifies to:
+
+$$
+2ab
+$$
+
+---
+
+### Step 2: Analyze the Structure of $ 2ab $
+
+We are told that $ a $ and $ b $ are **different prime numbers greater than 2**, so:
+
+- $ a $ and $ b $ are **distinct odd primes**
+- $ 2 $ is a **different prime** from $ a $ and $ b $
+
+Therefore, the number $ 2ab $ is the product of **three distinct primes**: 2, $ a $, and $ b $.
+
+This means the **prime factorization** of $ 2ab $ is:
+
+$$
+2^1 \cdot a^1 \cdot b^1
+$$
+
+---
+
+### Step 3: Count the Number of Divisors
+
+To find the number of **positive whole-number divisors** of a number, we use the formula:
+
+$$
+\text{Number of divisors} = (e_1 + 1)(e_2 + 1)\cdots(e_k + 1)
+$$
+
+where $ e_i $ are the exponents in the prime factorization.
+
+In this case, the exponents of the primes are all 1, so:
+
+$$
+(1 + 1)(1 + 1)(1 + 1) = 2 \cdot 2 \cdot 2 = 8
+$$
+
+---
+
+### Step 4: Confirm with Examples
+
+Let’s test with specific values of $ a $ and $ b $:
+
+- If $ a = 3 $, $ b = 5 $, then $ 2ab = 2 \cdot 3 \cdot 5 = 30 $
+  - Divisors of 30: $ 1, 2, 3, 5, 6, 10, 15, 30 $ → 8 divisors
+- If $ a = 3 $, $ b = 7 $, then $ 2ab = 2 \cdot 3 \cdot 7 = 42 $
+  - Divisors of 42: $ 1, 2, 3, 6, 7, 14, 21, 42 $ → 8 divisors
+- If $ a = 5 $, $ b = 7 $, then $ 2ab = 2 \cdot 5 \cdot 7 = 70 $
+  - Divisors of 70: $ 1, 2, 5, 7, 10, 14, 35, 70 $ → 8 divisors
+
+In all cases, the number of positive divisors is 8.
+
+---
+
+### Final Answer
+
+$$
+\boxed{8}
+$$

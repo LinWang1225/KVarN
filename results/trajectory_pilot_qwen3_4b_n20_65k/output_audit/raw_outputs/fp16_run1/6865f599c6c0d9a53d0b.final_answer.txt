@@ -1,0 +1,65 @@
+
+
+To simplify the expression:
+
+$$
+\frac{\sqrt{2.5^2 - 0.7^2}}{2.7 - 2.5}
+$$
+
+---
+
+### Step 1: Simplify the Numerator
+
+We begin by computing the expression inside the square root:
+
+$$
+2.5^2 = 6.25, \quad 0.7^2 = 0.49
+$$
+
+$$
+2.5^2 - 0.7^2 = 6.25 - 0.49 = 5.76
+$$
+
+Now, take the square root:
+
+$$
+\sqrt{5.76} = 2.4
+$$
+
+So the numerator simplifies to **2.4**.
+
+---
+
+### Step 2: Simplify the Denominator
+
+$$
+2.7 - 2.5 = 0.2
+$$
+
+So the denominator is **0.2**.
+
+---
+
+### Step 3: Divide the Simplified Numerator by the Denominator
+
+$$
+\frac{2.4}{0.2}
+$$
+
+To simplify this, we can convert the decimals to fractions:
+
+$$
+2.4 = \frac{24}{10}, \quad 0.2 = \frac{2}{10}
+$$
+
+$$
+\frac{24}{10} \div \frac{2}{10} = \frac{24}{10} \times \frac{10}{2} = \frac{24 \times 10}{10 \times 2} = \frac{24}{2} = 12
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{12}
+$$

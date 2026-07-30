@@ -1,0 +1,83 @@
+
+
+To simplify the expression:
+
+$$
+\frac{\sqrt{2.5^2 - 0.7^2}}{2.7 - 2.5}
+$$
+
+we proceed step by step, using algebraic identities and arithmetic.
+
+---
+
+### Step 1: Simplify the Numerator
+
+The numerator is:
+
+$$
+\sqrt{2.5^2 - 0.7^2}
+$$
+
+We can apply the **difference of squares** identity:
+
+$$
+a^2 - b^2 = (a - b)(a + b)
+$$
+
+Let $ a = 2.5 $ and $ b = 0.7 $. Then:
+
+$$
+2.5^2 - 0.7^2 = (2.5 - 0.7)(2.5 + 0.7) = (1.8)(3.2)
+$$
+
+Now compute the product:
+
+$$
+1.8 \times 3.2 = 5.76
+$$
+
+So the numerator becomes:
+
+$$
+\sqrt{5.76}
+$$
+
+We know that:
+
+$$
+\sqrt{5.76} = 2.4
+$$
+
+---
+
+### Step 2: Simplify the Denominator
+
+The denominator is:
+
+$$
+2.7 - 2.5 = 0.2
+$$
+
+---
+
+### Step 3: Divide the Simplified Parts
+
+Now we divide the simplified numerator by the simplified denominator:
+
+$$
+\frac{2.4}{0.2}
+$$
+
+Dividing by 0.2 is the same as multiplying by 5:
+
+$$
+2.4 \times 5 = 12
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{12}
+$$

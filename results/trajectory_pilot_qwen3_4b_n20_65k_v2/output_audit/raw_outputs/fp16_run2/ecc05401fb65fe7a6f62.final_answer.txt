@@ -1,0 +1,88 @@
+
+
+To determine the **range** of the function  
+$$
+f(x) = (\arccos x)^2 + (\arcsin x)^2,
+$$  
+we begin by leveraging a known identity between the inverse trigonometric functions:
+
+$$
+\arccos x + \arcsin x = \frac{\pi}{2}, \quad \text{for all } x \in [-1, 1].
+$$
+
+Let’s define $ \theta = \arcsin x $. Then, $ \arccos x = \frac{\pi}{2} - \theta $, and since $ x \in [-1, 1] $, we have $ \theta \in \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right] $.
+
+Substituting into the function, we get:
+
+$$
+f(x) = \left( \frac{\pi}{2} - \theta \right)^2 + \theta^2.
+$$
+
+Expanding this expression:
+
+$$
+f(x) = \left( \frac{\pi^2}{4} - \pi \theta + \theta^2 \right) + \theta^2 = 2\theta^2 - \pi \theta + \frac{\pi^2}{4}.
+$$
+
+So, the function becomes a quadratic in $ \theta $:
+
+$$
+f(\theta) = 2\theta^2 - \pi \theta + \frac{\pi^2}{4}, \quad \text{with } \theta \in \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right].
+$$
+
+---
+
+### Step 1: Analyze the Quadratic Function
+
+This is a **quadratic function** in $ \theta $, with:
+
+- Leading coefficient $ a = 2 > 0 $, so the parabola opens **upwards**.
+- The vertex occurs at:
+
+$$
+\theta = \frac{-b}{2a} = \frac{\pi}{4}.
+$$
+
+Since $ \frac{\pi}{4} \in \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right] $, the **minimum** of the function occurs at $ \theta = \frac{\pi}{4} $.
+
+---
+
+### Step 2: Evaluate the Function at the Vertex and Endpoints
+
+- **At $ \theta = \frac{\pi}{4} $:**
+
+$$
+f\left( \frac{\pi}{4} \right) = 2\left( \frac{\pi}{4} \right)^2 - \pi \left( \frac{\pi}{4} \right) + \frac{\pi^2}{4} = \frac{\pi^2}{8} - \frac{\pi^2}{4} + \frac{\pi^2}{4} = \frac{\pi^2}{8}.
+$$
+
+- **At $ \theta = -\frac{\pi}{2} $:**
+
+$$
+f\left( -\frac{\pi}{2} \right) = 2\left( -\frac{\pi}{2} \right)^2 - \pi \left( -\frac{\pi}{2} \right) + \frac{\pi^2}{4} = \frac{\pi^2}{2} + \frac{\pi^2}{2} + \frac{\pi^2}{4} = \frac{5\pi^2}{4}.
+$$
+
+- **At $ \theta = \frac{\pi}{2} $:**
+
+$$
+f\left( \frac{\pi}{2} \right) = 2\left( \frac{\pi}{2} \right)^2 - \pi \left( \frac{\pi}{2} \right) + \frac{\pi^2}{4} = \frac{\pi^2}{2} - \frac{\pi^2}{2} + \frac{\pi^2}{4} = \frac{\pi^2}{4}.
+$$
+
+---
+
+### Step 3: Determine the Range
+
+Since the function is continuous on the interval $ \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right] $, and the parabola opens upwards, the **minimum** occurs at the vertex $ \theta = \frac{\pi}{4} $, and the **maximum** occurs at the left endpoint $ \theta = -\frac{\pi}{2} $.
+
+Thus, the **range** of $ f(x) $ is:
+
+$$
+\left[ \frac{\pi^2}{8}, \frac{5\pi^2}{4} \right].
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{\left[ \dfrac{\pi^2}{8}, \dfrac{5\pi^2}{4} \right]}
+$$

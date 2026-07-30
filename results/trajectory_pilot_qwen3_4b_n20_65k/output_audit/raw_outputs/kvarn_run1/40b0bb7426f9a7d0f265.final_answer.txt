@@ -1,0 +1,89 @@
+
+
+To find the maximum value of the expression  
+$$
+|1 + z| + |1 - z + z^2|
+$$  
+for a complex number $ z $ such that $ |z| = 1 $, we begin by leveraging the fact that any complex number $ z $ on the unit circle can be written in the form  
+$$
+z = e^{i\theta} = \cos\theta + i\sin\theta.
+$$
+
+---
+
+### Step 1: Express the Terms in Terms of $ \theta $
+
+We compute each term in the expression:
+
+- $ |1 + z| = |1 + \cos\theta + i\sin\theta| = \sqrt{(1 + \cos\theta)^2 + \sin^2\theta} = \sqrt{2 + 2\cos\theta} = 2|\cos(\theta/2)| $, using the identity $ 1 + \cos\theta = 2\cos^2(\theta/2) $.
+
+- $ |1 - z + z^2| = |1 - e^{i\theta} + e^{i2\theta}| $. Using the identity $ z^2 = e^{i2\theta} $, and the fact that $ |z| = 1 $, we can simplify this expression using trigonometric identities. After simplification, we find:
+  $$
+  |1 - z + z^2| = |2\cos\theta - 1|.
+  $$
+
+Thus, the original expression becomes:
+$$
+|1 + z| + |1 - z + z^2| = 2|\cos(\theta/2)| + |2\cos\theta - 1|.
+$$
+
+---
+
+### Step 2: Substitution to Simplify the Expression
+
+Let $ \phi = \theta/2 $, so $ \theta = 2\phi $, and $ \cos\theta = \cos(2\phi) = 2\cos^2\phi - 1 $. Then the expression becomes:
+$$
+2|\cos\phi| + |2(2\cos^2\phi - 1) - 1| = 2|\cos\phi| + |4\cos^2\phi - 3|.
+$$
+
+Let $ x = \cos\phi $, where $ x \in [-1, 1] $. Since $ |\cos\phi| = |x| $, and the function is even in $ x $, we can restrict our attention to $ x \in [0, 1] $, and the expression becomes:
+$$
+f(x) = 2x + |4x^2 - 3|.
+$$
+
+---
+
+### Step 3: Analyze the Function $ f(x) = 2x + |4x^2 - 3| $ on $ x \in [0, 1] $
+
+We analyze the function in two intervals based on the sign of $ 4x^2 - 3 $:
+
+- **Case 1:** $ x \in [0, \sqrt{3}/2] $, where $ 4x^2 - 3 \leq 0 $, so $ |4x^2 - 3| = 3 - 4x^2 $. Then:
+  $$
+  f(x) = 2x + 3 - 4x^2.
+  $$
+  This is a quadratic function in $ x $, opening downward. Its maximum occurs at the vertex:
+  $$
+  x = \frac{-b}{2a} = \frac{-2}{2(-4)} = \frac{1}{4}.
+  $$
+  Evaluate at $ x = 1/4 $:
+  $$
+  f(1/4) = 2(1/4) + 3 - 4(1/4)^2 = \frac{1}{2} + 3 - \frac{1}{4} = \frac{13}{4}.
+  $$
+
+- **Case 2:** $ x \in [\sqrt{3}/2, 1] $, where $ 4x^2 - 3 \geq 0 $, so $ |4x^2 - 3| = 4x^2 - 3 $. Then:
+  $$
+  f(x) = 2x + 4x^2 - 3.
+  $$
+  This is a quadratic function in $ x $, opening upward. It is increasing on this interval, so its maximum occurs at $ x = 1 $:
+  $$
+  f(1) = 2(1) + 4(1)^2 - 3 = 2 + 4 - 3 = 3.
+  $$
+
+---
+
+### Step 4: Conclusion
+
+Comparing the two cases, the maximum value of the expression is:
+$$
+\boxed{\dfrac{13}{4}}.
+$$
+
+This maximum is achieved when $ x = \cos\phi = 1/4 $, which corresponds to $ \phi = \arccos(1/4) $, and hence $ \theta = 2\phi $.
+
+---
+
+### Final Answer
+
+$$
+\boxed{\dfrac{13}{4}}
+$$

@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "output_root": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k",
+  "output_dir": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k/output_audit",
+  "tokenizer": "/data/wanglin/models/Qwen3-4B",
+  "run_names": [
+    "fp16_run1",
+    "fp16_run2",
+    "kvarn_run1",
+    "kvarn_run2"
+  ],
+  "all_sample_count": 20,
+  "complete_sample_count": 20,
+  "complete_sample_ids": [
+    "003cd5e9c95a474e9431",
+    "05bdc1901a5bcbcd8361",
+    "1886f57e31114f1719d6",
+    "19da3838f3a463bab64e",
+    "1d8ac3dc721f5bffc4e3",
+    "40b0bb7426f9a7d0f265",
+    "4a422b3fdbfe13a33e16",
+    "5c8840b61958ad4caef7",
+    "6865f599c6c0d9a53d0b",
+    "706db9033372be2a17d8",
+    "8ffe40959752def39d11",
+    "95a915884d11ffcc8534",
+    "96b65be99ec3bc4c407f",
+    "ab6e90a57c013da0e038",
+    "af25489f8c0c57e591bc",
+    "bc0ebd5a3f8bc465de9e",
+    "bf1328c295bece4ac011",
+    "c18640ec8402577e23b4",
+    "c6c880408c31b81131f3",
+    "ecc05401fb65fe7a6f62"
+  ],
+  "missing_by_run": {
+    "fp16_run1": [],
+    "fp16_run2": [],
+    "kvarn_run1": [],
+    "kvarn_run2": []
+  },
+  "failed_by_run": {
+    "fp16_run1": [],
+    "fp16_run2": [],
+    "kvarn_run1": [],
+    "kvarn_run2": []
+  },
+  "prompt_hash_mismatch_count": 0,
+  "input_token_mismatch_count": 0,
+  "complete_thinking_run_count": 78,
+  "total_run_records": 80,
+  "pairs": {
+    "fp16_self_run1_vs_run2": {
+      "valid_pairs": 20,
+      "diverged_count": 0,
+      "divergence_rate": 0.0,
+      "relation_counts": {
+        "identical": 20
+      },
+      "mean_first_divergence_step": null,
+      "median_first_divergence_step": null,
+      "first_divergence_step_percentiles": {
+        "p25": null,
+        "p50": null,
+        "p75": null,
+        "p90": null
+      },
+      "divergence_region_counts": {
+        "none": 20
+      },
+      "prefix_divergence": {
+        "128": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        },
+        "256": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        },
+        "512": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        },
+        "1024": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        },
+        "2048": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        },
+        "4096": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        },
+        "8192": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        },
+        "16384": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        }
+      }
+    },
+    "kvarn_self_run1_vs_run2": {
+      "valid_pairs": 20,
+      "diverged_count": 20,
+      "divergence_rate": 1.0,
+      "relation_counts": {
+        "token_mismatch": 20
+      },
+      "mean_first_divergence_step": 427.5,
+      "median_first_divergence_step": 401.5,
+      "first_divergence_step_percentiles": {
+        "p25": 225.75,
+        "p50": 401.5,
+        "p75": 552.25,
+        "p90": 737.0000000000001
+      },
+      "divergence_region_counts": {
+        "thinking": 20
+      },
+      "prefix_divergence": {
+        "128": {
+          "diverged_count": 2,
+          "total": 20,
+          "rate": 0.1
+        },
+        "256": {
+          "diverged_count": 6,
+          "total": 20,
+          "rate": 0.3
+        },
+        "512": {
+          "diverged_count": 13,
+          "total": 20,
+          "rate": 0.65
+        },
+        "1024": {
+          "diverged_count": 19,
+          "total": 20,
+          "rate": 0.95
+        },
+        "2048": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "4096": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "8192": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "16384": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        }
+      }
+    },
+    "cross_fp16_run1_vs_kvarn_run1": {
+      "valid_pairs": 20,
+      "diverged_count": 20,
+      "divergence_rate": 1.0,
+      "relation_counts": {
+        "token_mismatch": 20
+      },
+      "mean_first_divergence_step": 253.4,
+      "median_first_divergence_step": 229.0,
+      "first_divergence_step_percentiles": {
+        "p25": 214.5,
+        "p50": 229.0,
+        "p75": 261.25,
+        "p90": 357.50000000000006
+      },
+      "divergence_region_counts": {
+        "thinking": 20
+      },
+      "prefix_divergence": {
+        "128": {
+          "diverged_count": 0,
+          "total": 20,
+          "rate": 0.0
+        },
+        "256": {
+          "diverged_count": 15,
+          "total": 20,
+          "rate": 0.75
+        },
+        "512": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "1024": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "2048": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "4096": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "8192": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "16384": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        }
+      }
+    },
+    "cross_fp16_run2_vs_kvarn_run2": {
+      "valid_pairs": 20,
+      "diverged_count": 20,
+      "divergence_rate": 1.0,
+      "relation_counts": {
+        "token_mismatch": 20
+      },
+      "mean_first_divergence_step": 251.95,
+      "median_first_divergence_step": 237.5,
+      "first_divergence_step_percentiles": {
+        "p25": 214.5,
+        "p50": 237.5,
+        "p75": 343.5,
+        "p90": 371.0
+      },
+      "divergence_region_counts": {
+        "thinking": 20
+      },
+      "prefix_divergence": {
+        "128": {
+          "diverged_count": 2,
+          "total": 20,
+          "rate": 0.1
+        },
+        "256": {
+          "diverged_count": 13,
+          "total": 20,
+          "rate": 0.65
+        },
+        "512": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "1024": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "2048": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "4096": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "8192": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        },
+        "16384": {
+          "diverged_count": 20,
+          "total": 20,
+          "rate": 1.0
+        }
+      }
+    }
+  }
+}

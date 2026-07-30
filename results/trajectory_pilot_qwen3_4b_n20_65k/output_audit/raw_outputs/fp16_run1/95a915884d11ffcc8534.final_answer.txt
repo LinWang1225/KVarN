@@ -1,0 +1,116 @@
+
+
+To solve the problem, we are given two key pieces of information about a two-digit number:
+
+1. The **sum of its digits** is 13.
+2. The **difference between the number and its reversed version** is 27.
+
+We are asked to find the **sum of the original number and its reversed version**.
+
+---
+
+### Step 1: Represent the Number Algebraically
+
+Let the original two-digit number be represented as:
+
+$$
+N = 10a + b
+$$
+
+Where:
+- $ a $ is the tens digit (must be between 1 and 9, since it's a two-digit number),
+- $ b $ is the units digit (must be between 0 and 9).
+
+The reversed number is:
+
+$$
+R = 10b + a
+$$
+
+---
+
+### Step 2: Use the Given Conditions
+
+**Condition 1:** The sum of the digits is 13.
+
+$$
+a + b = 13 \tag{1}
+$$
+
+**Condition 2:** The difference between the number and its reverse is 27.
+
+$$
+(10a + b) - (10b + a) = 27
+$$
+
+Simplify the equation:
+
+$$
+10a + b - 10b - a = 27 \\
+9a - 9b = 27 \\
+a - b = 3 \tag{2}
+$$
+
+---
+
+### Step 3: Solve the System of Equations
+
+We now have two equations:
+
+- $ a + b = 13 $ (Equation 1)
+- $ a - b = 3 $ (Equation 2)
+
+Add the two equations:
+
+$$
+(a + b) + (a - b) = 13 + 3 \\
+2a = 16 \\
+a = 8
+$$
+
+Substitute $ a = 8 $ into Equation 1:
+
+$$
+8 + b = 13 \\
+b = 5
+$$
+
+So the original number is:
+
+$$
+N = 10a + b = 10 \cdot 8 + 5 = 85
+$$
+
+The reversed number is:
+
+$$
+R = 10b + a = 10 \cdot 5 + 8 = 58
+$$
+
+---
+
+### Step 4: Find the Sum of the Original and Reversed Numbers
+
+$$
+N + R = 85 + 58 = 143
+$$
+
+Alternatively, we can use a general formula for the sum of a two-digit number and its reverse:
+
+$$
+N + R = (10a + b) + (10b + a) = 11a + 11b = 11(a + b)
+$$
+
+Since $ a + b = 13 $, we get:
+
+$$
+N + R = 11 \cdot 13 = 143
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{143}
+$$

@@ -1,0 +1,70 @@
+
+
+To solve the problem, we need to determine the number of students who attended the archery class this week, given the following conditions:
+
+1. The number of students is **between 30 and 50**.
+2. **Normally**, the students can be divided into **groups of equal size**.
+3. **This week**, Betty noticed that she **could not** divide the students into groups of equal size.
+4. **Then**, when **Betty and Wilma** joined the students, the total number **still could not** be divided into groups of equal size.
+
+---
+
+### Step 1: Understanding the Implication of the First Condition
+
+The key phrase is: *"Usually the students break up into groups of equal size."* This implies that the number of students is **not prime**—since a prime number cannot be divided into equal groups of size greater than 1 (except 1 and itself). Therefore, **this week's number of students must be a prime number**, because that is the only case where the students **cannot** be divided into equal groups.
+
+So, the number of students this week is a **prime number between 30 and 50**.
+
+---
+
+### Step 2: List of Primes Between 30 and 50
+
+The prime numbers in that range are:
+
+- 31
+- 37
+- 41
+- 43
+- 47
+
+---
+
+### Step 3: Apply the Second Condition
+
+When **Betty and Wilma** join the students, the total number of archers becomes:
+
+$$
+\text{Original number of students} + 2
+$$
+
+This new total **still cannot** be divided into equal groups, meaning it must also be **prime**.
+
+So, we are looking for a **prime number between 30 and 50** such that **adding 2 to it results in another prime number**.
+
+Let’s test each candidate:
+
+- **31 + 2 = 33** → Not prime (3 × 11)
+- **37 + 2 = 39** → Not prime (3 × 13)
+- **41 + 2 = 43** → **Prime**
+- **43 + 2 = 45** → Not prime (5 × 9)
+- **47 + 2 = 49** → Not prime (7 × 7)
+
+Only **41** satisfies the condition that both the original number and the number after adding 2 are **prime**.
+
+---
+
+### Step 4: Final Verification
+
+- 41 is a prime number (between 30 and 50).
+- 41 + 2 = 43, which is also a prime number.
+- Therefore, both conditions are satisfied:
+  - The students **could not** be divided into equal groups (41 is prime).
+  - When Betty and Wilma join, the total is still **not divisible** into equal groups (43 is prime).
+
+---
+
+### Final Answer
+
+$$
+\boxed{41}
+$$

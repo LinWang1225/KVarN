@@ -1,0 +1,3 @@
+<|im_start|>user
+What is the range of the function $y=\log_2 (\sqrt{\sin x})$ for $0^\circ< x < 180^\circ$?<|im_end|>
+<|im_start|>assistant

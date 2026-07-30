@@ -1,0 +1,116 @@
+
+
+To solve the equation:
+
+$$
+\sin \left( \tan^{-1} (x) + \cot^{-1} \left( \frac{1}{x} \right) \right) = \frac{1}{3}
+$$
+
+we begin by analyzing the identity between the inverse trigonometric functions.
+
+---
+
+### Step 1: Use the identity for inverse trigonometric functions
+
+We recall the identity:
+
+$$
+\cot^{-1}(y) = \tan^{-1}\left(\frac{1}{y}\right) \quad \text{for } y > 0
+$$
+
+and
+
+$$
+\cot^{-1}(y) = \pi + \tan^{-1}\left(\frac{1}{y}\right) \quad \text{for } y < 0
+$$
+
+So, for the given expression:
+
+$$
+\cot^{-1}\left(\frac{1}{x}\right) = 
+\begin{cases}
+\tan^{-1}(x), & \text{if } x > 0 \\
+\pi + \tan^{-1}(x), & \text{if } x < 0
+\end{cases}
+$$
+
+Therefore, the sum inside the sine becomes:
+
+- For $ x > 0 $: $ \tan^{-1}(x) + \tan^{-1}(x) = 2\tan^{-1}(x) $
+- For $ x < 0 $: $ \tan^{-1}(x) + \pi + \tan^{-1}(x) = \pi + 2\tan^{-1}(x) $
+
+---
+
+### Step 2: Use the identity for sine of double angle
+
+We use the identity:
+
+$$
+\sin(2\theta) = \frac{2\tan\theta}{1 + \tan^2\theta}
+$$
+
+Let $ \theta = \tan^{-1}(x) $, so $ \tan\theta = x $. Then:
+
+- For $ x > 0 $: $ \sin(2\theta) = \frac{2x}{1 + x^2} $
+- For $ x < 0 $: $ \sin(\pi + 2\theta) = -\sin(2\theta) = -\frac{2x}{1 + x^2} $
+
+So the equation becomes:
+
+- For $ x > 0 $: $ \frac{2x}{1 + x^2} = \frac{1}{3} $
+- For $ x < 0 $: $ -\frac{2x}{1 + x^2} = \frac{1}{3} \Rightarrow \frac{2x}{1 + x^2} = -\frac{1}{3} $
+
+---
+
+### Step 3: Solve the equations
+
+#### Case 1: $ x > 0 $
+
+$$
+\frac{2x}{1 + x^2} = \frac{1}{3}
+\Rightarrow 6x = 1 + x^2
+\Rightarrow x^2 - 6x + 1 = 0
+$$
+
+Solving this quadratic:
+
+$$
+x = \frac{6 \pm \sqrt{36 - 4}}{2} = \frac{6 \pm \sqrt{32}}{2} = 3 \pm 2\sqrt{2}
+$$
+
+Both solutions are positive, so they are valid.
+
+#### Case 2: $ x < 0 $
+
+$$
+\frac{2x}{1 + x^2} = -\frac{1}{3}
+\Rightarrow 6x = -1 - x^2
+\Rightarrow x^2 + 6x + 1 = 0
+$$
+
+Solving this quadratic:
+
+$$
+x = \frac{-6 \pm \sqrt{36 - 4}}{2} = \frac{-6 \pm \sqrt{32}}{2} = -3 \pm 2\sqrt{2}
+$$
+
+Both solutions are negative, so they are valid.
+
+---
+
+### Step 4: Final Answer
+
+The four distinct solutions are:
+
+$$
+x = 3 + 2\sqrt{2}, \quad x = 3 - 2\sqrt{2}, \quad x = -3 + 2\sqrt{2}, \quad x = -3 - 2\sqrt{2}
+$$
+
+These are all real and distinct values, and they satisfy the original equation.
+
+---
+
+### Final Answer:
+
+$$
+\boxed{-3 - 2\sqrt{2}}, \quad \boxed{-3 + 2\sqrt{2}}, \quad \boxed{3 - 2\sqrt{2}}, \quad \boxed{3 + 2\sqrt{2}}
+$$

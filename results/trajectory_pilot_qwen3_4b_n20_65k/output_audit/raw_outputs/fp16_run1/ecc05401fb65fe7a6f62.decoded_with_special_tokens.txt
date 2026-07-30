@@ -1,0 +1,311 @@
+<think>
+Okay, so I need to find the range of the function f(x) = (arccos x)^2 + (arcsin x)^2. Hmm, let me start by recalling some properties of the arccos and arcsin functions. Both arccos x and arcsin x are inverse trigonometric functions, and they have specific domains and ranges. 
+
+First, the domain of both arccos x and arcsin x is the interval [-1, 1]. So, the function f(x) is defined for x in [-1, 1]. That means the domain we're dealing with is x ∈ [-1, 1]. Now, the question is about the range of this function. 
+
+I remember that there's a relationship between arccos x and arcsin x. Specifically, arccos x + arcsin x = π/2 for all x in [-1, 1]. Is that right? Let me check. If I take x = 0, arccos 0 is π/2, and arcsin 0 is 0, so π/2 + 0 = π/2. That works. If x = 1, arccos 1 is 0, arcsin 1 is π/2, so 0 + π/2 = π/2. Similarly, x = -1, arccos(-1) is π, arcsin(-1) is -π/2, so π + (-π/2) = π/2. Yeah, that seems correct. So, arccos x + arcsin x = π/2. 
+
+So, maybe I can use this identity to simplify the expression for f(x). Let me denote θ = arcsin x. Then, arccos x would be π/2 - θ. Therefore, f(x) can be rewritten as (π/2 - θ)^2 + θ^2. Let me expand that:
+
+(π/2 - θ)^2 + θ^2 = (π²/4 - πθ + θ²) + θ² = π²/4 - πθ + 2θ².
+
+So, f(x) = 2θ² - πθ + π²/4, where θ = arcsin x. Since x is in [-1, 1], θ is in [-π/2, π/2]. Wait, arcsin x has a range of [-π/2, π/2], right? So θ ∈ [-π/2, π/2]. Therefore, the problem reduces to finding the range of the quadratic function g(θ) = 2θ² - πθ + π²/4 for θ ∈ [-π/2, π/2].
+
+Alternatively, maybe I can think of it in terms of x. But since θ is arcsin x, and x is between -1 and 1, maybe working with θ is easier. Let me stick with that.
+
+So, to find the range of g(θ) = 2θ² - πθ + π²/4 on the interval θ ∈ [-π/2, π/2]. Since this is a quadratic function in θ, I can analyze its minimum and maximum values on this interval. 
+
+First, let me note that the quadratic function is of the form g(θ) = aθ² + bθ + c, where a = 2, b = -π, c = π²/4. Since the coefficient of θ² is positive (a = 2 > 0), the parabola opens upwards, so the function has a minimum at its vertex and maximum at one of the endpoints of the interval.
+
+Therefore, the maximum value of g(θ) on the interval will be at either θ = -π/2 or θ = π/2, and the minimum will be at the vertex. So, I need to compute the vertex of the parabola and check if it lies within the interval [-π/2, π/2]. 
+
+The vertex of a quadratic function aθ² + bθ + c is at θ = -b/(2a). So here, θ_vertex = -(-π)/(2*2) = π/4. Since π/4 is approximately 0.785 radians, and the interval is from -π/2 ≈ -1.5708 to π/2 ≈ 1.5708, π/4 is within the interval. Therefore, the minimum occurs at θ = π/4, and the maximum occurs at one of the endpoints.
+
+So, let me compute g(π/4) first. 
+
+g(π/4) = 2*(π/4)^2 - π*(π/4) + π²/4.
+
+Calculating each term:
+
+First term: 2*(π²/16) = π²/8.
+
+Second term: -π*(π/4) = -π²/4.
+
+Third term: π²/4.
+
+Adding them up: π²/8 - π²/4 + π²/4 = π²/8. So, the minimum value is π²/8.
+
+Now, let's compute the values at the endpoints.
+
+First, θ = -π/2:
+
+g(-π/2) = 2*(-π/2)^2 - π*(-π/2) + π²/4.
+
+Calculating each term:
+
+First term: 2*(π²/4) = π²/2.
+
+Second term: -π*(-π/2) = π²/2.
+
+Third term: π²/4.
+
+Adding them up: π²/2 + π²/2 + π²/4 = π² + π²/4 = (5π²)/4.
+
+Wait, that seems high. Let me check again:
+
+Wait, 2*(π/2)^2 is 2*(π²/4) = π²/2. Then, -π*(-π/2) is π²/2. Then, π²/4. So total is π²/2 + π²/2 + π²/4 = π² + π²/4 = 5π²/4. Yes, that's correct.
+
+Now, θ = π/2:
+
+g(π/2) = 2*(π/2)^2 - π*(π/2) + π²/4.
+
+First term: 2*(π²/4) = π²/2.
+
+Second term: -π*(π/2) = -π²/2.
+
+Third term: π²/4.
+
+Adding them up: π²/2 - π²/2 + π²/4 = 0 + π²/4 = π²/4.
+
+So, the maximum value is 5π²/4 at θ = -π/2, and the minimum is π²/8 at θ = π/4. Therefore, the range of f(x) is [π²/8, 5π²/4]. Wait, but hold on. Let me make sure that this is correct.
+
+But wait, θ is arcsin x, so when θ = -π/2, that corresponds to x = sin(-π/2) = -1. Similarly, θ = π/2 corresponds to x = sin(π/2) = 1. And θ = π/4 corresponds to x = sin(π/4) = √2/2. So, the function f(x) is continuous on [-1, 1], so by the Extreme Value Theorem, it must attain its maximum and minimum on this interval. Therefore, according to this calculation, the range is [π²/8, 5π²/4]. 
+
+But let me check with some specific values. For example, when x = 0, arcsin 0 = 0, arccos 0 = π/2. Therefore, f(0) = (π/2)^2 + 0^2 = π²/4. Which is exactly the value we found at θ = π/2. Wait, but θ = π/2 is when x = 1. Wait, no, when x = 0, θ = arcsin 0 = 0, so arccos 0 is π/2. Therefore, f(0) = (π/2)^2 + 0^2 = π²/4. Which is the same as g(0). Wait, but according to our previous calculation, when θ = 0, which is in the interval, then g(0) = 2*0 - π*0 + π²/4 = π²/4. Which is correct. So, that's consistent.
+
+But when θ = π/4, which is x = √2/2, then f(x) = (arccos(√2/2))² + (arcsin(√2/2))². Since arccos(√2/2) is π/4, and arcsin(√2/2) is also π/4. Therefore, f(x) = (π/4)^2 + (π/4)^2 = 2*(π²/16) = π²/8. Which matches our previous calculation. So that seems correct.
+
+Now, when x = -1, θ = arcsin(-1) = -π/2, so arccos(-1) = π. Therefore, f(-1) = π² + (-π/2)^2 = π² + π²/4 = 5π²/4. Which is the same as we calculated for θ = -π/2. Similarly, when x = 1, θ = π/2, arccos(1) = 0, so f(1) = 0 + (π/2)^2 = π²/4. So that's correct.
+
+Therefore, the function f(x) reaches a minimum of π²/8 at x = √2/2 and a maximum of 5π²/4 at x = -1. Therefore, the range is [π²/8, 5π²/4]. 
+
+But wait, let me check another point. For example, x = -√2/2. Then arcsin(-√2/2) = -π/4, arccos(-√2/2) = π - π/4 = 3π/4. Therefore, f(-√2/2) = (3π/4)^2 + (-π/4)^2 = 9π²/16 + π²/16 = 10π²/16 = 5π²/8. Which is between π²/8 and 5π²/4. So that seems okay.
+
+Another test: x = 1/2. Then arcsin(1/2) = π/6, arccos(1/2) = π/3. Therefore, f(1/2) = (π/3)^2 + (π/6)^2 = π²/9 + π²/36 = (4π² + π²)/36 = 5π²/36 ≈ 0.436π². Which is greater than π²/8 ≈ 0.125π², so that's between the minimum and maximum. 
+
+But wait, let me check if there are any other critical points. Wait, we already considered the vertex at θ = π/4, which is inside the interval. Since the parabola opens upwards, that's the minimum. Therefore, the maximum is at the endpoints. So, since θ ranges from -π/2 to π/2, and we have the maximum at θ = -π/2 (x = -1) and θ = π/2 (x = 1). Therefore, the maximum value is 5π²/4 and the minimum is π²/8. Therefore, the range is [π²/8, 5π²/4].
+
+But wait, let me check if there's a mistake here. Because when θ is -π/2, which is x = -1, then arccos(-1) is π, and arcsin(-1) is -π/2. Therefore, f(-1) = π² + (-π/2)^2 = π² + π²/4 = 5π²/4. That's correct. When θ is π/2, x = 1, arccos(1) is 0, arcsin(1) is π/2, so f(1) = 0 + (π/2)^2 = π²/4. So that's correct. 
+
+But wait, is there a possibility that the maximum is at θ = -π/2 and the minimum at θ = π/4? So, the range is from π²/8 to 5π²/4. But let me check another value. For example, θ = -π/4. Then, x = sin(-π/4) = -√2/2. Then, arccos(-√2/2) is 3π/4, arcsin(-√2/2) is -π/4. Therefore, f(-√2/2) = (3π/4)^2 + (-π/4)^2 = 9π²/16 + π²/16 = 10π²/16 = 5π²/8. Which is between π²/8 and 5π²/4. So that seems okay.
+
+Alternatively, maybe I can check the derivative of f(x) to confirm. Let me try that approach as well. Maybe I can do that to verify.
+
+So, f(x) = (arccos x)^2 + (arcsin x)^2. Let me compute its derivative. 
+
+First, derivative of (arccos x)^2 is 2 arccos x * (-1 / sqrt(1 - x²)).
+
+Derivative of (arcsin x)^2 is 2 arcsin x * (1 / sqrt(1 - x²)).
+
+Therefore, f’(x) = 2 arccos x * (-1 / sqrt(1 - x²)) + 2 arcsin x * (1 / sqrt(1 - x²)).
+
+Factor out 2 / sqrt(1 - x²):
+
+f’(x) = [2 / sqrt(1 - x²)] [ - arccos x + arcsin x ].
+
+But from the identity arccos x + arcsin x = π/2, so arcsin x = π/2 - arccos x. Therefore, substituting that into the expression:
+
+- arccos x + arcsin x = - arccos x + π/2 - arccos x = π/2 - 2 arccos x.
+
+Alternatively, maybe I can write it as:
+
+- arccos x + arcsin x = - arccos x + (π/2 - arccos x) = π/2 - 2 arccos x.
+
+But maybe another way. Alternatively, since arcsin x = π/2 - arccos x, then:
+
+- arccos x + arcsin x = - arccos x + π/2 - arccos x = π/2 - 2 arccos x.
+
+Alternatively, maybe I can write it in terms of arcsin x. Let me see:
+
+But maybe it's easier to note that f’(x) = [2 / sqrt(1 - x²)] [ - arccos x + arcsin x ].
+
+But since arccos x + arcsin x = π/2, then arcsin x - arccos x = π/2 - 2 arccos x. Wait, but maybe I can write arcsin x - arccos x = - (arccos x - arcsin x). Alternatively, maybe I can express this as:
+
+Let me denote θ = arcsin x, so arccos x = π/2 - θ. Then, arcsin x - arccos x = θ - (π/2 - θ) = 2θ - π/2. Therefore, f’(x) = [2 / sqrt(1 - x²)] [2θ - π/2]. But θ = arcsin x, so f’(x) = [2 / sqrt(1 - x²)] [2 arcsin x - π/2].
+
+Alternatively, maybe I can write this as:
+
+f’(x) = [2 / sqrt(1 - x²)] [2 arcsin x - π/2].
+
+So, to find critical points, set f’(x) = 0. Since 2 / sqrt(1 - x²) is never zero (as sqrt(1 - x²) is positive for x in (-1, 1)), the critical points occur when 2 arcsin x - π/2 = 0. Therefore:
+
+2 arcsin x - π/2 = 0 => arcsin x = π/4 => x = sin(π/4) = √2/2.
+
+Therefore, the critical point is at x = √2/2. Which is the same as θ = π/4. Therefore, that's where the minimum occurs. Therefore, the function has critical point at x = √2/2, which is a minimum, since the parabola opens upwards. Therefore, the maximum occurs at the endpoints. Therefore, the range is indeed [π²/8, 5π²/4].
+
+But let me check the derivative's sign. For x < √2/2, say x = 0, arcsin 0 = 0, so 2*0 - π/2 = -π/2 < 0. Therefore, f’(0) is negative. Therefore, the function is decreasing at x = 0. For x > √2/2, say x = 1, arcsin 1 = π/2, so 2*(π/2) - π/2 = π/2 > 0. Therefore, f’(1) is positive. Wait, but x = 1 is an endpoint. However, for x approaching 1 from the left, arcsin x approaches π/2, so 2 arcsin x - π/2 approaches π/2, which is positive. Therefore, the derivative is positive for x > √2/2 and negative for x < √2/2. Therefore, the function is decreasing on [-1, √2/2] and increasing on [√2/2, 1]. Therefore, the minimum is at x = √2/2, and the maximum is at the endpoints. But wait, when x approaches -1, the function approaches 5π²/4, and at x = 1, it approaches π²/4. Therefore, the maximum is at x = -1, and the minimum at x = √2/2. Therefore, the range is [π²/8, 5π²/4].
+
+But wait, let me check the value at x = -1. When x approaches -1, arcsin x approaches -π/2, arccos x approaches π. Therefore, f(x) approaches π² + (π/2)^2 = π² + π²/4 = 5π²/4. Similarly, when x approaches 1, arcsin x approaches π/2, arccos x approaches 0, so f(x) approaches 0 + (π/2)^2 = π²/4. Therefore, the maximum is indeed at x = -1, and the minimum at x = √2/2. Therefore, the range is [π²/8, 5π²/4].
+
+But wait, hold on. Wait, when x is between -1 and 1, the function f(x) is continuous, so the maximum and minimum are achieved at the endpoints and critical points. Since we found that the critical point is a minimum, and the endpoints are the maximum. Therefore, the range is from π²/8 to 5π²/4.
+
+But let me check another value. For example, x = -√2/2. Then, as I calculated before, f(-√2/2) = 5π²/8. Which is between π²/8 and 5π²/4. So that seems okay. Also, if I take x = 0, f(0) = π²/4, which is between π²/8 and 5π²/4. So that seems okay.
+
+Alternatively, maybe I can check the value at x = -√2/2. Wait, 5π²/8 is approximately 5*(9.87)/8 ≈ 6.16, while π²/8 is about 1.23, and 5π²/4 is about 12.34. So, that seems to make sense.
+
+But let me think again. Is there a possibility that the maximum is at x = 1? But at x = 1, f(x) is π²/4 ≈ 2.467, which is less than 5π²/4 ≈ 12.34. So, no, the maximum is at x = -1.
+
+Therefore, the range is [π²/8, 5π²/4]. Therefore, the answer should be [π²/8, 5π²/4]. But let me check if there's any mistake in the calculation of the vertex.
+
+Earlier, I converted f(x) into a quadratic in θ, which was 2θ² - πθ + π²/4, and found the vertex at θ = π/4. Then, substituting θ = π/4 gives π²/8. Let me check that again:
+
+g(θ) = 2θ² - πθ + π²/4.
+
+At θ = π/4:
+
+g(π/4) = 2*(π/4)^2 - π*(π/4) + π²/4.
+
+Compute each term:
+
+First term: 2*(π²/16) = π²/8.
+
+Second term: -π*(π/4) = -π²/4.
+
+Third term: π²/4.
+
+Adding them: π²/8 - π²/4 + π²/4 = π²/8. Correct.
+
+So that's correct. Therefore, the minimum is π²/8, and the maximum is 5π²/4. Therefore, the range is [π²/8, 5π²/4].
+
+But wait, let me check if there's another way to approach this problem. Maybe using calculus on the original function. But we already did that. Alternatively, maybe using some trigonometric identities.
+
+Alternatively, since arccos x + arcsin x = π/2, then maybe we can write f(x) = (arccos x)^2 + (π/2 - arccos x)^2. Let me do that.
+
+Let me denote y = arccos x. Then, since arccos x is in [0, π], and arcsin x is in [-π/2, π/2]. But since y = arccos x, then arcsin x = π/2 - y. Therefore, f(x) = y² + (π/2 - y)^2. Which is the same as before. Expanding that:
+
+y² + π²/4 - π y + y² = 2y² - π y + π²/4. Which is the same quadratic as before. Therefore, the same analysis applies. So, since y ∈ [0, π], but earlier we had θ ∈ [-π/2, π/2], but since y = arccos x, which is in [0, π], but when we did the substitution earlier, we had θ = arcsin x, which is in [-π/2, π/2], but since arcsin x = π/2 - y, then π/2 - y ∈ [-π/2, π/2], so y ∈ [0, π]. Therefore, the quadratic in terms of y is 2y² - π y + π²/4, with y ∈ [0, π]. Wait, but earlier when we did substitution with θ, we had θ ∈ [-π/2, π/2], but here, y ∈ [0, π]. However, since arcsin x = π/2 - y, then when x is in [-1, 1], y is in [0, π], and θ is in [-π/2, π/2]. Therefore, the quadratic in terms of y is 2y² - π y + π²/4, with y ∈ [0, π]. Wait, but earlier when we did substitution with θ, we had θ ∈ [-π/2, π/2], but here, y ∈ [0, π]. However, since θ = π/2 - y, then θ ∈ [-π/2, π/2] corresponds to y ∈ [0, π]. Therefore, the quadratic in terms of y is the same as the quadratic in terms of θ. Therefore, if we analyze the quadratic in terms of y, which is 2y² - π y + π²/4, over y ∈ [0, π], then the vertex is at y = π/(4), since the vertex is at y = -b/(2a) = π/(4). Which is within [0, π]. Therefore, the minimum is at y = π/4, which is π²/8, and the maximum is at the endpoints. 
+
+So, compute g(0) = 2*0 - π*0 + π²/4 = π²/4.
+
+g(π) = 2π² - π² + π²/4 = π² + π²/4 = 5π²/4. Therefore, same result. Therefore, the maximum is 5π²/4 at y = π (which corresponds to x = -1), and the minimum is π²/8 at y = π/4 (which corresponds to x = √2/2). Therefore, same conclusion. Therefore, the range is [π²/8, 5π²/4].
+
+Therefore, I think this is correct. However, let me check if there's any possible mistake here. For example, maybe the quadratic in terms of y is different? Wait, no. Because when we write f(x) in terms of y, it's y² + (π/2 - y)^2, which is 2y² - π y + π²/4. So that's correct.
+
+Alternatively, maybe I can think of f(x) as a function of y, where y is arccos x, and then find its range. But that's the same as above.
+
+Alternatively, maybe I can check the value of f(x) at x = -√2/2. As before, that gives 5π²/8. Which is between π²/8 and 5π²/4. So that seems okay.
+
+Alternatively, maybe I can check the value of f(x) at x = -1, which is 5π²/4, and at x = 1, π²/4, and at x = 0, π²/4. Wait, but at x = 0, it's π²/4. So, the function is symmetric? Wait, not sure. Wait, if I plug in x = -a, then arcsin(-a) = -arcsin a, and arccos(-a) = π - arccos a. Therefore, f(-a) = (π - arccos a)^2 + (-arcsin a)^2 = (π - arccos a)^2 + (arcsin a)^2. But since arccos a = π/2 - arcsin a, so substituting that:
+
+(π - (π/2 - arcsin a))² + (arcsin a)^2 = (π/2 + arcsin a)^2 + (arcsin a)^2. Which is different from f(a). Therefore, the function is not symmetric. Therefore, the maximum is at x = -1, and the minimum at x = √2/2. Therefore, the range is [π²/8, 5π²/4].
+
+Alternatively, maybe I can check the value of f(x) at x = -√2/2. As before, that's 5π²/8. Which is between π²/8 and 5π²/4. So, that seems okay.
+
+Alternatively, maybe I can check the derivative again. Since we found that the critical point is at x = √2/2, and the function is decreasing before that and increasing after that. Therefore, the minimum is at √2/2, and the maximum is at the endpoints. But since at x = -1, the function is higher than at x = 1, so the maximum is at x = -1.
+
+Therefore, I think the conclusion is correct. Therefore, the range of f(x) is [π²/8, 5π²/4].
+
+But let me check if there's a way to write this in terms of π². For example, π²/8 is approximately 1.23, and 5π²/4 is approximately 12.34. But maybe there's a way to write the range as [π²/8, 5π²/4]. Therefore, the answer is [π²/8, 5π²/4].
+
+But let me check if there's any possible mistake in the calculation of the maximum. For example, when θ = -π/2, which is x = -1, then f(x) = (π)^2 + (-π/2)^2 = π² + π²/4 = 5π²/4. Correct. When θ = π/2, x = 1, f(x) = 0 + (π/2)^2 = π²/4. Correct. Therefore, the maximum is indeed 5π²/4 and the minimum is π²/8.
+
+Therefore, I think that is the correct range. Therefore, the answer is [π²/8, 5π²/4].
+
+But let me check if there's another approach. For example, using calculus, we found that the critical point is at x = √2/2, and the endpoints. Therefore, the maximum is at x = -1, and the minimum at x = √2/2. Therefore, the range is [π²/8, 5π²/4].
+
+Alternatively, maybe I can think of f(x) as a function of θ, where θ is arcsin x, so θ ∈ [-π/2, π/2], and f(x) = (π/2 - θ)^2 + θ^2. Which is the same as 2θ² - πθ + π²/4. Which is the same quadratic as before. Therefore, the same analysis applies.
+
+Alternatively, maybe I can think of this quadratic function in terms of θ. Since it's a quadratic function, we can also find its maximum and minimum. Since the parabola opens upwards, the minimum is at θ = π/4, and the maximum is at the endpoints. Therefore, the maximum is at θ = -π/2 or θ = π/2. Which gives 5π²/4 and π²/4. Therefore, the maximum is 5π²/4.
+
+Therefore, I think this is correct. Therefore, the range is [π²/8, 5π²/4].
+
+But let me check if there's a possible mistake in the substitution. For example, when I set θ = arcsin x, then arccos x = π/2 - θ. But arccos x is in [0, π], and θ is in [-π/2, π/2]. Therefore, π/2 - θ is in [π/2 - π/2, π/2 - (-π/2)] = [0, π], which is correct. Therefore, the substitution is valid.
+
+Therefore, I think the answer is correct. Therefore, the range of f(x) is [π²/8, 5π²/4].
+
+But let me check if there's a way to write this in another form. For example, π²/8 is (π/2)^2 / 2, but maybe that's not necessary. The problem says to put the answer in boxed notation. Therefore, the range is from π²/8 to 5π²/4. Therefore, the answer is [π²/8, 5π²/4].
+
+But let me check if there's a possible mistake in the calculation of the maximum. For example, when θ = -π/2, which is x = -1, then f(x) = (π)^2 + (-π/2)^2 = π² + π²/4 = 5π²/4. Correct. When θ = π/2, x = 1, f(x) = 0 + (π/2)^2 = π²/4. Correct. Therefore, the maximum is indeed 5π²/4 and the minimum is π²/8.
+
+Therefore, I think this is correct. Therefore, the range is [π²/8, 5π²/4].
+
+**Final Answer**
+The range of $ f(x) $ is \boxed{\left[ \dfrac{\pi^2}{8}, \dfrac{5\pi^2}{4} \right]}.
+</think>
+
+To determine the **range** of the function  
+$$
+f(x) = (\arccos x)^2 + (\arcsin x)^2,
+$$  
+we begin by leveraging a known identity between the inverse trigonometric functions:
+
+$$
+\arccos x + \arcsin x = \frac{\pi}{2}, \quad \text{for all } x \in [-1, 1].
+$$
+
+Let’s define $ \theta = \arcsin x $. Then, $ \arccos x = \frac{\pi}{2} - \theta $, and since $ x \in [-1, 1] $, we have $ \theta \in \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right] $.
+
+Substituting into the function, we get:
+
+$$
+f(x) = \left( \frac{\pi}{2} - \theta \right)^2 + \theta^2.
+$$
+
+Expanding this expression:
+
+$$
+f(x) = \left( \frac{\pi^2}{4} - \pi \theta + \theta^2 \right) + \theta^2 = 2\theta^2 - \pi \theta + \frac{\pi^2}{4}.
+$$
+
+So, the function becomes a quadratic in $ \theta $:
+
+$$
+f(\theta) = 2\theta^2 - \pi \theta + \frac{\pi^2}{4}, \quad \text{with } \theta \in \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right].
+$$
+
+---
+
+### Step 1: Analyze the Quadratic Function
+
+This is a **quadratic function** in $ \theta $, with:
+
+- Leading coefficient $ a = 2 > 0 $, so the parabola opens **upwards**.
+- The vertex occurs at:
+
+$$
+\theta = \frac{-b}{2a} = \frac{\pi}{4}.
+$$
+
+Since $ \frac{\pi}{4} \in \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right] $, the **minimum** of the function occurs at $ \theta = \frac{\pi}{4} $.
+
+---
+
+### Step 2: Evaluate the Function at the Vertex and Endpoints
+
+- **At $ \theta = \frac{\pi}{4} $:**
+
+$$
+f\left( \frac{\pi}{4} \right) = 2\left( \frac{\pi}{4} \right)^2 - \pi \left( \frac{\pi}{4} \right) + \frac{\pi^2}{4} = \frac{\pi^2}{8} - \frac{\pi^2}{4} + \frac{\pi^2}{4} = \frac{\pi^2}{8}.
+$$
+
+- **At $ \theta = -\frac{\pi}{2} $:**
+
+$$
+f\left( -\frac{\pi}{2} \right) = 2\left( -\frac{\pi}{2} \right)^2 - \pi \left( -\frac{\pi}{2} \right) + \frac{\pi^2}{4} = \frac{\pi^2}{2} + \frac{\pi^2}{2} + \frac{\pi^2}{4} = \frac{5\pi^2}{4}.
+$$
+
+- **At $ \theta = \frac{\pi}{2} $:**
+
+$$
+f\left( \frac{\pi}{2} \right) = 2\left( \frac{\pi}{2} \right)^2 - \pi \left( \frac{\pi}{2} \right) + \frac{\pi^2}{4} = \frac{\pi^2}{2} - \frac{\pi^2}{2} + \frac{\pi^2}{4} = \frac{\pi^2}{4}.
+$$
+
+---
+
+### Step 3: Determine the Range
+
+Since the function is continuous on the interval $ \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right] $, and the parabola opens upwards, the **minimum** occurs at the vertex $ \theta = \frac{\pi}{4} $, and the **maximum** occurs at the left endpoint $ \theta = -\frac{\pi}{2} $.
+
+Thus, the **range** of $ f(x) $ is:
+
+$$
+\left[ \frac{\pi^2}{8}, \frac{5\pi^2}{4} \right].
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{\left[ \dfrac{\pi^2}{8}, \dfrac{5\pi^2}{4} \right]}
+$$<|im_end|>

@@ -1,0 +1,97 @@
+
+Okay, let's try to figure out this archery class problem. So, the question is: Each week, between 30 and 50 students show up for an archery class run by Betty and Wilma. Usually, the students break up into groups of equal size for target practice. However, this week, Betty noticed that she couldn't break the students up into multiple groups of equal size. Then Wilma noticed that if she and Betty both joined the students in practicing, they still couldn't break the archers up into groups of equal size. We need to find out how many students showed up this week.
+
+First, let me parse the problem again. The number of students is between 30 and 50. Let's denote the number of students as N. Normally, they can be divided into groups of equal size, so N must be a number that can be divided into groups with equal size. That means N is not a prime number, right? Because if N is prime, you can't divide it into groups of equal size unless you have 1 group of N or N groups of 1. But since they usually break into groups of equal size, maybe they have more than one group. So, N should have divisors other than 1 and itself. Therefore, N is composite.
+
+But this week, Betty couldn't break the students into groups of equal size. So, N is not divisible by any number other than 1 and itself. Wait, but that would mean N is prime. But if N is prime, then adding Betty and Wilma (so N + 2) would make it N + 2. But then Wilma says that if she and Betty both joined the students, they still couldn't break up into groups of equal size. So, N + 2 is also prime?
+
+But hold on, the problem says that Betty noticed that she couldn't break the students up into multiple groups of equal size. So, maybe N is not divisible by any number between 2 and N-1? Which would mean N is prime. But then if N is prime, adding 2 (Betty and Wilma) would make N + 2. If N + 2 is also prime, then that would satisfy the second condition. But the problem says that the number of students is between 30 and 50. So, we need to find a prime number N between 30 and 50 such that N + 2 is also prime. Then N would be the answer.
+
+But wait, let me check if that's the correct interpretation. The problem says that Betty couldn't break the students into groups of equal size. So, N is not divisible by any number other than 1 and itself. Therefore, N is prime. Then, when Betty and Wilma join, the total number becomes N + 2. But Wilma says that even with Betty and Wilma joining, they still couldn't break up into groups of equal size. So, N + 2 is also not divisible by any number other than 1 and itself. Therefore, N + 2 is also prime. Therefore, we need a prime number N between 30 and 50 such that N + 2 is also prime. These are called twin primes. So, the answer would be one of the twin primes between 30 and 50.
+
+But let me check if that's the case. Let me list the primes between 30 and 50. The primes in that range are:
+
+31, 37, 41, 43, 47.
+
+Now, check which of these primes have their next number (N + 2) also prime.
+
+For N = 31: 31 + 2 = 33. 33 is not prime (divisible by 3 and 11). So, no.
+
+For N = 37: 37 + 2 = 39. 39 is not prime (divisible by 3 and 13). No.
+
+For N = 41: 41 + 2 = 43. 43 is prime. So, that's a twin prime pair (41, 43). So, if N is 41, then N + 2 is 43, which is also prime. So, that would satisfy the condition.
+
+For N = 43: 43 + 2 = 45. 45 is not prime (divisible by 5 and 9). So, no.
+
+For N = 47: 47 + 2 = 49. 49 is 7 squared, not prime. So, no.
+
+So, the only twin prime pair in that range is 41 and 43. Therefore, N is 41? But wait, the problem says that Betty and Wilma are part of the students? Wait, no. Wait, the problem says that Betty and Wilma are running the class, but the students are between 30 and 50. So, Betty and Wilma are not counted in the students? Wait, the problem says "between 30 and 50 students show up for an archery class run by Betty and Wilma." So, the students are N, between 30 and 50. Then, Betty noticed that she couldn't break the students up into multiple groups of equal size. So, N is not divisible by any number between 2 and N-1. Therefore, N is prime. Then, Wilma noticed that if she and Betty both joined the students in practicing, they still couldn't break up into groups of equal size. So, the total number is N + 2 (Betty and Wilma). Therefore, N + 2 is also not divisible by any number between 2 and N + 1. Therefore, N + 2 is also prime. Therefore, N is a prime number between 30 and 50, and N + 2 is also prime. Therefore, the answer is 41? Because 41 is prime, 43 is prime. But wait, the problem says that Betty and Wilma are part of the archers? Wait, the problem says "if she and Betty both joined the students in practicing, they still could not break the archers up into groups of equal size." So, the original number of students is N. Then, when Betty and Wilma join, the total number is N + 2. So, the archers are N + 2. Therefore, N + 2 cannot be divided into equal groups. Therefore, N + 2 is prime. Therefore, N is 41. But let me check if there are other possibilities.
+
+Wait, but maybe the problem is not that N is prime, but that N cannot be divided into groups of equal size. So, maybe N is not divisible by any number other than 1 and itself. So, N is prime. But maybe there's another way. Wait, but if N is composite, then it can be divided into groups. So, the fact that Betty couldn't break them into groups of equal size implies that N is prime. Then, adding Betty and Wilma (so N + 2) is also prime. Therefore, the answer is 41. But let me check if there are other numbers between 30 and 50 where N is prime and N + 2 is also prime. The only one is 41. But let me check again.
+
+Primes between 30 and 50:
+
+31, 37, 41, 43, 47.
+
+Check N + 2:
+
+31 + 2 = 33 (not prime)
+
+37 + 2 = 39 (not prime)
+
+41 + 2 = 43 (prime)
+
+43 + 2 = 45 (not prime)
+
+47 + 2 = 49 (not prime)
+
+So, only 41. Therefore, the answer is 41. But wait, let me think again. Is there another interpretation?
+
+Wait, maybe the problem is not that N is prime, but that N cannot be divided into groups of equal size. So, maybe N is not divisible by any number except 1 and itself. But maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. So, for example, if N is a prime number, then you can only have groups of size 1 or N. But maybe the problem is that they usually break into groups of equal size, so N is composite. But this week, Betty couldn't break them into groups of equal size. So, N is not composite. Therefore, N is prime. Then, when Betty and Wilma join, the total number is N + 2. So, if N is prime, then N + 2 is also prime. Therefore, the answer is 41. But let me check if there's another way.
+
+Alternatively, maybe the problem is that Betty couldn't break the students into groups of equal size, meaning that N is not divisible by any number other than 1 and itself. So, N is prime. Then, when Betty and Wilma join, the total number is N + 2. But maybe the problem is that even with Betty and Wilma joining, they still can't break into groups of equal size. So, N + 2 is also not divisible by any number other than 1 and itself. Therefore, N + 2 is prime. Therefore, N is a prime number between 30 and 50, and N + 2 is also prime. Therefore, the answer is 41. But let me check if there's another possible answer.
+
+Alternatively, maybe the problem is that Betty couldn't break the students into groups of equal size, but maybe the number of groups is not specified. So, maybe N is not a prime, but it's not divisible by any number except 1 and itself? Wait, that's the same as prime. So, maybe the answer is 41. But let me check if there's another way. Maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is more than one. So, N is not divisible by any number between 2 and N-1. Therefore, N is prime. Then, when Betty and Wilma join, the total is N + 2. So, N + 2 is also not divisible by any number between 2 and N + 1. Therefore, N + 2 is prime. Therefore, the answer is 41. So, 41 students.
+
+But let me check if there's another possible answer. For example, maybe N is not prime, but when you add 2, it's also not composite. Wait, but if N is composite, then it can be divided into groups. So, Betty couldn't break them into groups, so N is prime. Therefore, the answer is 41. But let me check if 41 is between 30 and 50. Yes, 41 is between 30 and 50. So, that's the answer.
+
+But wait, let me check if there's another possible number. For example, if N is 37. Then N + 2 is 39, which is not prime. If N is 31, N + 2 is 33, not prime. If N is 43, N + 2 is 45, not prime. If N is 47, N + 2 is 49, not prime. So, only 41. Therefore, the answer is 41.
+
+But let me think again. Maybe the problem is not that N is prime, but that N is not divisible by any number except 1 and itself. But maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. For example, maybe N is a prime number, but maybe there's another way. Wait, but if N is prime, then the only way to divide into groups is 1 group or N groups. So, if they usually break into groups of equal size, then N is composite. But this week, Betty couldn't break them into groups of equal size. Therefore, N is prime. Then, when Betty and Wilma join, the total is N + 2. So, if N + 2 is also prime, then they still can't break into groups. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. So, maybe N is not a prime, but it's not possible to divide into groups of equal size with some specific number of groups. Wait, but the problem says "usually the students break up into groups of equal size". So, that implies that normally, N is composite. But this week, Betty couldn't break them into groups of equal size. Therefore, N is prime. Then, when Betty and Wilma join, the total is N + 2. So, if N + 2 is also prime, then they still can't break into groups. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. So, maybe N is not divisible by any number except 1 and itself. Therefore, N is prime. Then, adding 2, N + 2 is also prime. Therefore, 41.
+
+But let me check if there's another possible answer. For example, if N is 37, which is prime. Then N + 2 is 39, which is not prime. So, that's not. If N is 43, N + 2 is 45, not prime. If N is 47, N + 2 is 49, not prime. If N is 31, N + 2 is 33, not prime. So, only 41. Therefore, the answer is 41.
+
+But let me check if there's another way. Maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. So, maybe N is not a prime, but it's not divisible by any number except 1 and itself. Wait, that's the same as prime. So, maybe the answer is 41.
+
+Alternatively, maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is more than one. So, N is not divisible by any number between 2 and N-1. Therefore, N is prime. Then, adding 2, N + 2 is also not divisible by any number between 2 and N + 1. Therefore, N + 2 is prime. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. So, maybe N is not a prime, but it's not possible to divide into groups of equal size with some number of groups. Wait, but if N is composite, then it can be divided into groups. For example, if N is 30, which is composite, you can divide into groups of 2, 3, 5, 6, etc. So, if N is composite, then Betty could break them into groups. Therefore, the fact that she couldn't implies that N is prime. Therefore, the answer is 41.
+
+But let me check if there's another possible answer. For example, if N is 41, then N + 2 is 43. Both primes. So, that works. But maybe there's another number where N is not prime, but when you add 2, it's also not prime? Wait, but the problem says that Betty couldn't break them into groups of equal size. So, N is prime. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. So, maybe N is not a prime, but it's not possible to divide into groups of equal size with some number of groups. Wait, but if N is composite, then it can be divided into groups. For example, if N is 30, you can divide into 2 groups of 15, 3 groups of 10, etc. Therefore, if N is composite, Betty could break them into groups. Therefore, the fact that she couldn't implies that N is prime. Therefore, the answer is 41.
+
+Therefore, I think the answer is 41. But let me check again. The problem says that between 30 and 50 students show up. So, N is between 30 and 50. So, 41 is in that range. Therefore, the answer is 41.
+
+But wait, let me check if there's another possible answer. For example, if N is 43. Then, N is prime. Then, N + 2 is 45, which is not prime. Therefore, that doesn't work. If N is 47, N + 2 is 49, not prime. If N is 37, N + 2 is 39, not prime. If N is 31, N + 2 is 33, not prime. Therefore, only 41. Therefore, the answer is 41.
+
+But let me think again. Maybe the problem is not that N is prime, but that N is not divisible by any number except 1 and itself. But maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. Wait, but if N is prime, then the only possible group sizes are 1 or N. So, if they usually break into groups of equal size, then N is composite. But this week, Betty couldn't break them into groups of equal size. Therefore, N is prime. Therefore, the answer is 41.
+
+Alternatively, maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. So, maybe N is not a prime, but it's not possible to divide into groups of equal size with some number of groups. Wait, but that's not possible. If N is composite, then it can be divided into groups. Therefore, the only way that Betty couldn't break them into groups is if N is prime. Therefore, the answer is 41.
+
+Therefore, I think the answer is 41. So, the number of students is 41.
+
+But let me check if there's another possible interpretation. Maybe "groups of equal size" refers to a specific size, not any size. But the problem says "usually the students break up into groups of equal size for target practice." So, maybe they usually break into groups of a certain size, but this week, they couldn't. But the problem doesn't specify the group size. Therefore, the problem is that N is not divisible by any number except 1 and itself. Therefore, N is prime. Then, adding 2, N + 2 is also prime. Therefore, 41.
+
+Alternatively, maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is not specified. So, for example, if N is 41, which is prime, then you can't divide into groups of equal size except 1 or 41. But if you add Betty and Wilma, making 43, which is also prime, so you can't divide into groups of equal size. Therefore, that works.
+
+Alternatively, maybe the problem is that Betty couldn't break them into groups of equal size, but maybe the number of groups is more than one. So, N is not divisible by any number between 2 and N-1. Therefore, N is prime. Therefore, the answer is 41.
+
+Therefore, I think the answer is 41. So, the number of students is 41.
+
+**Final Answer**
+The number of students who showed up to the archery class this week is \boxed{41}.

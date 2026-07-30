@@ -1,0 +1,69 @@
+
+
+To determine the **range** of the function  
+$$
+y = \log_2 (\sqrt{\sin x})
+$$  
+for $ 0^\circ < x < 180^\circ $, we begin by analyzing the behavior of the function within the given domain.
+
+---
+
+### Step 1: Simplify the Function
+
+We can simplify the expression using logarithmic identities:
+
+$$
+\log_2 (\sqrt{\sin x}) = \log_2 (\sin x)^{1/2} = \frac{1}{2} \log_2 (\sin x)
+$$
+
+So the function becomes:
+$$
+y = \frac{1}{2} \log_2 (\sin x)
+$$
+
+---
+
+### Step 2: Determine the Range of $\sin x$ in the Given Interval
+
+The sine function, $\sin x$, is **positive** for all $ x \in (0^\circ, 180^\circ) $, and it reaches its **maximum value of 1** at $ x = 90^\circ $, and approaches **0** as $ x \to 0^\circ $ or $ x \to 180^\circ $.
+
+Thus, the range of $\sin x$ in this interval is:
+$$
+(0, 1]
+$$
+
+---
+
+### Step 3: Analyze the Logarithmic Function
+
+Now consider the function:
+$$
+y = \frac{1}{2} \log_2 (\sin x)
+$$
+
+Since $\sin x \in (0, 1]$, the logarithm $\log_2 (\sin x)$ is defined and takes values in:
+$$
+(-\infty, 0]
+$$
+
+Multiplying this interval by $ \frac{1}{2} $, the range of $ y $ becomes:
+$$
+(-\infty, 0]
+$$
+
+---
+
+### Step 4: Confirm the Behavior at the Endpoints
+
+- As $ x \to 0^\circ $ or $ x \to 180^\circ $, $\sin x \to 0^+$, so $\log_2 (\sqrt{\sin x}) \to -\infty$.
+- At $ x = 90^\circ $, $\sin x = 1$, so $\log_2 (\sqrt{1}) = \log_2 (1) = 0$.
+
+Therefore, the function $ y $ can take **any real value less than or equal to 0**, and it is **continuous** over the interval $ (0^\circ, 180^\circ) $, which confirms that the range is all real numbers from $ -\infty $ to 0, inclusive.
+
+---
+
+### Final Answer
+
+$$
+\boxed{(-\infty, 0]}
+$$

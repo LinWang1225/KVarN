@@ -1,0 +1,59 @@
+
+
+To simplify the expression:
+
+$$
+(u + 4)(u - 1) - (u - 3)(u + 6)
+$$
+
+we begin by expanding each of the two binomial products using the distributive property (FOIL method).
+
+---
+
+### Step 1: Expand the first product
+
+$$
+(u + 4)(u - 1) = u \cdot u + u \cdot (-1) + 4 \cdot u + 4 \cdot (-1) = u^2 - u + 4u - 4 = u^2 + 3u - 4
+$$
+
+---
+
+### Step 2: Expand the second product
+
+$$
+(u - 3)(u + 6) = u \cdot u + u \cdot 6 + (-3) \cdot u + (-3) \cdot 6 = u^2 + 6u - 3u - 18 = u^2 + 3u - 18
+$$
+
+---
+
+### Step 3: Subtract the second expanded expression from the first
+
+$$
+(u^2 + 3u - 4) - (u^2 + 3u - 18)
+$$
+
+Distribute the negative sign across the second expression:
+
+$$
+u^2 + 3u - 4 - u^2 - 3u + 18
+$$
+
+Now combine like terms:
+
+- $u^2 - u^2 = 0$
+- $3u - 3u = 0$
+- $-4 + 18 = 14$
+
+So the entire expression simplifies to:
+
+$$
+\boxed{14}
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{14}
+$$

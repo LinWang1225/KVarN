@@ -1,0 +1,109 @@
+
+
+To simplify the expression:
+
+$$
+\sqrt{\dfrac{\dfrac{5}{\sqrt{80}}+\dfrac{\sqrt{845}}{9}+\sqrt{45}}{\sqrt{5}}}
+$$
+
+we proceed step by step, simplifying each term and combining them appropriately.
+
+---
+
+### Step 1: Simplify each term in the numerator
+
+#### Term 1: $\dfrac{5}{\sqrt{80}}$
+
+We simplify $\sqrt{80}$:
+
+$$
+\sqrt{80} = \sqrt{16 \cdot 5} = 4\sqrt{5}
+$$
+
+So:
+
+$$
+\dfrac{5}{\sqrt{80}} = \dfrac{5}{4\sqrt{5}} = \dfrac{5\sqrt{5}}{4 \cdot 5} = \dfrac{\sqrt{5}}{4}
+$$
+
+#### Term 2: $\dfrac{\sqrt{845}}{9}$
+
+Factor 845:
+
+$$
+845 = 5 \cdot 13^2 \Rightarrow \sqrt{845} = \sqrt{5 \cdot 13^2} = 13\sqrt{5}
+$$
+
+So:
+
+$$
+\dfrac{\sqrt{845}}{9} = \dfrac{13\sqrt{5}}{9}
+$$
+
+#### Term 3: $\sqrt{45}$
+
+$$
+\sqrt{45} = \sqrt{9 \cdot 5} = 3\sqrt{5}
+$$
+
+---
+
+### Step 2: Combine the simplified terms
+
+Now the numerator becomes:
+
+$$
+\dfrac{\sqrt{5}}{4} + \dfrac{13\sqrt{5}}{9} + 3\sqrt{5}
+$$
+
+We can factor out $\sqrt{5}$:
+
+$$
+\sqrt{5} \left( \dfrac{1}{4} + \dfrac{13}{9} + 3 \right)
+$$
+
+Now compute the sum inside the parentheses:
+
+Convert all terms to have a common denominator of 36:
+
+- $\dfrac{1}{4} = \dfrac{9}{36}$
+- $\dfrac{13}{9} = \dfrac{52}{36}$
+- $3 = \dfrac{108}{36}$
+
+Add them:
+
+$$
+\dfrac{9 + 52 + 108}{36} = \dfrac{169}{36}
+$$
+
+So the numerator becomes:
+
+$$
+\sqrt{5} \cdot \dfrac{169}{36}
+$$
+
+---
+
+### Step 3: Divide by $\sqrt{5}$
+
+Now divide the entire expression by $\sqrt{5}$:
+
+$$
+\dfrac{\sqrt{5} \cdot \dfrac{169}{36}}{\sqrt{5}} = \dfrac{169}{36}
+$$
+
+---
+
+### Step 4: Take the square root
+
+$$
+\sqrt{\dfrac{169}{36}} = \dfrac{\sqrt{169}}{\sqrt{36}} = \dfrac{13}{6}
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{\dfrac{13}{6}}
+$$

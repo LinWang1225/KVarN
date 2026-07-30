@@ -1,0 +1,121 @@
+
+
+To solve the equation:
+
+$$
+\sin \left( \tan^{-1} (x) + \cot^{-1} \left( \frac{1}{x} \right) \right) = \frac{1}{3},
+$$
+
+we begin by analyzing the expression inside the sine function.
+
+---
+
+### Step 1: Use Trigonometric Identities
+
+We use the identity:
+
+$$
+\tan^{-1}(x) + \cot^{-1}(x) = \frac{\pi}{2}, \quad \text{for } x > 0.
+$$
+
+However, in our case, the second term is $\cot^{-1}\left(\frac{1}{x}\right)$, not $\cot^{-1}(x)$. So we need to consider the relationship between $\tan^{-1}(x)$ and $\cot^{-1}\left(\frac{1}{x}\right)$.
+
+Let’s define:
+
+$$
+\theta = \tan^{-1}(x) \Rightarrow \tan(\theta) = x.
+$$
+
+Then:
+
+$$
+\cot^{-1}\left(\frac{1}{x}\right) = \cot^{-1}(\cot(\theta)) = \theta \quad \text{if } \theta \in (0, \frac{\pi}{2}) \text{ (i.e., } x > 0).
+$$
+
+But if $x < 0$, then $\theta = \tan^{-1}(x)$ is in $(- \frac{\pi}{2}, 0)$, and $\cot^{-1}\left(\frac{1}{x}\right)$ is in $(\frac{\pi}{2}, \pi)$. In this case, we can use the identity:
+
+$$
+\cot^{-1}(y) = \pi + \tan^{-1}(y) \quad \text{for } y < 0.
+$$
+
+So, for $x < 0$, we have:
+
+$$
+\cot^{-1}\left(\frac{1}{x}\right) = \pi + \tan^{-1}\left(\frac{1}{x}\right) = \pi + \theta.
+$$
+
+Therefore, the expression inside the sine becomes:
+
+- For $x > 0$: $\tan^{-1}(x) + \cot^{-1}\left(\frac{1}{x}\right) = 2 \tan^{-1}(x)$
+- For $x < 0$: $\tan^{-1}(x) + \cot^{-1}\left(\frac{1}{x}\right) = \pi + 2 \tan^{-1}(x)$
+
+---
+
+### Step 2: Use the Identity for Sine of Double Angle
+
+We use the identity:
+
+$$
+\sin(2\theta) = \frac{2 \tan(\theta)}{1 + \tan^2(\theta)}.
+$$
+
+Let’s define $\theta = \tan^{-1}(x)$, so $\tan(\theta) = x$. Then:
+
+$$
+\sin(2\theta) = \frac{2x}{1 + x^2}.
+$$
+
+So the equation becomes:
+
+- For $x > 0$: $\frac{2x}{1 + x^2} = \frac{1}{3}$
+- For $x < 0$: $\sin(\pi + 2\theta) = -\sin(2\theta) = \frac{1}{3} \Rightarrow \sin(2\theta) = -\frac{1}{3}$
+
+Thus, we solve:
+
+#### Case 1: $x > 0$
+
+$$
+\frac{2x}{1 + x^2} = \frac{1}{3} \Rightarrow 6x = 1 + x^2 \Rightarrow x^2 - 6x + 1 = 0
+$$
+
+Solving this quadratic:
+
+$$
+x = \frac{6 \pm \sqrt{36 - 4}}{2} = \frac{6 \pm \sqrt{32}}{2} = \frac{6 \pm 4\sqrt{2}}{2} = 3 \pm 2\sqrt{2}
+$$
+
+Both are positive, so both are valid.
+
+#### Case 2: $x < 0$
+
+$$
+\frac{2x}{1 + x^2} = -\frac{1}{3} \Rightarrow 6x = -1 - x^2 \Rightarrow x^2 + 6x + 1 = 0
+$$
+
+Solving this quadratic:
+
+$$
+x = \frac{-6 \pm \sqrt{36 - 4}}{2} = \frac{-6 \pm \sqrt{32}}{2} = \frac{-6 \pm 4\sqrt{2}}{2} = -3 \pm 2\sqrt{2}
+$$
+
+Both are negative, so both are valid.
+
+---
+
+### Step 3: Final Answer
+
+The four solutions are:
+
+$$
+x = 3 + 2\sqrt{2}, \quad x = 3 - 2\sqrt{2}, \quad x = -3 + 2\sqrt{2}, \quad x = -3 - 2\sqrt{2}
+$$
+
+All of these are distinct and valid, as they are all non-zero and satisfy the original equation.
+
+---
+
+### Final Answer
+
+$$
+\boxed{3 + 2\sqrt{2}}, \boxed{3 - 2\sqrt{2}}, \boxed{-3 + 2\sqrt{2}}, \boxed{-3 - 2\sqrt{2}}
+$$

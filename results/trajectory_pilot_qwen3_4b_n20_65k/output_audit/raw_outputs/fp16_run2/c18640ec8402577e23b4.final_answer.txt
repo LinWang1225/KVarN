@@ -1,0 +1,77 @@
+
+
+To determine the **range** of the function  
+$$
+y = \log_2 (\sqrt{\sin x})
+$$  
+for $ 0^\circ < x < 180^\circ $, we proceed by analyzing the behavior of the function step by step.
+
+---
+
+### Step 1: Domain Consideration
+
+The function involves a square root and a logarithm. The square root of a number is defined only when the number is non-negative, and the logarithm is defined only when its argument is positive. Therefore, we require:
+
+$$
+\sqrt{\sin x} > 0 \quad \Rightarrow \quad \sin x > 0
+$$
+
+In the interval $ 0^\circ < x < 180^\circ $, the sine function is **positive** for all $ x $ in that range, except at the endpoints where it is zero. Since the domain is open at both ends, we are safe to say that $ \sin x > 0 $ for all $ x \in (0^\circ, 180^\circ) $, and thus the function is **defined** on this interval.
+
+---
+
+### Step 2: Express the Function in a Simpler Form
+
+Using logarithmic identities, we can rewrite the function:
+
+$$
+y = \log_2 (\sqrt{\sin x}) = \log_2 ((\sin x)^{1/2}) = \frac{1}{2} \log_2 (\sin x)
+$$
+
+So, the function becomes:
+
+$$
+y = \frac{1}{2} \log_2 (\sin x)
+$$
+
+---
+
+### Step 3: Analyze the Range of $ \sin x $
+
+In the interval $ 0^\circ < x < 180^\circ $, the sine function takes values in the open interval $ (0, 1] $, since:
+
+- $ \sin x = 0 $ at $ x = 0^\circ $ and $ x = 180^\circ $, but these are **not included** in the domain.
+- $ \sin x = 1 $ at $ x = 90^\circ $, which is within the domain.
+
+Thus, $ \sin x \in (0, 1] $, and so:
+
+$$
+\log_2 (\sin x) \in (-\infty, 0]
+$$
+
+Multiplying this by $ \frac{1}{2} $, we get:
+
+$$
+y = \frac{1}{2} \log_2 (\sin x) \in (-\infty, 0]
+$$
+
+---
+
+### Step 4: Confirm Continuity and Attainability
+
+The function $ \sin x $ is continuous on $ (0^\circ, 180^\circ) $, and so is $ \log_2 (\sin x) $, since it is a composition of continuous functions. Therefore, $ y = \frac{1}{2} \log_2 (\sin x) $ is also continuous on this interval.
+
+- As $ \sin x \to 0^+ $, $ \log_2 (\sin x) \to -\infty $, so $ y \to -\infty $.
+- At $ x = 90^\circ $, $ \sin x = 1 $, so $ y = \frac{1}{2} \log_2 (1) = 0 $.
+
+Thus, the function **attains** all values from $ -\infty $ up to and including $ 0 $.
+
+---
+
+### Final Conclusion
+
+The function $ y = \log_2 (\sqrt{\sin x}) $ is defined and continuous on $ (0^\circ, 180^\circ) $, and its range is all real numbers less than or equal to 0.
+
+$$
+\boxed{(-\infty, 0]}
+$$

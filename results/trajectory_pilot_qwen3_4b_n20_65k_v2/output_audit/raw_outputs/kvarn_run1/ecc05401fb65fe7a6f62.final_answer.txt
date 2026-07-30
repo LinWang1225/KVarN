@@ -1,0 +1,89 @@
+
+
+To determine the **range** of the function  
+$$
+f(x) = (\arccos x)^2 + (\arcsin x)^2,
+$$  
+we begin by leveraging a key identity from trigonometry:
+
+$$
+\arccos x + \arcsin x = \frac{\pi}{2}, \quad \text{for all } x \in [-1, 1].
+$$
+
+This identity allows us to express $ f(x) $ in terms of a single inverse trigonometric function. Let us define:
+
+$$
+y = \arcsin x \Rightarrow \arccos x = \frac{\pi}{2} - y.
+$$
+
+Substituting into $ f(x) $, we get:
+
+$$
+f(x) = \left( \frac{\pi}{2} - y \right)^2 + y^2.
+$$
+
+Expanding this expression:
+
+$$
+f(x) = \left( \frac{\pi^2}{4} - \pi y + y^2 \right) + y^2 = 2y^2 - \pi y + \frac{\pi^2}{4}.
+$$
+
+Now, since $ y = \arcsin x $, and the domain of $ \arcsin x $ is $ [-\frac{\pi}{2}, \frac{\pi}{2}] $, we are looking to find the **range** of the quadratic function:
+
+$$
+g(y) = 2y^2 - \pi y + \frac{\pi^2}{4}, \quad \text{for } y \in \left[ -\frac{\pi}{2}, \frac{\pi}{2} \right].
+$$
+
+---
+
+### Step 1: Analyze the Quadratic Function
+
+This is a **quadratic function** in $ y $, with:
+
+- Leading coefficient $ a = 2 > 0 $, so the parabola opens **upwards**.
+- Vertex at $ y = \frac{-b}{2a} = \frac{\pi}{4} $, which lies within the interval $ [-\frac{\pi}{2}, \frac{\pi}{2}] $.
+
+Since the parabola opens upwards, the **minimum** value occurs at the vertex, and the **maximum** occurs at one of the endpoints of the interval.
+
+---
+
+### Step 2: Evaluate the Function at Key Points
+
+- **At the vertex $ y = \frac{\pi}{4} $:**
+
+$$
+g\left( \frac{\pi}{4} \right) = 2\left( \frac{\pi}{4} \right)^2 - \pi \left( \frac{\pi}{4} \right) + \frac{\pi^2}{4}
+= \frac{\pi^2}{8} - \frac{\pi^2}{4} + \frac{\pi^2}{4} = \frac{\pi^2}{8}.
+$$
+
+- **At $ y = -\frac{\pi}{2} $:**
+
+$$
+g\left( -\frac{\pi}{2} \right) = 2\left( \frac{\pi^2}{4} \right) - \pi \left( -\frac{\pi}{2} \right) + \frac{\pi^2}{4}
+= \frac{\pi^2}{2} + \frac{\pi^2}{2} + \frac{\pi^2}{4} = \frac{5\pi^2}{4}.
+$$
+
+- **At $ y = \frac{\pi}{2} $:**
+
+$$
+g\left( \frac{\pi}{2} \right) = 2\left( \frac{\pi^2}{4} \right) - \pi \left( \frac{\pi}{2} \right) + \frac{\pi^2}{4}
+= \frac{\pi^2}{2} - \frac{\pi^2}{2} + \frac{\pi^2}{4} = \frac{\pi^2}{4}.
+$$
+
+---
+
+### Step 3: Conclude the Range
+
+Since the function is continuous on the interval $ [-\frac{\pi}{2}, \frac{\pi}{2}] $, and the minimum occurs at $ y = \frac{\pi}{4} $, while the maximum occurs at $ y = -\frac{\pi}{2} $, the **range** of $ f(x) $ is:
+
+$$
+\left[ \frac{\pi^2}{8}, \frac{5\pi^2}{4} \right].
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{\left[ \dfrac{\pi^2}{8}, \dfrac{5\pi^2}{4} \right]}
+$$

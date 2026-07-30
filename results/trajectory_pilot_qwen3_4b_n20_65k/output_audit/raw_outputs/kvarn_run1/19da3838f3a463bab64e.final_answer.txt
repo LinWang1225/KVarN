@@ -1,0 +1,80 @@
+
+
+To find the value of the expression $ x^3 - 2x + 1 $, given that $ x^2 - x - 1 = 0 $, we can use the original equation to reduce higher powers of $ x $ to lower-degree expressions.
+
+---
+
+### Step 1: Use the original equation to express $ x^2 $
+
+From the given equation:
+
+$$
+x^2 - x - 1 = 0 \quad \Rightarrow \quad x^2 = x + 1
+$$
+
+This is a key identity that allows us to express higher powers of $ x $ in terms of $ x $ and constants.
+
+---
+
+### Step 2: Express $ x^3 $ in terms of $ x $
+
+Multiply both sides of the equation $ x^2 = x + 1 $ by $ x $:
+
+$$
+x^3 = x \cdot x^2 = x(x + 1) = x^2 + x
+$$
+
+Now substitute $ x^2 = x + 1 $ into the expression:
+
+$$
+x^3 = (x + 1) + x = 2x + 1
+$$
+
+---
+
+### Step 3: Substitute into the target expression
+
+We are asked to evaluate:
+
+$$
+x^3 - 2x + 1
+$$
+
+Substitute $ x^3 = 2x + 1 $ into the expression:
+
+$$
+x^3 - 2x + 1 = (2x + 1) - 2x + 1 = 2x + 1 - 2x + 1 = 2
+$$
+
+---
+
+### Step 4: Verification via polynomial division
+
+We can also verify this by performing polynomial division of $ x^3 - 2x + 1 $ by $ x^2 - x - 1 $, which is the original equation.
+
+Divide $ x^3 - 2x + 1 $ by $ x^2 - x - 1 $:
+
+- First term: $ x^3 \div x^2 = x $
+- Multiply $ x $ by $ x^2 - x - 1 $: $ x^3 - x^2 - x $
+- Subtract from the original polynomial:  
+  $$
+  (x^3 - 2x + 1) - (x^3 - x^2 - x) = x^2 - x + 1
+  $$
+- Now divide $ x^2 - x + 1 $ by $ x^2 - x - 1 $:  
+  $$
+  (x^2 - x + 1) - (x^2 - x - 1) = 2
+  $$
+
+So the remainder is 2, and since $ x^2 - x - 1 = 0 $, the value of the expression is:
+
+$$
+x^3 - 2x + 1 = 2
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{2}
+$$

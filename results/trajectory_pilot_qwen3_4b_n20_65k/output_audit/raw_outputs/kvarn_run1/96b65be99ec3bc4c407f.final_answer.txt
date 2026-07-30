@@ -1,0 +1,111 @@
+
+
+To solve the equation:
+
+$$
+\frac{C}{x-3} + \frac{D}{x+8} = \frac{4x - 23}{x^2 + 5x - 24}
+$$
+
+we begin by factoring the denominator on the right-hand side:
+
+$$
+x^2 + 5x - 24 = (x + 8)(x - 3)
+$$
+
+This allows us to rewrite the equation as:
+
+$$
+\frac{C}{x - 3} + \frac{D}{x + 8} = \frac{4x - 23}{(x + 8)(x - 3)}
+$$
+
+---
+
+### Step 1: Combine the Left-Hand Side
+
+To combine the two fractions on the left, we find a common denominator:
+
+$$
+\frac{C(x + 8) + D(x - 3)}{(x - 3)(x + 8)} = \frac{4x - 23}{(x + 8)(x - 3)}
+$$
+
+Since the denominators are the same, we equate the numerators:
+
+$$
+C(x + 8) + D(x - 3) = 4x - 23
+$$
+
+---
+
+### Step 2: Expand and Group Terms
+
+Expanding the left-hand side:
+
+$$
+Cx + 8C + Dx - 3D = (C + D)x + (8C - 3D)
+$$
+
+So, we have:
+
+$$
+(C + D)x + (8C - 3D) = 4x - 23
+$$
+
+Now, equating coefficients of like terms:
+
+- Coefficient of $ x $: $ C + D = 4 $
+- Constant term: $ 8C - 3D = -23 $
+
+---
+
+### Step 3: Solve the System of Equations
+
+We now solve the system:
+
+1. $ C + D = 4 $
+2. $ 8C - 3D = -23 $
+
+From the first equation, solve for $ C $:
+
+$$
+C = 4 - D
+$$
+
+Substitute into the second equation:
+
+$$
+8(4 - D) - 3D = -23
+$$
+
+$$
+32 - 8D - 3D = -23
+$$
+
+$$
+32 - 11D = -23
+$$
+
+$$
+-11D = -55 \Rightarrow D = 5
+$$
+
+Now substitute back to find $ C $:
+
+$$
+C = 4 - D = 4 - 5 = -1
+$$
+
+---
+
+### Step 4: Compute the Product $ CD $
+
+$$
+CD = (-1)(5) = -5
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{-5}
+$$

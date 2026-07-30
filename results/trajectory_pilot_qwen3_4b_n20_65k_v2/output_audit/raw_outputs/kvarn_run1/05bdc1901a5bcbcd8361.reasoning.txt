@@ -1,0 +1,41 @@
+
+Okay, so I need to find all values of p that satisfy both inequalities: 0 ≥ 54p - 144 and 0 > 12 - 20p. Hmm, let me start by solving each inequality separately and then find their intersection. 
+
+First, let me tackle the first inequality: 0 ≥ 54p - 144. I think I can rewrite this as 54p - 144 ≤ 0. To solve for p, I need to isolate it. So, adding 144 to both sides would give me 54p ≤ 144. Then, dividing both sides by 54... Let me check that. 
+
+Yes, if I divide both sides by 54, I get p ≤ 144/54. Let me simplify that fraction. Both numerator and denominator are divisible by 18. 144 divided by 18 is 8, and 54 divided by 18 is 3. Wait, no, 18 times 8 is 144? Wait, 18*8 is 144? Let me check: 18*10 is 180, so 18*8 is 144. Yes, that's right. And 54 divided by 18 is 3. So 144/54 simplifies to 8/3. Wait, but 144 divided by 54 is actually 8/3? Let me confirm. 54 times 2 is 108, 54 times 2.666... is 144? Let me do decimal division. 144 divided by 54. Well, 54 goes into 144 two times (54*2=108), subtract 108 from 144, you get 36. Then bring down a zero, so 360 divided by 54 is 6.666...? Wait, no, 54*6 is 324, so 360-324 is 36. So it's 2.666..., which is 2 and 2/3, which is 8/3. Yes, because 8 divided by 3 is 2.666... So p ≤ 8/3. Okay, that seems right.
+
+Now the second inequality: 0 > 12 - 20p. Let me rewrite that as 12 - 20p < 0. To solve for p, I can subtract 12 from both sides: -20p < -12. Then, divide both sides by -20. Wait, but when I divide by a negative number, I have to reverse the inequality sign. So dividing both sides by -20 gives p > (-12)/(-20), which simplifies to p > 12/20. Simplifying that fraction, divide numerator and denominator by 4: 12/20 = 3/5. So p > 3/5. 
+
+So now I have two inequalities: p ≤ 8/3 and p > 3/5. Therefore, the solution is all p such that 3/5 < p ≤ 8/3. But I need to express this in interval notation. Let me recall that interval notation uses parentheses for open intervals and brackets for closed intervals. Since p is greater than 3/5, that's an open interval at 3/5, and less than or equal to 8/3, which is a closed interval at 8/3. So the interval would be (3/5, 8/3]. 
+
+But wait, let me check my steps again to make sure I didn't make a mistake. Starting with the first inequality: 0 ≥ 54p - 144. Adding 144 to both sides: 144 ≥ 54p. Then dividing by 54: 144/54 ≥ p, which is p ≤ 144/54. Simplify 144/54. Let me divide numerator and denominator by 6: 144 ÷ 6 = 24, 54 ÷ 6 = 9. So 24/9. Then divide numerator and denominator by 3: 8/3. Yep, that's correct. So p ≤ 8/3.
+
+Second inequality: 0 > 12 - 20p. Subtract 12: -12 > -20p. Wait, hold on, maybe I should have done that step differently. Let me check again. Original inequality: 0 > 12 - 20p. Subtract 12 from both sides: -12 > -20p. Then divide both sides by -20, which reverses the inequality: (-12)/(-20) < p. Which is 12/20 < p, simplifying to 3/5 < p. So that's the same as before. So p > 3/5. So that's correct.
+
+Therefore, combining both inequalities, p must be greater than 3/5 and less than or equal to 8/3. So in interval notation, that's (3/5, 8/3]. 
+
+But let me check if there's any possible mistake here. For example, maybe I messed up the direction of the inequality when dividing by a negative number? Let me verify with numbers. Let's take p = 3/5. If I plug into the second inequality: 0 > 12 - 20*(3/5). Let's compute 20*(3/5) = 12. So 12 - 12 = 0. Therefore, 0 > 0? No, that's false. So p must be greater than 3/5, not equal to 3/5. So the lower bound is open. Then, for the upper bound, let's check p = 8/3. Plug into the first inequality: 0 ≥ 54*(8/3) - 144. Let's compute 54*(8/3). 54 divided by 3 is 18, so 18*8 = 144. Then 144 - 144 = 0. So 0 ≥ 0 is true. So p = 8/3 is included. Therefore, the upper bound is closed. 
+
+So the interval is indeed (3/5, 8/3]. Let me just check if 3/5 is approximately 0.6 and 8/3 is approximately 2.666..., so the interval is from 0.6 to 2.666..., with 0.6 not included and 2.666... included. 
+
+But maybe I should write the fractions in simplest form. 3/5 is already simplified, and 8/3 is also simplified. So the answer is (3/5, 8/3]. 
+
+Wait, but the problem says "reducing any fractions in your answer." So maybe I need to check if 3/5 and 8/3 can be reduced further? 3 and 5 have no common factors besides 1, so 3/5 is fine. 8 and 3 also have no common factors, so 8/3 is already reduced. So that's correct. 
+
+Alternatively, maybe I can write the interval as (0.6, 2.666...], but the question says to express in interval notation and reduce fractions. So fractions are preferred. Therefore, (3/5, 8/3]. 
+
+Is there any other possible mistake? Let me check the second inequality again. Starting with 0 > 12 - 20p. Let me solve it another way. Maybe adding 20p to both sides and subtracting 0 from both sides. So 20p > 12 - 0? Wait, no. Let me do that. 
+
+Original inequality: 0 > 12 - 20p. Let me add 20p to both sides: 20p > 12. Then subtract 12 from both sides: 20p - 12 > 0. Wait, that's not helpful. Alternatively, maybe adding 20p to both sides: 20p > 12. Then divide both sides by 20: p > 12/20 = 3/5. So that's the same result. So that's correct. 
+
+Alternatively, maybe I can think of the second inequality as 12 - 20p < 0. Then, 12 < 20p. Then divide both sides by 20: 12/20 < p, which is 3/5 < p. Yep, same thing. So that's correct. 
+
+Therefore, combining both inequalities, the solution is all real numbers p where p is greater than 3/5 and less than or equal to 8/3. So in interval notation, that's (3/5, 8/3]. 
+
+I think that's the answer. Let me just check if there's any overlap or something. For example, if 3/5 is less than 8/3? Let me compute 3/5 is 0.6, 8/3 is approximately 2.666..., so yes, 0.6 is less than 2.666..., so the interval is valid. 
+
+Therefore, the answer is (3/5, 8/3].
+
+**Final Answer**
+The solution in interval notation is \boxed{\left( \dfrac{3}{5}, \dfrac{8}{3} \right]}.

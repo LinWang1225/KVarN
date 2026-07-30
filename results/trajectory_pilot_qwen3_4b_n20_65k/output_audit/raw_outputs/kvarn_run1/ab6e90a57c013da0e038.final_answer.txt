@@ -1,0 +1,77 @@
+
+
+To solve the equation:
+
+$$
+10^x - 10 = 9990
+$$
+
+we begin by isolating the exponential term. Add 10 to both sides:
+
+$$
+10^x = 9990 + 10 = 10000
+$$
+
+Now, we have:
+
+$$
+10^x = 10000
+$$
+
+We recognize that $10000$ is a power of 10. Specifically:
+
+$$
+10000 = 10^4
+$$
+
+Therefore, the equation becomes:
+
+$$
+10^x = 10^4
+$$
+
+Since the bases are the same, the exponents must be equal:
+
+$$
+x = 4
+$$
+
+---
+
+To verify, substitute $x = 4$ back into the original equation:
+
+$$
+10^4 - 10 = 10000 - 10 = 9990
+$$
+
+This matches the right-hand side of the equation, confirming the solution is correct.
+
+---
+
+Alternatively, we can solve using logarithms. Taking the base-10 logarithm of both sides of $10^x = 10000$:
+
+$$
+\log_{10}(10^x) = \log_{10}(10000)
+$$
+
+$$
+x = \log_{10}(10000)
+$$
+
+Since $10000 = 10^4$, we have:
+
+$$
+x = \log_{10}(10^4) = 4
+$$
+
+---
+
+Another method: express $10000$ as $10^4$, and since the exponential function $10^x$ is strictly increasing and one-to-one, there is only one solution to the equation $10^x = 10000$, which is $x = 4$.
+
+---
+
+Thus, the value of $x$ is:
+
+$$
+\boxed{4}
+$$

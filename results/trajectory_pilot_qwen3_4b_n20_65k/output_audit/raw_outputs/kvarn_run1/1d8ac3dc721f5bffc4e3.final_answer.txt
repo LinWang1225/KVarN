@@ -1,0 +1,45 @@
+
+
+To solve the problem, we need to determine the number of students, $ N $, who attended the archery class this week, given the following conditions:
+
+1. **The number of students is between 30 and 50.**
+2. **Normally, the students can be divided into groups of equal size.** This implies that $ N $ is **not prime** (since a prime number cannot be divided into equal groups of size greater than 1 without leaving a remainder).
+3. **This week, Betty noticed that she could not break the students into groups of equal size.** This suggests that $ N $ is **prime** (since only prime numbers cannot be divided into equal groups of size greater than 1).
+4. **When Betty and Wilma joined the students, the total number of archers was still not divisible into equal groups.** This means that $ N + 2 $ is also **prime**.
+
+---
+
+### Step-by-Step Analysis
+
+We are looking for a **prime number $ N $** between 30 and 50 such that $ N + 2 $ is also **prime**. These are known as **twin primes**.
+
+Let’s list the prime numbers between 30 and 50:
+
+- 31
+- 37
+- 41
+- 43
+- 47
+
+Now, check which of these primes, when 2 is added, result in another prime:
+
+- $ 31 + 2 = 33 $ → Not prime (divisible by 3 and 11)
+- $ 37 + 2 = 39 $ → Not prime (divisible by 3 and 13)
+- $ 41 + 2 = 43 $ → **Prime**
+- $ 43 + 2 = 45 $ → Not prime (divisible by 5 and 9)
+- $ 47 + 2 = 49 $ → Not prime (7²)
+
+Only **41** and **43** are twin primes in this range. Therefore, the only value of $ N $ that satisfies both conditions is:
+
+- $ N = 41 $ (prime)
+- $ N + 2 = 43 $ (also prime)
+
+This means that **41 students** showed up this week, and even when Betty and Wilma joined, the total of 43 archers still couldn't be divided into equal groups.
+
+---
+
+### Final Answer
+
+$$
+\boxed{41}
+$$

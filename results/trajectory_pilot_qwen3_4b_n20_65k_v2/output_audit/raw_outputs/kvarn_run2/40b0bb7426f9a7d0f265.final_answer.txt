@@ -1,0 +1,82 @@
+
+
+To find the maximum value of the expression  
+$$
+|1 + z| + |1 - z + z^2|
+$$  
+given that $ |z| = 1 $, we begin by expressing $ z $ in terms of its polar form. Since $ |z| = 1 $, we can write  
+$$
+z = e^{i\theta} = \cos\theta + i\sin\theta
+$$  
+for some real angle $ \theta \in [0, 2\pi) $.
+
+---
+
+### Step 1: Simplify the First Term
+
+$$
+|1 + z| = |1 + \cos\theta + i\sin\theta| = \sqrt{(1 + \cos\theta)^2 + \sin^2\theta}
+$$  
+Expanding and simplifying:
+$$
+(1 + \cos\theta)^2 + \sin^2\theta = 1 + 2\cos\theta + \cos^2\theta + \sin^2\theta = 2 + 2\cos\theta
+$$  
+So:
+$$
+|1 + z| = \sqrt{2 + 2\cos\theta} = 2|\cos(\theta/2)|
+$$
+
+---
+
+### Step 2: Simplify the Second Term
+
+$$
+|1 - z + z^2| = |1 - e^{i\theta} + e^{i2\theta}|
+$$  
+We can simplify this using the identity $ |z^2 - z + 1| = |2\cos\theta - 1| $, which is derived from the algebraic manipulation of the expression and the fact that $ |z| = 1 $, so $ \overline{z} = 1/z $.
+
+Thus, the expression becomes:
+$$
+|1 + z| + |1 - z + z^2| = 2|\cos(\theta/2)| + |2\cos\theta - 1|
+$$
+
+---
+
+### Step 3: Maximize the Function
+
+Let:
+$$
+f(\theta) = 2|\cos(\theta/2)| + |2\cos\theta - 1|
+$$  
+We analyze this function over $ \theta \in [0, 2\pi) $, considering the behavior of the absolute values.
+
+We split the domain into intervals based on the sign of $ \cos(\theta/2) $ and $ 2\cos\theta - 1 $, and find the maximum value of $ f(\theta) $ in each interval.
+
+After careful analysis and computation (as detailed in the thought process), we find that the maximum occurs at two critical points:
+
+- $ \theta = 2\arccos(1/4) $
+- $ \theta = 2\pi - 2\arccos(1/4) $
+
+At these points, we compute:
+$$
+\cos(\theta/2) = \frac{1}{4}, \quad \cos\theta = -\frac{7}{8}
+$$  
+Then:
+$$
+|1 + z| = 2|\cos(\theta/2)| = 2 \cdot \frac{1}{4} = \frac{1}{2}
+$$  
+$$
+|1 - z + z^2| = |2\cos\theta - 1| = \left|2 \cdot \left(-\frac{7}{8}\right) - 1\right| = \left|-\frac{14}{8} - \frac{8}{8}\right| = \left|-\frac{22}{8}\right| = \frac{11}{4}
+$$  
+So the total is:
+$$
+f(\theta) = \frac{1}{2} + \frac{11}{4} = \frac{13}{4}
+$$
+
+---
+
+### Final Answer
+
+$$
+\boxed{\dfrac{13}{4}}
+$$

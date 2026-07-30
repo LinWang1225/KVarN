@@ -1,0 +1,68 @@
+
+
+To simplify the expression  
+$$
+\frac{4 + 6a}{5} - \frac{1 + 3a}{4}
+$$  
+into a single fraction, we follow these steps:
+
+---
+
+### **Step 1: Find the Least Common Denominator (LCD)**
+
+The denominators are 5 and 4. The least common denominator is the least common multiple (LCM) of 5 and 4, which is **20**.
+
+---
+
+### **Step 2: Rewrite Each Fraction with the LCD**
+
+We rewrite each fraction so that the denominator is 20:
+
+- For $\frac{4 + 6a}{5}$, multiply numerator and denominator by 4:
+  $$
+  \frac{4(4 + 6a)}{20} = \frac{16 + 24a}{20}
+  $$
+
+- For $\frac{1 + 3a}{4}$, multiply numerator and denominator by 5:
+  $$
+  \frac{5(1 + 3a)}{20} = \frac{5 + 15a}{20}
+  $$
+
+---
+
+### **Step 3: Subtract the Two Fractions**
+
+Now that both fractions have the same denominator, we subtract the numerators:
+$$
+\frac{16 + 24a}{20} - \frac{5 + 15a}{20} = \frac{(16 + 24a) - (5 + 15a)}{20}
+$$
+
+Simplify the numerator:
+$$
+16 - 5 = 11,\quad 24a - 15a = 9a
+$$
+
+So the combined numerator is:
+$$
+11 + 9a
+$$
+
+---
+
+### **Step 4: Write the Final Answer**
+
+The expression as a single fraction is:
+$$
+\frac{11 + 9a}{20}
+$$
+
+Alternatively, it can be written as:
+$$
+\frac{9a + 11}{20}
+$$
+
+Both forms are algebraically equivalent, but typically, the standard form is to write the variable term first, so:
+
+$$
+\boxed{\dfrac{9a + 11}{20}}
+$$

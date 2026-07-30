@@ -1,0 +1,232 @@
+<think>
+Okay, so I need to find the range of the function y = log base 2 of the square root of sin x, where x is between 0 degrees and 180 degrees. Let me start by recalling some basic properties of logarithmic functions and trigonometric functions.
+
+First, the logarithm function log₂(z) is defined only when z is positive. So, the argument inside the logarithm here is √(sin x). Therefore, √(sin x) must be greater than 0. Since the square root of a number is always non-negative, but we need it to be positive, that means sin x must be greater than 0. 
+
+Now, sin x is positive in which intervals? Well, between 0° and 180°, the sine function is positive from 0° to 180°, except at the endpoints where it's zero. But since the domain is 0° < x < 180°, sin x is positive throughout this interval. So, √(sin x) is defined and positive for all x in that interval. Good, so the function is defined for all x in (0°, 180°).
+
+Next, I need to figure out the range of y. To do that, I should first understand the range of sin x in the given interval. The sine function reaches its maximum value of 1 at 90°, and it decreases to 0 at both 0° and 180°. Therefore, sin x is in the interval (0, 1] for 0° < x < 180°. 
+
+But since we have √(sin x), let me think about that. The square root function is increasing, so if sin x is between 0 and 1, then √(sin x) will be between 0 and 1 as well. Wait, but actually, when sin x approaches 0, √(sin x) approaches 0, and when sin x is 1, √(sin x) is 1. Therefore, √(sin x) is in (0, 1].
+
+Now, the function y is log base 2 of that. So, log₂(z) where z is in (0, 1]. Let me recall that log₂(z) is a decreasing function. That means as z increases, log₂(z) decreases. So, when z is 1, log₂(1) is 0. When z approaches 0 from the right, log₂(z) approaches negative infinity. Therefore, the range of log₂(√(sin x)) should be from negative infinity up to 0. But wait, let me check that again.
+
+Wait, but hold on. Let me write down the steps more carefully.
+
+First, let me express the function in terms of exponents to make it easier. Since log₂(√(sin x)) can be rewritten using logarithm properties. Remember that log_b(a^c) = c * log_b(a). So, log₂(√(sin x)) is equal to log₂((sin x)^(1/2)) which is (1/2) * log₂(sin x). Therefore, y = (1/2) * log₂(sin x). 
+
+So, if I can find the range of log₂(sin x), then multiplying by 1/2 will scale it. But maybe it's easier to think about the original expression. Let me stick with that.
+
+So, since sin x is in (0, 1], then √(sin x) is in (0, 1]. Then log₂ of that is in (-∞, 0]. Because log₂(1) is 0, and as √(sin x) approaches 0, log₂ approaches negative infinity. Therefore, the range of y is all real numbers less than or equal to 0. But wait, is that correct?
+
+Wait, but hold on. Let me check with specific values. For example, when x is 90°, sin x is 1, so √(sin x) is 1, so log₂(1) is 0. That's the maximum value of y. When x approaches 0° or 180°, sin x approaches 0, so √(sin x) approaches 0, so log₂(√(sin x)) approaches negative infinity. Therefore, the range is (-∞, 0]. But wait, the problem says 0° < x < 180°, so x can't be 0 or 180, but sin x can get arbitrarily close to 0. Therefore, log₂(√(sin x)) can get arbitrarily close to negative infinity, but never actually reaches it. However, in terms of the range, since the function can take on all values from negative infinity up to 0, but does it actually attain all values in between?
+
+Wait, but since sin x is continuous on (0°, 180°), and √(sin x) is also continuous there, then log₂(√(sin x)) is continuous as well. Therefore, since sin x can take any value in (0, 1], then √(sin x) can take any value in (0, 1], and log₂ of that can take any value from -∞ to 0. Therefore, the range is (-∞, 0].
+
+But wait, let me check if there's a mistake here. Because log₂(z) is defined for z > 0, and since z is in (0, 1], then log₂(z) is in (-∞, 0]. So, yes, that seems correct.
+
+But maybe I need to verify with another approach. Let me consider substituting variables. Let me set t = sin x. Then, since x is between 0° and 180°, t is between 0 and 1. So, t ∈ (0, 1]. Then, the function becomes y = log₂(√t) = (1/2) log₂ t. Therefore, y = (1/2) log₂ t, where t ∈ (0, 1].
+
+So, log₂ t is defined for t > 0. When t approaches 0+, log₂ t approaches -infty, so y approaches -infty. When t = 1, log₂ 1 = 0, so y = 0. Therefore, the range of y is (-infty, 0]. 
+
+But wait, is there a restriction here? For example, can t take any value between 0 and 1? Since sin x is continuous on (0°, 180°), and it's strictly increasing from 0 to 90°, then decreasing from 90° to 180°, but still, the range of sin x is (0, 1]. Therefore, t can be any value in (0, 1], so log₂ t can be any value in (-infty, 0], so y is (-infty, 0]. 
+
+But maybe the problem is expecting a different answer? Let me check if there's something I'm missing here. For example, maybe the square root is causing some issues? Wait, no. The square root of sin x is defined as long as sin x is non-negative, which it is in this interval. And since sin x is positive in (0°, 180°), then √(sin x) is positive, so log₂ is defined. 
+
+Alternatively, maybe I need to consider the domain of x more carefully. For example, when x approaches 0°, sin x approaches 0, so √(sin x) approaches 0, so log₂(√(sin x)) approaches -infty. Similarly, when x approaches 180°, sin x approaches 0, so same thing. Therefore, the function can take on all values from -infty up to 0. 
+
+But wait, is there a maximum value? Well, when sin x is maximum, which is 1 at x = 90°, then log₂(√1) = log₂(1) = 0. So, 0 is the maximum value. So, the range is all real numbers less than or equal to 0. But since x can't be 0 or 180°, the function never actually reaches -infty, but approaches it. However, in terms of the range, since for any real number y < 0, there exists an x in (0°, 180°) such that y = log₂(√(sin x)). Therefore, the range is (-infty, 0].
+
+But let me check with specific numbers. For example, take y = -1. Then, log₂(√(sin x)) = -1. Let's solve for sin x. 
+
+Starting with log₂(√(sin x)) = -1. 
+
+Convert to exponential form: √(sin x) = 2^(-1) = 1/2. 
+
+Then square both sides: sin x = (1/2)^2 = 1/4. 
+
+So, sin x = 1/4. Since 1/4 is between 0 and 1, there are solutions for x in (0°, 180°). For example, arcsin(1/4) is approximately 14.47°, and 180° - 14.47° = 165.53°, both of which are in the interval. Therefore, y = -1 is attainable. Similarly, for any y < 0, we can solve for sin x = (2^y)^2 = 4^y. Since 4^y is between 0 and 1 when y is between -infty and 0. Therefore, sin x = 4^y is in (0, 1), which is attainable for some x in (0°, 180°). Therefore, the range is indeed all real numbers less than or equal to 0. 
+
+But wait, when y approaches negative infinity, 4^y approaches 0, so sin x approaches 0, which is attainable as x approaches 0° or 180°, but not exactly at those points. However, since the function is continuous on the open interval (0°, 180°), the range is all real numbers less than 0, but does it include 0? At x = 90°, sin x is 1, so log₂(√1) = log₂(1) = 0. Since x = 90° is within the domain (0°, 180°), then 0 is included in the range. Therefore, the range is (-infty, 0].
+
+But wait, the original problem says 0° < x < 180°, so x=90° is allowed. Therefore, 0 is included. Therefore, the range is all real numbers y such that y ≤ 0. 
+
+But let me check if there's a possible mistake here. For example, maybe the square root is only defined for certain values? Wait, no. The square root of sin x is defined for sin x ≥ 0, which is true for all x in (0°, 180°). So, that's okay. 
+
+Alternatively, maybe I need to consider the domain of the logarithm? Wait, log₂(√(sin x)) is defined as long as √(sin x) > 0, which is equivalent to sin x > 0, which is already satisfied in the given interval. 
+
+Therefore, I think the conclusion is that the range is (-infty, 0]. 
+
+But let me check another value. Suppose y = -0.5. Then, log₂(√(sin x)) = -0.5. Then, √(sin x) = 2^(-0.5) = 1/√2 ≈ 0.707. Then, sin x = (1/√2)^2 = 1/2. So, sin x = 1/2. Which occurs at x = 30° and 150°, which are within the interval. Therefore, y = -0.5 is attainable. 
+
+Similarly, if I take y = -10, then √(sin x) = 2^(-10) = 1/1024, so sin x = 1/1024² = 1/1048576, which is a very small positive number, but since sin x can be as small as we want (approaching 0), there exists x in (0°, 180°) such that sin x is that small. Therefore, y can be as small as we want, approaching negative infinity. 
+
+Therefore, the range is all real numbers less than or equal to 0. 
+
+But wait, the problem says "range of the function", so in interval notation, that would be (-∞, 0]. 
+
+But let me check if there's a possible mistake in the transformation. Let me go back to the original function: y = log₂(√(sin x)). 
+
+Alternatively, maybe I can write this as y = (1/2) log₂(sin x). Then, since sin x ∈ (0, 1], log₂(sin x) ∈ (-∞, 0], so multiplying by 1/2, y ∈ (-∞, 0]. 
+
+Yes, that's the same conclusion. Therefore, the range is (-∞, 0]. 
+
+But wait, maybe the problem expects the answer in terms of degrees? But no, the range is a set of real numbers, not dependent on the angle measure. The function y is a real number, so the range is all real numbers less than or equal to 0. 
+
+Alternatively, maybe I need to check if there's a restriction due to the square root? For example, if the square root was of something else, but here it's just sin x. Since sin x is positive in the interval, the square root is fine. 
+
+Alternatively, maybe the problem is in radians? Wait, the problem says 0° < x < 180°, so it's in degrees. But the range is still the same, regardless of the unit. 
+
+Therefore, I think the answer is (-∞, 0]. 
+
+But let me check if there's a different interpretation. For example, maybe the square root is only defined for sin x ≥ 0, but since we already have that, and the function is defined for all x in (0°, 180°), then the range is indeed (-∞, 0]. 
+
+Alternatively, maybe the problem is expecting a different answer? Let me think again. 
+
+Suppose someone might think that since sin x is between 0 and 1, then √(sin x) is between 0 and 1, so log₂ of that is between -infty and 0. But since log₂ is defined for positive numbers, and since √(sin x) is positive, then yes, that's correct. 
+
+Alternatively, maybe the problem is expecting the answer in terms of specific values? But no, the range is all real numbers less than or equal to 0. 
+
+Wait, but maybe I need to write it in terms of logarithms? For example, if I consider the function y = log₂(√(sin x)) = (1/2) log₂(sin x). Then, since sin x can be any value between 0 and 1, log₂(sin x) can be any value between -infty and 0, so multiplying by 1/2, it's still between -infty and 0. 
+
+Therefore, I think the answer is (-∞, 0]. 
+
+But let me check if there's a possible mistake in the problem statement. The function is log base 2 of sqrt(sin x). If it was log base 2 of sin x, then the range would be (-infty, 0], but since it's log base 2 of sqrt(sin x), which is equivalent to (1/2) log base 2 of sin x, so same range. 
+
+Alternatively, if the problem had been log base 2 of sqrt(sin x) for x in 0° to 180°, but maybe there's a different consideration? For example, if x is in degrees, but when we take log₂, does that matter? No, because log₂ is a function that takes real numbers, regardless of the unit of the angle. 
+
+Alternatively, maybe the problem is expecting the answer in terms of intervals with specific numbers? But no, since sin x can take any value between 0 and 1, the log can take any value between -infty and 0. 
+
+Therefore, I think the answer is (-∞, 0]. 
+
+But let me check with another approach. Let me consider the function y = log₂(√(sin x)). Let me write this as y = (1/2) log₂(sin x). Let me denote z = sin x. Then, z ∈ (0, 1]. Therefore, y = (1/2) log₂ z. 
+
+So, log₂ z is defined for z > 0. Since z ∈ (0, 1], log₂ z ∈ (-∞, 0]. Therefore, multiplying by 1/2, y ∈ (-∞, 0]. 
+
+Therefore, the range is all real numbers less than or equal to 0. 
+
+Alternatively, maybe the problem is expecting the answer in terms of a closed interval? But since sin x approaches 0, but never actually reaches 0, then log₂(√(sin x)) approaches -infty, but never actually reaches it. Therefore, the range is (-infty, 0]. 
+
+But in some contexts, people might say the range is (-infty, 0), but since at x = 90°, the function reaches 0, which is included, so it's (-infty, 0]. 
+
+Therefore, I think that is the correct answer. 
+
+But let me check if there's a possible mistake in the transformation. For example, if I have log₂(√(sin x)) = log₂(sin x^{1/2}) = (1/2) log₂(sin x). Yes, that's correct. 
+
+Alternatively, if I think of √(sin x) as sin x^{1/2}, then log₂(sin x^{1/2}) = (1/2) log₂(sin x). 
+
+Therefore, that's correct. 
+
+Alternatively, maybe I can think of the function as y = log₂(sin x)/2. Since sin x is between 0 and 1, log₂(sin x) is between -infty and 0, so dividing by 2, it's still between -infty and 0. 
+
+Therefore, the range is (-infty, 0]. 
+
+Therefore, I think that is the answer. 
+
+But let me check if there's a possible mistake in the domain. For example, if x is between 0° and 180°, then sin x is between 0 and 1. But is there a case where sin x is negative? No, because between 0° and 180°, sine is non-negative. So, sin x is in (0, 1]. Therefore, the square root is defined and positive. 
+
+Therefore, the conclusion is that the range is all real numbers less than or equal to 0. 
+
+But maybe the problem is expecting the answer in a different notation? For example, using interval notation, it would be (-∞, 0]. 
+
+Alternatively, if the problem is in radians, but the question specifies degrees, so that shouldn't matter. 
+
+Alternatively, maybe the problem is expecting the answer in terms of specific values? But no, since the function can take any value from negative infinity up to 0. 
+
+Therefore, I think the answer is (-∞, 0]. 
+
+But let me check once more with another example. Suppose x is 30°, then sin x is 1/2, so √(sin x) is √(1/2) = 1/√2 ≈ 0.707. Then log₂(1/√2) = log₂(2^{-1/2}) = -1/2. So, y = -1/2. Which is in the range. 
+
+If x is 180° - 30° = 150°, same value. 
+
+If x is 90°, sin x is 1, so y = 0. 
+
+If x approaches 0°, say x = 1°, sin x ≈ 0.01745, so √(sin x) ≈ 0.132, log₂(0.132) ≈ log₂(1/7.57) ≈ -log₂(7.57) ≈ -2.92. So, that's a negative number. 
+
+If x approaches 0°, sin x approaches 0, so log₂(√(sin x)) approaches -infty. 
+
+Therefore, the function can take any value from -infty up to 0. 
+
+Therefore, the range is (-infty, 0]. 
+
+Therefore, I think that is the correct answer. 
+
+**Final Answer**
+The range of the function is \boxed{(-\infty, 0]}.
+</think>
+
+To determine the **range** of the function  
+$$
+y = \log_2 (\sqrt{\sin x})
+$$  
+for $ 0^\circ < x < 180^\circ $, we proceed by analyzing the behavior of the function step by step.
+
+---
+
+### Step 1: Domain Consideration
+
+The function involves a square root and a logarithm. The square root of a number is defined only when the number is non-negative, and the logarithm is defined only when its argument is positive. Therefore, we require:
+
+$$
+\sqrt{\sin x} > 0 \quad \Rightarrow \quad \sin x > 0
+$$
+
+In the interval $ 0^\circ < x < 180^\circ $, the sine function is **positive** for all $ x $ in that range, except at the endpoints where it is zero. Since the domain is open at both ends, we are safe to say that $ \sin x > 0 $ for all $ x \in (0^\circ, 180^\circ) $, and thus the function is **defined** on this interval.
+
+---
+
+### Step 2: Express the Function in a Simpler Form
+
+Using logarithmic identities, we can rewrite the function:
+
+$$
+y = \log_2 (\sqrt{\sin x}) = \log_2 ((\sin x)^{1/2}) = \frac{1}{2} \log_2 (\sin x)
+$$
+
+So, the function becomes:
+
+$$
+y = \frac{1}{2} \log_2 (\sin x)
+$$
+
+---
+
+### Step 3: Analyze the Range of $ \sin x $
+
+In the interval $ 0^\circ < x < 180^\circ $, the sine function takes values in the open interval $ (0, 1] $, since:
+
+- $ \sin x = 0 $ at $ x = 0^\circ $ and $ x = 180^\circ $, but these are **not included** in the domain.
+- $ \sin x = 1 $ at $ x = 90^\circ $, which is within the domain.
+
+Thus, $ \sin x \in (0, 1] $, and so:
+
+$$
+\log_2 (\sin x) \in (-\infty, 0]
+$$
+
+Multiplying this by $ \frac{1}{2} $, we get:
+
+$$
+y = \frac{1}{2} \log_2 (\sin x) \in (-\infty, 0]
+$$
+
+---
+
+### Step 4: Confirm Continuity and Attainability
+
+The function $ \sin x $ is continuous on $ (0^\circ, 180^\circ) $, and so is $ \log_2 (\sin x) $, since it is a composition of continuous functions. Therefore, $ y = \frac{1}{2} \log_2 (\sin x) $ is also continuous on this interval.
+
+- As $ \sin x \to 0^+ $, $ \log_2 (\sin x) \to -\infty $, so $ y \to -\infty $.
+- At $ x = 90^\circ $, $ \sin x = 1 $, so $ y = \frac{1}{2} \log_2 (1) = 0 $.
+
+Thus, the function **attains** all values from $ -\infty $ up to and including $ 0 $.
+
+---
+
+### Final Conclusion
+
+The function $ y = \log_2 (\sqrt{\sin x}) $ is defined and continuous on $ (0^\circ, 180^\circ) $, and its range is all real numbers less than or equal to 0.
+
+$$
+\boxed{(-\infty, 0]}
+$$<|im_end|>

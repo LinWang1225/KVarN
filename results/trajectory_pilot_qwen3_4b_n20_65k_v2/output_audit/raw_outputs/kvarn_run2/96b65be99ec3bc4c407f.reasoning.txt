@@ -1,0 +1,195 @@
+
+Okay, so I need to find the product CD where C and D are integers that satisfy the equation:
+
+$$
+\frac{C}{x-3} + \frac{D}{x+8} = \frac{4x - 23}{x^2 + 5x - 24}
+$$
+
+for all real values of x except -8 and 3. Hmm, let me think. First, I remember that when you have an equation like this, where two rational expressions on the left add up to another rational expression on the right, you can combine the left side into a single fraction and then equate the numerators. That should work because the denominators on the left must be the same as the denominator on the right, right?
+
+So, let me start by factoring the denominator on the right side. The denominator is x² + 5x - 24. Let me try to factor that. I need two numbers that multiply to -24 and add up to 5. Let me think... 8 and -3? 8 * (-3) = -24 and 8 + (-3) = 5. Yes, that works. So, the denominator factors into (x + 8)(x - 3). Let me check that:
+
+(x + 8)(x - 3) = x² - 3x + 8x - 24 = x² + 5x - 24. Perfect, that's correct.
+
+So, the equation becomes:
+
+$$
+\frac{C}{x - 3} + \frac{D}{x + 8} = \frac{4x - 23}{(x + 8)(x - 3)}
+$$
+
+Now, since the denominators on the left are (x - 3) and (x + 8), and the right side has the product of those denominators, I can combine the left side into a single fraction. To do that, I need a common denominator, which would be (x - 3)(x + 8). Let me write that out.
+
+First, rewrite the left side with the common denominator:
+
+$$
+\frac{C(x + 8)}{(x - 3)(x + 8)} + \frac{D(x - 3)}{(x - 3)(x + 8)} = \frac{4x - 23}{(x + 8)(x - 3)}
+$$
+
+Now, since the denominators are the same, I can set the numerators equal to each other:
+
+C(x + 8) + D(x - 3) = 4x - 23
+
+So, expanding the left side:
+
+C*x + 8C + D*x - 3D = 4x - 23
+
+Combine like terms:
+
+(C + D)x + (8C - 3D) = 4x - 23
+
+Now, since this equation must hold for all real x except -8 and 3, the coefficients of the corresponding powers of x on both sides must be equal. That means:
+
+For the x terms: C + D = 4
+
+For the constant terms: 8C - 3D = -23
+
+So, now I have a system of two equations:
+
+1) C + D = 4
+
+2) 8C - 3D = -23
+
+I need to solve for C and D. Let me use substitution or elimination. Maybe elimination is easier here. Let me solve equation 1) for one variable. Let's solve for D:
+
+From equation 1: D = 4 - C
+
+Now substitute D into equation 2:
+
+8C - 3(4 - C) = -23
+
+Let me compute that:
+
+8C - 12 + 3C = -23
+
+Combine like terms:
+
+(8C + 3C) - 12 = -23
+
+11C - 12 = -23
+
+Add 12 to both sides:
+
+11C = -23 + 12
+
+11C = -11
+
+Divide both sides by 11:
+
+C = -1
+
+Now, substitute back into equation 1 to find D:
+
+D = 4 - C = 4 - (-1) = 4 + 1 = 5
+
+So, C is -1 and D is 5. Therefore, the product CD is (-1)(5) = -5.
+
+Wait, let me check if that's correct. Let me verify by plugging back into the original equation.
+
+First, let me compute the left side with C = -1 and D = 5:
+
+Left side: (-1)/(x - 3) + 5/(x + 8)
+
+Combine them over the common denominator:
+
+[-1*(x + 8) + 5*(x - 3)] / [(x - 3)(x + 8)]
+
+Compute numerator:
+
+-1*(x + 8) + 5*(x - 3) = -x - 8 + 5x - 15 = ( -x + 5x ) + ( -8 -15 ) = 4x - 23
+
+Which is exactly the numerator on the right side. So that checks out. Therefore, C = -1 and D = 5, so CD = -5.
+
+But wait, the problem says "for all real values of x except -8 and 3". So, as long as the equation is valid for all x except those excluded values, which is the case here because we have the same denominator on both sides and the numerators match. Therefore, the answer should be -5.
+
+But let me just make sure I didn't make any mistakes in my algebra. Let me go through the steps again.
+
+Original equation:
+
+C/(x - 3) + D/(x + 8) = (4x -23)/[(x - 3)(x + 8)]
+
+Combine left side:
+
+[C(x + 8) + D(x - 3)] / [(x - 3)(x + 8)] = (4x -23)/[(x - 3)(x + 8)]
+
+Therefore, numerator must be equal:
+
+C(x + 8) + D(x - 3) = 4x -23
+
+Expanding:
+
+Cx + 8C + Dx - 3D = (C + D)x + (8C - 3D) = 4x -23
+
+Therefore, equations:
+
+C + D = 4
+
+8C - 3D = -23
+
+Solving:
+
+From first equation, D = 4 - C
+
+Substitute into second equation:
+
+8C - 3*(4 - C) = 8C -12 + 3C = 11C -12 = -23
+
+So 11C = -23 + 12 = -11 => C = -1. Then D = 4 - (-1) = 5. Correct.
+
+So CD = (-1)(5) = -5. Seems right.
+
+Alternatively, maybe I can check with specific values of x. Let me pick a value of x that's not -8 or 3, say x = 0.
+
+Left side: C/(0 - 3) + D/(0 + 8) = C/(-3) + D/8
+
+Right side: (4*0 -23)/(0^2 +5*0 -24) = (-23)/(-24) = 23/24
+
+So, if C = -1 and D = 5, then left side is (-1)/(-3) + 5/8 = 1/3 + 5/8. Let me compute that:
+
+Convert to common denominator 24: 8/24 + 15/24 = 23/24. Which matches the right side. Good.
+
+Another check: x = 1.
+
+Left side: C/(1 - 3) + D/(1 + 8) = C/(-2) + D/9
+
+Right side: (4*1 -23)/(1 +5 -24) = (4 -23)/(-18) = (-19)/(-18) = 19/18
+
+With C = -1 and D = 5:
+
+Left side: (-1)/(-2) + 5/9 = 1/2 + 5/9. Convert to common denominator 18: 9/18 + 10/18 = 19/18. Correct again.
+
+Another check: x = 4.
+
+Left side: C/(4 - 3) + D/(4 + 8) = C/1 + D/12 = C + D/12
+
+Right side: (4*4 -23)/(16 + 20 -24) = (16 -23)/(12) = (-7)/12
+
+So, with C = -1 and D = 5:
+
+Left side: -1 + 5/12 = (-12/12 + 5/12) = -7/12. Which matches the right side. Perfect.
+
+So, all checks out. Therefore, CD is indeed -5.
+
+But just to make sure, let me try solving the system again using another method, maybe substitution.
+
+From equation 1: C + D = 4. So, D = 4 - C.
+
+Plug into equation 2: 8C - 3*(4 - C) = -23.
+
+Which is 8C -12 + 3C = 11C -12 = -23. So 11C = -11, so C = -1. Then D = 4 - (-1) = 5. Yep, same result.
+
+Alternatively, maybe using elimination. Let me write the equations:
+
+Equation 1: C + D = 4
+
+Equation 2: 8C - 3D = -23
+
+Multiply equation 1 by 3: 3C + 3D = 12
+
+Then add to equation 2:
+
+8C -3D + 3C + 3D = -23 + 12 => 11C = -11 => C = -1. Then D = 4 - C = 5. Same result.
+
+So, all methods lead to C = -1, D = 5, so CD = -5. Therefore, the answer is \boxed{-5}.
+
+**Final Answer**
+\boxed{-5}

@@ -1,0 +1,66 @@
+
+
+To determine the range of the function  
+$$
+y = \log_2 (\sqrt{\sin x})
+$$  
+for $ 0^\circ < x < 180^\circ $, we proceed by analyzing the behavior of the function step by step.
+
+---
+
+### Step 1: Domain Consideration
+
+The function involves a square root and a logarithm. The square root of a number is defined only when the number is non-negative, and the logarithm is defined only when its argument is positive. Therefore, we require:
+
+$$
+\sqrt{\sin x} > 0 \quad \Rightarrow \quad \sin x > 0
+$$
+
+In the interval $ 0^\circ < x < 180^\circ $, the sine function is **positive** for all $ x $ in that range **except at the endpoints** (where it is zero). Since the domain is open, $ x \neq 0^\circ $ and $ x \neq 180^\circ $, we have:
+
+$$
+\sin x \in (0, 1]
+$$
+
+---
+
+### Step 2: Simplify the Function
+
+We can simplify the expression using logarithmic identities:
+
+$$
+y = \log_2 (\sqrt{\sin x}) = \log_2 ((\sin x)^{1/2}) = \frac{1}{2} \log_2 (\sin x)
+$$
+
+So, the function becomes:
+
+$$
+y = \frac{1}{2} \log_2 (\sin x)
+$$
+
+Now, since $ \sin x \in (0, 1] $, we analyze the behavior of $ \log_2 (\sin x) $ over this interval.
+
+---
+
+### Step 3: Analyze the Logarithmic Expression
+
+- When $ \sin x = 1 $, $ \log_2 (1) = 0 $, so $ y = \frac{1}{2} \cdot 0 = 0 $
+- As $ \sin x \to 0^+ $, $ \log_2 (\sin x) \to -\infty $, so $ y \to -\infty $
+
+Therefore, the range of $ \log_2 (\sin x) $ is $ (-\infty, 0] $, and multiplying by $ \frac{1}{2} $, the range of $ y $ remains:
+
+$$
+(-\infty, 0]
+$$
+
+---
+
+### Step 4: Final Conclusion
+
+The function $ y = \log_2 (\sqrt{\sin x}) $ is defined for all $ x \in (0^\circ, 180^\circ) $, and its values range from negative infinity (as $ \sin x \to 0 $) up to 0 (when $ \sin x = 1 $).
+
+Thus, the **range** of the function is:
+
+$$
+\boxed{(-\infty, 0]}
+$$

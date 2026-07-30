@@ -1,0 +1,85 @@
+
+
+To determine the **total surface area** of a cube with a **volume of 1 cubic foot**, we need to follow a clear sequence of steps involving unit conversion and the geometric formulas for a cube.
+
+---
+
+### Step 1: Understand the Volume of a Cube
+
+The volume $ V $ of a cube is given by the formula:
+
+$$
+V = s^3
+$$
+
+where $ s $ is the length of one side of the cube.
+
+Given that the volume is **1 cubic foot**, we can solve for the side length $ s $:
+
+$$
+s^3 = 1 \text{ ft}^3 \Rightarrow s = \sqrt[3]{1} = 1 \text{ ft}
+$$
+
+---
+
+### Step 2: Convert the Side Length to Inches
+
+Since the final answer must be in **square inches**, we need to convert the side length from **feet to inches**.
+
+$$
+1 \text{ ft} = 12 \text{ inches}
+$$
+
+So, the side length is:
+
+$$
+s = 12 \text{ inches}
+$$
+
+---
+
+### Step 3: Use the Surface Area Formula
+
+The surface area $ A $ of a cube is given by:
+
+$$
+A = 6s^2
+$$
+
+Substituting $ s = 12 $ inches:
+
+$$
+A = 6 \times (12)^2 = 6 \times 144 = 864 \text{ square inches}
+$$
+
+---
+
+### Step 4: Verify with an Alternative Method
+
+Alternatively, we can convert the **volume from cubic feet to cubic inches** first:
+
+$$
+1 \text{ ft}^3 = 12 \times 12 \times 12 = 1728 \text{ in}^3
+$$
+
+Now, the volume is $ 1728 \text{ in}^3 $, so the side length is:
+
+$$
+s = \sqrt[3]{1728} = 12 \text{ inches}
+$$
+
+Using the surface area formula again:
+
+$$
+A = 6 \times (12)^2 = 6 \times 144 = 864 \text{ square inches}
+$$
+
+---
+
+### Final Answer
+
+All methods confirm that the total surface area of the cube is:
+
+$$
+\boxed{864}
+$$ square inches.
