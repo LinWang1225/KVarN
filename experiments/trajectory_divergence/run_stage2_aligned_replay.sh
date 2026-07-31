@@ -4,7 +4,6 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 PYTHON="${PYTHON:-/home/wanglin/miniconda3/envs/kvarn-smoke/bin/python}"
-VLLM_INSTALL_ROOT="${VLLM_INSTALL_ROOT:-/data/wanglin/vllm-0.23.0-cu126}"
 SOURCE_ROOT="${SOURCE_ROOT:?Set SOURCE_ROOT to the existing four-run trajectory result directory}"
 MODEL="${MODEL:-Qwen/Qwen3-4B}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-${SOURCE_ROOT}/aligned_replay_1024}"
@@ -38,11 +37,7 @@ if [[ ! -x "${PYTHON}" ]]; then
   echo "Python executable not found: ${PYTHON}" >&2
   exit 2
 fi
-if [[ ! -d "${VLLM_INSTALL_ROOT}" ]]; then
-  echo "Missing vLLM install root: ${VLLM_INSTALL_ROOT}" >&2
-  exit 2
-fi
-export PYTHONPATH="${VLLM_INSTALL_ROOT}:${PYTHONPATH:-}"
+export PYTHONPATH="${REPO_ROOT}:${PYTHONPATH:-}"
 export VLLM_ENABLE_V1_MULTIPROCESSING="${VLLM_ENABLE_V1_MULTIPROCESSING:-0}"
 export VLLM_USE_FLASHINFER_SAMPLER="${VLLM_USE_FLASHINFER_SAMPLER:-0}"
 export VLLM_USE_DEEP_GEMM="${VLLM_USE_DEEP_GEMM:-0}"

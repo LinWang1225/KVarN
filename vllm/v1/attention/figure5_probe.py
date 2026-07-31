@@ -1,25 +1,24 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Benchmark-only probe for paper-style Figure 5 measurements.
+"""Benchmark-only probe for the paper's Figure 5 semantics.
 
-The probe is dormant unless ``VLLM_FIGURE5_PROBE_OUTPUT`` is set.  It is
-called from the native KVarN and TurboQuant attention backends *after* their
-normal cache kernels have produced an attention result.
+The probe is dormant unless ``VLLM_FIGURE5_PROBE_OUTPUT`` is set. It runs
+inside the native KVarN/TurboQuant attention backends *after* they have already
+produced the quantized-cache attention output.
 
-Two regimes are supported:
-
-``accumulated``
-    Return the native quantized-cache result, so its error propagates through
-    later layers and later chunks.  A shadow FP16 KV history is used only to
-    compute the local reference at the requested observation point.
+Two regimes are supported and mirror the paper's protocol:
 
 ``static``
-    Compute the same native quantized-cache result, measure it against a
-    shadow FP16 reference, but return the FP16 reference to the model.  This
-    prevents the local cache error from changing subsequent hidden states,
-    matching the static/local reconstruction protocol used in Figure 5.
+    Measure the local reconstruction error of the current chunk against a
+    shadow FP16 reference, but feed the FP16 reference forward so later chunks
+    do not inherit the quantization error from earlier chunks.
 
-The benchmark pins one request per batch, disables prefix caching and uses
-128-token chunked prefill.  Supporting general mixed batches here would add
+``accumulated``
+    Measure the same local reconstruction error, but feed the native quantized
+    output forward so later chunks observe the full downstream error
+    propagation.
+
+This benchmark pins one request per batch, disables prefix caching, and uses
+128-token chunked prefill. Supporting general mixed batches here would add
 substantial state-management complexity and is intentionally rejected.
 """
 
@@ -106,13 +105,38 @@ def _read_control() -> dict[str, int]:
     path = os.environ.get("VLLM_FIGURE5_PROBE_CONTROL")
     if not path:
         raise RuntimeError("VLLM_FIGURE5_PROBE_CONTROL is not set")
-    with open(path, encoding="utf-8") as handle:
-        payload = json.load(handle)
-    required = ("request_index", "sample_id", "target_context")
-    missing = [name for name in required if name not in payload]
-    if missing:
-        raise RuntimeError(f"Probe control file is missing {missing}: {path}")
-    return {name: int(payload[name]) for name in required}
+
+    control_path = Path(path)
+    last_error: Exception | None = None
+    # The controller writes this file immediately before each generate() call,
+    # but EngineCore may enter the first attention hook slightly earlier on some
+    # launches. A short bounded retry avoids a spurious startup race without
+    # masking genuine missing-file bugs.
+    for _ in range(50):
+        try:
+            with control_path.open(encoding="utf-8") as handle:
+                payload = json.load(handle)
+            required = ("request_index", "sample_id", "target_context")
+            missing = [name for name in required if name not in payload]
+            if missing:
+                raise RuntimeError(
+                    f"Probe control file is missing {missing}: {control_path}"
+                )
+            return {name: int(payload[name]) for name in required}
+        except FileNotFoundError as exc:
+            last_error = exc
+            import time
+
+            time.sleep(0.02)
+        except json.JSONDecodeError as exc:
+            last_error = exc
+            import time
+
+            time.sleep(0.02)
+
+    raise RuntimeError(
+        f"Unable to read Figure 5 probe control file after retries: {control_path}"
+    ) from last_error
 
 
 def _layer_name(method: str, impl: Any, layer: Any) -> str:
@@ -226,11 +250,13 @@ def probe_attention_output(
     attn_metadata: Any,
     native_output: torch.Tensor,
 ) -> torch.Tensor:
-    """Record paper-style attention-output MAE and return the selected regime.
+    """Record Figure 5 attention-output MAE and return the selected regime.
 
-    This function is invoked only when the environment variable checked by the
-    backend is present.  It intentionally raises on unsupported batching rather
-    than silently reporting a different metric.
+    The probe measures the same local reconstruction error in both regimes.
+    The only semantic difference is whether the native quantized output is fed
+    forward (``accumulated``) or replaced by the local FP16 reference
+    (``static``) so later chunks either do or do not inherit the earlier error
+    propagation, matching the paper's protocol.
     """
     regime = os.environ.get("VLLM_FIGURE5_PROBE_REGIME", "accumulated")
     if regime not in {"static", "accumulated"}:
@@ -248,6 +274,10 @@ def probe_attention_output(
         raise RuntimeError(
             f"Probe sequence {seq_len} exceeds configured maximum {max_context}"
         )
+
+    # Ignore tiny startup/warmup attention calls.
+    if seq_len < 128 or q_len < 128:
+        return native_output
 
     name = _layer_name(method, impl, layer)
     state = _LAYER_STATES.get(name)
@@ -273,15 +303,11 @@ def probe_attention_output(
     if state.target_context <= 0:
         raise RuntimeError(f"Probe state for {name} was not initialized by a first chunk")
     if seq_len > state.target_context:
-        # The one generated token after prompt scoring is outside Figure 5.
         return native_output
 
     state.key[start:seq_len].copy_(key[:q_len])
     state.value[start:seq_len].copy_(value[:q_len])
 
-    # Figure 5 averages attention-output reconstruction error across the
-    # sequence and all attention layers, not only the final 128-token block.
-    # Compute a local FP16-cache reference for every pseudo-decode chunk.
     reference = _fp16_reference(
         impl,
         query[:q_len],
@@ -322,9 +348,6 @@ def probe_attention_output(
         )
         _RECORDED.add(record_key)
 
-    # In the static regime, feed the FP16 local reference forward.  The native
-    # backend still wrote and read its compressed cache, so the measured local
-    # error is real, but it cannot perturb later Q/K/V tensors.
     if regime == "static":
         return reference.to(native_output.dtype)
     return native_output

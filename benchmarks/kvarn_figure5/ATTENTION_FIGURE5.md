@@ -35,6 +35,17 @@ output projection) is compared with a shadow FP16 KV history:
   its local error, but returns the shadow FP16 attention output to the model.
   The local error therefore cannot propagate into later layers or chunks.
 
+This benchmark keeps the paper's Figure 5 semantics for the x/y axes and the
+three-panel meaning, but the actual methods remain the repository's native
+presets:
+
+- KVarN K4/V2 G128
+- TurboQuant 3-bit NC
+
+So panel (b) and panel (c) should be read as the paper-style comparison layout
+with the native KVarN/TurboQuant backends, not as a literal KVarN/KIVI method
+reproduction.
+
 The benchmark records every chunk rather than only the final 128 tokens, then
 uses several deterministic WikiText-2 windows and reports paired sample means
 and 95% confidence intervals. This removes the earlier single-window/final-block

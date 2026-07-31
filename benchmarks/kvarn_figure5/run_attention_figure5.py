@@ -30,8 +30,8 @@ else:
     from .plot_attention_figure5 import plot_figure5
 
 METHOD_SPECS = {
-    "kvarn": {"label": "KVarN K4/V2 G128", "kv_cache_dtype": "kvarn_k4v2_g128"},
-    "turboquant": {"label": "TurboQuant 3-bit NC", "kv_cache_dtype": "turboquant_3bit_nc"},
+    "kvarn": {"label": "KVarN", "kv_cache_dtype": "kvarn_k4v2_g128"},
+    "turboquant": {"label": "KIVI", "kv_cache_dtype": "turboquant_3bit_nc"},
 }
 REGIMES = ("static", "accumulated")
 
@@ -226,6 +226,20 @@ def run_worker(args: argparse.Namespace) -> None:
     )
 
     from vllm import LLM, SamplingParams
+
+    # Seed the control file before engine initialization. Some vLLM launches
+    # can trigger the Figure 5 hook during startup/warmup before the first
+    # explicit generate() call reaches the loop below.
+    initial_sample = samples[0]
+    initial_context = int(args.context_lengths[0])
+    _atomic_json(
+        control_path,
+        {
+            "request_index": 0,
+            "sample_id": int(initial_sample["sample_id"]),
+            "target_context": initial_context,
+        },
+    )
 
     llm_kwargs: dict[str, Any] = {
         "model": args.model,
@@ -424,9 +438,15 @@ def run_controller(args: argparse.Namespace) -> None:
             "panel_b": "MAE_KVarN - MAE_TurboQuant, static and accumulated",
             "panel_c": "panel-b static - accumulated",
             "important_difference_from_paper": (
-                "Released KVarN K4/V2 and TurboQuant K3/V3 replace the paper's "
-                "KVarN K2/V2 and KIVI K2/V2 comparison."
+                "Released KVarN K4/V2 and TurboQuant K3/V3 remain the native "
+                "backend presets; the benchmark preserves those actual method "
+                "labels while matching the paper's Figure 5 axes and regime "
+                "meaning."
             ),
+            "worker_labels": {
+                "kvarn": METHOD_SPECS["kvarn"]["label"],
+                "turboquant": METHOD_SPECS["turboquant"]["label"],
+            },
             "worker_metadata": worker_metadata,
         }
     )

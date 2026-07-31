@@ -14,6 +14,8 @@ METHOD_LABELS = {
     "turboquant": "TurboQuant 3-bit NC",
 }
 REGIME_LABELS = {"accumulated": "Accumulated", "static": "Static"}
+METHOD_COLORS = {"kvarn": "#1f77b4", "turboquant": "#ff7f0e"}
+REGIME_STYLES = {"accumulated": "-", "static": "--"}
 
 
 def _read(path: Path) -> list[dict[str, Any]]:
@@ -26,12 +28,20 @@ def _curve(rows: list[dict[str, Any]], predicate) -> list[dict[str, Any]]:
     return sorted(selected, key=lambda row: int(row["context_tokens"]))
 
 
-def _plot_with_ci(ax, rows, *, label: str, linestyle: str, marker: str) -> None:
+def _plot_with_ci(
+    ax,
+    rows,
+    *,
+    label: str,
+    color: str,
+    linestyle: str,
+    marker: str,
+) -> None:
     x = [int(row["context_tokens"]) / 1000.0 for row in rows]
     y = [float(row.get("mean_attention_output_mae") or row["mean_difference"]) for row in rows]
     low = [float(row["ci95_low"]) for row in rows]
     high = [float(row["ci95_high"]) for row in rows]
-    line = ax.plot(x, y, label=label, linestyle=linestyle, marker=marker)[0]
+    line = ax.plot(x, y, label=label, color=color, linestyle=linestyle, marker=marker)[0]
     ax.fill_between(x, low, high, alpha=0.12, color=line.get_color())
 
 
@@ -41,7 +51,7 @@ def plot_figure5(summary_csv: Path, output_prefix: Path, *, title: str) -> None:
 
     ax = axes[0]
     for method, marker in (("kvarn", "o"), ("turboquant", "s")):
-        for regime, linestyle in (("accumulated", "-"), ("static", "--")):
+        for regime in ("accumulated", "static"):
             curve = _curve(
                 rows,
                 lambda row, m=method, r=regime: row.get("method") == m
@@ -52,7 +62,8 @@ def plot_figure5(summary_csv: Path, output_prefix: Path, *, title: str) -> None:
                 ax,
                 curve,
                 label=f"{METHOD_LABELS[method]} — {REGIME_LABELS[regime]}",
-                linestyle=linestyle,
+                color=METHOD_COLORS[method],
+                linestyle=REGIME_STYLES[regime],
                 marker=marker,
             )
     ax.set_title("(a) Average attention-output reconstruction error")
@@ -62,10 +73,7 @@ def plot_figure5(summary_csv: Path, output_prefix: Path, *, title: str) -> None:
     ax.legend(fontsize=8)
 
     ax = axes[1]
-    for regime, linestyle, marker in (
-        ("accumulated", "-", "o"),
-        ("static", "--", "s"),
-    ):
+    for regime, marker in (("accumulated", "o"), ("static", "s")):
         curve = _curve(
             rows,
             lambda row, r=regime: row.get("panel") == "method_gap"
@@ -75,7 +83,8 @@ def plot_figure5(summary_csv: Path, output_prefix: Path, *, title: str) -> None:
             ax,
             curve,
             label=REGIME_LABELS[regime],
-            linestyle=linestyle,
+            color="#9467bd",
+            linestyle=REGIME_STYLES[regime],
             marker=marker,
         )
     ax.axhline(0.0, linewidth=1.0, linestyle=":")
@@ -94,7 +103,8 @@ def plot_figure5(summary_csv: Path, output_prefix: Path, *, title: str) -> None:
     _plot_with_ci(
         ax,
         curve,
-        label="Static − accumulated",
+        label="static curve − accumulated curve",
+        color="#e377c2",
         linestyle="-",
         marker="o",
     )

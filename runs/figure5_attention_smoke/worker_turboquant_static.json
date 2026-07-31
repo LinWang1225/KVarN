@@ -1,0 +1,11 @@
+{
+  "method": "turboquant",
+  "regime": "static",
+  "kv_cache_dtype": "turboquant_3bit_nc",
+  "num_requests": 3,
+  "trace": "/data/wanglin/KVarN/runs/figure5_attention_smoke/worker_turboquant_static.jsonl",
+  "shadow_cache_bytes": 603979776,
+  "shadow_memory_safety_bytes": 1073741824,
+  "requested_gpu_memory_utilization": 0.9,
+  "effective_gpu_memory_utilization": 0.8337594121147825
+}

@@ -24,7 +24,7 @@
   "seed": 2026,
   "num_reference_samples": 3,
   "environment": {
-    "timestamp_utc": "2026-07-30T02:31:51.995738+00:00",
+    "timestamp_utc": "2026-07-30T07:29:59.462886+00:00",
     "command": [
       "/home/wanglin/miniconda3/envs/kvarn-smoke/bin/python",
       "/home/wanglin/data/KVarN/experiments/trajectory_divergence/run_aligned_replay.py",
@@ -35,7 +35,7 @@
       "--reference-generations",
       "/home/wanglin/data/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/fp16_run1/generations.jsonl",
       "--output-dir",
-      "/home/wanglin/data/KVarN/results/stage2_aligned_smoke/fp16_run2",
+      "/home/wanglin/data/KVarN/results/stage2_aligned_smoke_kvarn_fork/fp16_run2",
       "--model",
       "/data/wanglin/models/Qwen3-4B",
       "--tokenizer",
@@ -86,7 +86,7 @@
       "KVARN_FUSED_DECODE": null,
       "CUDA_LAUNCH_BLOCKING": null
     },
-    "git_commit": "bf3b159ef9e37310f2d077a78b1485801a0f614e",
-    "git_status_porcelain": "D KVarN-figure5-native-attention-v2/INTEGRATION.md\n D KVarN-figure5-native-attention-v2/PATCH_FAILURE_FIX.md\n D KVarN-figure5-native-attention-v2/backend_hooks.patch\n D KVarN-figure5-native-attention-v2/files/benchmarks/kvarn_figure5/ATTENTION_FIGURE5.md\n D KVarN-figure5-native-attention-v2/files/benchmarks/kvarn_figure5/attention_metrics.py\n D KVarN-figure5-native-attention-v2/files/benchmarks/kvarn_figure5/plot_attention_figure5.py\n D KVarN-figure5-native-attention-v2/files/benchmarks/kvarn_figure5/run_attention_figure5.py\n D KVarN-figure5-native-attention-v2/files/benchmarks/kvarn_figure5/run_attention_figure5.sh\n D KVarN-figure5-native-attention-v2/files/benchmarks/kvarn_figure5/tests/test_attention_metrics.py\n D KVarN-figure5-native-attention-v2/files/benchmarks/kvarn_figure5/tests/test_run_attention_figure5.py\n D KVarN-figure5-native-attention-v2/files/vllm/v1/attention/figure5_probe.py\n D KVarN-figure5-native-attention-v2/install_semantic.py\n D KVarN-figure5-native-attention-v2/kvarn_figure5_native_attention.patch\n D KVarN-figure5-native-attention-v2/new_files.patch\n D KVarN_trajectory_divergence.patch\n D KVarN_trajectory_long_context_fix.patch\n D KVarN_trajectory_long_context_fix_v2.patch\n D kvarn_figure5_vllm_backends.patch\n M pyproject.toml\n M requirements/build/cpu.txt\n M requirements/build/cuda.txt\n M requirements/build/rocm.txt\n M requirements/build/tpu.txt\n M requirements/cpu.txt\n M requirements/cuda.txt\n M requirements/test/cuda.in\n M requirements/test/cuda.txt\n M requirements/test/rocm.in\n M requirements/test/rocm.txt\n M requirements/test/xpu.txt\n M requirements/xpu.txt\n?? KVarN_stage2_rope_json_fix.patch\n?? experiments/trajectory_divergence/STAGE1_OUTPUT_AUDIT.md\n?? experiments/trajectory_divergence/STAGE2_ALIGNED_REPLAY.md\n?? experiments/trajectory_divergence/analyze_aligned_replay.py\n?? experiments/trajectory_divergence/audit_repeat_outputs.py\n?? experiments/trajectory_divergence/run_aligned_replay.py\n?? experiments/trajectory_divergence/run_stage1_output_audit.sh\n?? experiments/trajectory_divergence/run_stage2_aligned_replay.sh\n?? experiments/trajectory_divergence/teacher_forced_logits_processor.py\n?? results/stage2_aligned_smoke/\n?? results/trajectory_pilot_qwen3_4b_n20_65k/output_audit/\n?? results/trajectory_pilot_qwen3_4b_n20_65k_v2/output_audit/\n?? runs/figure5_attention_smoke/"
+    "git_commit": "ab36aec04757b934dd26dc06614007dee3eebe7e",
+    "git_status_porcelain": "M benchmarks/kvarn_figure5/run_attention_figure5.py\n M experiments/trajectory_divergence/run_stage2_aligned_replay.sh\n D results/stage2_aligned_smoke/fp16_run1/experiment_config.json\n D results/stage2_aligned_smoke/fp16_run1/metrics/4a422b3fdbfe13a33e16.jsonl\n D results/stage2_aligned_smoke/fp16_run1/metrics/5c8840b61958ad4caef7.jsonl\n D results/stage2_aligned_smoke/fp16_run1/metrics/af25489f8c0c57e591bc.jsonl\n D results/stage2_aligned_smoke/fp16_run1/replay_records.jsonl\n D results/stage2_aligned_smoke/fp16_run2/experiment_config.json\n D results/stage2_aligned_smoke/fp16_run2/metrics/4a422b3fdbfe13a33e16.jsonl\n D results/stage2_aligned_smoke/fp16_run2/metrics/5c8840b61958ad4caef7.jsonl\n D results/stage2_aligned_smoke/fp16_run2/metrics/af25489f8c0c57e591bc.jsonl\n D results/stage2_aligned_smoke/fp16_run2/replay_records.jsonl\n M vllm/v1/attention/figure5_probe.py\n?? .install-logs/\n?? .wheel-cache/\n?? kvarn_oneclick.sh\n?? results/stage2_aligned_smoke_kvarn_fork/"
   }
 }

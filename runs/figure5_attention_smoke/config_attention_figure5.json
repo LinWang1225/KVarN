@@ -1,0 +1,90 @@
+{
+  "model": "/data/wanglin/models/Qwen3-4B",
+  "tokenizer": null,
+  "revision": null,
+  "tokenizer_revision": null,
+  "trust_remote_code": false,
+  "methods": [
+    "kvarn",
+    "turboquant"
+  ],
+  "context_lengths": [
+    1024,
+    2048,
+    4096
+  ],
+  "num_samples": 1,
+  "sample_offsets": null,
+  "block_size": 128,
+  "chunk_size": 128,
+  "tensor_parallel_size": 1,
+  "gpu_memory_utilization": 0.9,
+  "shadow_memory_safety_gib": 1.0,
+  "seed": 0,
+  "output_dir": "runs/figure5_attention_smoke",
+  "overwrite": true,
+  "text_file": null,
+  "repeat_short_text": false,
+  "dataset": "Salesforce/wikitext",
+  "dataset_config": "wikitext-2-raw-v1",
+  "dataset_split": "test",
+  "dataset_text_column": "text",
+  "dataset_cache_dir": null,
+  "sample_file": null,
+  "num_hidden_layers": 36,
+  "protocol": "paper-Figure-5-aligned native-vLLM adaptation",
+  "panel_a": "element-weighted mean attention-output MAE over every 128-token chunk and all attention layers",
+  "panel_b": "MAE_KVarN - MAE_TurboQuant, static and accumulated",
+  "panel_c": "panel-b static - accumulated",
+  "important_difference_from_paper": "Released KVarN K4/V2 and TurboQuant K3/V3 remain the native backend presets; the benchmark preserves those actual method labels while matching the paper's Figure 5 axes and regime meaning.",
+  "worker_labels": {
+    "kvarn": "KVarN",
+    "turboquant": "KIVI"
+  },
+  "worker_metadata": [
+    {
+      "method": "kvarn",
+      "regime": "static",
+      "kv_cache_dtype": "kvarn_k4v2_g128",
+      "num_requests": 3,
+      "trace": "/data/wanglin/KVarN/runs/figure5_attention_smoke/worker_kvarn_static.jsonl",
+      "shadow_cache_bytes": 603979776,
+      "shadow_memory_safety_bytes": 1073741824,
+      "requested_gpu_memory_utilization": 0.9,
+      "effective_gpu_memory_utilization": 0.8337594121147825
+    },
+    {
+      "method": "kvarn",
+      "regime": "accumulated",
+      "kv_cache_dtype": "kvarn_k4v2_g128",
+      "num_requests": 3,
+      "trace": "/data/wanglin/KVarN/runs/figure5_attention_smoke/worker_kvarn_accumulated.jsonl",
+      "shadow_cache_bytes": 603979776,
+      "shadow_memory_safety_bytes": 1073741824,
+      "requested_gpu_memory_utilization": 0.9,
+      "effective_gpu_memory_utilization": 0.8337594121147825
+    },
+    {
+      "method": "turboquant",
+      "regime": "static",
+      "kv_cache_dtype": "turboquant_3bit_nc",
+      "num_requests": 3,
+      "trace": "/data/wanglin/KVarN/runs/figure5_attention_smoke/worker_turboquant_static.jsonl",
+      "shadow_cache_bytes": 603979776,
+      "shadow_memory_safety_bytes": 1073741824,
+      "requested_gpu_memory_utilization": 0.9,
+      "effective_gpu_memory_utilization": 0.8337594121147825
+    },
+    {
+      "method": "turboquant",
+      "regime": "accumulated",
+      "kv_cache_dtype": "turboquant_3bit_nc",
+      "num_requests": 3,
+      "trace": "/data/wanglin/KVarN/runs/figure5_attention_smoke/worker_turboquant_accumulated.jsonl",
+      "shadow_cache_bytes": 603979776,
+      "shadow_memory_safety_bytes": 1073741824,
+      "requested_gpu_memory_utilization": 0.9,
+      "effective_gpu_memory_utilization": 0.8337594121147825
+    }
+  ]
+}

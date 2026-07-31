@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "common_samples": 3,
+  "common_sample_ids": [
+    "4a422b3fdbfe13a33e16",
+    "5c8840b61958ad4caef7",
+    "af25489f8c0c57e591bc"
+  ],
+  "observed_aligned_steps": 3072,
+  "verification": {
+    "fp16_run1": {
+      "successful_samples": 3,
+      "all_prompt_token_ids_match": true,
+      "all_metrics_complete": true
+    },
+    "fp16_run2": {
+      "successful_samples": 3,
+      "all_prompt_token_ids_match": true,
+      "all_metrics_complete": true
+    },
+    "kvarn_run1": {
+      "successful_samples": 3,
+      "all_prompt_token_ids_match": true,
+      "all_metrics_complete": true
+    },
+    "kvarn_run2": {
+      "successful_samples": 3,
+      "all_prompt_token_ids_match": true,
+      "all_metrics_complete": true
+    }
+  },
+  "pairs": {
+    "fp16_self": {
+      "valid_samples": 3,
+      "samples_with_raw_top1_disagreement": 0,
+      "sample_disagreement_rate": 0.0,
+      "first_disagreement_step_median": null,
+      "first_disagreement_step_p90": null,
+      "observed_steps": 3072,
+      "top1_disagreement_steps": 0,
+      "step_disagreement_rate": 0.0,
+      "mean_abs_forced_logprob_difference": 0.0,
+      "mean_topk_jaccard": 1.0,
+      "first_disagreement_region_counts": {}
+    },
+    "kvarn_self": {
+      "valid_samples": 3,
+      "samples_with_raw_top1_disagreement": 0,
+      "sample_disagreement_rate": 0.0,
+      "first_disagreement_step_median": null,
+      "first_disagreement_step_p90": null,
+      "observed_steps": 3072,
+      "top1_disagreement_steps": 0,
+      "step_disagreement_rate": 0.0,
+      "mean_abs_forced_logprob_difference": 2.359350522359212e-08,
+      "mean_topk_jaccard": 1.0,
+      "first_disagreement_region_counts": {}
+    },
+    "cross_run1": {
+      "valid_samples": 3,
+      "samples_with_raw_top1_disagreement": 3,
+      "sample_disagreement_rate": 1.0,
+      "first_disagreement_step_median": 247.0,
+      "first_disagreement_step_p90": 251.8,
+      "observed_steps": 3072,
+      "top1_disagreement_steps": 30,
+      "step_disagreement_rate": 0.009765625,
+      "mean_abs_forced_logprob_difference": 0.014844405775268873,
+      "mean_topk_jaccard": 0.9457963543476451,
+      "first_disagreement_region_counts": {
+        "thinking": 3
+      }
+    },
+    "cross_run2": {
+      "valid_samples": 3,
+      "samples_with_raw_top1_disagreement": 3,
+      "sample_disagreement_rate": 1.0,
+      "first_disagreement_step_median": 247.0,
+      "first_disagreement_step_p90": 251.8,
+      "observed_steps": 3072,
+      "top1_disagreement_steps": 30,
+      "step_disagreement_rate": 0.009765625,
+      "mean_abs_forced_logprob_difference": 0.014844429368774096,
+      "mean_topk_jaccard": 0.9457963543476451,
+      "first_disagreement_region_counts": {
+        "thinking": 3
+      }
+    }
+  },
+  "cross_disagreement_by_region": {
+    "thinking": {
+      "steps": 3072,
+      "run1_disagree": 30,
+      "run2_disagree": 30
+    }
+  },
+  "interpretation": {
+    "positive_reference_logprob_drop": "The FP16 reference token is less probable under KVarN at the same aligned history.",
+    "raw_top1_disagreement": "The unmodified next-token argmax differs before teacher forcing."
+  }
+}
