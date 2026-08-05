@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "common_samples": 20,
+  "common_sample_ids": [
+    "003cd5e9c95a474e9431",
+    "05bdc1901a5bcbcd8361",
+    "1886f57e31114f1719d6",
+    "19da3838f3a463bab64e",
+    "1d8ac3dc721f5bffc4e3",
+    "40b0bb7426f9a7d0f265",
+    "4a422b3fdbfe13a33e16",
+    "5c8840b61958ad4caef7",
+    "6865f599c6c0d9a53d0b",
+    "706db9033372be2a17d8",
+    "8ffe40959752def39d11",
+    "95a915884d11ffcc8534",
+    "96b65be99ec3bc4c407f",
+    "ab6e90a57c013da0e038",
+    "af25489f8c0c57e591bc",
+    "bc0ebd5a3f8bc465de9e",
+    "bf1328c295bece4ac011",
+    "c18640ec8402577e23b4",
+    "c6c880408c31b81131f3",
+    "ecc05401fb65fe7a6f62"
+  ],
+  "observed_aligned_steps": 20480,
+  "verification": {
+    "fp16_run1": {
+      "successful_samples": 20,
+      "all_prompt_token_ids_match": true,
+      "all_metrics_complete": true
+    },
+    "fp16_run2": {
+      "successful_samples": 20,
+      "all_prompt_token_ids_match": true,
+      "all_metrics_complete": true
+    },
+    "kvarn_run1": {
+      "successful_samples": 20,
+      "all_prompt_token_ids_match": true,
+      "all_metrics_complete": true
+    },
+    "kvarn_run2": {
+      "successful_samples": 20,
+      "all_prompt_token_ids_match": true,
+      "all_metrics_complete": true
+    }
+  },
+  "pairs": {
+    "fp16_self": {
+      "valid_samples": 20,
+      "samples_with_raw_top1_disagreement": 0,
+      "sample_disagreement_rate": 0.0,
+      "first_disagreement_step_median": null,
+      "first_disagreement_step_p90": null,
+      "observed_steps": 20480,
+      "top1_disagreement_steps": 0,
+      "step_disagreement_rate": 0.0,
+      "mean_abs_forced_logprob_difference": 0.0,
+      "mean_topk_jaccard": 1.0,
+      "first_disagreement_region_counts": {}
+    },
+    "kvarn_self": {
+      "valid_samples": 20,
+      "samples_with_raw_top1_disagreement": 0,
+      "sample_disagreement_rate": 0.0,
+      "first_disagreement_step_median": null,
+      "first_disagreement_step_p90": null,
+      "observed_steps": 20480,
+      "top1_disagreement_steps": 0,
+      "step_disagreement_rate": 0.0,
+      "mean_abs_forced_logprob_difference": 0.0,
+      "mean_topk_jaccard": 1.0,
+      "first_disagreement_region_counts": {}
+    },
+    "cross_run1": {
+      "valid_samples": 20,
+      "samples_with_raw_top1_disagreement": 20,
+      "sample_disagreement_rate": 1.0,
+      "first_disagreement_step_median": 227.5,
+      "first_disagreement_step_p90": 357.50000000000006,
+      "observed_steps": 20480,
+      "top1_disagreement_steps": 263,
+      "step_disagreement_rate": 0.012841796875,
+      "mean_abs_forced_logprob_difference": 0.015389492642134428,
+      "mean_topk_jaccard": 0.9487922207368685,
+      "first_disagreement_region_counts": {
+        "thinking": 19,
+        "unknown": 1
+      }
+    },
+    "cross_run2": {
+      "valid_samples": 20,
+      "samples_with_raw_top1_disagreement": 20,
+      "sample_disagreement_rate": 1.0,
+      "first_disagreement_step_median": 227.5,
+      "first_disagreement_step_p90": 357.50000000000006,
+      "observed_steps": 20480,
+      "top1_disagreement_steps": 263,
+      "step_disagreement_rate": 0.012841796875,
+      "mean_abs_forced_logprob_difference": 0.015389492642134428,
+      "mean_topk_jaccard": 0.9487922207368685,
+      "first_disagreement_region_counts": {
+        "thinking": 19,
+        "unknown": 1
+      }
+    }
+  },
+  "cross_disagreement_by_region": {
+    "thinking": {
+      "steps": 19456,
+      "run1_disagree": 248,
+      "run2_disagree": 248
+    },
+    "unknown": {
+      "steps": 1024,
+      "run1_disagree": 15,
+      "run2_disagree": 15
+    }
+  },
+  "interpretation": {
+    "positive_reference_logprob_drop": "The FP16 reference token is less probable under KVarN at the same aligned history.",
+    "raw_top1_disagreement": "The unmodified next-token argmax differs before teacher forcing."
+  }
+}

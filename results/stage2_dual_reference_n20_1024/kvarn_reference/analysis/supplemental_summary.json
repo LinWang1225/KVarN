@@ -1,0 +1,296 @@
+{
+  "schema_version": 1,
+  "reference": {
+    "reference_generations": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl",
+    "reference_source_run": "kvarn_run1",
+    "reference_source_mode": "kvarn",
+    "run_reference_paths": {
+      "fp16_run1": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl",
+      "fp16_run2": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl",
+      "kvarn_run1": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl",
+      "kvarn_run2": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl"
+    }
+  },
+  "observed_rows": 20480,
+  "reference_adherence": {
+    "fp16_run1": {
+      "observed_steps": 20480,
+      "matching_steps": 20217,
+      "mismatch_steps": 263,
+      "adherence_rate": 0.987158203125,
+      "mismatch_rate": 0.012841796875,
+      "samples_with_mismatch": 20,
+      "first_mismatch_step_median": 227.5,
+      "first_mismatch_step_p90": 371.0,
+      "first_mismatch_by_sample": {
+        "003cd5e9c95a474e9431": 228,
+        "05bdc1901a5bcbcd8361": 219,
+        "1886f57e31114f1719d6": 295,
+        "19da3838f3a463bab64e": 174,
+        "1d8ac3dc721f5bffc4e3": 152,
+        "40b0bb7426f9a7d0f265": 354,
+        "4a422b3fdbfe13a33e16": 215,
+        "5c8840b61958ad4caef7": 253,
+        "6865f599c6c0d9a53d0b": 101,
+        "706db9033372be2a17d8": 253,
+        "8ffe40959752def39d11": 211,
+        "95a915884d11ffcc8534": 227,
+        "96b65be99ec3bc4c407f": 389,
+        "ab6e90a57c013da0e038": 399,
+        "af25489f8c0c57e591bc": 247,
+        "bc0ebd5a3f8bc465de9e": 369,
+        "bf1328c295bece4ac011": 361,
+        "c18640ec8402577e23b4": 226,
+        "c6c880408c31b81131f3": 213,
+        "ecc05401fb65fe7a6f62": 93
+      },
+      "mismatch_region_counts": {
+        "thinking": 250,
+        "unknown": 13
+      }
+    },
+    "fp16_run2": {
+      "observed_steps": 20480,
+      "matching_steps": 20217,
+      "mismatch_steps": 263,
+      "adherence_rate": 0.987158203125,
+      "mismatch_rate": 0.012841796875,
+      "samples_with_mismatch": 20,
+      "first_mismatch_step_median": 227.5,
+      "first_mismatch_step_p90": 371.0,
+      "first_mismatch_by_sample": {
+        "003cd5e9c95a474e9431": 228,
+        "05bdc1901a5bcbcd8361": 219,
+        "1886f57e31114f1719d6": 295,
+        "19da3838f3a463bab64e": 174,
+        "1d8ac3dc721f5bffc4e3": 152,
+        "40b0bb7426f9a7d0f265": 354,
+        "4a422b3fdbfe13a33e16": 215,
+        "5c8840b61958ad4caef7": 253,
+        "6865f599c6c0d9a53d0b": 101,
+        "706db9033372be2a17d8": 253,
+        "8ffe40959752def39d11": 211,
+        "95a915884d11ffcc8534": 227,
+        "96b65be99ec3bc4c407f": 389,
+        "ab6e90a57c013da0e038": 399,
+        "af25489f8c0c57e591bc": 247,
+        "bc0ebd5a3f8bc465de9e": 369,
+        "bf1328c295bece4ac011": 361,
+        "c18640ec8402577e23b4": 226,
+        "c6c880408c31b81131f3": 213,
+        "ecc05401fb65fe7a6f62": 93
+      },
+      "mismatch_region_counts": {
+        "thinking": 250,
+        "unknown": 13
+      }
+    },
+    "kvarn_run1": {
+      "observed_steps": 20480,
+      "matching_steps": 20405,
+      "mismatch_steps": 75,
+      "adherence_rate": 0.996337890625,
+      "mismatch_rate": 0.003662109375,
+      "samples_with_mismatch": 19,
+      "first_mismatch_step_median": 392.0,
+      "first_mismatch_step_p90": 592.0,
+      "first_mismatch_by_sample": {
+        "003cd5e9c95a474e9431": 727,
+        "05bdc1901a5bcbcd8361": 315,
+        "1886f57e31114f1719d6": 544,
+        "19da3838f3a463bab64e": 462,
+        "1d8ac3dc721f5bffc4e3": 427,
+        "40b0bb7426f9a7d0f265": 411,
+        "4a422b3fdbfe13a33e16": 225,
+        "5c8840b61958ad4caef7": 331,
+        "6865f599c6c0d9a53d0b": 101,
+        "706db9033372be2a17d8": 392,
+        "8ffe40959752def39d11": 577,
+        "95a915884d11ffcc8534": 337,
+        "96b65be99ec3bc4c407f": 652,
+        "ab6e90a57c013da0e038": 540,
+        "af25489f8c0c57e591bc": 480,
+        "bc0ebd5a3f8bc465de9e": 184,
+        "bf1328c295bece4ac011": 199,
+        "c18640ec8402577e23b4": 226,
+        "ecc05401fb65fe7a6f62": 93
+      },
+      "mismatch_region_counts": {
+        "thinking": 71,
+        "unknown": 4
+      }
+    },
+    "kvarn_run2": {
+      "observed_steps": 20480,
+      "matching_steps": 20405,
+      "mismatch_steps": 75,
+      "adherence_rate": 0.996337890625,
+      "mismatch_rate": 0.003662109375,
+      "samples_with_mismatch": 19,
+      "first_mismatch_step_median": 392.0,
+      "first_mismatch_step_p90": 592.0,
+      "first_mismatch_by_sample": {
+        "003cd5e9c95a474e9431": 727,
+        "05bdc1901a5bcbcd8361": 315,
+        "1886f57e31114f1719d6": 544,
+        "19da3838f3a463bab64e": 462,
+        "1d8ac3dc721f5bffc4e3": 427,
+        "40b0bb7426f9a7d0f265": 411,
+        "4a422b3fdbfe13a33e16": 225,
+        "5c8840b61958ad4caef7": 331,
+        "6865f599c6c0d9a53d0b": 101,
+        "706db9033372be2a17d8": 392,
+        "8ffe40959752def39d11": 577,
+        "95a915884d11ffcc8534": 337,
+        "96b65be99ec3bc4c407f": 652,
+        "ab6e90a57c013da0e038": 540,
+        "af25489f8c0c57e591bc": 480,
+        "bc0ebd5a3f8bc465de9e": 184,
+        "bf1328c295bece4ac011": 199,
+        "c18640ec8402577e23b4": 226,
+        "ecc05401fb65fe7a6f62": 93
+      },
+      "mismatch_region_counts": {
+        "thinking": 71,
+        "unknown": 4
+      }
+    }
+  },
+  "source_reference_adherence": {
+    "observed_steps": 20480,
+    "matching_steps": 20405,
+    "mismatch_steps": 75,
+    "adherence_rate": 0.996337890625,
+    "mismatch_rate": 0.003662109375,
+    "samples_with_mismatch": 19,
+    "first_mismatch_step_median": 392.0,
+    "first_mismatch_step_p90": 592.0,
+    "first_mismatch_by_sample": {
+      "003cd5e9c95a474e9431": 727,
+      "05bdc1901a5bcbcd8361": 315,
+      "1886f57e31114f1719d6": 544,
+      "19da3838f3a463bab64e": 462,
+      "1d8ac3dc721f5bffc4e3": 427,
+      "40b0bb7426f9a7d0f265": 411,
+      "4a422b3fdbfe13a33e16": 225,
+      "5c8840b61958ad4caef7": 331,
+      "6865f599c6c0d9a53d0b": 101,
+      "706db9033372be2a17d8": 392,
+      "8ffe40959752def39d11": 577,
+      "95a915884d11ffcc8534": 337,
+      "96b65be99ec3bc4c407f": 652,
+      "ab6e90a57c013da0e038": 540,
+      "af25489f8c0c57e591bc": 480,
+      "bc0ebd5a3f8bc465de9e": 184,
+      "bf1328c295bece4ac011": 199,
+      "c18640ec8402577e23b4": 226,
+      "ecc05401fb65fe7a6f62": 93
+    },
+    "mismatch_region_counts": {
+      "thinking": 71,
+      "unknown": 4
+    }
+  },
+  "margin_flip_probability": [
+    {
+      "margin_bucket": "[0,0.05)",
+      "lower": 0.0,
+      "upper": 0.05,
+      "run1_steps": 120,
+      "run1_disagreements": 57,
+      "run1_disagreement_rate": 0.475,
+      "run2_steps": 120,
+      "run2_disagreements": 57,
+      "run2_disagreement_rate": 0.475
+    },
+    {
+      "margin_bucket": "[0.05,0.1)",
+      "lower": 0.05,
+      "upper": 0.1,
+      "run1_steps": 155,
+      "run1_disagreements": 54,
+      "run1_disagreement_rate": 0.34838709677419355,
+      "run2_steps": 155,
+      "run2_disagreements": 54,
+      "run2_disagreement_rate": 0.34838709677419355
+    },
+    {
+      "margin_bucket": "[0.1,0.2)",
+      "lower": 0.1,
+      "upper": 0.2,
+      "run1_steps": 210,
+      "run1_disagreements": 55,
+      "run1_disagreement_rate": 0.2619047619047619,
+      "run2_steps": 210,
+      "run2_disagreements": 55,
+      "run2_disagreement_rate": 0.2619047619047619
+    },
+    {
+      "margin_bucket": "[0.2,0.5)",
+      "lower": 0.2,
+      "upper": 0.5,
+      "run1_steps": 631,
+      "run1_disagreements": 63,
+      "run1_disagreement_rate": 0.09984152139461172,
+      "run2_steps": 631,
+      "run2_disagreements": 63,
+      "run2_disagreement_rate": 0.09984152139461172
+    },
+    {
+      "margin_bucket": "[0.5,1)",
+      "lower": 0.5,
+      "upper": 1.0,
+      "run1_steps": 1052,
+      "run1_disagreements": 29,
+      "run1_disagreement_rate": 0.027566539923954372,
+      "run2_steps": 1052,
+      "run2_disagreements": 29,
+      "run2_disagreement_rate": 0.027566539923954372
+    },
+    {
+      "margin_bucket": "[1,2)",
+      "lower": 1.0,
+      "upper": 2.0,
+      "run1_steps": 1721,
+      "run1_disagreements": 4,
+      "run1_disagreement_rate": 0.002324230098779779,
+      "run2_steps": 1721,
+      "run2_disagreements": 4,
+      "run2_disagreement_rate": 0.002324230098779779
+    },
+    {
+      "margin_bucket": "[2,5)",
+      "lower": 2.0,
+      "upper": 5.0,
+      "run1_steps": 3136,
+      "run1_disagreements": 1,
+      "run1_disagreement_rate": 0.00031887755102040814,
+      "run2_steps": 3136,
+      "run2_disagreements": 1,
+      "run2_disagreement_rate": 0.00031887755102040814
+    },
+    {
+      "margin_bucket": "[5,+inf)",
+      "lower": 5.0,
+      "upper": null,
+      "run1_steps": 13455,
+      "run1_disagreements": 0,
+      "run1_disagreement_rate": 0.0,
+      "run2_steps": 13455,
+      "run2_disagreements": 0,
+      "run2_disagreement_rate": 0.0
+    }
+  ],
+  "diagnostic_row_counts": {
+    "any_reference_mismatch": 300,
+    "any_cross_mode_top1_disagreement": 263
+  },
+  "warnings": [
+    "The aligned kvarn_run1 engine does not naturally reproduce the source trajectory at 75 steps; the forced path remains valid, but it is not an exact natural replay under the aligned runner."
+  ],
+  "interpretation": {
+    "reference_adherence": "Whether the unmodified aligned engine's raw top-1 equals the forced source token before masking.",
+    "positive_reference_logprob_drop": "FP16 assigns the forced reference token a higher log-probability than KVarN.",
+    "kvarn_reference_use": "When reference_source_mode is kvarn, kvarn_self disagreements directly test repeatability along a KVarN-generated natural path."
+  }
+}

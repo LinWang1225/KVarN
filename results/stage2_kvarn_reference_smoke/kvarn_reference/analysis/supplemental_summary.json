@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "reference": {
+    "reference_generations": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl",
+    "reference_source_run": "kvarn_run1",
+    "reference_source_mode": "kvarn",
+    "run_reference_paths": {
+      "fp16_run1": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl",
+      "fp16_run2": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl",
+      "kvarn_run1": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl",
+      "kvarn_run2": "/data/wanglin/KVarN/results/trajectory_pilot_qwen3_4b_n20_65k_v2/kvarn_run1/generations.jsonl"
+    }
+  },
+  "observed_rows": 3072,
+  "reference_adherence": {
+    "fp16_run1": {
+      "observed_steps": 3072,
+      "matching_steps": 3033,
+      "mismatch_steps": 39,
+      "adherence_rate": 0.9873046875,
+      "mismatch_rate": 0.0126953125,
+      "samples_with_mismatch": 3,
+      "first_mismatch_step_median": 247.0,
+      "first_mismatch_step_p90": 251.8,
+      "first_mismatch_by_sample": {
+        "4a422b3fdbfe13a33e16": 215,
+        "5c8840b61958ad4caef7": 253,
+        "af25489f8c0c57e591bc": 247
+      },
+      "mismatch_region_counts": {
+        "thinking": 26,
+        "unknown": 13
+      }
+    },
+    "fp16_run2": {
+      "observed_steps": 3072,
+      "matching_steps": 3033,
+      "mismatch_steps": 39,
+      "adherence_rate": 0.9873046875,
+      "mismatch_rate": 0.0126953125,
+      "samples_with_mismatch": 3,
+      "first_mismatch_step_median": 247.0,
+      "first_mismatch_step_p90": 251.8,
+      "first_mismatch_by_sample": {
+        "4a422b3fdbfe13a33e16": 215,
+        "5c8840b61958ad4caef7": 253,
+        "af25489f8c0c57e591bc": 247
+      },
+      "mismatch_region_counts": {
+        "thinking": 26,
+        "unknown": 13
+      }
+    },
+    "kvarn_run1": {
+      "observed_steps": 3072,
+      "matching_steps": 3060,
+      "mismatch_steps": 12,
+      "adherence_rate": 0.99609375,
+      "mismatch_rate": 0.00390625,
+      "samples_with_mismatch": 3,
+      "first_mismatch_step_median": 331.0,
+      "first_mismatch_step_p90": 450.2,
+      "first_mismatch_by_sample": {
+        "4a422b3fdbfe13a33e16": 225,
+        "5c8840b61958ad4caef7": 331,
+        "af25489f8c0c57e591bc": 480
+      },
+      "mismatch_region_counts": {
+        "thinking": 8,
+        "unknown": 4
+      }
+    },
+    "kvarn_run2": {
+      "observed_steps": 3072,
+      "matching_steps": 3060,
+      "mismatch_steps": 12,
+      "adherence_rate": 0.99609375,
+      "mismatch_rate": 0.00390625,
+      "samples_with_mismatch": 3,
+      "first_mismatch_step_median": 331.0,
+      "first_mismatch_step_p90": 450.2,
+      "first_mismatch_by_sample": {
+        "4a422b3fdbfe13a33e16": 225,
+        "5c8840b61958ad4caef7": 331,
+        "af25489f8c0c57e591bc": 480
+      },
+      "mismatch_region_counts": {
+        "thinking": 8,
+        "unknown": 4
+      }
+    }
+  },
+  "source_reference_adherence": {
+    "observed_steps": 3072,
+    "matching_steps": 3060,
+    "mismatch_steps": 12,
+    "adherence_rate": 0.99609375,
+    "mismatch_rate": 0.00390625,
+    "samples_with_mismatch": 3,
+    "first_mismatch_step_median": 331.0,
+    "first_mismatch_step_p90": 450.2,
+    "first_mismatch_by_sample": {
+      "4a422b3fdbfe13a33e16": 225,
+      "5c8840b61958ad4caef7": 331,
+      "af25489f8c0c57e591bc": 480
+    },
+    "mismatch_region_counts": {
+      "thinking": 8,
+      "unknown": 4
+    }
+  },
+  "margin_flip_probability": [
+    {
+      "margin_bucket": "[0,0.05)",
+      "lower": 0.0,
+      "upper": 0.05,
+      "run1_steps": 19,
+      "run1_disagreements": 9,
+      "run1_disagreement_rate": 0.47368421052631576,
+      "run2_steps": 19,
+      "run2_disagreements": 9,
+      "run2_disagreement_rate": 0.47368421052631576
+    },
+    {
+      "margin_bucket": "[0.05,0.1)",
+      "lower": 0.05,
+      "upper": 0.1,
+      "run1_steps": 30,
+      "run1_disagreements": 9,
+      "run1_disagreement_rate": 0.3,
+      "run2_steps": 30,
+      "run2_disagreements": 9,
+      "run2_disagreement_rate": 0.3
+    },
+    {
+      "margin_bucket": "[0.1,0.2)",
+      "lower": 0.1,
+      "upper": 0.2,
+      "run1_steps": 32,
+      "run1_disagreements": 9,
+      "run1_disagreement_rate": 0.28125,
+      "run2_steps": 32,
+      "run2_disagreements": 9,
+      "run2_disagreement_rate": 0.28125
+    },
+    {
+      "margin_bucket": "[0.2,0.5)",
+      "lower": 0.2,
+      "upper": 0.5,
+      "run1_steps": 113,
+      "run1_disagreements": 12,
+      "run1_disagreement_rate": 0.10619469026548672,
+      "run2_steps": 113,
+      "run2_disagreements": 12,
+      "run2_disagreement_rate": 0.10619469026548672
+    },
+    {
+      "margin_bucket": "[0.5,1)",
+      "lower": 0.5,
+      "upper": 1.0,
+      "run1_steps": 184,
+      "run1_disagreements": 2,
+      "run1_disagreement_rate": 0.010869565217391304,
+      "run2_steps": 184,
+      "run2_disagreements": 2,
+      "run2_disagreement_rate": 0.010869565217391304
+    },
+    {
+      "margin_bucket": "[1,2)",
+      "lower": 1.0,
+      "upper": 2.0,
+      "run1_steps": 291,
+      "run1_disagreements": 0,
+      "run1_disagreement_rate": 0.0,
+      "run2_steps": 291,
+      "run2_disagreements": 0,
+      "run2_disagreement_rate": 0.0
+    },
+    {
+      "margin_bucket": "[2,5)",
+      "lower": 2.0,
+      "upper": 5.0,
+      "run1_steps": 535,
+      "run1_disagreements": 0,
+      "run1_disagreement_rate": 0.0,
+      "run2_steps": 535,
+      "run2_disagreements": 0,
+      "run2_disagreement_rate": 0.0
+    },
+    {
+      "margin_bucket": "[5,+inf)",
+      "lower": 5.0,
+      "upper": null,
+      "run1_steps": 1868,
+      "run1_disagreements": 0,
+      "run1_disagreement_rate": 0.0,
+      "run2_steps": 1868,
+      "run2_disagreements": 0,
+      "run2_disagreement_rate": 0.0
+    }
+  ],
+  "diagnostic_row_counts": {
+    "any_reference_mismatch": 46,
+    "any_cross_mode_top1_disagreement": 41
+  },
+  "warnings": [
+    "The aligned kvarn_run1 engine does not naturally reproduce the source trajectory at 12 steps; the forced path remains valid, but it is not an exact natural replay under the aligned runner."
+  ],
+  "interpretation": {
+    "reference_adherence": "Whether the unmodified aligned engine's raw top-1 equals the forced source token before masking.",
+    "positive_reference_logprob_drop": "FP16 assigns the forced reference token a higher log-probability than KVarN.",
+    "kvarn_reference_use": "When reference_source_mode is kvarn, kvarn_self disagreements directly test repeatability along a KVarN-generated natural path."
+  }
+}
