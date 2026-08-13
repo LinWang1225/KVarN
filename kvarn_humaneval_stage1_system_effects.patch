@@ -1,0 +1,2015 @@
+diff --git a/experiments/trajectory_divergence/HUMANEVAL_STAGE1_SYSTEM_EFFECTS.md b/experiments/trajectory_divergence/HUMANEVAL_STAGE1_SYSTEM_EFFECTS.md
+new file mode 100644
+--- /dev/null
++++ b/experiments/trajectory_divergence/HUMANEVAL_STAGE1_SYSTEM_EFFECTS.md
+@@ -0,0 +1,312 @@
++# HumanEval Stage 1: trajectory divergence → generation inflation → latency
++
++This patch adds a HumanEval-specific Stage 1 experiment without changing KVarN
++attention kernels, cache managers, or the existing MATH-500 experiment scripts.
++
++The goal is to test a stronger system-level hypothesis than "KV quantization can
++change a token": under a fixed greedy decoding configuration, sparse FP16/KVarN
++trajectory divergence may cause extra reasoning/generation, which in turn may
++increase decode work and request latency even when both outputs still pass the
++HumanEval tests.
++
++## Files added
++
++```text
++experiments/trajectory_divergence/
++├── humaneval_utils.py
++├── prepare_humaneval_samples.py
++├── run_humaneval_generation.py
++├── analyze_humaneval_system_effects.py
++├── plot_humaneval_system_effects.py
++├── run_humaneval_stage1.sh
++└── HUMANEVAL_STAGE1_SYSTEM_EFFECTS.md
++```
++
++Existing generic components are reused unchanged:
++
++- `compare_trajectories.py` for exact output-token first divergence/LCP;
++- `plot_results.py` for the existing trajectory/length figures.
++
++## Default experiment
++
++- dataset: `openai/openai_humaneval`, full 164-task test set;
++- model: `Qwen/Qwen3-4B`;
++- thinking mode: enabled through the Qwen chat template;
++- decoding: greedy (`temperature=0`, `top_p=1`, `top_k=-1`);
++- FP16 KV: `kv_cache_dtype=auto`;
++- KVarN KV: `kvarn_k4v2_g128`;
++- block size: 128;
++- prefix caching: disabled;
++- output budget: 16384 tokens;
++- model context ceiling: 32768 tokens;
++- repeats: FP16 x2 and KVarN x2;
++- one request at a time (`max_num_seqs=1`);
++- HumanEval execution timeout: 30 seconds;
++- bootstrap confidence intervals: 5000 paired resamples.
++
++Greedy decoding is intentional: this arm is for trajectory attribution. A
++separate sampling arm can later reproduce the paper-style HumanEval setup, but
++sampling randomness should not be mixed into the first causal analysis.
++
++## HumanEval prompt and correctness
++
++`prepare_humaneval_samples.py` preserves the HumanEval-native fields:
++
++```text
++task_id
++prompt
++canonical_solution
++test
++entry_point
++```
++
++It also writes the generic `problem`/`sample_id` fields expected by the existing
++trajectory analysis scripts.
++
++`run_humaneval_generation.py` wraps the raw HumanEval prompt in a short coding
++instruction and the Qwen chat template. It records the exact prompt hash, input
++and output token IDs, output text, finish reason, and KVarN backend metadata.
++
++For correctness, the runner:
++
++1. removes the visible reasoning prefix up to the last `</think>`;
++2. extracts the final Python code block when present;
++3. supports both a full returned function and a completion appended to the
++   original HumanEval prompt;
++4. appends the HumanEval test and `check(entry_point)` call;
++5. executes the candidate in a short-lived Python subprocess;
++6. records `passed`, `failed`, `syntax_error`, `memory_error`, or `timeout`.
++
++### Security warning
++
++Generated code is untrusted. The helper applies a wall-clock timeout, isolated
++Python mode (`-I`), a temporary working directory, a minimal environment, and
++best-effort POSIX CPU/memory/file/process limits. This is **not** a hardened
++security sandbox and does not prove network isolation. Run the experiment in a
++dedicated container/VM with no credentials, secrets, or sensitive host mounts.
++
++## Per-request metrics
++
++### Quality
++
++```text
++fp16_pass
++kvarn_pass
++correctness_transition
++execution_result
++```
++
++The most important subgroup is `pass_to_pass`: both modes produce functionally
++correct code, so any additional KVarN tokens/latency cannot be dismissed as a
++simple correctness failure.
++
++### Output/generation cost
++
++For FP16 output length `N_fp` and KVarN output length `N_q`:
++
++```text
++delta_tokens = N_q - N_fp
++TIR = (N_q - N_fp) / N_fp
++```
++
++The analysis reports mean/median/P90/P95, plus fractions with:
++
++```text
++TIR > 10%
++TIR > 25%
++TIR > 50%
++TIR > 100%
++TIR < -10%
++```
++
++Pairs where either run terminates because of `max_tokens` are marked censored
++and excluded from the primary inflation distribution.
++
++### Thinking versus final/code region
++
++When `</think>` is found in the generated token sequence, the runner records:
++
++```text
++thinking_tokens
++final_tokens
++delta_thinking_tokens
++delta_final_tokens
++reasoning_inflation_ratio
++final_inflation_ratio
++```
++
++This separates "more internal reasoning" from merely returning more final code.
++
++### System timing
++
++The generation wall-clock time is always recorded:
++
++```text
++latency_seconds
++tokens_per_second
++```
++
++When the vLLM `RequestOutput.metrics` object exposes timestamps, the runner also
++records:
++
++```text
++ttft_seconds
++queue_time_seconds
++prefill_time_seconds
++decode_time_seconds
++tpot_seconds
++engine_inference_span_seconds
++```
++
++For paired analysis:
++
++```text
++E2E LIR    = (T_q - T_fp) / T_fp
++Decode LIR = (D_q - D_fp) / D_fp
++```
++
++If per-request vLLM timestamps are unavailable in the local build, E2E latency
++remains available and `timing_coverage` in `summary.json` makes the missing
++coverage explicit.
++
++### Trajectory linkage
++
++The generic `compare_trajectories.py` still provides:
++
++```text
++first_divergence_step
++lcp_ratio
++diverged
++```
++
++This patch adds:
++
++```text
++normalized_first_divergence = first_divergence_step / FP16_output_tokens
++```
++
++and the request groups:
++
++```text
++no_divergence
++early_[0,0.25)
++middle_[0.25,0.5)
++late_[0.5,1+]
++```
++
++The main correlations are Spearman rank correlations between:
++
++```text
++normalized first divergence ↔ TIR
++TIR ↔ E2E LIR
++TIR ↔ decode LIR
++```
++
++These are correlation diagnostics, not yet a causal intervention result.
++
++## Output layout
++
++```text
++results/humaneval_stage1_qwen3_4b_n164/
++├── selected_samples.json
++├── fp16_run1/
++│   ├── generations.jsonl
++│   └── experiment_config.json
++├── fp16_run2/
++├── kvarn_run1/
++├── kvarn_run2/
++├── comparison/
++│   ├── per_sample_comparison.csv
++│   ├── summary.json
++│   ├── summary.md
++│   └── plots/
++└── system_effects/
++    ├── per_sample_system_effects.csv
++    ├── per_sample_system_effects.jsonl
++    ├── summary.json
++    ├── summary.md
++    └── plots/
++        ├── figure_humaneval_tir_cdf.{png,pdf}
++        ├── figure_humaneval_tir_vs_lir.{png,pdf}
++        ├── figure_humaneval_divergence_vs_tir.{png,pdf}
++        ├── figure_humaneval_tir_by_divergence_group.{png,pdf}
++        └── figure_humaneval_thinking_vs_final_delta.{png,pdf}
++```
++
++## Smoke test first
++
++Run 3 tasks before the full set:
++
++```bash
++cd /data/wanglin/KVarN
++
++HF_HUB_OFFLINE=1 \
++TRANSFORMERS_OFFLINE=1 \
++PYTHON=/home/wanglin/miniconda3/envs/kvarn-smoke/bin/python \
++MODEL=/data/wanglin/models/Qwen3-4B \
++NUM_SAMPLES=3 \
++MAX_TOKENS=4096 \
++MAX_MODEL_LEN=32768 \
++OUTPUT_ROOT=$PWD/results/humaneval_stage1_smoke \
++bash experiments/trajectory_divergence/run_humaneval_stage1.sh
++```
++
++Inspect at minimum:
++
++```text
++results/humaneval_stage1_smoke/fp16_run1/generations.jsonl
++results/humaneval_stage1_smoke/kvarn_run1/generations.jsonl
++results/humaneval_stage1_smoke/comparison/summary.md
++results/humaneval_stage1_smoke/system_effects/summary.md
++```
++
++Check that:
++
++- `backend_verified=true` for KVarN;
++- the prompt hashes match across modes;
++- `execution_result` is populated;
++- `candidate_code` is valid-looking Python for representative tasks;
++- `timing_coverage.decode_pairs` is non-zero if the local vLLM exposes request
++  timestamps;
++- FP16/KVarN repeat self-divergence is not unexpectedly large.
++
++## Full 164-task run
++
++```bash
++cd /data/wanglin/KVarN
++
++HF_HUB_OFFLINE=1 \
++TRANSFORMERS_OFFLINE=1 \
++PYTHON=/home/wanglin/miniconda3/envs/kvarn-smoke/bin/python \
++MODEL=/data/wanglin/models/Qwen3-4B \
++NUM_SAMPLES=164 \
++NUM_REPEATS=2 \
++MAX_TOKENS=16384 \
++MAX_MODEL_LEN=32768 \
++BLOCK_SIZE=128 \
++GPU_MEMORY_UTILIZATION=0.90 \
++TP_SIZE=1 \
++SEED=2026 \
++OUTPUT_ROOT=$PWD/results/humaneval_stage1_qwen3_4b_n164 \
++bash experiments/trajectory_divergence/run_humaneval_stage1.sh
++```
++
++If the HumanEval dataset is not already in the Hugging Face cache, temporarily
++run without `HF_HUB_OFFLINE=1` / `TRANSFORMERS_OFFLINE=1` once to populate the
++cache, or point the dataset loader at an already available local copy.
++
++## Primary result checks
++
++A useful system-level signal would have all or most of the following:
++
++1. KVarN `pass@1` remains close to FP16;
++2. the `pass_to_pass` subset still has positive TIR;
++3. TIR has a non-trivial positive right tail rather than only a tiny mean shift;
++4. TIR positively tracks E2E/decode LIR;
++5. early divergence has larger TIR/LIR than late/no divergence;
++6. extra tokens are concentrated in the thinking region rather than final code.
++
++If these hold, the next experiment should select representative high-inflation,
++low-inflation, contraction, and quality-change tasks and run bounded aligned
++replay. The replay horizon should be selected from the HumanEval first-divergence
++CDF rather than fixed to the previous MATH-500 1024-token horizon.
+diff --git a/experiments/trajectory_divergence/analyze_humaneval_system_effects.py b/experiments/trajectory_divergence/analyze_humaneval_system_effects.py
+new file mode 100755
+--- /dev/null
++++ b/experiments/trajectory_divergence/analyze_humaneval_system_effects.py
+@@ -0,0 +1,470 @@
++#!/usr/bin/env python3
++"""Analyze HumanEval trajectory divergence, generation inflation, and latency."""
++
++from __future__ import annotations
++
++import argparse
++import csv
++import json
++import math
++import random
++import statistics
++from collections import Counter, defaultdict
++from pathlib import Path
++from typing import Any, Callable, Iterable
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(
++        description="Join HumanEval free-generation outputs with trajectory comparisons."
++    )
++    parser.add_argument("--fp16", type=Path, required=True)
++    parser.add_argument("--kvarn", type=Path, required=True)
++    parser.add_argument("--comparison-csv", type=Path, required=True)
++    parser.add_argument("--output-dir", type=Path, required=True)
++    parser.add_argument("--bootstrap-samples", type=int, default=5000)
++    parser.add_argument("--bootstrap-seed", type=int, default=2026)
++    return parser.parse_args()
++
++
++def load_jsonl(path: Path) -> dict[str, dict[str, Any]]:
++    records: dict[str, dict[str, Any]] = {}
++    with path.open("r", encoding="utf-8") as handle:
++        for line in handle:
++            if not line.strip():
++                continue
++            record = json.loads(line)
++            sample_id = record.get("sample_id")
++            if sample_id is None:
++                continue
++            previous = records.get(str(sample_id))
++            if previous is None or previous.get("error") is not None or record.get("error") is None:
++                records[str(sample_id)] = record
++    return records
++
++
++def parse_bool(value: Any) -> bool | None:
++    if isinstance(value, bool):
++        return value
++    text = str(value).strip().lower()
++    if text in {"true", "1", "yes"}:
++        return True
++    if text in {"false", "0", "no"}:
++        return False
++    return None
++
++
++def parse_int(value: Any) -> int | None:
++    if value is None or str(value).strip() == "":
++        return None
++    return int(float(value))
++
++
++def parse_float(value: Any) -> float | None:
++    if value is None or str(value).strip() == "":
++        return None
++    return float(value)
++
++
++def load_comparison(path: Path) -> dict[str, dict[str, Any]]:
++    rows: dict[str, dict[str, Any]] = {}
++    with path.open("r", encoding="utf-8", newline="") as handle:
++        for row in csv.DictReader(handle):
++            sample_id = str(row["sample_id"])
++            rows[sample_id] = {
++                **row,
++                "diverged": bool(parse_bool(row.get("diverged"))),
++                "first_divergence_step": parse_int(row.get("first_divergence_step")),
++                "fp16_censored": bool(parse_bool(row.get("fp16_censored"))),
++                "kvarn_censored": bool(parse_bool(row.get("kvarn_censored"))),
++                "either_censored": bool(parse_bool(row.get("either_censored"))),
++            }
++    return rows
++
++
++def ratio_delta(candidate: float | int | None, reference: float | int | None) -> float | None:
++    if candidate is None or reference is None or float(reference) == 0.0:
++        return None
++    return (float(candidate) - float(reference)) / float(reference)
++
++
++def accuracy(records: list[dict[str, Any]], field: str) -> dict[str, Any]:
++    values = [row[field] for row in records if isinstance(row.get(field), bool)]
++    return {
++        "correct": sum(bool(value) for value in values),
++        "evaluated": len(values),
++        "accuracy": sum(bool(value) for value in values) / len(values) if values else None,
++    }
++
++
++def percentile(values: Iterable[float], probability: float) -> float | None:
++    ordered = sorted(float(value) for value in values)
++    if not ordered:
++        return None
++    if len(ordered) == 1:
++        return ordered[0]
++    position = probability * (len(ordered) - 1)
++    low = math.floor(position)
++    high = math.ceil(position)
++    if low == high:
++        return ordered[low]
++    fraction = position - low
++    return ordered[low] * (1 - fraction) + ordered[high] * fraction
++
++
++def summarize_values(values: Iterable[float | int | None]) -> dict[str, Any]:
++    clean = [float(value) for value in values if value is not None and math.isfinite(float(value))]
++    if not clean:
++        return {"count": 0, "mean": None, "median": None, "p90": None, "p95": None, "min": None, "max": None}
++    return {
++        "count": len(clean),
++        "mean": statistics.fmean(clean),
++        "median": statistics.median(clean),
++        "p90": percentile(clean, 0.90),
++        "p95": percentile(clean, 0.95),
++        "min": min(clean),
++        "max": max(clean),
++    }
++
++
++def average_ranks(values: list[float]) -> list[float]:
++    indexed = sorted(enumerate(values), key=lambda item: item[1])
++    ranks = [0.0] * len(values)
++    cursor = 0
++    while cursor < len(indexed):
++        end = cursor + 1
++        while end < len(indexed) and indexed[end][1] == indexed[cursor][1]:
++            end += 1
++        average = (cursor + 1 + end) / 2.0
++        for offset in range(cursor, end):
++            ranks[indexed[offset][0]] = average
++        cursor = end
++    return ranks
++
++
++def pearson(x: list[float], y: list[float]) -> float | None:
++    if len(x) < 2 or len(x) != len(y):
++        return None
++    mean_x = statistics.fmean(x)
++    mean_y = statistics.fmean(y)
++    dx = [value - mean_x for value in x]
++    dy = [value - mean_y for value in y]
++    denom = math.sqrt(sum(value * value for value in dx) * sum(value * value for value in dy))
++    if denom == 0:
++        return None
++    return sum(left * right for left, right in zip(dx, dy)) / denom
++
++
++def spearman(pairs: Iterable[tuple[float | None, float | None]]) -> dict[str, Any]:
++    clean = [(float(x), float(y)) for x, y in pairs if x is not None and y is not None and math.isfinite(float(x)) and math.isfinite(float(y))]
++    if len(clean) < 2:
++        return {"n": len(clean), "rho": None}
++    x = [item[0] for item in clean]
++    y = [item[1] for item in clean]
++    return {"n": len(clean), "rho": pearson(average_ranks(x), average_ranks(y))}
++
++
++def bootstrap_ci(
++    values: list[float],
++    statistic: Callable[[list[float]], float],
++    *,
++    samples: int,
++    seed: int,
++) -> dict[str, Any]:
++    if not values:
++        return {"estimate": None, "low": None, "high": None, "samples": 0}
++    estimate = statistic(values)
++    if len(values) == 1 or samples <= 0:
++        return {"estimate": estimate, "low": estimate, "high": estimate, "samples": 0}
++    rng = random.Random(seed)
++    boot: list[float] = []
++    n = len(values)
++    for _ in range(samples):
++        draw = [values[rng.randrange(n)] for _ in range(n)]
++        boot.append(statistic(draw))
++    return {
++        "estimate": estimate,
++        "low": percentile(boot, 0.025),
++        "high": percentile(boot, 0.975),
++        "samples": samples,
++    }
++
++
++def divergence_group(diverged: bool, normalized_position: float | None) -> str:
++    if not diverged:
++        return "no_divergence"
++    if normalized_position is None:
++        return "diverged_unclassified"
++    if normalized_position < 0.25:
++        return "early_[0,0.25)"
++    if normalized_position < 0.50:
++        return "middle_[0.25,0.5)"
++    return "late_[0.5,1+]"
++
++
++def correctness_transition(fp16: bool | None, kvarn: bool | None) -> str:
++    if fp16 is None or kvarn is None:
++        return "unavailable"
++    return f"{'pass' if fp16 else 'fail'}_to_{'pass' if kvarn else 'fail'}"
++
++
++def build_row(sample_id: str, fp16: dict[str, Any], kvarn: dict[str, Any], comparison: dict[str, Any]) -> dict[str, Any]:
++    fp_tokens = int(fp16.get("output_tokens") or 0)
++    kv_tokens = int(kvarn.get("output_tokens") or 0)
++    first_step = comparison.get("first_divergence_step")
++    normalized_first = (float(first_step) / max(1, fp_tokens)) if first_step is not None else None
++    fp_pass = parse_bool(fp16.get("execution_passed"))
++    kv_pass = parse_bool(kvarn.get("execution_passed"))
++
++    fp_latency = parse_float(fp16.get("latency_seconds"))
++    kv_latency = parse_float(kvarn.get("latency_seconds"))
++    fp_decode = parse_float(fp16.get("decode_time_seconds"))
++    kv_decode = parse_float(kvarn.get("decode_time_seconds"))
++    fp_ttft = parse_float(fp16.get("ttft_seconds"))
++    kv_ttft = parse_float(kvarn.get("ttft_seconds"))
++    fp_tpot = parse_float(fp16.get("tpot_seconds"))
++    kv_tpot = parse_float(kvarn.get("tpot_seconds"))
++    fp_thinking = parse_int(fp16.get("thinking_tokens"))
++    kv_thinking = parse_int(kvarn.get("thinking_tokens"))
++    fp_final = parse_int(fp16.get("final_tokens"))
++    kv_final = parse_int(kvarn.get("final_tokens"))
++
++    return {
++        "sample_id": sample_id,
++        "task_id": fp16.get("task_id") or sample_id,
++        "diverged": bool(comparison.get("diverged")),
++        "first_divergence_step": first_step,
++        "normalized_first_divergence": normalized_first,
++        "divergence_group": divergence_group(bool(comparison.get("diverged")), normalized_first),
++        "lcp_ratio": parse_float(comparison.get("lcp_ratio")),
++        "fp16_output_tokens": fp_tokens,
++        "kvarn_output_tokens": kv_tokens,
++        "delta_tokens": kv_tokens - fp_tokens,
++        "token_inflation_ratio": ratio_delta(kv_tokens, fp_tokens),
++        "abs_token_change_ratio": abs(kv_tokens - fp_tokens) / max(1, fp_tokens),
++        "fp16_censored": bool(comparison.get("fp16_censored")),
++        "kvarn_censored": bool(comparison.get("kvarn_censored")),
++        "either_censored": bool(comparison.get("either_censored")),
++        "fp16_finish_reason": fp16.get("finish_reason"),
++        "kvarn_finish_reason": kvarn.get("finish_reason"),
++        "fp16_pass": fp_pass,
++        "kvarn_pass": kv_pass,
++        "correctness_transition": correctness_transition(fp_pass, kv_pass),
++        "fp16_execution_result": fp16.get("execution_result"),
++        "kvarn_execution_result": kvarn.get("execution_result"),
++        "same_candidate_code": fp16.get("candidate_code_sha256") == kvarn.get("candidate_code_sha256"),
++        "fp16_thinking_tokens": fp_thinking,
++        "kvarn_thinking_tokens": kv_thinking,
++        "delta_thinking_tokens": (kv_thinking - fp_thinking) if fp_thinking is not None and kv_thinking is not None else None,
++        "reasoning_inflation_ratio": ratio_delta(kv_thinking, fp_thinking),
++        "fp16_final_tokens": fp_final,
++        "kvarn_final_tokens": kv_final,
++        "delta_final_tokens": (kv_final - fp_final) if fp_final is not None and kv_final is not None else None,
++        "final_inflation_ratio": ratio_delta(kv_final, fp_final),
++        "fp16_latency_seconds": fp_latency,
++        "kvarn_latency_seconds": kv_latency,
++        "delta_latency_seconds": (kv_latency - fp_latency) if fp_latency is not None and kv_latency is not None else None,
++        "latency_inflation_ratio": ratio_delta(kv_latency, fp_latency),
++        "fp16_decode_time_seconds": fp_decode,
++        "kvarn_decode_time_seconds": kv_decode,
++        "delta_decode_time_seconds": (kv_decode - fp_decode) if fp_decode is not None and kv_decode is not None else None,
++        "decode_latency_inflation_ratio": ratio_delta(kv_decode, fp_decode),
++        "fp16_ttft_seconds": fp_ttft,
++        "kvarn_ttft_seconds": kv_ttft,
++        "ttft_inflation_ratio": ratio_delta(kv_ttft, fp_ttft),
++        "fp16_tpot_seconds": fp_tpot,
++        "kvarn_tpot_seconds": kv_tpot,
++        "tpot_inflation_ratio": ratio_delta(kv_tpot, fp_tpot),
++        "fp16_tokens_per_second": parse_float(fp16.get("tokens_per_second")),
++        "kvarn_tokens_per_second": parse_float(kvarn.get("tokens_per_second")),
++    }
++
++
++def subset_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
++    uncensored = [row for row in rows if not row["either_censored"]]
++    tir = [row["token_inflation_ratio"] for row in uncensored if row["token_inflation_ratio"] is not None]
++    return {
++        "sample_count": len(rows),
++        "uncensored_count": len(uncensored),
++        "token_inflation_ratio": summarize_values(tir),
++        "latency_inflation_ratio": summarize_values(row["latency_inflation_ratio"] for row in uncensored),
++        "decode_latency_inflation_ratio": summarize_values(row["decode_latency_inflation_ratio"] for row in uncensored),
++        "pass_rate_fp16": accuracy(rows, "fp16_pass"),
++        "pass_rate_kvarn": accuracy(rows, "kvarn_pass"),
++    }
++
++
++def main() -> None:
++    args = parse_args()
++    fp16 = load_jsonl(args.fp16)
++    kvarn = load_jsonl(args.kvarn)
++    comparison = load_comparison(args.comparison_csv)
++    common = sorted(set(fp16).intersection(kvarn).intersection(comparison))
++    rows = [
++        build_row(sample_id, fp16[sample_id], kvarn[sample_id], comparison[sample_id])
++        for sample_id in common
++        if fp16[sample_id].get("error") is None and kvarn[sample_id].get("error") is None
++    ]
++    rows.sort(key=lambda row: str(row["task_id"]))
++    uncensored = [row for row in rows if not row["either_censored"]]
++    pass_pass = [row for row in uncensored if row["correctness_transition"] == "pass_to_pass"]
++
++    tir_values = [float(row["token_inflation_ratio"]) for row in uncensored if row["token_inflation_ratio"] is not None]
++    delta_tokens = [float(row["delta_tokens"]) for row in uncensored]
++    lir_values = [float(row["latency_inflation_ratio"]) for row in uncensored if row["latency_inflation_ratio"] is not None]
++    dlir_values = [float(row["decode_latency_inflation_ratio"]) for row in uncensored if row["decode_latency_inflation_ratio"] is not None]
++
++    by_group: dict[str, list[dict[str, Any]]] = defaultdict(list)
++    for row in rows:
++        by_group[row["divergence_group"]].append(row)
++
++    summary = {
++        "schema_version": 1,
++        "valid_pairs": len(rows),
++        "uncensored_pairs": len(uncensored),
++        "censored_pairs": len(rows) - len(uncensored),
++        "diverged_count": sum(row["diverged"] for row in rows),
++        "divergence_rate": sum(row["diverged"] for row in rows) / len(rows) if rows else None,
++        "fp16_pass_at_1": accuracy(rows, "fp16_pass"),
++        "kvarn_pass_at_1": accuracy(rows, "kvarn_pass"),
++        "correctness_transition_counts": dict(Counter(row["correctness_transition"] for row in rows)),
++        "pass_pass_uncensored_count": len(pass_pass),
++        "fp16_output_tokens": summarize_values(row["fp16_output_tokens"] for row in uncensored),
++        "kvarn_output_tokens": summarize_values(row["kvarn_output_tokens"] for row in uncensored),
++        "delta_tokens": summarize_values(delta_tokens),
++        "token_inflation_ratio": summarize_values(tir_values),
++        "latency_inflation_ratio": summarize_values(lir_values),
++        "decode_latency_inflation_ratio": summarize_values(dlir_values),
++        "reasoning_inflation_ratio": summarize_values(row["reasoning_inflation_ratio"] for row in uncensored),
++        "final_inflation_ratio": summarize_values(row["final_inflation_ratio"] for row in uncensored),
++        "tail_fractions": {
++            "tir_gt_0_10": sum(value > 0.10 for value in tir_values) / len(tir_values) if tir_values else None,
++            "tir_gt_0_25": sum(value > 0.25 for value in tir_values) / len(tir_values) if tir_values else None,
++            "tir_gt_0_50": sum(value > 0.50 for value in tir_values) / len(tir_values) if tir_values else None,
++            "tir_gt_1_00": sum(value > 1.00 for value in tir_values) / len(tir_values) if tir_values else None,
++            "tir_lt_minus_0_10": sum(value < -0.10 for value in tir_values) / len(tir_values) if tir_values else None,
++        },
++        "correlations": {
++            "normalized_first_divergence_vs_tir": spearman(
++                (row["normalized_first_divergence"], row["token_inflation_ratio"])
++                for row in uncensored
++                if row["diverged"]
++            ),
++            "tir_vs_e2e_lir": spearman(
++                (row["token_inflation_ratio"], row["latency_inflation_ratio"])
++                for row in uncensored
++            ),
++            "tir_vs_decode_lir": spearman(
++                (row["token_inflation_ratio"], row["decode_latency_inflation_ratio"])
++                for row in uncensored
++            ),
++        },
++        "bootstrap_95ci": {
++            "mean_delta_tokens": bootstrap_ci(
++                delta_tokens,
++                statistics.fmean,
++                samples=args.bootstrap_samples,
++                seed=args.bootstrap_seed,
++            ),
++            "mean_tir": bootstrap_ci(
++                tir_values,
++                statistics.fmean,
++                samples=args.bootstrap_samples,
++                seed=args.bootstrap_seed + 1,
++            ),
++            "mean_e2e_lir": bootstrap_ci(
++                lir_values,
++                statistics.fmean,
++                samples=args.bootstrap_samples,
++                seed=args.bootstrap_seed + 2,
++            ),
++            "mean_decode_lir": bootstrap_ci(
++                dlir_values,
++                statistics.fmean,
++                samples=args.bootstrap_samples,
++                seed=args.bootstrap_seed + 3,
++            ),
++        },
++        "pass_pass_uncensored": subset_summary(pass_pass),
++        "by_divergence_group": {
++            key: subset_summary(group_rows) for key, group_rows in sorted(by_group.items())
++        },
++        "timing_coverage": {
++            "e2e_pairs": sum(row["latency_inflation_ratio"] is not None for row in rows),
++            "decode_pairs": sum(row["decode_latency_inflation_ratio"] is not None for row in rows),
++            "ttft_pairs": sum(row["ttft_inflation_ratio"] is not None for row in rows),
++            "tpot_pairs": sum(row["tpot_inflation_ratio"] is not None for row in rows),
++        },
++    }
++
++    args.output_dir.mkdir(parents=True, exist_ok=True)
++    csv_path = args.output_dir / "per_sample_system_effects.csv"
++    jsonl_path = args.output_dir / "per_sample_system_effects.jsonl"
++    fieldnames = list(rows[0].keys()) if rows else ["sample_id"]
++    with csv_path.open("w", encoding="utf-8", newline="") as handle:
++        writer = csv.DictWriter(handle, fieldnames=fieldnames)
++        writer.writeheader()
++        writer.writerows(rows)
++    with jsonl_path.open("w", encoding="utf-8") as handle:
++        for row in rows:
++            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
++    (args.output_dir / "summary.json").write_text(
++        json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
++    )
++
++    def fmt(value: Any, digits: int = 4) -> str:
++        if value is None:
++            return "N/A"
++        if isinstance(value, float):
++            return f"{value:.{digits}f}"
++        return str(value)
++
++    tir = summary["token_inflation_ratio"]
++    e2e = summary["latency_inflation_ratio"]
++    decode = summary["decode_latency_inflation_ratio"]
++    lines = [
++        "# HumanEval system-consequence summary",
++        "",
++        "## Overall",
++        "",
++        "| Metric | Value |",
++        "|---|---:|",
++        f"| Valid paired requests | {summary['valid_pairs']} |",
++        f"| Uncensored pairs | {summary['uncensored_pairs']} |",
++        f"| Divergence rate | {fmt(summary['divergence_rate'])} |",
++        f"| FP16 pass@1 | {fmt(summary['fp16_pass_at_1']['accuracy'])} |",
++        f"| KVarN pass@1 | {fmt(summary['kvarn_pass_at_1']['accuracy'])} |",
++        f"| Mean TIR | {fmt(tir['mean'])} |",
++        f"| Median TIR | {fmt(tir['median'])} |",
++        f"| P95 TIR | {fmt(tir['p95'])} |",
++        f"| Fraction TIR > 10% | {fmt(summary['tail_fractions']['tir_gt_0_10'])} |",
++        f"| Fraction TIR > 50% | {fmt(summary['tail_fractions']['tir_gt_0_50'])} |",
++        f"| Mean E2E LIR | {fmt(e2e['mean'])} |",
++        f"| Mean decode LIR | {fmt(decode['mean'])} |",
++        f"| pass→pass uncensored pairs | {summary['pass_pass_uncensored_count']} |",
++        "",
++        "## Correlations (Spearman)",
++        "",
++        "| Relation | n | rho |",
++        "|---|---:|---:|",
++    ]
++    for label, key in (
++        ("Normalized first divergence vs TIR", "normalized_first_divergence_vs_tir"),
++        ("TIR vs E2E LIR", "tir_vs_e2e_lir"),
++        ("TIR vs decode LIR", "tir_vs_decode_lir"),
++    ):
++        value = summary["correlations"][key]
++        lines.append(f"| {label} | {value['n']} | {fmt(value['rho'])} |")
++    lines.extend(["", "## By divergence group", "", "| Group | Samples | Uncensored | Mean TIR | Mean decode LIR |", "|---|---:|---:|---:|---:|"])
++    for group, value in summary["by_divergence_group"].items():
++        lines.append(
++            f"| {group} | {value['sample_count']} | {value['uncensored_count']} | "
++            f"{fmt(value['token_inflation_ratio']['mean'])} | "
++            f"{fmt(value['decode_latency_inflation_ratio']['mean'])} |"
++        )
++    lines.append("")
++    (args.output_dir / "summary.md").write_text("\n".join(lines), encoding="utf-8")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/experiments/trajectory_divergence/humaneval_utils.py b/experiments/trajectory_divergence/humaneval_utils.py
+new file mode 100755
+--- /dev/null
++++ b/experiments/trajectory_divergence/humaneval_utils.py
+@@ -0,0 +1,244 @@
++#!/usr/bin/env python3
++"""HumanEval-specific helpers for trajectory-divergence experiments.
++
++The generated code is untrusted. ``evaluate_humaneval_candidate`` applies basic
++process/resource isolation, but it is not a hardened security sandbox. Run the
++experiment in an isolated container/VM with no secrets and no sensitive mounts.
++"""
++
++from __future__ import annotations
++
++import hashlib
++import os
++import re
++import resource
++import subprocess
++import sys
++import tempfile
++import textwrap
++import time
++from pathlib import Path
++from typing import Any, Iterable
++
++_CODE_FENCE_RE = re.compile(r"```(?:python|py)?\s*\n(.*?)```", re.DOTALL | re.IGNORECASE)
++
++
++def sha256_text(text: str) -> str:
++    return hashlib.sha256(text.encode("utf-8")).hexdigest()
++
++
++def find_subsequence(sequence: list[int], needle: list[int]) -> int | None:
++    if not needle or len(needle) > len(sequence):
++        return None
++    limit = len(sequence) - len(needle) + 1
++    for index in range(limit):
++        if sequence[index : index + len(needle)] == needle:
++            return index
++    return None
++
++
++def split_thinking_tokens(tokenizer: Any, output_token_ids: Iterable[int]) -> dict[str, Any]:
++    """Split generated tokens at the first ``</think>`` marker when present."""
++    output_ids = [int(value) for value in output_token_ids]
++    marker_ids = [
++        int(value)
++        for value in tokenizer.encode("</think>", add_special_tokens=False)
++    ]
++    marker_start = find_subsequence(output_ids, marker_ids)
++    if marker_start is None:
++        return {
++            "thinking_boundary_detected": False,
++            "thinking_end_step": None,
++            "thinking_tokens": None,
++            "final_tokens": None,
++        }
++    thinking_tokens = marker_start + len(marker_ids)
++    return {
++        "thinking_boundary_detected": True,
++        "thinking_end_step": thinking_tokens,
++        "thinking_tokens": thinking_tokens,
++        "final_tokens": max(0, len(output_ids) - thinking_tokens),
++    }
++
++
++def visible_after_thinking(text: str) -> str:
++    """Return text after the last closing think marker, or the full text."""
++    marker = "</think>"
++    if marker in text:
++        return text.rsplit(marker, 1)[1].strip()
++    return text.strip()
++
++
++def extract_python_candidate(output_text: str, entry_point: str) -> dict[str, Any]:
++    """Extract the final Python candidate from a reasoning-model response.
++
++    Preference order:
++      1. last fenced block containing ``def <entry_point>``;
++      2. last fenced code block;
++      3. all visible text after ``</think>``.
++    """
++    visible = visible_after_thinking(output_text)
++    blocks = [block.strip() for block in _CODE_FENCE_RE.findall(visible) if block.strip()]
++    entry_pattern = re.compile(rf"\bdef\s+{re.escape(entry_point)}\s*\(")
++
++    selected: str
++    source: str
++    matching = [block for block in blocks if entry_pattern.search(block)]
++    if matching:
++        selected = matching[-1]
++        source = "fenced_entry_point"
++    elif blocks:
++        selected = blocks[-1]
++        source = "fenced_last"
++    else:
++        selected = visible
++        source = "visible_text"
++
++    # Remove a few common non-code lead-ins when no fence was used.
++    selected = re.sub(
++        r"^(?:Here(?:'s| is)\s+(?:the\s+)?(?:implementation|code)\s*:?\s*)",
++        "",
++        selected.strip(),
++        flags=re.IGNORECASE,
++    )
++    return {
++        "visible_output": visible,
++        "candidate_code": selected.strip(),
++        "candidate_source": source,
++        "candidate_code_sha256": sha256_text(selected.strip()),
++        "contains_entry_point_definition": bool(entry_pattern.search(selected)),
++    }
++
++
++def build_humaneval_program(
++    *,
++    prompt: str,
++    candidate_code: str,
++    test: str,
++    entry_point: str,
++) -> tuple[str, str]:
++    """Build an executable HumanEval test program.
++
++    HumanEval originally expects a completion appended to ``prompt``. Chat
++    models often return a complete function instead. Support both forms.
++    """
++    entry_pattern = re.compile(rf"\bdef\s+{re.escape(entry_point)}\s*\(")
++    if entry_pattern.search(candidate_code):
++        prompt_match = entry_pattern.search(prompt)
++        prelude = prompt[: prompt_match.start()] if prompt_match is not None else ""
++        solution = prelude.rstrip() + ("\n\n" if prelude.strip() else "") + candidate_code.rstrip() + "\n"
++        assembly = "standalone_function_with_prompt_prelude" if prelude.strip() else "standalone_function"
++    else:
++        completion = candidate_code.rstrip()
++        first_nonempty = next((line for line in completion.splitlines() if line.strip()), "")
++        if first_nonempty and not first_nonempty[0].isspace():
++            completion = textwrap.indent(completion, "    ")
++        solution = prompt.rstrip() + "\n" + completion + "\n"
++        assembly = "prompt_plus_completion"
++
++    program = (
++        solution
++        + "\n"
++        + test.rstrip()
++        + "\n\n"
++        + f"check({entry_point})\n"
++    )
++    return program, assembly
++
++
++def _limit_child_resources(cpu_seconds: int, memory_mb: int) -> None:
++    """Best-effort POSIX resource guard for the evaluator child process."""
++    try:
++        resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
++        resource.setrlimit(resource.RLIMIT_FSIZE, (16 * 1024 * 1024, 16 * 1024 * 1024))
++        resource.setrlimit(resource.RLIMIT_NOFILE, (64, 64))
++        resource.setrlimit(resource.RLIMIT_NPROC, (64, 64))
++        resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds + 1))
++        memory_bytes = memory_mb * 1024 * 1024
++        resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
++    except (ValueError, OSError):
++        # Some limits are unavailable or restricted in containers. The parent
++        # wall-clock timeout still applies.
++        pass
++
++
++def classify_execution(returncode: int | None, stderr: str, timed_out: bool) -> str:
++    if timed_out:
++        return "timeout"
++    if returncode == 0:
++        return "passed"
++    lowered = stderr.lower()
++    if "syntaxerror" in lowered or "indentationerror" in lowered or "taberror" in lowered:
++        return "syntax_error"
++    if "memoryerror" in lowered:
++        return "memory_error"
++    return "failed"
++
++
++def evaluate_humaneval_candidate(
++    *,
++    prompt: str,
++    candidate_code: str,
++    test: str,
++    entry_point: str,
++    timeout_seconds: float = 30.0,
++    memory_mb: int = 1024,
++) -> dict[str, Any]:
++    """Execute one HumanEval candidate in a short-lived isolated process."""
++    program, assembly = build_humaneval_program(
++        prompt=prompt,
++        candidate_code=candidate_code,
++        test=test,
++        entry_point=entry_point,
++    )
++    started = time.perf_counter()
++    timed_out = False
++    returncode: int | None = None
++    stdout = ""
++    stderr = ""
++
++    with tempfile.TemporaryDirectory(prefix="kvarn_humaneval_") as temp_dir:
++        script_path = Path(temp_dir) / "candidate_test.py"
++        script_path.write_text(program, encoding="utf-8")
++        env = {
++            "PATH": os.environ.get("PATH", ""),
++            "PYTHONIOENCODING": "utf-8",
++            "PYTHONDONTWRITEBYTECODE": "1",
++            "PYTHONHASHSEED": "0",
++        }
++        cpu_seconds = max(1, int(timeout_seconds) + 1)
++        try:
++            result = subprocess.run(
++                [sys.executable, "-I", str(script_path)],
++                cwd=temp_dir,
++                env=env,
++                capture_output=True,
++                text=True,
++                timeout=timeout_seconds,
++                preexec_fn=(
++                    lambda: _limit_child_resources(cpu_seconds=cpu_seconds, memory_mb=memory_mb)
++                )
++                if os.name == "posix"
++                else None,
++            )
++            returncode = result.returncode
++            stdout = result.stdout
++            stderr = result.stderr
++        except subprocess.TimeoutExpired as exc:
++            timed_out = True
++            stdout = (exc.stdout or "") if isinstance(exc.stdout, str) else ""
++            stderr = (exc.stderr or "") if isinstance(exc.stderr, str) else ""
++
++    elapsed = time.perf_counter() - started
++    result_class = classify_execution(returncode, stderr, timed_out)
++    return {
++        "passed": result_class == "passed",
++        "result": result_class,
++        "returncode": returncode,
++        "execution_seconds": elapsed,
++        "assembly": assembly,
++        "program_sha256": sha256_text(program),
++        "stdout_tail": stdout[-4000:],
++        "stderr_tail": stderr[-4000:],
++        "timed_out": timed_out,
++    }
+diff --git a/experiments/trajectory_divergence/plot_humaneval_system_effects.py b/experiments/trajectory_divergence/plot_humaneval_system_effects.py
+new file mode 100755
+--- /dev/null
++++ b/experiments/trajectory_divergence/plot_humaneval_system_effects.py
+@@ -0,0 +1,216 @@
++#!/usr/bin/env python3
++"""Plot HumanEval trajectory/system consequence diagnostics."""
++
++from __future__ import annotations
++
++import argparse
++import csv
++import math
++from pathlib import Path
++from typing import Any
++
++import matplotlib
++
++matplotlib.use("Agg")
++import matplotlib.pyplot as plt
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(description="Plot HumanEval system-effect analysis")
++    parser.add_argument("--input-csv", type=Path, required=True)
++    parser.add_argument("--output-dir", type=Path, required=True)
++    return parser.parse_args()
++
++
++def parse_bool(value: Any) -> bool:
++    return str(value).strip().lower() in {"true", "1", "yes"}
++
++
++def parse_float(value: Any) -> float | None:
++    if value is None or str(value).strip() == "":
++        return None
++    return float(value)
++
++
++def load_rows(path: Path) -> list[dict[str, Any]]:
++    rows: list[dict[str, Any]] = []
++    with path.open("r", encoding="utf-8", newline="") as handle:
++        for row in csv.DictReader(handle):
++            rows.append(
++                {
++                    **row,
++                    "diverged": parse_bool(row.get("diverged")),
++                    "either_censored": parse_bool(row.get("either_censored")),
++                    "normalized_first_divergence": parse_float(row.get("normalized_first_divergence")),
++                    "token_inflation_ratio": parse_float(row.get("token_inflation_ratio")),
++                    "latency_inflation_ratio": parse_float(row.get("latency_inflation_ratio")),
++                    "decode_latency_inflation_ratio": parse_float(row.get("decode_latency_inflation_ratio")),
++                    "delta_thinking_tokens": parse_float(row.get("delta_thinking_tokens")),
++                    "delta_final_tokens": parse_float(row.get("delta_final_tokens")),
++                }
++            )
++    return rows
++
++
++def save(fig: Any, output_dir: Path, stem: str) -> None:
++    output_dir.mkdir(parents=True, exist_ok=True)
++    fig.tight_layout()
++    fig.savefig(output_dir / f"{stem}.png", dpi=200, bbox_inches="tight")
++    fig.savefig(output_dir / f"{stem}.pdf", bbox_inches="tight")
++    plt.close(fig)
++
++
++def empty(ax: Any, text: str) -> None:
++    ax.text(0.5, 0.5, text, ha="center", va="center", transform=ax.transAxes)
++    ax.set_xticks([])
++    ax.set_yticks([])
++
++
++def plot_tir_cdf(rows: list[dict[str, Any]], output_dir: Path) -> None:
++    values = sorted(
++        row["token_inflation_ratio"]
++        for row in rows
++        if not row["either_censored"] and row["token_inflation_ratio"] is not None
++    )
++    fig, ax = plt.subplots(figsize=(7.2, 4.8))
++    if not values:
++        empty(ax, "No uncensored token-inflation values")
++    else:
++        cdf = [(index + 1) / len(values) for index in range(len(values))]
++        ax.step(values, cdf, where="post")
++        for threshold in (0.0, 0.10, 0.25, 0.50, 1.00):
++            ax.axvline(threshold, linestyle="--", linewidth=0.8, alpha=0.5)
++        ax.set_xlabel("Token inflation ratio: (KVarN - FP16) / FP16")
++        ax.set_ylabel("Cumulative fraction")
++        ax.set_title("HumanEval token-inflation CDF")
++        ax.grid(alpha=0.25)
++    save(fig, output_dir, "figure_humaneval_tir_cdf")
++
++
++def plot_tir_vs_lir(rows: list[dict[str, Any]], output_dir: Path) -> None:
++    usable = [
++        row
++        for row in rows
++        if not row["either_censored"]
++        and row["token_inflation_ratio"] is not None
++        and row["decode_latency_inflation_ratio"] is not None
++    ]
++    use_decode = bool(usable)
++    if not usable:
++        usable = [
++            row
++            for row in rows
++            if not row["either_censored"]
++            and row["token_inflation_ratio"] is not None
++            and row["latency_inflation_ratio"] is not None
++        ]
++    fig, ax = plt.subplots(figsize=(6.5, 5.6))
++    if not usable:
++        empty(ax, "No paired token/latency inflation values")
++    else:
++        y_key = "decode_latency_inflation_ratio" if use_decode else "latency_inflation_ratio"
++        ax.scatter(
++            [row["token_inflation_ratio"] for row in usable],
++            [row[y_key] for row in usable],
++            alpha=0.75,
++        )
++        ax.axhline(0.0, linestyle="--", linewidth=0.8)
++        ax.axvline(0.0, linestyle="--", linewidth=0.8)
++        ax.set_xlabel("Token inflation ratio")
++        ax.set_ylabel("Decode latency inflation ratio" if use_decode else "E2E latency inflation ratio")
++        ax.set_title("Generation inflation versus latency inflation")
++        ax.grid(alpha=0.25)
++    save(fig, output_dir, "figure_humaneval_tir_vs_lir")
++
++
++def plot_divergence_vs_tir(rows: list[dict[str, Any]], output_dir: Path) -> None:
++    usable = [
++        row
++        for row in rows
++        if row["diverged"]
++        and not row["either_censored"]
++        and row["normalized_first_divergence"] is not None
++        and row["token_inflation_ratio"] is not None
++    ]
++    fig, ax = plt.subplots(figsize=(6.5, 5.6))
++    if not usable:
++        empty(ax, "No uncensored diverged samples")
++    else:
++        ax.scatter(
++            [row["normalized_first_divergence"] for row in usable],
++            [row["token_inflation_ratio"] for row in usable],
++            alpha=0.75,
++        )
++        ax.axhline(0.0, linestyle="--", linewidth=0.8)
++        ax.set_xlabel("Normalized first divergence: step / FP16 output tokens")
++        ax.set_ylabel("Token inflation ratio")
++        ax.set_title("First divergence location versus generation inflation")
++        ax.grid(alpha=0.25)
++    save(fig, output_dir, "figure_humaneval_divergence_vs_tir")
++
++
++def plot_group_box(rows: list[dict[str, Any]], output_dir: Path) -> None:
++    order = ["no_divergence", "early_[0,0.25)", "middle_[0.25,0.5)", "late_[0.5,1+]", "diverged_unclassified"]
++    grouped: list[list[float]] = []
++    labels: list[str] = []
++    for group in order:
++        values = [
++            row["token_inflation_ratio"]
++            for row in rows
++            if row.get("divergence_group") == group
++            and not row["either_censored"]
++            and row["token_inflation_ratio"] is not None
++        ]
++        if values:
++            grouped.append(values)
++            labels.append(group.replace("_", "\n"))
++    fig, ax = plt.subplots(figsize=(8.2, 5.2))
++    if not grouped:
++        empty(ax, "No populated divergence groups")
++    else:
++        ax.boxplot(grouped, labels=labels, showfliers=True)
++        ax.axhline(0.0, linestyle="--", linewidth=0.8)
++        ax.set_ylabel("Token inflation ratio")
++        ax.set_title("Token inflation by trajectory-divergence group")
++        ax.grid(axis="y", alpha=0.25)
++    save(fig, output_dir, "figure_humaneval_tir_by_divergence_group")
++
++
++def plot_thinking_vs_final(rows: list[dict[str, Any]], output_dir: Path) -> None:
++    usable = [
++        row
++        for row in rows
++        if not row["either_censored"]
++        and row["delta_thinking_tokens"] is not None
++        and row["delta_final_tokens"] is not None
++    ]
++    fig, ax = plt.subplots(figsize=(6.5, 5.6))
++    if not usable:
++        empty(ax, "No thinking/final token split available")
++    else:
++        ax.scatter(
++            [row["delta_thinking_tokens"] for row in usable],
++            [row["delta_final_tokens"] for row in usable],
++            alpha=0.75,
++        )
++        ax.axhline(0.0, linestyle="--", linewidth=0.8)
++        ax.axvline(0.0, linestyle="--", linewidth=0.8)
++        ax.set_xlabel("Δ thinking tokens (KVarN - FP16)")
++        ax.set_ylabel("Δ final/code-region tokens (KVarN - FP16)")
++        ax.set_title("Where does HumanEval output inflation come from?")
++        ax.grid(alpha=0.25)
++    save(fig, output_dir, "figure_humaneval_thinking_vs_final_delta")
++
++
++def main() -> None:
++    args = parse_args()
++    rows = load_rows(args.input_csv)
++    plot_tir_cdf(rows, args.output_dir)
++    plot_tir_vs_lir(rows, args.output_dir)
++    plot_divergence_vs_tir(rows, args.output_dir)
++    plot_group_box(rows, args.output_dir)
++    plot_thinking_vs_final(rows, args.output_dir)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/experiments/trajectory_divergence/prepare_humaneval_samples.py b/experiments/trajectory_divergence/prepare_humaneval_samples.py
+new file mode 100755
+--- /dev/null
++++ b/experiments/trajectory_divergence/prepare_humaneval_samples.py
+@@ -0,0 +1,116 @@
++#!/usr/bin/env python3
++"""Prepare a fixed HumanEval manifest shared by FP16 and KVarN runs."""
++
++from __future__ import annotations
++
++import argparse
++import json
++import logging
++from datetime import datetime, timezone
++from pathlib import Path
++from typing import Any
++
++LOGGER = logging.getLogger("prepare_humaneval_samples")
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(
++        description="Prepare OpenAI HumanEval tasks for trajectory/system experiments."
++    )
++    parser.add_argument("--dataset-name", default="openai/openai_humaneval")
++    parser.add_argument("--dataset-config", default=None)
++    parser.add_argument("--dataset-split", default="test")
++    parser.add_argument(
++        "--num-samples",
++        type=int,
++        default=164,
++        help="Use 164 for the full HumanEval set. Samples are kept in dataset order.",
++    )
++    parser.add_argument("--output", type=Path, required=True)
++    parser.add_argument("--overwrite", action="store_true")
++    return parser.parse_args()
++
++
++def require_string(row: dict[str, Any], key: str, index: int) -> str:
++    value = row.get(key)
++    if not isinstance(value, str) or not value.strip():
++        raise ValueError(f"HumanEval row {index} is missing non-empty field {key!r}")
++    return value
++
++
++def main() -> None:
++    args = parse_args()
++    logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
++
++    if args.output.exists() and not args.overwrite:
++        LOGGER.info("Manifest already exists; reusing %s", args.output)
++        return
++    if args.num_samples <= 0:
++        raise ValueError("--num-samples must be positive")
++
++    try:
++        from datasets import load_dataset
++    except ImportError as exc:
++        raise SystemExit("Missing dependency 'datasets'. Install trajectory_divergence requirements.") from exc
++
++    LOGGER.info(
++        "Loading dataset=%s config=%s split=%s",
++        args.dataset_name,
++        args.dataset_config,
++        args.dataset_split,
++    )
++    dataset = load_dataset(args.dataset_name, args.dataset_config, split=args.dataset_split)
++    total = len(dataset)
++    if args.num_samples > total:
++        raise ValueError(f"Requested {args.num_samples} samples, dataset contains {total}")
++
++    samples: list[dict[str, Any]] = []
++    for index in range(args.num_samples):
++        row = dict(dataset[index])
++        task_id = require_string(row, "task_id", index)
++        prompt = require_string(row, "prompt", index)
++        canonical_solution = require_string(row, "canonical_solution", index)
++        test = require_string(row, "test", index)
++        entry_point = require_string(row, "entry_point", index)
++        samples.append(
++            {
++                "selection_order": index,
++                "dataset_index": index,
++                "sample_id": task_id,
++                "source_id": task_id,
++                # Generic fields retained for compatibility with the existing
++                # trajectory comparison/audit scripts.
++                "problem": prompt,
++                "reference_answer": None,
++                "reference_solution": canonical_solution,
++                "subject": "code",
++                "level": None,
++                # HumanEval-native fields.
++                "task_id": task_id,
++                "prompt": prompt,
++                "canonical_solution": canonical_solution,
++                "test": test,
++                "entry_point": entry_point,
++            }
++        )
++
++    manifest = {
++        "schema_version": 1,
++        "task_type": "humaneval",
++        "created_at_utc": datetime.now(timezone.utc).isoformat(),
++        "dataset_name": args.dataset_name,
++        "dataset_config": args.dataset_config,
++        "dataset_split": args.dataset_split,
++        "dataset_size": total,
++        "num_samples": len(samples),
++        "samples": samples,
++    }
++    args.output.parent.mkdir(parents=True, exist_ok=True)
++    tmp = args.output.with_suffix(args.output.suffix + ".tmp")
++    tmp.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
++    tmp.replace(args.output)
++    LOGGER.info("Saved %d HumanEval tasks to %s", len(samples), args.output)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/experiments/trajectory_divergence/run_humaneval_generation.py b/experiments/trajectory_divergence/run_humaneval_generation.py
+new file mode 100755
+--- /dev/null
++++ b/experiments/trajectory_divergence/run_humaneval_generation.py
+@@ -0,0 +1,486 @@
++#!/usr/bin/env python3
++"""Run HumanEval free generation with FP16 KV or KVarN KV cache."""
++
++from __future__ import annotations
++
++import argparse
++import hashlib
++import json
++import logging
++import os
++import time
++import traceback
++from datetime import datetime, timezone
++from pathlib import Path
++from typing import Any
++
++from humaneval_utils import (
++    evaluate_humaneval_candidate,
++    extract_python_candidate,
++    split_thinking_tokens,
++)
++from run_generation import (
++    append_jsonl,
++    collect_environment,
++    get_nested_attr,
++    parse_json_object,
++    read_completed_sample_ids,
++    resolve_engine_cache_dtype,
++    safe_list,
++)
++
++LOGGER = logging.getLogger("humaneval_generation")
++
++DEFAULT_TASK_INSTRUCTION = (
++    "Complete the following Python function so that it satisfies its docstring and tests. "
++    "Return a valid Python implementation. You may reason before the final answer, but the "
++    "final answer should contain executable Python code.\n\n"
++)
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(
++        description="Generate HumanEval trajectories with either FP16 or KVarN KV cache."
++    )
++    parser.add_argument("--mode", choices=("fp16", "kvarn"), required=True)
++    parser.add_argument("--run-name", required=True)
++    parser.add_argument("--samples-file", type=Path, required=True)
++    parser.add_argument("--output-dir", type=Path, required=True)
++    parser.add_argument("--model", default="Qwen/Qwen3-4B")
++    parser.add_argument("--tokenizer", default=None)
++    parser.add_argument("--dtype", default="float16")
++    parser.add_argument("--fp16-kv-cache-dtype", default="auto")
++    parser.add_argument("--kvarn-kv-cache-dtype", default="kvarn_k4v2_g128")
++    parser.add_argument("--block-size", type=int, default=128)
++    parser.add_argument("--max-tokens", type=int, default=16384)
++    parser.add_argument("--max-model-len", type=int, default=32768)
++    parser.add_argument("--rope-scaling-json", default="")
++    parser.add_argument("--temperature", type=float, default=0.0)
++    parser.add_argument("--top-p", type=float, default=1.0)
++    parser.add_argument("--top-k", type=int, default=-1)
++    parser.add_argument("--seed", type=int, default=2026)
++    parser.add_argument("--tensor-parallel-size", type=int, default=1)
++    parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
++    parser.add_argument("--swap-space", type=float, default=4.0)
++    parser.add_argument("--max-num-seqs", type=int, default=1)
++    parser.add_argument(
++        "--enable-thinking",
++        action=argparse.BooleanOptionalAction,
++        default=True,
++    )
++    parser.add_argument(
++        "--execute-tests",
++        action=argparse.BooleanOptionalAction,
++        default=True,
++        help="Execute generated HumanEval code in a resource-limited subprocess.",
++    )
++    parser.add_argument("--execution-timeout", type=float, default=30.0)
++    parser.add_argument("--execution-memory-mb", type=int, default=1024)
++    parser.add_argument(
++        "--task-instruction-file",
++        type=Path,
++        default=None,
++        help="Optional replacement for the built-in HumanEval user instruction.",
++    )
++    parser.add_argument("--system-prompt-file", type=Path, default=None)
++    parser.add_argument("--resume", action="store_true")
++    parser.add_argument("--limit", type=int, default=None)
++    parser.add_argument("--enforce-eager", action="store_true")
++    parser.add_argument("--require-backend-verification", action="store_true")
++    return parser.parse_args()
++
++
++def load_manifest(path: Path, limit: int | None) -> tuple[dict[str, Any], list[dict[str, Any]]]:
++    manifest = json.loads(path.read_text(encoding="utf-8"))
++    samples = list(manifest.get("samples", []))
++    if limit is not None:
++        if limit <= 0:
++            raise ValueError("--limit must be positive")
++        samples = samples[:limit]
++    if not samples:
++        raise ValueError(f"No samples found in {path}")
++    return manifest, samples
++
++
++def build_humaneval_prompt(
++    tokenizer: Any,
++    *,
++    raw_prompt: str,
++    task_instruction: str,
++    enable_thinking: bool,
++    system_prompt: str | None,
++) -> tuple[str, bool]:
++    messages: list[dict[str, str]] = []
++    if system_prompt:
++        messages.append({"role": "system", "content": system_prompt})
++    messages.append({"role": "user", "content": task_instruction + raw_prompt})
++    try:
++        prompt = tokenizer.apply_chat_template(
++            messages,
++            tokenize=False,
++            add_generation_prompt=True,
++            enable_thinking=enable_thinking,
++        )
++        return str(prompt), True
++    except TypeError:
++        LOGGER.warning("Tokenizer chat template rejected enable_thinking; retrying without it")
++        prompt = tokenizer.apply_chat_template(
++            messages,
++            tokenize=False,
++            add_generation_prompt=True,
++        )
++        return str(prompt), False
++
++
++def create_llm(args: argparse.Namespace, rope_scaling: dict[str, Any] | None) -> tuple[Any, str]:
++    try:
++        from vllm import LLM
++    except ImportError as exc:
++        raise SystemExit("Could not import the local KVarN vLLM package") from exc
++
++    requested_dtype = (
++        args.kvarn_kv_cache_dtype if args.mode == "kvarn" else args.fp16_kv_cache_dtype
++    )
++    kwargs: dict[str, Any] = {
++        "model": args.model,
++        "tokenizer": args.tokenizer or args.model,
++        "dtype": args.dtype,
++        "max_model_len": args.max_model_len,
++        "max_num_seqs": args.max_num_seqs,
++        "tensor_parallel_size": args.tensor_parallel_size,
++        "gpu_memory_utilization": args.gpu_memory_utilization,
++        "swap_space": args.swap_space,
++        "trust_remote_code": True,
++        "enable_prefix_caching": False,
++        "disable_log_stats": False,
++        "block_size": args.block_size,
++        "seed": args.seed,
++    }
++    if args.enforce_eager:
++        kwargs["enforce_eager"] = True
++    if rope_scaling is not None:
++        kwargs["hf_overrides"] = {"rope_scaling": rope_scaling}
++    if requested_dtype != "auto":
++        kwargs["kv_cache_dtype"] = requested_dtype
++    LOGGER.info("Initializing %s engine with kv_cache_dtype=%s", args.mode, requested_dtype)
++    return LLM(**kwargs), requested_dtype
++
++
++def extract_request_timing(request_output: Any, output_tokens: int) -> dict[str, Any]:
++    metrics = getattr(request_output, "metrics", None)
++    if metrics is None:
++        return {
++            "ttft_seconds": None,
++            "queue_time_seconds": None,
++            "prefill_time_seconds": None,
++            "decode_time_seconds": None,
++            "tpot_seconds": None,
++            "engine_inference_span_seconds": None,
++        }
++
++    def number(name: str) -> float | None:
++        value = getattr(metrics, name, None)
++        return float(value) if isinstance(value, (int, float)) else None
++
++    first_token_latency = number("first_token_latency")
++    queued_ts = number("queued_ts")
++    scheduled_ts = number("scheduled_ts")
++    first_token_ts = number("first_token_ts")
++    last_token_ts = number("last_token_ts")
++
++    queue_time = None
++    if queued_ts is not None and scheduled_ts is not None and scheduled_ts >= queued_ts:
++        queue_time = scheduled_ts - queued_ts
++
++    prefill_time = None
++    if scheduled_ts is not None and first_token_ts is not None and first_token_ts >= scheduled_ts:
++        prefill_time = first_token_ts - scheduled_ts
++
++    decode_time = None
++    if first_token_ts is not None and last_token_ts is not None and last_token_ts >= first_token_ts:
++        decode_time = last_token_ts - first_token_ts
++
++    tpot = None
++    if decode_time is not None and output_tokens > 1:
++        tpot = decode_time / (output_tokens - 1)
++
++    inference_span = None
++    if scheduled_ts is not None and last_token_ts is not None and last_token_ts >= scheduled_ts:
++        inference_span = last_token_ts - scheduled_ts
++
++    return {
++        "ttft_seconds": first_token_latency,
++        "queue_time_seconds": queue_time,
++        "prefill_time_seconds": prefill_time,
++        "decode_time_seconds": decode_time,
++        "tpot_seconds": tpot,
++        "engine_inference_span_seconds": inference_span,
++    }
++
++
++def main() -> None:
++    args = parse_args()
++    logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
++    if args.max_tokens <= 0 or args.max_model_len <= 0 or args.max_tokens >= args.max_model_len:
++        raise ValueError("Require 0 < max_tokens < max_model_len")
++    if args.execution_timeout <= 0:
++        raise ValueError("--execution-timeout must be positive")
++
++    rope_scaling = parse_json_object(args.rope_scaling_json, "--rope-scaling-json")
++    manifest, samples = load_manifest(args.samples_file, args.limit)
++    args.output_dir.mkdir(parents=True, exist_ok=True)
++    output_path = args.output_dir / "generations.jsonl"
++    config_path = args.output_dir / "experiment_config.json"
++    if output_path.exists() and not args.resume:
++        raise FileExistsError(f"{output_path} already exists; use a new output dir or --resume")
++    completed = read_completed_sample_ids(output_path) if args.resume else set()
++
++    task_instruction = DEFAULT_TASK_INSTRUCTION
++    if args.task_instruction_file:
++        task_instruction = args.task_instruction_file.read_text(encoding="utf-8").rstrip() + "\n\n"
++    system_prompt = None
++    if args.system_prompt_file:
++        system_prompt = args.system_prompt_file.read_text(encoding="utf-8").strip()
++
++    llm, requested_dtype = create_llm(args, rope_scaling)
++    tokenizer = llm.get_tokenizer()
++    resolved_dtype, resolved_path = resolve_engine_cache_dtype(llm)
++    backend_verified = (
++        args.mode == "fp16" and requested_dtype == "auto"
++    ) or (
++        resolved_dtype is not None and requested_dtype.lower() in resolved_dtype.lower()
++    )
++    if args.mode == "kvarn" and not backend_verified:
++        message = "Could not verify active KVarN cache dtype from engine internals"
++        if args.require_backend_verification:
++            raise RuntimeError(message)
++        LOGGER.warning(message)
++
++    from vllm import SamplingParams
++
++    sampling_params = SamplingParams(
++        temperature=args.temperature,
++        top_p=args.top_p,
++        top_k=args.top_k,
++        max_tokens=args.max_tokens,
++        seed=args.seed,
++    )
++
++    script_path = Path(__file__).resolve()
++    repo_root = script_path.parents[2]
++    config = {
++        "schema_version": 1,
++        "task_type": "humaneval",
++        "mode": args.mode,
++        "run_name": args.run_name,
++        "model": args.model,
++        "tokenizer": args.tokenizer or args.model,
++        "dtype": args.dtype,
++        "requested_kv_cache_dtype": requested_dtype,
++        "resolved_kv_cache_dtype": resolved_dtype,
++        "resolved_kv_cache_dtype_path": resolved_path,
++        "backend_verified": backend_verified,
++        "block_size": args.block_size,
++        "max_tokens": args.max_tokens,
++        "max_model_len": args.max_model_len,
++        "rope_scaling": rope_scaling,
++        "temperature": args.temperature,
++        "top_p": args.top_p,
++        "top_k": args.top_k,
++        "seed": args.seed,
++        "tensor_parallel_size": args.tensor_parallel_size,
++        "gpu_memory_utilization": args.gpu_memory_utilization,
++        "max_num_seqs": args.max_num_seqs,
++        "enable_thinking_requested": args.enable_thinking,
++        "prefix_caching": False,
++        "execute_tests": args.execute_tests,
++        "execution_timeout": args.execution_timeout,
++        "execution_memory_mb": args.execution_memory_mb,
++        "task_instruction": task_instruction,
++        "samples_file": str(args.samples_file.resolve()),
++        "num_manifest_samples": len(samples),
++        "dataset": {
++            key: manifest.get(key)
++            for key in ("dataset_name", "dataset_config", "dataset_split", "dataset_size")
++        },
++        "environment": collect_environment(repo_root),
++    }
++    config_path.write_text(json.dumps(config, ensure_ascii=False, indent=2, default=str) + "\n", encoding="utf-8")
++
++    LOGGER.info("Starting %d samples (%d already complete)", len(samples), len(completed))
++    mode = "a" if args.resume else "w"
++    with output_path.open(mode, encoding="utf-8") as handle:
++        for position, sample in enumerate(samples, start=1):
++            sample_id = str(sample["sample_id"])
++            if sample_id in completed:
++                LOGGER.info("[%d/%d] skip completed %s", position, len(samples), sample_id)
++                continue
++
++            raw_prompt = str(sample["prompt"])
++            entry_point = str(sample["entry_point"])
++            base_record: dict[str, Any] = {
++                "schema_version": 1,
++                "task_type": "humaneval",
++                "sample_id": sample_id,
++                "source_id": sample.get("source_id"),
++                "task_id": sample.get("task_id"),
++                "dataset_index": sample.get("dataset_index"),
++                "selection_order": sample.get("selection_order"),
++                "problem": raw_prompt,
++                "entry_point": entry_point,
++                "subject": "code",
++                "level": None,
++                "mode": args.mode,
++                "run_name": args.run_name,
++                "seed": args.seed,
++                "model": args.model,
++                "dtype": args.dtype,
++                "requested_kv_cache_dtype": requested_dtype,
++                "resolved_kv_cache_dtype": resolved_dtype,
++                "backend_verified": backend_verified,
++                "block_size": args.block_size,
++                "temperature": args.temperature,
++                "top_p": args.top_p,
++                "top_k": args.top_k,
++                "max_tokens": args.max_tokens,
++                "max_model_len": args.max_model_len,
++            }
++
++            try:
++                prompt_text, thinking_arg_applied = build_humaneval_prompt(
++                    tokenizer,
++                    raw_prompt=raw_prompt,
++                    task_instruction=task_instruction,
++                    enable_thinking=args.enable_thinking,
++                    system_prompt=system_prompt,
++                )
++                prompt_sha256 = hashlib.sha256(prompt_text.encode("utf-8")).hexdigest()
++                LOGGER.info("[%d/%d] generating %s", position, len(samples), sample_id)
++                started = time.perf_counter()
++                request_output = llm.generate([prompt_text], sampling_params, use_tqdm=False)[0]
++                generation_elapsed = time.perf_counter() - started
++                if not request_output.outputs:
++                    raise RuntimeError("vLLM returned no candidate outputs")
++                candidate = request_output.outputs[0]
++                input_token_ids = safe_list(getattr(request_output, "prompt_token_ids", None))
++                if not input_token_ids:
++                    input_token_ids = safe_list(tokenizer.encode(prompt_text))
++                output_token_ids = [int(value) for value in safe_list(getattr(candidate, "token_ids", None))]
++                output_text = str(getattr(candidate, "text", ""))
++
++                split = split_thinking_tokens(tokenizer, output_token_ids)
++                extraction = extract_python_candidate(output_text, entry_point)
++                if args.execute_tests:
++                    execution = evaluate_humaneval_candidate(
++                        prompt=raw_prompt,
++                        candidate_code=extraction["candidate_code"],
++                        test=str(sample["test"]),
++                        entry_point=entry_point,
++                        timeout_seconds=args.execution_timeout,
++                        memory_mb=args.execution_memory_mb,
++                    )
++                    approx_correct: bool | None = bool(execution["passed"])
++                else:
++                    execution = {
++                        "passed": None,
++                        "result": "not_executed",
++                        "returncode": None,
++                        "execution_seconds": None,
++                        "assembly": None,
++                        "program_sha256": None,
++                        "stdout_tail": "",
++                        "stderr_tail": "",
++                        "timed_out": False,
++                    }
++                    approx_correct = None
++
++                timing = extract_request_timing(request_output, len(output_token_ids))
++                record = {
++                    **base_record,
++                    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
++                    "prompt_text": prompt_text,
++                    "prompt_sha256": prompt_sha256,
++                    "enable_thinking_requested": args.enable_thinking,
++                    "enable_thinking_argument_applied": thinking_arg_applied,
++                    "input_token_ids": input_token_ids,
++                    "input_tokens": len(input_token_ids),
++                    "output_token_ids": output_token_ids,
++                    "output_tokens": len(output_token_ids),
++                    "output_text": output_text,
++                    "finish_reason": getattr(candidate, "finish_reason", None),
++                    "stop_reason": getattr(candidate, "stop_reason", None),
++                    "latency_seconds": generation_elapsed,
++                    "tokens_per_second": (
++                        len(output_token_ids) / generation_elapsed if generation_elapsed > 0 else None
++                    ),
++                    **timing,
++                    **split,
++                    "visible_final_output": extraction["visible_output"],
++                    "candidate_code": extraction["candidate_code"],
++                    "candidate_source": extraction["candidate_source"],
++                    "candidate_code_sha256": extraction["candidate_code_sha256"],
++                    "contains_entry_point_definition": extraction["contains_entry_point_definition"],
++                    "execution_result": execution["result"],
++                    "execution_passed": execution["passed"],
++                    "execution_seconds": execution["execution_seconds"],
++                    "execution_returncode": execution["returncode"],
++                    "execution_assembly": execution["assembly"],
++                    "execution_program_sha256": execution["program_sha256"],
++                    "execution_stdout_tail": execution["stdout_tail"],
++                    "execution_stderr_tail": execution["stderr_tail"],
++                    "execution_timed_out": execution["timed_out"],
++                    # Compatibility fields consumed by compare_trajectories.py.
++                    "extracted_answer": extraction["candidate_code"],
++                    "normalized_extracted_answer": extraction["candidate_code_sha256"],
++                    "normalized_reference_answer": None,
++                    "approx_correct": approx_correct,
++                    "error": None,
++                }
++            except Exception as exc:
++                LOGGER.exception("Sample %s failed", sample_id)
++                record = {
++                    **base_record,
++                    "timestamp_utc": datetime.now(timezone.utc).isoformat(),
++                    "prompt_text": None,
++                    "prompt_sha256": None,
++                    "input_token_ids": [],
++                    "input_tokens": None,
++                    "output_token_ids": [],
++                    "output_tokens": None,
++                    "output_text": None,
++                    "finish_reason": None,
++                    "stop_reason": None,
++                    "latency_seconds": None,
++                    "tokens_per_second": None,
++                    "ttft_seconds": None,
++                    "queue_time_seconds": None,
++                    "prefill_time_seconds": None,
++                    "decode_time_seconds": None,
++                    "tpot_seconds": None,
++                    "engine_inference_span_seconds": None,
++                    "thinking_boundary_detected": False,
++                    "thinking_end_step": None,
++                    "thinking_tokens": None,
++                    "final_tokens": None,
++                    "candidate_code": None,
++                    "candidate_code_sha256": None,
++                    "execution_result": None,
++                    "execution_passed": None,
++                    "execution_seconds": None,
++                    "extracted_answer": None,
++                    "normalized_extracted_answer": None,
++                    "normalized_reference_answer": None,
++                    "approx_correct": None,
++                    "error": {
++                        "type": type(exc).__name__,
++                        "message": str(exc),
++                        "traceback": traceback.format_exc(),
++                    },
++                }
++            append_jsonl(handle, record)
++
++    LOGGER.info("HumanEval generation complete: %s", output_path)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/experiments/trajectory_divergence/run_humaneval_stage1.sh b/experiments/trajectory_divergence/run_humaneval_stage1.sh
+new file mode 100755
+--- /dev/null
++++ b/experiments/trajectory_divergence/run_humaneval_stage1.sh
+@@ -0,0 +1,136 @@
++#!/usr/bin/env bash
++# HumanEval Stage 1: free-generation trajectory + system consequence experiment.
++set -euo pipefail
++
++SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
++REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
++PYTHON="${PYTHON:-python}"
++MODEL="${MODEL:-Qwen/Qwen3-4B}"
++DATASET_NAME="${DATASET_NAME:-openai/openai_humaneval}"
++DATASET_SPLIT="${DATASET_SPLIT:-test}"
++NUM_SAMPLES="${NUM_SAMPLES:-164}"
++NUM_REPEATS="${NUM_REPEATS:-2}"
++MAX_TOKENS="${MAX_TOKENS:-16384}"
++MAX_MODEL_LEN="${MAX_MODEL_LEN:-32768}"
++ROPE_SCALING_JSON="${ROPE_SCALING_JSON:-}"
++KVARN_DTYPE="${KVARN_DTYPE:-kvarn_k4v2_g128}"
++BLOCK_SIZE="${BLOCK_SIZE:-128}"
++GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.90}"
++TP_SIZE="${TP_SIZE:-1}"
++SEED="${SEED:-2026}"
++TEMPERATURE="${TEMPERATURE:-0.0}"
++TOP_P="${TOP_P:-1.0}"
++TOP_K="${TOP_K:--1}"
++EXECUTE_TESTS="${EXECUTE_TESTS:-1}"
++EXECUTION_TIMEOUT="${EXECUTION_TIMEOUT:-30}"
++EXECUTION_MEMORY_MB="${EXECUTION_MEMORY_MB:-1024}"
++BOOTSTRAP_SAMPLES="${BOOTSTRAP_SAMPLES:-5000}"
++OUTPUT_ROOT="${OUTPUT_ROOT:-${REPO_ROOT}/results/humaneval_stage1_qwen3_4b_n${NUM_SAMPLES}}"
++REQUIRE_CLEAN_GIT="${REQUIRE_CLEAN_GIT:-0}"
++
++if (( NUM_REPEATS < 2 )); then
++  echo "NUM_REPEATS must be >= 2 so FP16/KVarN repeat determinism is audited." >&2
++  exit 2
++fi
++if (( MAX_TOKENS >= MAX_MODEL_LEN )); then
++  echo "MAX_TOKENS must be smaller than MAX_MODEL_LEN." >&2
++  exit 2
++fi
++
++export VLLM_USE_FLASHINFER_SAMPLER="${VLLM_USE_FLASHINFER_SAMPLER:-0}"
++mkdir -p "${OUTPUT_ROOT}"
++SAMPLES_FILE="${OUTPUT_ROOT}/selected_samples.json"
++
++cd "${REPO_ROOT}"
++if [[ -n "$(git status --porcelain --untracked-files=no)" ]]; then
++  if [[ "${REQUIRE_CLEAN_GIT}" == "1" ]]; then
++    echo "Repository is dirty; commit/stash changes or set REQUIRE_CLEAN_GIT=0." >&2
++    exit 2
++  fi
++  echo "WARNING: repository has tracked uncommitted changes; configs will record git state." >&2
++fi
++
++"${PYTHON}" "${SCRIPT_DIR}/prepare_humaneval_samples.py" \
++  --dataset-name "${DATASET_NAME}" \
++  --dataset-split "${DATASET_SPLIT}" \
++  --num-samples "${NUM_SAMPLES}" \
++  --output "${SAMPLES_FILE}"
++
++run_generation() {
++  local mode="$1"
++  local run_name="$2"
++  local output_dir="${OUTPUT_ROOT}/${run_name}"
++  local args=(
++    --mode "${mode}"
++    --run-name "${run_name}"
++    --samples-file "${SAMPLES_FILE}"
++    --output-dir "${output_dir}"
++    --model "${MODEL}"
++    --kvarn-kv-cache-dtype "${KVARN_DTYPE}"
++    --block-size "${BLOCK_SIZE}"
++    --max-tokens "${MAX_TOKENS}"
++    --max-model-len "${MAX_MODEL_LEN}"
++    --temperature "${TEMPERATURE}"
++    --top-p "${TOP_P}"
++    --top-k "${TOP_K}"
++    --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}"
++    --tensor-parallel-size "${TP_SIZE}"
++    --seed "${SEED}"
++    --execution-timeout "${EXECUTION_TIMEOUT}"
++    --execution-memory-mb "${EXECUTION_MEMORY_MB}"
++  )
++  if [[ -n "${ROPE_SCALING_JSON}" ]]; then
++    args+=(--rope-scaling-json "${ROPE_SCALING_JSON}")
++  fi
++  if [[ "${EXECUTE_TESTS}" == "1" ]]; then
++    args+=(--execute-tests)
++  else
++    args+=(--no-execute-tests)
++  fi
++  "${PYTHON}" "${SCRIPT_DIR}/run_humaneval_generation.py" "${args[@]}"
++}
++
++for repeat in $(seq 1 "${NUM_REPEATS}"); do
++  run_generation fp16 "fp16_run${repeat}"
++done
++for repeat in $(seq 1 "${NUM_REPEATS}"); do
++  run_generation kvarn "kvarn_run${repeat}"
++done
++
++COMPARISON_DIR="${OUTPUT_ROOT}/comparison"
++"${PYTHON}" "${SCRIPT_DIR}/compare_trajectories.py" \
++  --reference "${OUTPUT_ROOT}/fp16_run1/generations.jsonl" \
++  --candidate "${OUTPUT_ROOT}/kvarn_run1/generations.jsonl" \
++  --reference-repeat "${OUTPUT_ROOT}/fp16_run2/generations.jsonl" \
++  --candidate-repeat "${OUTPUT_ROOT}/kvarn_run2/generations.jsonl" \
++  --output-dir "${COMPARISON_DIR}" \
++  --tokenizer "${MODEL}" \
++  --trust-remote-code \
++  --block-size "${BLOCK_SIZE}"
++
++"${PYTHON}" "${SCRIPT_DIR}/plot_results.py" \
++  --comparison-csv "${COMPARISON_DIR}/per_sample_comparison.csv" \
++  --summary-json "${COMPARISON_DIR}/summary.json" \
++  --output-dir "${COMPARISON_DIR}/plots" \
++  --boundary-step "${BLOCK_SIZE}"
++
++SYSTEM_DIR="${OUTPUT_ROOT}/system_effects"
++"${PYTHON}" "${SCRIPT_DIR}/analyze_humaneval_system_effects.py" \
++  --fp16 "${OUTPUT_ROOT}/fp16_run1/generations.jsonl" \
++  --kvarn "${OUTPUT_ROOT}/kvarn_run1/generations.jsonl" \
++  --comparison-csv "${COMPARISON_DIR}/per_sample_comparison.csv" \
++  --output-dir "${SYSTEM_DIR}" \
++  --bootstrap-samples "${BOOTSTRAP_SAMPLES}" \
++  --bootstrap-seed "${SEED}"
++
++"${PYTHON}" "${SCRIPT_DIR}/plot_humaneval_system_effects.py" \
++  --input-csv "${SYSTEM_DIR}/per_sample_system_effects.csv" \
++  --output-dir "${SYSTEM_DIR}/plots"
++
++cat <<EOF
++HumanEval Stage 1 completed.
++Output: ${OUTPUT_ROOT}
++Main summaries:
++  ${COMPARISON_DIR}/summary.md
++  ${SYSTEM_DIR}/summary.md
++EOF

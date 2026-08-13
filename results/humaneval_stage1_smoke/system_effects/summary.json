@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "valid_pairs": 3,
+  "uncensored_pairs": 2,
+  "censored_pairs": 1,
+  "diverged_count": 3,
+  "divergence_rate": 1.0,
+  "fp16_pass_at_1": {
+    "correct": 2,
+    "evaluated": 3,
+    "accuracy": 0.6666666666666666
+  },
+  "kvarn_pass_at_1": {
+    "correct": 2,
+    "evaluated": 3,
+    "accuracy": 0.6666666666666666
+  },
+  "correctness_transition_counts": {
+    "pass_to_pass": 2,
+    "fail_to_fail": 1
+  },
+  "pass_pass_uncensored_count": 2,
+  "fp16_output_tokens": {
+    "count": 2,
+    "mean": 1555.5,
+    "median": 1555.5,
+    "p90": 1576.6999999999998,
+    "p95": 1579.35,
+    "min": 1529.0,
+    "max": 1582.0
+  },
+  "kvarn_output_tokens": {
+    "count": 2,
+    "mean": 3361.0,
+    "median": 3361.0,
+    "p90": 3907.3999999999996,
+    "p95": 3975.7,
+    "min": 2678.0,
+    "max": 4044.0
+  },
+  "delta_tokens": {
+    "count": 2,
+    "mean": 1805.5,
+    "median": 1805.5,
+    "p90": 2330.7000000000003,
+    "p95": 2396.3500000000004,
+    "min": 1149.0,
+    "max": 2462.0
+  },
+  "token_inflation_ratio": {
+    "count": 2,
+    "mean": 1.153864725711673,
+    "median": 1.153864725711673,
+    "p90": 1.4757792662548503,
+    "p95": 1.5160185838227476,
+    "min": 0.7514715500327012,
+    "max": 1.5562579013906448
+  },
+  "latency_inflation_ratio": {
+    "count": 2,
+    "mean": 1.362572217224869,
+    "median": 1.362572217224869,
+    "p90": 1.7203544671484967,
+    "p95": 1.76507724838895,
+    "min": 0.9153444048203346,
+    "max": 1.8098000296294035
+  },
+  "decode_latency_inflation_ratio": {
+    "count": 2,
+    "mean": 1.3657973734604896,
+    "median": 1.3657973734604896,
+    "p90": 1.72401108130485,
+    "p95": 1.7687877947853947,
+    "min": 0.9180302386550392,
+    "max": 1.81356450826594
+  },
+  "reasoning_inflation_ratio": {
+    "count": 2,
+    "mean": 1.5386102841165101,
+    "median": 1.5386102841165101,
+    "p90": 2.0034425808407694,
+    "p95": 2.0615466179313016,
+    "min": 0.9575699132111861,
+    "max": 2.119650655021834
+  },
+  "final_inflation_ratio": {
+    "count": 2,
+    "mean": 0.1985823519562427,
+    "median": 0.1985823519562427,
+    "p90": 0.2933750069766144,
+    "p95": 0.30522408885416086,
+    "min": 0.08009153318077804,
+    "max": 0.3170731707317073
+  },
+  "tail_fractions": {
+    "tir_gt_0_10": 1.0,
+    "tir_gt_0_25": 1.0,
+    "tir_gt_0_50": 1.0,
+    "tir_gt_1_00": 0.5,
+    "tir_lt_minus_0_10": 0.0
+  },
+  "correlations": {
+    "normalized_first_divergence_vs_tir": {
+      "n": 2,
+      "rho": 1.0
+    },
+    "tir_vs_e2e_lir": {
+      "n": 2,
+      "rho": 1.0
+    },
+    "tir_vs_decode_lir": {
+      "n": 2,
+      "rho": 1.0
+    }
+  },
+  "bootstrap_95ci": {
+    "mean_delta_tokens": {
+      "estimate": 1805.5,
+      "low": 1149.0,
+      "high": 2462.0,
+      "samples": 5000
+    },
+    "mean_tir": {
+      "estimate": 1.153864725711673,
+      "low": 0.7514715500327012,
+      "high": 1.5562579013906448,
+      "samples": 5000
+    },
+    "mean_e2e_lir": {
+      "estimate": 1.362572217224869,
+      "low": 0.9153444048203346,
+      "high": 1.8098000296294035,
+      "samples": 5000
+    },
+    "mean_decode_lir": {
+      "estimate": 1.3657973734604896,
+      "low": 0.9180302386550392,
+      "high": 1.81356450826594,
+      "samples": 5000
+    }
+  },
+  "pass_pass_uncensored": {
+    "sample_count": 2,
+    "uncensored_count": 2,
+    "token_inflation_ratio": {
+      "count": 2,
+      "mean": 1.153864725711673,
+      "median": 1.153864725711673,
+      "p90": 1.4757792662548503,
+      "p95": 1.5160185838227476,
+      "min": 0.7514715500327012,
+      "max": 1.5562579013906448
+    },
+    "latency_inflation_ratio": {
+      "count": 2,
+      "mean": 1.362572217224869,
+      "median": 1.362572217224869,
+      "p90": 1.7203544671484967,
+      "p95": 1.76507724838895,
+      "min": 0.9153444048203346,
+      "max": 1.8098000296294035
+    },
+    "decode_latency_inflation_ratio": {
+      "count": 2,
+      "mean": 1.3657973734604896,
+      "median": 1.3657973734604896,
+      "p90": 1.72401108130485,
+      "p95": 1.7687877947853947,
+      "min": 0.9180302386550392,
+      "max": 1.81356450826594
+    },
+    "pass_rate_fp16": {
+      "correct": 2,
+      "evaluated": 2,
+      "accuracy": 1.0
+    },
+    "pass_rate_kvarn": {
+      "correct": 2,
+      "evaluated": 2,
+      "accuracy": 1.0
+    }
+  },
+  "by_divergence_group": {
+    "early_[0,0.25)": {
+      "sample_count": 3,
+      "uncensored_count": 2,
+      "token_inflation_ratio": {
+        "count": 2,
+        "mean": 1.153864725711673,
+        "median": 1.153864725711673,
+        "p90": 1.4757792662548503,
+        "p95": 1.5160185838227476,
+        "min": 0.7514715500327012,
+        "max": 1.5562579013906448
+      },
+      "latency_inflation_ratio": {
+        "count": 2,
+        "mean": 1.362572217224869,
+        "median": 1.362572217224869,
+        "p90": 1.7203544671484967,
+        "p95": 1.76507724838895,
+        "min": 0.9153444048203346,
+        "max": 1.8098000296294035
+      },
+      "decode_latency_inflation_ratio": {
+        "count": 2,
+        "mean": 1.3657973734604896,
+        "median": 1.3657973734604896,
+        "p90": 1.72401108130485,
+        "p95": 1.7687877947853947,
+        "min": 0.9180302386550392,
+        "max": 1.81356450826594
+      },
+      "pass_rate_fp16": {
+        "correct": 2,
+        "evaluated": 3,
+        "accuracy": 0.6666666666666666
+      },
+      "pass_rate_kvarn": {
+        "correct": 2,
+        "evaluated": 3,
+        "accuracy": 0.6666666666666666
+      }
+    }
+  },
+  "timing_coverage": {
+    "e2e_pairs": 3,
+    "decode_pairs": 3,
+    "ttft_pairs": 3,
+    "tpot_pairs": 3
+  }
+}
