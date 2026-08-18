@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "condition_label": "thinking_on",
+  "seeds": [
+    2026,
+    2027,
+    2028
+  ],
+  "seed_count": 3,
+  "valid_request_seed_pairs": 9,
+  "uncensored_request_seed_pairs": 5,
+  "paper_style_avg3": {
+    "fp16_output_tokens": {
+      "count": 3,
+      "mean": 2726.4444444444443,
+      "std": 125.32683198267965,
+      "median": 2716.0,
+      "p90": 2828.5333333333333,
+      "p95": 2842.6,
+      "min": 2606.6666666666665,
+      "max": 2856.6666666666665
+    },
+    "kvarn_output_tokens": {
+      "count": 3,
+      "mean": 3105.222222222222,
+      "std": 530.3925520397694,
+      "median": 2816.6666666666665,
+      "p90": 3537.2,
+      "p95": 3627.266666666667,
+      "min": 2781.6666666666665,
+      "max": 3717.3333333333335
+    },
+    "output_token_change": 0.13892737794441276,
+    "fp16_pass_at_1": {
+      "count": 3,
+      "mean": 0.6666666666666666,
+      "std": 0.0,
+      "median": 0.6666666666666666,
+      "p90": 0.6666666666666666,
+      "p95": 0.6666666666666666,
+      "min": 0.6666666666666666,
+      "max": 0.6666666666666666
+    },
+    "kvarn_pass_at_1": {
+      "count": 3,
+      "mean": 0.5555555555555555,
+      "std": 0.19245008972987523,
+      "median": 0.6666666666666666,
+      "p90": 0.6666666666666666,
+      "p95": 0.6666666666666666,
+      "min": 0.3333333333333333,
+      "max": 0.6666666666666666
+    },
+    "pass_at_1_change_points": -0.11111111111111116,
+    "note": "Mode means are computed within each seed over all valid requests, then averaged across seeds. Capped outputs are included, matching benchmark-style mean-token reporting more closely than the uncensored paired distribution."
+  },
+  "pooled_uncensored": {
+    "pair_count": 5,
+    "tir": {
+      "count": 5,
+      "mean": 0.03906339436144422,
+      "std": 0.5645296758064215,
+      "median": 0.1544461778471139,
+      "p90": 0.5906227449662594,
+      "p95": 0.6966600238317809,
+      "min": -0.5673635307781649,
+      "max": 0.8026973026973027
+    },
+    "e2e_lir": {
+      "count": 5,
+      "mean": 0.13063353205139183,
+      "std": 0.6168513345510441,
+      "median": 0.2535828699334396,
+      "p90": 0.734096153904723,
+      "p95": 0.8515952762885768,
+      "min": -0.5302278891241431,
+      "max": 0.9690943986724307
+    },
+    "decode_lir": {
+      "count": 5,
+      "mean": 0.13067773475050756,
+      "std": 0.6182225481649636,
+      "median": 0.2538902704985047,
+      "p90": 0.7354831401091023,
+      "p95": 0.8532649669434111,
+      "min": -0.5316150566171499,
+      "max": 0.9710467937777203
+    },
+    "tpot_lir": {
+      "count": 5,
+      "mean": 0.0866937190905098,
+      "std": 0.0037662835037600337,
+      "median": 0.08605765581776155,
+      "p90": 0.0903199376512602,
+      "p95": 0.09173211881859276,
+      "min": 0.08345495640038292,
+      "max": 0.09314429998592533
+    },
+    "ttft_lir": {
+      "count": 5,
+      "mean": 0.15177908853641614,
+      "std": 0.07656465512060259,
+      "median": 0.11680027995164471,
+      "p90": 0.23596092935061697,
+      "p95": 0.24253195737726738,
+      "min": 0.0716983622536527,
+      "max": 0.24910298540391784
+    },
+    "tail_fractions": {
+      "tir_gt_0_10": 0.6,
+      "tir_gt_0_25": 0.4,
+      "tir_gt_0_50": 0.2,
+      "tir_gt_1_00": 0.0,
+      "tir_lt_minus_0_10": 0.4,
+      "tir_between_minus_0_10_and_0_10": 0.0
+    },
+    "tir_vs_e2e_lir": {
+      "n": 5,
+      "rho": 1.0
+    },
+    "tir_vs_decode_lir": {
+      "n": 5,
+      "rho": 1.0
+    }
+  },
+  "quality": {
+    "fp16": {
+      "correct": 6,
+      "evaluated": 9,
+      "accuracy": 0.6666666666666666
+    },
+    "kvarn": {
+      "correct": 5,
+      "evaluated": 9,
+      "accuracy": 0.5555555555555556
+    },
+    "pass_to_pass_pairs": 5,
+    "pass_to_fail_pairs": 1,
+    "fail_to_pass_pairs": 0
+  },
+  "censoring": {
+    "fp16_pairs": 3,
+    "kvarn_pairs": 4,
+    "either_pairs": 4
+  },
+  "severe_inflation_thinking": {
+    "threshold": 0.5,
+    "severe_pair_count": 1,
+    "thinking_split_available_count": 1,
+    "total_extra_tokens": 1607,
+    "total_extra_thinking_tokens": 1758,
+    "total_extra_final_tokens": -151,
+    "aggregate_thinking_contribution": 1.0939639079029246,
+    "per_pair_thinking_contribution": {
+      "count": 1,
+      "mean": 1.0939639079029246,
+      "std": 0.0,
+      "median": 1.0939639079029246,
+      "p90": 1.0939639079029246,
+      "p95": 1.0939639079029246,
+      "min": 1.0939639079029246,
+      "max": 1.0939639079029246
+    },
+    "pass_to_pass_pair_count": 1,
+    "pass_to_pass_aggregate_thinking_contribution": 1.0939639079029246
+  },
+  "robust_across_seeds": {
+    "all_seeds_uncensored_task_count": 1,
+    "majority_seed_threshold": 2,
+    "tasks_longer_gt_10_in_majority_seeds": 1,
+    "tasks_longer_gt_25_in_majority_seeds": 1,
+    "tasks_longer_gt_50_in_majority_seeds": 0,
+    "tasks_shorter_gt_10_in_majority_seeds": 0,
+    "tasks_longer_gt_10_in_all_seeds": 1,
+    "tasks_longer_gt_50_in_all_seeds": 0
+  },
+  "per_seed": [
+    {
+      "seed": 2026,
+      "valid_pairs": 3,
+      "uncensored_pairs": 1,
+      "fp16_censored": 1,
+      "kvarn_censored": 2,
+      "fp16_pass_at_1": 0.6666666666666666,
+      "kvarn_pass_at_1": 0.3333333333333333,
+      "fp16_mean_output_tokens_all": 2716.0,
+      "kvarn_mean_output_tokens_all": 3717.3333333333335,
+      "paper_style_output_token_change": 0.3686794305351007,
+      "tir_mean_uncensored": 0.1544461778471139,
+      "tir_median_uncensored": 0.1544461778471139,
+      "tir_p95_uncensored": 0.1544461778471139,
+      "decode_lir_mean_uncensored": 0.2538902704985047,
+      "decode_lir_p95_uncensored": 0.2538902704985047,
+      "tpot_lir_mean_uncensored": 0.0860833941492625,
+      "tir_gt_0_10": 1.0,
+      "tir_gt_0_25": 0.0,
+      "tir_gt_0_50": 0.0,
+      "tir_gt_1_00": 0.0,
+      "tir_lt_minus_0_10": 0.0,
+      "tir_between_minus_0_10_and_0_10": 0.0
+    },
+    {
+      "seed": 2027,
+      "valid_pairs": 3,
+      "uncensored_pairs": 2,
+      "fp16_censored": 1,
+      "kvarn_censored": 1,
+      "fp16_pass_at_1": 0.6666666666666666,
+      "kvarn_pass_at_1": 0.6666666666666666,
+      "fp16_mean_output_tokens_all": 2606.6666666666665,
+      "kvarn_mean_output_tokens_all": 2816.6666666666665,
+      "paper_style_output_token_change": 0.08056265984654731,
+      "tir_mean_uncensored": 0.11766688595956887,
+      "tir_median_uncensored": 0.11766688595956887,
+      "tir_p95_uncensored": 0.7341942610235292,
+      "decode_lir_mean_uncensored": 0.2197158685802852,
+      "decode_lir_p95_uncensored": 0.8959137012579768,
+      "tpot_lir_mean_uncensored": 0.08829962819315412,
+      "tir_gt_0_10": 0.5,
+      "tir_gt_0_25": 0.5,
+      "tir_gt_0_50": 0.5,
+      "tir_gt_1_00": 0.0,
+      "tir_lt_minus_0_10": 0.5,
+      "tir_between_minus_0_10_and_0_10": 0.0
+    },
+    {
+      "seed": 2028,
+      "valid_pairs": 3,
+      "uncensored_pairs": 2,
+      "fp16_censored": 1,
+      "kvarn_censored": 1,
+      "fp16_pass_at_1": 0.6666666666666666,
+      "kvarn_pass_at_1": 0.6666666666666666,
+      "fp16_mean_output_tokens_all": 2856.6666666666665,
+      "kvarn_mean_output_tokens_all": 2781.6666666666665,
+      "paper_style_output_token_change": -0.026254375729288217,
+      "tir_mean_uncensored": -0.09723148897951525,
+      "tir_median_uncensored": -0.09723148897951525,
+      "tir_p95_uncensored": 0.23553666863477352,
+      "decode_lir_mean_uncensored": -0.019966666953268652,
+      "decode_lir_p95_uncensored": 0.34192722695023076,
+      "tpot_lir_mean_uncensored": 0.08539297245848912,
+      "tir_gt_0_10": 0.5,
+      "tir_gt_0_25": 0.5,
+      "tir_gt_0_50": 0.0,
+      "tir_gt_1_00": 0.0,
+      "tir_lt_minus_0_10": 0.5,
+      "tir_between_minus_0_10_and_0_10": 0.0
+    }
+  ]
+}
