@@ -58,6 +58,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--top-k", type=int, default=-1)
+    parser.add_argument("--min-p", type=float, default=0.0)
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--tensor-parallel-size", type=int, default=1)
     parser.add_argument("--gpu-memory-utilization", type=float, default=0.90)
@@ -262,6 +263,7 @@ def main() -> None:
         temperature=args.temperature,
         top_p=args.top_p,
         top_k=args.top_k,
+        min_p=args.min_p,
         max_tokens=args.max_tokens,
         seed=args.seed,
     )
@@ -287,6 +289,7 @@ def main() -> None:
         "temperature": args.temperature,
         "top_p": args.top_p,
         "top_k": args.top_k,
+        "min_p": args.min_p,
         "seed": args.seed,
         "tensor_parallel_size": args.tensor_parallel_size,
         "gpu_memory_utilization": args.gpu_memory_utilization,
@@ -342,6 +345,7 @@ def main() -> None:
                 "temperature": args.temperature,
                 "top_p": args.top_p,
                 "top_k": args.top_k,
+                "min_p": args.min_p,
                 "max_tokens": args.max_tokens,
                 "max_model_len": args.max_model_len,
             }
