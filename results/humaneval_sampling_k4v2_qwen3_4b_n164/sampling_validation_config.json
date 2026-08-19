@@ -1,0 +1,25 @@
+{
+  "experiment": "humaneval_k4v2_sampling_validation",
+  "model": "/data/wanglin/models/Qwen3-4B",
+  "dataset": "openai/openai_humaneval",
+  "num_samples": 164,
+  "kvarn_dtype": "kvarn_k4v2_g128",
+  "seeds": "2026,2027,2028",
+  "max_tokens": 16384,
+  "max_model_len": 32768,
+  "thinking_on": {
+    "enable_thinking": true,
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "top_k": 20,
+    "min_p": 0.0
+  },
+  "thinking_off": {
+    "enabled": 0,
+    "enable_thinking": false,
+    "temperature": 0.7,
+    "top_p": 0.8,
+    "top_k": 20,
+    "min_p": 0.0
+  }
+}
