@@ -9,6 +9,7 @@ import json
 import math
 import random
 import statistics
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Callable, Iterable
@@ -67,6 +68,9 @@ def parse_float(value: Any) -> float | None:
 
 
 def load_comparison(path: Path) -> dict[str, dict[str, Any]]:
+    # Keep this reader consistent with plot_results.py. Long greedy reasoning
+    # can make extracted-answer fields exceed Python csv's 128 KiB default.
+    csv.field_size_limit(sys.maxsize)
     rows: dict[str, dict[str, Any]] = {}
     with path.open("r", encoding="utf-8", newline="") as handle:
         for row in csv.DictReader(handle):

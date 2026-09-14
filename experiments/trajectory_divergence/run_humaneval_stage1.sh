@@ -27,6 +27,9 @@ EXECUTION_MEMORY_MB="${EXECUTION_MEMORY_MB:-1024}"
 BOOTSTRAP_SAMPLES="${BOOTSTRAP_SAMPLES:-5000}"
 OUTPUT_ROOT="${OUTPUT_ROOT:-${REPO_ROOT}/results/humaneval_stage1_qwen3_4b_n${NUM_SAMPLES}}"
 REQUIRE_CLEAN_GIT="${REQUIRE_CLEAN_GIT:-0}"
+# Empty by default so the existing Stage-1 experiment is byte-for-byte compatible
+# unless a caller explicitly asks for per-task inspection artifacts.
+PER_SAMPLE_OUTPUT_ROOT="${PER_SAMPLE_OUTPUT_ROOT:-}"
 
 if (( NUM_REPEATS < 2 )); then
   echo "NUM_REPEATS must be >= 2 so FP16/KVarN repeat determinism is audited." >&2
@@ -79,6 +82,9 @@ run_generation() {
     --execution-timeout "${EXECUTION_TIMEOUT}"
     --execution-memory-mb "${EXECUTION_MEMORY_MB}"
   )
+  if [[ -n "${PER_SAMPLE_OUTPUT_ROOT}" ]]; then
+    args+=(--per-sample-output-dir "${PER_SAMPLE_OUTPUT_ROOT}/${run_name}")
+  fi
   if [[ -n "${ROPE_SCALING_JSON}" ]]; then
     args+=(--rope-scaling-json "${ROPE_SCALING_JSON}")
   fi

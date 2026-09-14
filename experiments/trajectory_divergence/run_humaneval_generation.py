@@ -88,6 +88,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--enforce-eager", action="store_true")
     parser.add_argument("--require-backend-verification", action="store_true")
+    parser.add_argument(
+        "--per-sample-output-dir",
+        type=Path,
+        default=None,
+        help=(
+            "Optional directory for one human-readable .txt file per HumanEval task. "
+            "Useful for inspecting long, repeated, censored, or otherwise abnormal outputs."
+        ),
+    )
     return parser.parse_args()
 
 
@@ -101,6 +110,81 @@ def load_manifest(path: Path, limit: int | None) -> tuple[dict[str, Any], list[d
     if not samples:
         raise ValueError(f"No samples found in {path}")
     return manifest, samples
+
+
+def _sample_output_filename(sample_id: str) -> str:
+    """Return a stable, naturally sortable filename for a HumanEval task."""
+    prefix, separator, suffix = sample_id.rpartition("/")
+    if separator and suffix.isdigit():
+        raw = f"{prefix}_{int(suffix):03d}"
+    else:
+        raw = sample_id
+    safe = "".join(char if char.isalnum() or char in {"-", "_", "."} else "_" for char in raw)
+    return f"{safe or 'unknown_sample'}.txt"
+
+
+def write_per_sample_output(output_dir: Path | None, record: dict[str, Any]) -> None:
+    """Write a human-readable task artifact without changing the JSONL source of truth."""
+    if output_dir is None:
+        return
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    sample_id = str(record.get("sample_id") or "unknown_sample")
+    output_tokens = record.get("output_tokens")
+    max_tokens = record.get("max_tokens")
+    cap_fraction = None
+    if isinstance(output_tokens, int) and isinstance(max_tokens, int) and max_tokens > 0:
+        cap_fraction = output_tokens / max_tokens
+
+    flags: list[str] = []
+    if record.get("finish_reason") == "length":
+        flags.append("HIT_LENGTH_CAP")
+    if cap_fraction is not None and cap_fraction >= 0.8:
+        flags.append("NEAR_LENGTH_CAP")
+    if record.get("output_text") and not record.get("thinking_boundary_detected"):
+        flags.append("NO_THINK_END")
+    if record.get("execution_passed") is False:
+        flags.append("EXECUTION_FAILED")
+    if record.get("error"):
+        flags.append("GENERATION_ERROR")
+
+    header = [
+        f"sample_id: {sample_id}",
+        f"mode: {record.get('mode')}",
+        f"run_name: {record.get('run_name')}",
+        f"seed: {record.get('seed')}",
+        f"max_tokens: {max_tokens}",
+        f"max_model_len: {record.get('max_model_len')}",
+        f"input_tokens: {record.get('input_tokens')}",
+        f"output_tokens: {output_tokens}",
+        f"output_cap_fraction: {cap_fraction:.6f}" if cap_fraction is not None else "output_cap_fraction: None",
+        f"finish_reason: {record.get('finish_reason')}",
+        f"stop_reason: {record.get('stop_reason')}",
+        f"thinking_boundary_detected: {record.get('thinking_boundary_detected')}",
+        f"thinking_tokens: {record.get('thinking_tokens')}",
+        f"final_tokens: {record.get('final_tokens')}",
+        f"latency_seconds: {record.get('latency_seconds')}",
+        f"execution_result: {record.get('execution_result')}",
+        f"execution_passed: {record.get('execution_passed')}",
+        f"candidate_source: {record.get('candidate_source')}",
+        f"contains_entry_point_definition: {record.get('contains_entry_point_definition')}",
+        f"inspection_flags: {','.join(flags) if flags else 'NONE'}",
+    ]
+
+    error = record.get("error")
+    error_text = json.dumps(error, ensure_ascii=False, indent=2) if error else ""
+    sections = [
+        "\n".join(header),
+        "===== PROMPT =====\n" + str(record.get("prompt_text") or record.get("problem") or ""),
+        "===== FULL MODEL OUTPUT =====\n" + str(record.get("output_text") or ""),
+        "===== VISIBLE FINAL OUTPUT =====\n" + str(record.get("visible_final_output") or ""),
+        "===== EXTRACTED CANDIDATE CODE =====\n" + str(record.get("candidate_code") or ""),
+    ]
+    if error_text:
+        sections.append("===== ERROR =====\n" + error_text)
+
+    artifact_path = output_dir / _sample_output_filename(sample_id)
+    artifact_path.write_text("\n\n".join(sections).rstrip() + "\n", encoding="utf-8")
 
 
 def build_humaneval_prompt(
@@ -232,6 +316,8 @@ def main() -> None:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     output_path = args.output_dir / "generations.jsonl"
     config_path = args.output_dir / "experiment_config.json"
+    if args.per_sample_output_dir is not None:
+        args.per_sample_output_dir.mkdir(parents=True, exist_ok=True)
     if output_path.exists() and not args.resume:
         raise FileExistsError(f"{output_path} already exists; use a new output dir or --resume")
     completed = read_completed_sample_ids(output_path) if args.resume else set()
@@ -301,6 +387,9 @@ def main() -> None:
         "execution_memory_mb": args.execution_memory_mb,
         "task_instruction": task_instruction,
         "samples_file": str(args.samples_file.resolve()),
+        "per_sample_output_dir": (
+            str(args.per_sample_output_dir.resolve()) if args.per_sample_output_dir is not None else None
+        ),
         "num_manifest_samples": len(samples),
         "dataset": {
             key: manifest.get(key)
@@ -481,6 +570,7 @@ def main() -> None:
                         "traceback": traceback.format_exc(),
                     },
                 }
+            write_per_sample_output(args.per_sample_output_dir, record)
             append_jsonl(handle, record)
 
     LOGGER.info("HumanEval generation complete: %s", output_path)

@@ -8,6 +8,7 @@ import csv
 import json
 import logging
 import math
+import sys
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -66,6 +67,10 @@ def parse_float(value: Any) -> float | None:
 
 
 def load_rows(path: Path) -> list[dict[str, Any]]:
+    # Extended-cap HumanEval runs can place >128 KiB extracted answers in a
+    # single comparison-CSV cell. Python's csv module defaults to 131072 bytes.
+    # Lift the parser limit so plotting does not fail after successful generation.
+    csv.field_size_limit(sys.maxsize)
     rows: list[dict[str, Any]] = []
     with path.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
