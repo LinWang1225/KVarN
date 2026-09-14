@@ -1,0 +1,542 @@
+diff --git a/experiments/trajectory_divergence/HUMANEVAL_KVARN_DETERMINISM_ISOLATION.md b/experiments/trajectory_divergence/HUMANEVAL_KVARN_DETERMINISM_ISOLATION.md
+new file mode 100644
+index 0000000..dbbdfc8
+--- /dev/null
++++ b/experiments/trajectory_divergence/HUMANEVAL_KVARN_DETERMINISM_ISOLATION.md
+@@ -0,0 +1,39 @@
++# HumanEval KVarN greedy determinism isolation
++
++This diagnostic isolates the `3/3` KVarN repeat self-divergence observed after
++raising the HumanEval greedy experiment from `16K/32K` to `32K/40K`.
++
++It intentionally runs **KVarN only**, twice per condition, because FP16 was
++already repeat-deterministic in the smoke and the immediate question is which
++configuration change triggers KVarN self-divergence.
++
++## Conditions
++
++| Condition | max_tokens | max_model_len | CUDA graph | Isolates |
++|---|---:|---:|---|---|
++| `baseline_16k_model32k_graph` | 16384 | 32768 | on | old HumanEval geometry on current code |
++| `model40k_16k_graph` | 16384 | 40960 | on | `max_model_len` / cache geometry only |
++| `cap30k_model32k_graph` | 30000 | 32768 | on | decode horizon while preserving old model length |
++| `extended_32k_model40k_graph` | 32768 | 40960 | on | current problematic point; reused from existing smoke by default |
++| `extended_32k_model40k_eager` | 32768 | 40960 | off | graph-vs-eager execution path |
++
++All conditions keep greedy decoding (`temperature=0`, `top_p=1`, `top_k=-1`),
++seed 2026, KVarN K4/V2 G128, block size 128, TP=1, and prefix caching disabled.
++
++## Reading the matrix
++
++The most useful columns in `matrix_summary.md` are self-divergence rate and the
++first-divergence location.
++
++- Baseline stable, `model40k_16k_graph` unstable: suspect `max_model_len`-driven
++  KV allocation / CUDA graph shape changes.
++- Baseline stable, `cap30k_model32k_graph` unstable: decode-horizon behavior can
++  trigger the issue even with the old model length.
++- Graph 32K/40K unstable, eager 32K/40K stable: CUDA graph execution is strongly
++  implicated.
++- Both graph and eager unstable at early steps: investigate numerical
++  determinism in the KVarN store/Sinkhorn/decode path before treating one
++  greedy FP16-vs-KVarN trajectory as a clean causal sample.
++
++The script is resume-safe: generation calls use `--resume`. It also saves
++human-readable per-sample outputs for every newly generated condition.
+diff --git a/experiments/trajectory_divergence/analyze_humaneval_repeat_determinism.py b/experiments/trajectory_divergence/analyze_humaneval_repeat_determinism.py
+new file mode 100644
+index 0000000..a727204
+--- /dev/null
++++ b/experiments/trajectory_divergence/analyze_humaneval_repeat_determinism.py
+@@ -0,0 +1,225 @@
++#!/usr/bin/env python3
++"""Analyze repeat determinism for two HumanEval generation runs.
++
++This is intentionally mode-agnostic, but the isolation runner uses it for two
++KVarN greedy repeats under the same configuration.  It reports the exact first
++token at which the repeats disagree and keeps censoring/termination metadata so
++small numerical nondeterminism can be separated from later autoregressive
++amplification.
++"""
++
++from __future__ import annotations
++
++import argparse
++import csv
++import json
++import statistics
++from collections import Counter
++from pathlib import Path
++from typing import Any
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(description="Compare two repeated HumanEval runs.")
++    parser.add_argument("--run1", type=Path, required=True)
++    parser.add_argument("--run2", type=Path, required=True)
++    parser.add_argument("--output-dir", type=Path, required=True)
++    parser.add_argument("--condition-label", required=True)
++    parser.add_argument("--max-tokens", type=int, required=True)
++    parser.add_argument("--max-model-len", type=int, required=True)
++    parser.add_argument("--enforce-eager", action="store_true")
++    return parser.parse_args()
++
++
++def load_jsonl(path: Path) -> dict[str, dict[str, Any]]:
++    rows: dict[str, dict[str, Any]] = {}
++    with path.open("r", encoding="utf-8") as handle:
++        for line in handle:
++            if not line.strip():
++                continue
++            row = json.loads(line)
++            sample_id = row.get("sample_id")
++            if sample_id is not None:
++                rows[str(sample_id)] = row
++    return rows
++
++
++def first_difference(left: list[int], right: list[int]) -> int | None:
++    for index, (a, b) in enumerate(zip(left, right)):
++        if a != b:
++            return index
++    if len(left) != len(right):
++        return min(len(left), len(right))
++    return None
++
++
++def median_or_none(values: list[int]) -> float | None:
++    return float(statistics.median(values)) if values else None
++
++
++def mean_or_none(values: list[int | float]) -> float | None:
++    return float(statistics.fmean(values)) if values else None
++
++
++def row_for(sample_id: str, left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
++    left_ids = [int(v) for v in left.get("output_token_ids", [])]
++    right_ids = [int(v) for v in right.get("output_token_ids", [])]
++    first = first_difference(left_ids, right_ids)
++    common_prefix = first if first is not None else min(len(left_ids), len(right_ids))
++    min_len = min(len(left_ids), len(right_ids))
++    left_finish = str(left.get("finish_reason") or "")
++    right_finish = str(right.get("finish_reason") or "")
++    left_error = left.get("error")
++    right_error = right.get("error")
++
++    return {
++        "sample_id": sample_id,
++        "valid_pair": left_error is None and right_error is None,
++        "diverged": first is not None,
++        "first_divergence_step": first,
++        "common_prefix_tokens": common_prefix,
++        "lcp_ratio_vs_shorter": common_prefix / max(1, min_len),
++        "first_divergence_before_256": first is not None and first < 256,
++        "first_divergence_before_1024": first is not None and first < 1024,
++        "first_divergence_before_16384": first is not None and first < 16384,
++        "run1_output_tokens": len(left_ids),
++        "run2_output_tokens": len(right_ids),
++        "delta_output_tokens": len(right_ids) - len(left_ids),
++        "run1_finish_reason": left.get("finish_reason"),
++        "run2_finish_reason": right.get("finish_reason"),
++        "run1_hit_length_cap": left_finish.lower() == "length",
++        "run2_hit_length_cap": right_finish.lower() == "length",
++        "finish_reason_match": left.get("finish_reason") == right.get("finish_reason"),
++        "run1_thinking_boundary": bool(left.get("thinking_boundary_detected")),
++        "run2_thinking_boundary": bool(right.get("thinking_boundary_detected")),
++        "run1_thinking_tokens": left.get("thinking_tokens"),
++        "run2_thinking_tokens": right.get("thinking_tokens"),
++        "run1_execution_passed": left.get("execution_passed"),
++        "run2_execution_passed": right.get("execution_passed"),
++        "execution_pass_match": left.get("execution_passed") == right.get("execution_passed"),
++        "same_candidate_code": (
++            left.get("candidate_code_sha256") is not None
++            and left.get("candidate_code_sha256") == right.get("candidate_code_sha256")
++        ),
++        "same_output_text": left.get("output_text") == right.get("output_text"),
++        "run1_error": left_error,
++        "run2_error": right_error,
++    }
++
++
++def write_markdown(path: Path, summary: dict[str, Any], rows: list[dict[str, Any]]) -> None:
++    lines = [
++        f"# Repeat determinism: {summary['condition_label']}",
++        "",
++        "## Configuration",
++        "",
++        f"- max_tokens: `{summary['max_tokens']}`",
++        f"- max_model_len: `{summary['max_model_len']}`",
++        f"- enforce_eager: `{summary['enforce_eager']}`",
++        "- decoding: greedy (`temperature=0`, `top_p=1`, `top_k=-1`)",
++        "",
++        "## Summary",
++        "",
++        "| Metric | Value |",
++        "|---|---:|",
++        f"| Valid repeat pairs | {summary['valid_pairs']} |",
++        f"| Self-diverged | {summary['diverged_count']} |",
++        f"| Self-divergence rate | {summary['self_divergence_rate']:.4f} |" if summary["self_divergence_rate"] is not None else "| Self-divergence rate | N/A |",
++        f"| Diverged before step 256 | {summary['diverged_before_256']} |",
++        f"| Diverged before step 1024 | {summary['diverged_before_1024']} |",
++        f"| Diverged before step 16384 | {summary['diverged_before_16384']} |",
++        f"| Median first divergence step | {summary['median_first_divergence_step']} |",
++        f"| Either repeat hit max_tokens | {summary['either_hit_length_cap_count']} |",
++        f"| Finish-reason mismatches | {summary['finish_reason_mismatch_count']} |",
++        f"| Pass/fail mismatches | {summary['execution_pass_mismatch_count']} |",
++        "",
++        "## Per sample",
++        "",
++        "| Sample | Diverged | First diff | Run1 tokens | Run2 tokens | Run1 finish | Run2 finish | Pass match | Same code |",
++        "|---|---:|---:|---:|---:|---|---|---:|---:|",
++    ]
++    for row in rows:
++        lines.append(
++            "| {sample_id} | {diverged} | {first} | {l1} | {l2} | {f1} | {f2} | {pass_match} | {same_code} |".format(
++                sample_id=row["sample_id"],
++                diverged=row["diverged"],
++                first=row["first_divergence_step"],
++                l1=row["run1_output_tokens"],
++                l2=row["run2_output_tokens"],
++                f1=row["run1_finish_reason"],
++                f2=row["run2_finish_reason"],
++                pass_match=row["execution_pass_match"],
++                same_code=row["same_candidate_code"],
++            )
++        )
++    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
++
++
++def main() -> None:
++    args = parse_args()
++    left = load_jsonl(args.run1)
++    right = load_jsonl(args.run2)
++    common = sorted(set(left).intersection(right))
++    rows = [row_for(sample_id, left[sample_id], right[sample_id]) for sample_id in common]
++    valid = [row for row in rows if row["valid_pair"]]
++    diverged = [row for row in valid if row["diverged"]]
++    first_steps = [int(row["first_divergence_step"]) for row in diverged]
++
++    summary = {
++        "schema_version": 1,
++        "condition_label": args.condition_label,
++        "max_tokens": args.max_tokens,
++        "max_model_len": args.max_model_len,
++        "enforce_eager": bool(args.enforce_eager),
++        "common_sample_count": len(common),
++        "valid_pairs": len(valid),
++        "diverged_count": len(diverged),
++        "self_divergence_rate": len(diverged) / len(valid) if valid else None,
++        "diverged_before_256": sum(bool(row["first_divergence_before_256"]) for row in valid),
++        "diverged_before_1024": sum(bool(row["first_divergence_before_1024"]) for row in valid),
++        "diverged_before_16384": sum(bool(row["first_divergence_before_16384"]) for row in valid),
++        "first_divergence_steps": first_steps,
++        "mean_first_divergence_step": mean_or_none(first_steps),
++        "median_first_divergence_step": median_or_none(first_steps),
++        "min_first_divergence_step": min(first_steps) if first_steps else None,
++        "max_first_divergence_step": max(first_steps) if first_steps else None,
++        "either_hit_length_cap_count": sum(
++            bool(row["run1_hit_length_cap"] or row["run2_hit_length_cap"]) for row in valid
++        ),
++        "finish_reason_mismatch_count": sum(not bool(row["finish_reason_match"]) for row in valid),
++        "execution_pass_mismatch_count": sum(not bool(row["execution_pass_match"]) for row in valid),
++        "same_candidate_code_count": sum(bool(row["same_candidate_code"]) for row in valid),
++        "run1_finish_reason_counts": dict(Counter(str(row["run1_finish_reason"]) for row in valid)),
++        "run2_finish_reason_counts": dict(Counter(str(row["run2_finish_reason"]) for row in valid)),
++        "run1_mean_output_tokens": mean_or_none([int(row["run1_output_tokens"]) for row in valid]),
++        "run2_mean_output_tokens": mean_or_none([int(row["run2_output_tokens"]) for row in valid]),
++    }
++
++    args.output_dir.mkdir(parents=True, exist_ok=True)
++    with (args.output_dir / "per_sample_repeat_comparison.jsonl").open("w", encoding="utf-8") as handle:
++        for row in rows:
++            handle.write(json.dumps(row, ensure_ascii=False, default=str) + "\n")
++
++    fieldnames = list(rows[0].keys()) if rows else ["sample_id"]
++    with (args.output_dir / "per_sample_repeat_comparison.csv").open(
++        "w", encoding="utf-8", newline=""
++    ) as handle:
++        writer = csv.DictWriter(handle, fieldnames=fieldnames)
++        writer.writeheader()
++        for row in rows:
++            writer.writerow(
++                {
++                    key: json.dumps(value, ensure_ascii=False) if isinstance(value, (dict, list)) else value
++                    for key, value in row.items()
++                }
++            )
++
++    (args.output_dir / "summary.json").write_text(
++        json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
++    )
++    write_markdown(args.output_dir / "summary.md", summary, rows)
++    print(json.dumps(summary, ensure_ascii=False, indent=2))
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/experiments/trajectory_divergence/run_humaneval_kvarn_determinism_isolation.sh b/experiments/trajectory_divergence/run_humaneval_kvarn_determinism_isolation.sh
+new file mode 100755
+index 0000000..4a0ac31
+--- /dev/null
++++ b/experiments/trajectory_divergence/run_humaneval_kvarn_determinism_isolation.sh
+@@ -0,0 +1,154 @@
++#!/usr/bin/env bash
++# Isolate the trigger for KVarN greedy repeat self-divergence on HumanEval.
++set -euo pipefail
++
++SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
++REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
++PYTHON="${PYTHON:-python}"
++MODEL="${MODEL:-Qwen/Qwen3-4B}"
++NUM_SAMPLES="${NUM_SAMPLES:-3}"
++KVARN_DTYPE="${KVARN_DTYPE:-kvarn_k4v2_g128}"
++BLOCK_SIZE="${BLOCK_SIZE:-128}"
++GPU_MEMORY_UTILIZATION="${GPU_MEMORY_UTILIZATION:-0.90}"
++TP_SIZE="${TP_SIZE:-1}"
++SEED="${SEED:-2026}"
++EXECUTE_TESTS="${EXECUTE_TESTS:-1}"
++EXECUTION_TIMEOUT="${EXECUTION_TIMEOUT:-30}"
++EXECUTION_MEMORY_MB="${EXECUTION_MEMORY_MB:-1024}"
++OUTPUT_ROOT="${OUTPUT_ROOT:-${REPO_ROOT}/results/humaneval_kvarn_determinism_isolation_n${NUM_SAMPLES}}"
++EXISTING_32K_ROOT="${EXISTING_32K_ROOT:-${REPO_ROOT}/results/humaneval_stage1_greedy32k_smoke}"
++SOURCE_SAMPLES_FILE="${SOURCE_SAMPLES_FILE:-${EXISTING_32K_ROOT}/selected_samples.json}"
++
++# Set to 0 if you deliberately want to regenerate the graph-mode 32K/40K point.
++REUSE_EXISTING_32K="${REUSE_EXISTING_32K:-1}"
++
++mkdir -p "${OUTPUT_ROOT}"
++SAMPLES_FILE="${OUTPUT_ROOT}/selected_samples.json"
++
++if [[ "${NUM_SAMPLES}" == "3" && -f "${SOURCE_SAMPLES_FILE}" ]]; then
++  cp "${SOURCE_SAMPLES_FILE}" "${SAMPLES_FILE}"
++else
++  "${PYTHON}" "${SCRIPT_DIR}/prepare_humaneval_samples.py" \
++    --dataset-name openai/openai_humaneval \
++    --dataset-split test \
++    --num-samples "${NUM_SAMPLES}" \
++    --output "${SAMPLES_FILE}"
++fi
++
++run_repeat() {
++  local condition="$1"
++  local repeat="$2"
++  local max_tokens="$3"
++  local max_model_len="$4"
++  local eager="$5"
++
++  local condition_dir="${OUTPUT_ROOT}/${condition}"
++  local run_name="kvarn_run${repeat}"
++  local run_dir="${condition_dir}/${run_name}"
++  local per_sample_dir="${condition_dir}/per_sample_outputs/${run_name}"
++  mkdir -p "${condition_dir}" "${per_sample_dir}"
++
++  local args=(
++    --mode kvarn
++    --run-name "${run_name}"
++    --samples-file "${SAMPLES_FILE}"
++    --output-dir "${run_dir}"
++    --model "${MODEL}"
++    --kvarn-kv-cache-dtype "${KVARN_DTYPE}"
++    --block-size "${BLOCK_SIZE}"
++    --max-tokens "${max_tokens}"
++    --max-model-len "${max_model_len}"
++    --temperature 0.0
++    --top-p 1.0
++    --top-k -1
++    --min-p 0.0
++    --gpu-memory-utilization "${GPU_MEMORY_UTILIZATION}"
++    --tensor-parallel-size "${TP_SIZE}"
++    --seed "${SEED}"
++    --execution-timeout "${EXECUTION_TIMEOUT}"
++    --execution-memory-mb "${EXECUTION_MEMORY_MB}"
++    --per-sample-output-dir "${per_sample_dir}"
++    --require-backend-verification
++    --resume
++  )
++  if [[ "${eager}" == "1" ]]; then
++    args+=(--enforce-eager)
++  fi
++  if [[ "${EXECUTE_TESTS}" == "1" ]]; then
++    args+=(--execute-tests)
++  else
++    args+=(--no-execute-tests)
++  fi
++
++  echo "=== ${condition} / ${run_name} ==="
++  echo "max_tokens=${max_tokens} max_model_len=${max_model_len} eager=${eager}"
++  "${PYTHON}" "${SCRIPT_DIR}/run_humaneval_generation.py" "${args[@]}"
++}
++
++analyze_condition() {
++  local condition="$1"
++  local max_tokens="$2"
++  local max_model_len="$3"
++  local eager="$4"
++  local run1="$5"
++  local run2="$6"
++  local analysis_dir="${OUTPUT_ROOT}/${condition}/analysis"
++  local args=(
++    --run1 "${run1}"
++    --run2 "${run2}"
++    --output-dir "${analysis_dir}"
++    --condition-label "${condition}"
++    --max-tokens "${max_tokens}"
++    --max-model-len "${max_model_len}"
++  )
++  if [[ "${eager}" == "1" ]]; then
++    args+=(--enforce-eager)
++  fi
++  "${PYTHON}" "${SCRIPT_DIR}/analyze_humaneval_repeat_determinism.py" "${args[@]}"
++}
++
++run_and_analyze() {
++  local condition="$1"
++  local max_tokens="$2"
++  local max_model_len="$3"
++  local eager="$4"
++  run_repeat "${condition}" 1 "${max_tokens}" "${max_model_len}" "${eager}"
++  run_repeat "${condition}" 2 "${max_tokens}" "${max_model_len}" "${eager}"
++  analyze_condition \
++    "${condition}" "${max_tokens}" "${max_model_len}" "${eager}" \
++    "${OUTPUT_ROOT}/${condition}/kvarn_run1/generations.jsonl" \
++    "${OUTPUT_ROOT}/${condition}/kvarn_run2/generations.jsonl"
++}
++
++# A. Reproduce the old deterministic HumanEval geometry on the current code.
++run_and_analyze baseline_16k_model32k_graph 16384 32768 0
++
++# B. Change only max_model_len/cache geometry.
++run_and_analyze model40k_16k_graph 16384 40960 0
++
++# C. Keep the old max_model_len, but greatly extend the decode horizon.
++run_and_analyze cap30k_model32k_graph 30000 32768 0
++
++# D. Current 32K/40K graph point. Reuse the smoke that already exists by default.
++if [[ "${REUSE_EXISTING_32K}" == "1" \
++      && -f "${EXISTING_32K_ROOT}/kvarn_run1/generations.jsonl" \
++      && -f "${EXISTING_32K_ROOT}/kvarn_run2/generations.jsonl" ]]; then
++  echo "=== extended_32k_model40k_graph / reusing ${EXISTING_32K_ROOT} ==="
++  analyze_condition \
++    extended_32k_model40k_graph 32768 40960 0 \
++    "${EXISTING_32K_ROOT}/kvarn_run1/generations.jsonl" \
++    "${EXISTING_32K_ROOT}/kvarn_run2/generations.jsonl"
++else
++  run_and_analyze extended_32k_model40k_graph 32768 40960 0
++fi
++
++# E. Same current geometry, but disable CUDA graph capture/replay.
++run_and_analyze extended_32k_model40k_eager 32768 40960 1
++
++"${PYTHON}" "${SCRIPT_DIR}/summarize_humaneval_determinism_matrix.py" \
++  --root "${OUTPUT_ROOT}"
++
++echo
++cat "${OUTPUT_ROOT}/matrix_summary.md"
++echo
++echo "Isolation experiment complete: ${OUTPUT_ROOT}"
+diff --git a/experiments/trajectory_divergence/summarize_humaneval_determinism_matrix.py b/experiments/trajectory_divergence/summarize_humaneval_determinism_matrix.py
+new file mode 100644
+index 0000000..24b7859
+--- /dev/null
++++ b/experiments/trajectory_divergence/summarize_humaneval_determinism_matrix.py
+@@ -0,0 +1,100 @@
++#!/usr/bin/env python3
++"""Aggregate repeat-determinism summaries across isolation conditions."""
++
++from __future__ import annotations
++
++import argparse
++import csv
++import json
++from pathlib import Path
++from typing import Any
++
++
++def parse_args() -> argparse.Namespace:
++    parser = argparse.ArgumentParser(description="Summarize HumanEval determinism isolation matrix.")
++    parser.add_argument("--root", type=Path, required=True)
++    return parser.parse_args()
++
++
++def main() -> None:
++    args = parse_args()
++    summaries: list[dict[str, Any]] = []
++    for path in sorted(args.root.glob("*/analysis/summary.json")):
++        row = json.loads(path.read_text(encoding="utf-8"))
++        row["summary_path"] = str(path)
++        summaries.append(row)
++    if not summaries:
++        raise SystemExit(f"No */analysis/summary.json files found under {args.root}")
++
++    output_json = args.root / "matrix_summary.json"
++    output_csv = args.root / "matrix_summary.csv"
++    output_md = args.root / "matrix_summary.md"
++    output_json.write_text(json.dumps(summaries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
++
++    fields = [
++        "condition_label",
++        "max_tokens",
++        "max_model_len",
++        "enforce_eager",
++        "valid_pairs",
++        "diverged_count",
++        "self_divergence_rate",
++        "diverged_before_256",
++        "diverged_before_1024",
++        "median_first_divergence_step",
++        "either_hit_length_cap_count",
++        "finish_reason_mismatch_count",
++        "execution_pass_mismatch_count",
++        "run1_mean_output_tokens",
++        "run2_mean_output_tokens",
++        "summary_path",
++    ]
++    with output_csv.open("w", encoding="utf-8", newline="") as handle:
++        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
++        writer.writeheader()
++        writer.writerows(summaries)
++
++    lines = [
++        "# HumanEval KVarN determinism isolation matrix",
++        "",
++        "| Condition | max_tokens | max_model_len | eager | Diverged | Rate | <256 | <1024 | Median first diff | Cap hits | Finish mismatch | Pass mismatch |",
++        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
++    ]
++    for row in summaries:
++        rate = row.get("self_divergence_rate")
++        rate_text = "N/A" if rate is None else f"{float(rate):.4f}"
++        lines.append(
++            "| {label} | {mt} | {ml} | {eager} | {div}/{valid} | {rate} | {d256} | {d1024} | {median} | {cap} | {finish} | {passed} |".format(
++                label=row["condition_label"],
++                mt=row["max_tokens"],
++                ml=row["max_model_len"],
++                eager=row["enforce_eager"],
++                div=row["diverged_count"],
++                valid=row["valid_pairs"],
++                rate=rate_text,
++                d256=row["diverged_before_256"],
++                d1024=row["diverged_before_1024"],
++                median=row["median_first_divergence_step"],
++                cap=row["either_hit_length_cap_count"],
++                finish=row["finish_reason_mismatch_count"],
++                passed=row["execution_pass_mismatch_count"],
++            )
++        )
++
++    lines.extend(
++        [
++            "",
++            "## Interpretation guide",
++            "",
++            "- `baseline_16k_model32k_graph` stable but `model40k_16k_graph` unstable: changing `max_model_len`/cache allocation is the primary trigger.",
++            "- `baseline_16k_model32k_graph` stable but `cap30k_model32k_graph` unstable: output-cap/decode-horizon effects matter even with the old model length.",
++            "- `extended_32k_model40k_graph` unstable but `extended_32k_model40k_eager` stable: CUDA graph/execution-path effects are strongly implicated.",
++            "- Graph and eager both unstable at early steps: investigate KVarN kernel/reduction numerical determinism before using greedy cross-mode divergence as a clean causal result.",
++        ]
++    )
++    output_md.write_text("\n".join(lines) + "\n", encoding="utf-8")
++    print(output_md)
++
++
++if __name__ == "__main__":
++    main()

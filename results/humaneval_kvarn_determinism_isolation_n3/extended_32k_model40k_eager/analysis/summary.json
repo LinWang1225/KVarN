@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "condition_label": "extended_32k_model40k_eager",
+  "max_tokens": 32768,
+  "max_model_len": 40960,
+  "enforce_eager": true,
+  "common_sample_count": 3,
+  "valid_pairs": 3,
+  "diverged_count": 0,
+  "self_divergence_rate": 0.0,
+  "diverged_before_256": 0,
+  "diverged_before_1024": 0,
+  "diverged_before_16384": 0,
+  "first_divergence_steps": [],
+  "mean_first_divergence_step": null,
+  "median_first_divergence_step": null,
+  "min_first_divergence_step": null,
+  "max_first_divergence_step": null,
+  "either_hit_length_cap_count": 0,
+  "finish_reason_mismatch_count": 0,
+  "execution_pass_mismatch_count": 0,
+  "same_candidate_code_count": 3,
+  "run1_finish_reason_counts": {
+    "stop": 3
+  },
+  "run2_finish_reason_counts": {
+    "stop": 3
+  },
+  "run1_mean_output_tokens": 4430.333333333333,
+  "run2_mean_output_tokens": 4430.333333333333
+}

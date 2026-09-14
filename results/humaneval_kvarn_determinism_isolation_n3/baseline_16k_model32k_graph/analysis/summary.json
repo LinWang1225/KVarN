@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "condition_label": "baseline_16k_model32k_graph",
+  "max_tokens": 16384,
+  "max_model_len": 32768,
+  "enforce_eager": false,
+  "common_sample_count": 3,
+  "valid_pairs": 3,
+  "diverged_count": 3,
+  "self_divergence_rate": 1.0,
+  "diverged_before_256": 3,
+  "diverged_before_1024": 3,
+  "diverged_before_16384": 3,
+  "first_divergence_steps": [
+    136,
+    123,
+    250
+  ],
+  "mean_first_divergence_step": 169.66666666666666,
+  "median_first_divergence_step": 136.0,
+  "min_first_divergence_step": 123,
+  "max_first_divergence_step": 250,
+  "either_hit_length_cap_count": 1,
+  "finish_reason_mismatch_count": 1,
+  "execution_pass_mismatch_count": 1,
+  "same_candidate_code_count": 0,
+  "run1_finish_reason_counts": {
+    "stop": 2,
+    "length": 1
+  },
+  "run2_finish_reason_counts": {
+    "stop": 3
+  },
+  "run1_mean_output_tokens": 7771.0,
+  "run2_mean_output_tokens": 6825.0
+}

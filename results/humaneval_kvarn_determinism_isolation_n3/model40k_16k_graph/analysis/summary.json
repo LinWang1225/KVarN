@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "condition_label": "model40k_16k_graph",
+  "max_tokens": 16384,
+  "max_model_len": 40960,
+  "enforce_eager": false,
+  "common_sample_count": 3,
+  "valid_pairs": 3,
+  "diverged_count": 3,
+  "self_divergence_rate": 1.0,
+  "diverged_before_256": 2,
+  "diverged_before_1024": 3,
+  "diverged_before_16384": 3,
+  "first_divergence_steps": [
+    136,
+    281,
+    207
+  ],
+  "mean_first_divergence_step": 208.0,
+  "median_first_divergence_step": 207.0,
+  "min_first_divergence_step": 136,
+  "max_first_divergence_step": 281,
+  "either_hit_length_cap_count": 1,
+  "finish_reason_mismatch_count": 0,
+  "execution_pass_mismatch_count": 0,
+  "same_candidate_code_count": 0,
+  "run1_finish_reason_counts": {
+    "stop": 2,
+    "length": 1
+  },
+  "run2_finish_reason_counts": {
+    "stop": 2,
+    "length": 1
+  },
+  "run1_mean_output_tokens": 7281.0,
+  "run2_mean_output_tokens": 7771.333333333333
+}
