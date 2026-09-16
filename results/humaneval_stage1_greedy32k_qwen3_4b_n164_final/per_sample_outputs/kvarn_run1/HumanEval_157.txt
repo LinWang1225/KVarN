@@ -1,0 +1,146 @@
+sample_id: HumanEval/157
+mode: kvarn
+run_name: kvarn_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 150
+output_tokens: 1171
+output_cap_fraction: 0.035736
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 1031
+final_tokens: 140
+latency_seconds: 15.093991408124566
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+def right_angle_triangle(a, b, c):
+    '''
+    Given the lengths of the three sides of a triangle. Return True if the three
+    sides form a right-angled triangle, False otherwise.
+    A right-angled triangle is a triangle in which one angle is right angle or 
+    90 degree.
+    Example:
+    right_angle_triangle(3, 4, 5) == True
+    right_angle_triangle(1, 2, 3) == False
+    '''
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function right_angle_triangle so that it checks if the three given sides form a right-angled triangle. Let me think about how to approach this.
+
+First, I remember that in a right-angled triangle, the Pythagorean theorem holds. That is, the sum of the squares of the two shorter sides equals the square of the longest side (the hypotenuse). So, the function needs to check if this condition is met.
+
+But wait, how do I determine which of the three sides is the hypotenuse? Because the hypotenuse is the longest side. So maybe I should first sort the sides. Let's see: if I sort the sides in ascending order, then the largest one is the third element. Then, check if a^2 + b^2 = c^2, where c is the largest side.
+
+But wait, the parameters are a, b, c. But the order might not be sorted. For example, in the first example, 3,4,5. The hypotenuse is 5. But if the input was 5,3,4, then the same condition should hold. So, the function should check all possible combinations where the sum of squares of two sides equals the square of the third. But wait, no. Because the hypotenuse must be the longest side. So, the correct approach is to sort the sides, then check if the sum of squares of the first two equals the square of the third.
+
+So, the steps would be:
+
+1. Sort the three numbers so that the largest is last.
+2. Check if the sum of squares of the first two equals the square of the third.
+
+But wait, what if the three numbers are not in order? For example, if the input is 5, 3, 4. Then after sorting, they become 3,4,5. Then 3² +4² = 5², which is correct.
+
+So the function should sort the sides, then check that the sum of squares of the first two equals the square of the third.
+
+But how to implement this in Python?
+
+So, the function takes a, b, c. Let me sort them. Let's create a list of the three numbers, sort them, then assign them to x, y, z where z is the largest.
+
+Then check if x² + y² == z².
+
+But wait, what if there are two sides with the same length? Like 5,5,5? Then it's an equilateral triangle, which is not right-angled. So the check would be 5² +5² = 50, which is not equal to 25. So returns false, which is correct.
+
+Another example: 5, 12, 13. Sorted as 5,12,13. 25 + 144 = 169. Which is correct.
+
+So the approach is correct.
+
+So, in code:
+
+First, sort the list of a, b, c. Then check if the sum of squares of the first two equals the square of the third.
+
+So, in Python:
+
+def right_angle_triangle(a, b, c):
+    sides = sorted([a, b, c])
+    return sides[0]**2 + sides[1]**2 == sides[2]**2
+
+Wait, but what about if the input is not sorted? For example, if the hypotenuse is not the third element. But sorted will take care of that. So this code should work.
+
+Testing the examples:
+
+First example: 3,4,5. sorted is [3,4,5]. 9 + 16 = 25 → yes. So returns True. Correct.
+
+Second example: 1,2,3. sorted is [1,2,3]. 1 +4 =5, which is not 9. So returns False. Correct.
+
+Another test case: 5,3,4 → sorted is [3,4,5], same as before. Returns True.
+
+Another case: 5,5,5 → sum is 25+25=50, which is not 25. So returns False.
+
+What about 0? Well, the problem says that the inputs are lengths of sides. So probably, the function is supposed to handle positive integers. But the problem says nothing about that. However, the examples given are all positive integers. So perhaps the function is intended to work with positive numbers. But the code would handle any numbers, but if any of the sides is zero, then the sum would be zero, but the code would return False. But maybe the problem assumes that the inputs are valid positive numbers. So the code is correct.
+
+So the code should be as above.
+
+But wait, the function is supposed to return True if the three sides form a right-angled triangle. So the code is correct.
+
+So the final code is as written.
+</think>
+
+```python
+def right_angle_triangle(a, b, c):
+    '''
+    Given the lengths of the three sides of a triangle. Return True if the three
+    sides form a right-angled triangle, False otherwise.
+    A right-angled triangle is a triangle in which one angle is right angle or 
+    90 degree.
+    Example:
+    right_angle_triangle(3, 4, 5) == True
+    right_angle_triangle(1, 2, 3) == False
+    '''
+    sides = sorted([a, b, c])
+    return sides[0]**2 + sides[1]**2 == sides[2]**2
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+def right_angle_triangle(a, b, c):
+    '''
+    Given the lengths of the three sides of a triangle. Return True if the three
+    sides form a right-angled triangle, False otherwise.
+    A right-angled triangle is a triangle in which one angle is right angle or 
+    90 degree.
+    Example:
+    right_angle_triangle(3, 4, 5) == True
+    right_angle_triangle(1, 2, 3) == False
+    '''
+    sides = sorted([a, b, c])
+    return sides[0]**2 + sides[1]**2 == sides[2]**2
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+def right_angle_triangle(a, b, c):
+    '''
+    Given the lengths of the three sides of a triangle. Return True if the three
+    sides form a right-angled triangle, False otherwise.
+    A right-angled triangle is a triangle in which one angle is right angle or 
+    90 degree.
+    Example:
+    right_angle_triangle(3, 4, 5) == True
+    right_angle_triangle(1, 2, 3) == False
+    '''
+    sides = sorted([a, b, c])
+    return sides[0]**2 + sides[1]**2 == sides[2]**2

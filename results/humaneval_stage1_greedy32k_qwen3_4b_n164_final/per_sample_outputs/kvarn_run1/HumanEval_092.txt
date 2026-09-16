@@ -1,0 +1,203 @@
+sample_id: HumanEval/92
+mode: kvarn
+run_name: kvarn_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 176
+output_tokens: 2627
+output_cap_fraction: 0.080170
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 2448
+final_tokens: 179
+latency_seconds: 33.94576856866479
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+def any_int(x, y, z):
+    '''
+    Create a function that takes 3 numbers.
+    Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
+    Returns false in any other cases.
+    
+    Examples
+    any_int(5, 2, 7) ➞ True
+    
+    any_int(3, 2, 2) ➞ False
+
+    any_int(3, -2, 1) ➞ True
+    
+    any_int(3.6, -2.2, 2) ➞ False
+  
+
+    
+    '''
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function any_int according to the given docstring and examples. Let me think about what the function needs to do.
+
+The function takes three numbers x, y, z. It should return True if one of them is equal to the sum of the other two, but only if all numbers are integers. Otherwise, return False.
+
+So first, I need to check if all three numbers are integers. Wait, but how do I check that? Because in Python, if a number is an instance of int, then it's an integer. But if it's a float, like 5.0, is that considered an integer here? The examples show that in the third example, 3, -2, 1: 3 is the sum of -2 and 1 (since -2 +1 is -1, no, wait wait. Wait the third example says any_int(3, -2, 1) returns True. Let me check that. Wait 3 is equal to (-2) + 1? No, that's -1. Wait maybe I'm misunderstanding the example. Wait the example says any_int(3, -2, 1) returns True. Wait maybe the sum is 3 = -2 + 1? No, that's -1. Wait maybe I'm missing something here. Wait maybe the sum is one of the numbers. Let me think again.
+
+The function returns True if one of the numbers is equal to the sum of the other two. So for example, in the first example: 5, 2, 7. 5 + 2 is 7, so 7 is the third number. So returns True. So the function checks if any of the three numbers is the sum of the other two.
+
+But in the third example, 3, -2, 1. Let's see: 3 is equal to (-2) + 1? No, that's -1. Wait maybe the sum is -2 + 1 = -1, which is not 3. Or maybe 3 + (-2) = 1, which is the third number. Oh right! So 3 + (-2) equals 1. So the third number is 1. So that's why the example returns True. So the function checks if any of the numbers is the sum of the other two. So for the third example, 1 is the sum of 3 and -2. So that's why it returns True.
+
+So the function needs to check all three possibilities: x == y + z, y == x + z, or z == x + y. But also, all three numbers must be integers.
+
+So first, check if all three numbers are integers. How to do that? Well, in Python, checking if a number is an instance of int. But wait, what about numbers like 5.0? Because if the input is 5.0, then it's a float, but maybe the function considers it as an integer? But according to the examples, in the fourth example, 3.6, -2.2, 2 returns False. So the function checks if all numbers are integers. So for example, if any of the numbers is a float (like 3.6), then it returns False.
+
+So the first step is to check if all three numbers are integers. How to do that? For each of x, y, z, check if they are instances of int. But wait, what if someone passes a float that is an integer, like 5.0? Then, according to the problem statement, it's not considered an integer. Because the examples show that in the fourth example, 3.6 is a float, so returns False. So the function requires that all numbers are integers. So, for example, if x is 5.0, then it's not considered an integer here. So the check is that x, y, z are all integers.
+
+So, how to check that? Well, for each of the three variables, check if they are instances of int. So, for example, if x is 5, then it's okay. But if x is 5.0, then it's not. So in code, we can check:
+
+if isinstance(x, int) and isinstance(y, int) and isinstance(z, int):
+
+But wait, what about if someone passes a boolean? Because in Python, booleans are subclasses of int. For example, True is 1, False is 0. But according to the problem statement, the function should return False if any of the numbers is not an integer. So if someone passes True (which is an int), but in the problem's context, maybe the function expects that the numbers are integers, but booleans are not considered as integers here. Wait, but the problem says that the function takes 3 numbers. So, for example, if the input is True, which is 1, but the function would check if it's an instance of int. Since True is an instance of int, then it would pass. But according to the problem's examples, maybe the function is supposed to consider only integers, not booleans. But the problem says that the function takes 3 numbers. So perhaps the function is supposed to check that all three are integers, but in Python, booleans are instances of int. So, for example, if x is True, then isinstance(x, int) is True. But in the problem's examples, maybe the function is supposed to return False if any of the numbers is not an integer. So, for example, if x is 3.0, then it's a float, so returns False. But if x is 3, then it's okay.
+
+So the first step is to check that all three numbers are integers. So, the code would check if all three are instances of int.
+
+Once that is confirmed, then check if any of the three possibilities (x == y + z, y == x + z, z == x + y) is true.
+
+So putting it all together:
+
+def any_int(x, y, z):
+    '''
+    Create a function that takes 3 numbers.
+    Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
+    Returns false in any other cases.
+    
+    Examples
+    any_int(5, 2, 7) ➞ True
+    
+    any_int(3, 2, 2) ➞ False
+
+    any_int(3, -2, 1) ➞ True
+    
+    any_int(3.6, -2.2, 2) ➞ False
+    '''
+    # Check if all are integers
+    if not (isinstance(x, int) and isinstance(y, int) and isinstance(z, int)):
+        return False
+    # Check if any of the numbers is sum of the other two
+    if x == y + z or y == x + z or z == x + y:
+        return True
+    else:
+        return False
+
+Wait, but let's test the examples.
+
+First example: 5, 2, 7. All integers. 5 == 2+7? 2+7 is 9, no. 2 == 5+7? 12, no. 7 == 5+2? 7 ==7, yes. So returns True. Correct.
+
+Second example: 3, 2, 2. All integers. Check 3 == 2+2? 4? No. 2 == 3+2? 5? No. 2 == 3+2? 5? No. So returns False. Correct.
+
+Third example: 3, -2, 1. All integers. Check 3 == -2 +1? -1? No. -2 == 3 +1? 4? No. 1 == 3 + (-2) = 1? Yes. So returns True. Correct.
+
+Fourth example: 3.6, -2.2, 2. All are not integers. So returns False. Correct.
+
+But wait, what about if one of the numbers is a float but equals to the sum of the other two? For example, if x is 5.0, y is 2.0, z is 7.0. Then, all are floats, but the function returns False because they are not integers. But if the numbers are 5.0, 2.0, 7.0, then the function returns False because they are not integers. But if the numbers are 5, 2, 7, then returns True.
+
+But what if someone passes 5.0, 2.0, 7.0? Then, the function returns False because they are not integers. So that's correct.
+
+But what about if one of the numbers is a boolean? Like True, which is 1. So, for example, any_int(True, 2, 3). Then, True is an instance of int, so the check passes. Then, check if any of the numbers is sum of the other two. True is 1. So 1 == 2 +3? 5? No. 2 == 1 +3? 4? No. 3 == 1 +2? 3 ==3, yes. So returns True. But according to the problem's examples, is that acceptable? Well, according to the problem's description, the function is supposed to return True if all numbers are integers. But in Python, booleans are instances of int. So, according to the code, that would be considered as integers. But maybe the problem expects that the numbers are integers, but not booleans. But the problem says that the function takes 3 numbers. So, perhaps the problem expects that the numbers are integers, but in Python, booleans are considered as integers. However, the problem's examples don't include such cases. So perhaps the code is correct as written.
+
+But according to the problem's examples, the function is supposed to return True if all numbers are integers. So, for example, if x is 3, y is 2, z is 1, then returns True. But if x is True, y is 2, z is 1, then returns True. But according to the problem's description, maybe the function is supposed to consider booleans as integers. But the problem's examples don't cover that. So the code as written is correct.
+
+Another test case: any_int(3, 2, 5) → 3 +2 =5. So returns True. Correct.
+
+Another test case: any_int(3, 2, 4) → 3+2=5 !=4. 3+4=7 !=2. 2+4=6 !=3. So returns False.
+
+So the code seems to handle that.
+
+But wait, what about if two numbers are integers and the third is a float that is equal to the sum? For example, any_int(5, 2, 7.0). Then, the code checks if all are integers. 7.0 is a float, so returns False. So that's correct.
+
+So the code seems to handle all the cases.
+
+But wait, what about if one of the numbers is a float but is an integer? Like 5.0. Then, the code returns False because it's not an integer. So that's correct.
+
+So the code should be correct.
+
+But let me check the code again. The code checks if all three are integers. Then checks if any of the three conditions is true.
+
+Yes.
+
+So the code should work.
+</think>
+
+```python
+def any_int(x, y, z):
+    '''
+    Create a function that takes 3 numbers.
+    Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
+    Returns false in any other cases.
+    
+    Examples
+    any_int(5, 2, 7) ➞ True
+    
+    any_int(3, 2, 2) ➞ False
+
+    any_int(3, -2, 1) ➞ True
+    
+    any_int(3.6, -2.2, 2) ➞ False
+    '''
+    if not (isinstance(x, int) and isinstance(y, int) and isinstance(z, int)):
+        return False
+    return x == y + z or y == x + z or z == x + y
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+def any_int(x, y, z):
+    '''
+    Create a function that takes 3 numbers.
+    Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
+    Returns false in any other cases.
+    
+    Examples
+    any_int(5, 2, 7) ➞ True
+    
+    any_int(3, 2, 2) ➞ False
+
+    any_int(3, -2, 1) ➞ True
+    
+    any_int(3.6, -2.2, 2) ➞ False
+    '''
+    if not (isinstance(x, int) and isinstance(y, int) and isinstance(z, int)):
+        return False
+    return x == y + z or y == x + z or z == x + y
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+def any_int(x, y, z):
+    '''
+    Create a function that takes 3 numbers.
+    Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
+    Returns false in any other cases.
+    
+    Examples
+    any_int(5, 2, 7) ➞ True
+    
+    any_int(3, 2, 2) ➞ False
+
+    any_int(3, -2, 1) ➞ True
+    
+    any_int(3.6, -2.2, 2) ➞ False
+    '''
+    if not (isinstance(x, int) and isinstance(y, int) and isinstance(z, int)):
+        return False
+    return x == y + z or y == x + z or z == x + y

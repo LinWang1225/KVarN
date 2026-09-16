@@ -1,0 +1,536 @@
+sample_id: HumanEval/124
+mode: fp16
+run_name: fp16_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 330
+output_tokens: 5557
+output_cap_fraction: 0.169586
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 4708
+final_tokens: 849
+latency_seconds: 68.45034739561379
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+def valid_date(date):
+    """You have to write a function which validates a given date string and
+    returns True if the date is valid otherwise False.
+    The date is valid if all of the following rules are satisfied:
+    1. The date string is not empty.
+    2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12. And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11. And, the number of days is not less than 1 or higher than 29 for the month 2.
+    3. The months should not be less than 1 or higher than 12.
+    4. The date should be in the format: mm-dd-yyyy
+
+    for example: 
+    valid_date('03-11-2000') => True
+
+    valid_date('15-01-2012') => False
+
+    valid_date('04-0-2040') => False
+
+    valid_date('06-04-2020') => True
+
+    valid_date('06/04/2020') => False
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write a Python function called valid_date that checks if a given date string is valid according to the specified rules. Let me think through the requirements step by step.
+
+First, the date string must not be empty. So, the first check is if the input is empty, return False.
+
+Next, the format must be mm-dd-yyyy. So the string should be split into three parts separated by hyphens. Also, the date should have exactly two hyphens. So, splitting the string by '-' should give exactly three parts. If not, return False. Also, the parts should be in the format of two digits for month, two digits for day, and four digits for year. So each part should be a string of numbers. Wait, but maybe leading zeros are allowed? Like '03-11-2000' is valid. So the month and day can be 01 to 12, 01 to 31, etc. But the string must be in the format mm-dd-yyyy, so the hyphens must be in the correct positions.
+
+So first, check that the date string is in the format mm-dd-yyyy. So, split into parts. Let's see: the string should be split into three parts. So, if the date string is split by '-', it should have exactly three elements. Also, the first part is the month (two digits), the second is day (two digits), third is year (four digits). So, for example, '03-11-2000' is valid. But '06/04/2020' is invalid because of the slashes. So the first check is that the string is split into exactly three parts, and that the parts are in the correct format.
+
+So, first, check that the date string is not empty. Then, check that it's split into three parts with hyphens. Then, check that each part is a valid number. For example, the month part should be between 1 and 12, the day part should be between 1 and 31, but depending on the month. Also, the year can be any four digits, but maybe we don't need to check that since the problem doesn't mention any constraints on the year. Wait, the problem says that the date is valid if all the rules are satisfied. The rules don't mention the year, so maybe the year can be any four-digit number. So the only checks are on the month and day.
+
+So, the steps:
+
+1. Check that the date string is not empty. If it is, return False.
+
+2. Check that the date string is in the format mm-dd-yyyy. So, split into parts. Let's split on '-', check that there are exactly three parts. Also, check that each part is a string of digits. For example, if the month is '03', that's okay. But if it's '0a', then it's invalid. So, for each part, check that it's a string of digits. So, for the month, day, and year parts.
+
+Wait, but the problem says that the date is in the format mm-dd-yyyy. So, the hyphens must be in the correct positions. So, for example, '06-04-2020' is valid, but '06/04/2020' is invalid. So, the first check is that the string is split into three parts by hyphens, and that the parts are in the correct format.
+
+So, first, check that the date string has exactly two hyphens. So, the string must be split into three parts. So, if the string is split into parts with len(parts) != 3, return False.
+
+Then, check that each part is a valid number. For example, the month part must be a two-digit number, the day part must be two digits, and the year must be four digits. So, for each part, check that it's a string of digits. So, for example, if the month is '03', that's okay. But if it's '0a', then it's invalid.
+
+So, for each part, check that it's a string of digits. So, for the month, day, and year parts.
+
+Once that is done, then check the month and day.
+
+So, the month is the first part. It must be between 1 and 12. So, convert the month part to integer. If it's not between 1 and 12, return False.
+
+Then, check the day. The day depends on the month. For months 1,3,5,7,8,10,12 (which have 31 days), the day must be between 1 and 31. For months 4,6,9,11 (which have 30 days), the day must be between 1 and 30. For February (month 2), the day must be between 1 and 29. Wait, but the problem says that for February, the day is between 1 and 29. But what about leap years? Wait, the problem's rules don't mention leap years. So, according to the problem's rules, February can have up to 29 days. So, regardless of leap years, the day is allowed to be up to 29. So, the problem's rule is that for February, the day is between 1 and 29. So, even if it's a leap year, the day can be 29. So, the problem's rules don't require checking for leap years. So, the day for February is 1-29.
+
+So, the steps for checking the day:
+
+- For month in [1,3,5,7,8,10,12], day must be 1-31.
+
+- For month in [4,6,9,11], day must be 1-30.
+
+- For month 2, day must be 1-29.
+
+So, the code would need to check that.
+
+So, putting it all together:
+
+First, check that the date string is not empty.
+
+Then, split into parts. Check that there are exactly three parts. Then check that each part is a string of digits. Then, check that the month is between 1 and 12. Then check the day based on the month.
+
+But wait, the day part is two digits. So, for example, if the day is 1, it's '01', but if the day is 31, it's '31'. So, the day part must be a two-digit number. So, the code must check that the day is between 1 and 31 (or 30, or 29) as per the month.
+
+But how to handle the day part? For example, if the day is '0', like in '04-0-2040', then the day is 0, which is invalid. So, the code must check that the day is between 1 and the maximum allowed for that month.
+
+So, the steps:
+
+After splitting into parts, check that each part is a valid integer. For example, the month part is converted to integer, and the day part is converted to integer. But also, the parts must be two digits. Wait, but the problem says that the date is in the format mm-dd-yyyy. So, the month is two digits, day is two digits, year is four digits. So, for example, '03-11-2000' is valid. But if the month is '1' (as in '1-11-2000'), then the string is not in the correct format. So, the code must check that the month and day parts are two digits. Wait, but the problem says that the date is in the format mm-dd-yyyy. So, the month must be two digits, day two digits, year four digits. So, for example, '03-11-2000' is valid, but '3-11-2000' is invalid because the month is one digit. So, the code must check that the month and day parts are two digits. So, for example, the month part must be two digits, so the string must be two characters long. So, for the month part, len(month_str) must be 2, same for day_str.
+
+So, that's another check. So, the code must check that the first part (month) is two digits, the second part (day) is two digits, and the third part (year) is four digits. So, for example, '03-11-2000' is valid. But '03-1-2000' is invalid because the day is one digit. So, the code must check that the day part is two digits. So, the code must check that each part is two digits for month and day, and four digits for year.
+
+So, the steps:
+
+Check that the date string is not empty.
+
+Check that the date string is split into three parts by hyphens. So, split on '-', check that len(parts) == 3.
+
+Check that each part is two digits for month and day, and four digits for year. So, for the first part (month), len(part) must be 2, and the same for the second part (day). The third part (year) must be four digits.
+
+But how to check that? For example, the month part is '03', which is two digits. But if the part is '0', then len is 1, which is invalid. So, the code must check that each part is of the correct length.
+
+So, for the first part (month), len(parts[0]) must be 2. Similarly for parts[1] (day) must be 2. parts[2] (year) must be 4.
+
+So, that's another check.
+
+So, the code must first check that the date string is split into three parts, each of which is of the correct length. Then, check that each part is a string of digits.
+
+So, for example, '03-11-2000' is valid. '06-04-2020' is valid. '06/04/2020' is invalid because of the slash. '15-01-2012' is invalid because the month is 15, which is not between 1 and 12. '04-0-2040' is invalid because the day is 0, which is not between 1 and 30 (since April is month 4, which has 30 days).
+
+So, putting all these steps into code.
+
+Now, code steps:
+
+def valid_date(date):
+
+    # Check if the date is empty
+    if not date:
+        return False
+
+    # Split into parts
+    parts = date.split('-')
+    if len(parts) != 3:
+        return False
+
+    # Check that each part is of correct length
+    if len(parts[0]) != 2 or len(parts[1]) != 2 or len(parts[2]) != 4:
+        return False
+
+    # Check that each part is digits
+    for part in parts:
+        if not part.isdigit():
+            return False
+
+    # Now, convert to integers
+    month = int(parts[0])
+    day = int(parts[1])
+    year = int(parts[2])
+
+    # Check month is between 1 and 12
+    if month < 1 or month > 12:
+        return False
+
+    # Check day based on month
+    if month in [1,3,5,7,8,10,12]:
+        max_day = 31
+    elif month in [4,6,9,11]:
+        max_day = 30
+    elif month == 2:
+        max_day = 29
+    else:
+        # This should not happen since month is 1-12
+        return False
+
+    if day < 1 or day > max_day:
+        return False
+
+    return True
+
+Wait, but what about the case where the day is 29 for February? According to the problem's rules, that's allowed. So, even if it's not a leap year, the day is allowed to be 29. So, the code allows that. So, the code is correct.
+
+But wait, the problem says that the day must be between 1 and 29 for February. So, the code checks that day is between 1 and 29. So, that's correct.
+
+But what about the case where the day is 30 for February? Then, the code would return False.
+
+So, this code should handle all the cases.
+
+Let me test the examples.
+
+Example 1: valid_date('03-11-2000') => True.
+
+Split into parts: ['03', '11', '2000']. All parts are 2, 2, 4 digits. All digits. month is 3, which is valid. day is 11. For month 3 (which is in the list of 1,3,5,7,8,10,12), max_day is 31. 11 is between 1 and 31. So returns True. Correct.
+
+Example 2: valid_date('15-01-2012') => False. The month is 15, which is invalid. So returns False. Correct.
+
+Example 3: valid_date('04-0-2040') => False. The day is 0, which is invalid. Also, the day part is '0', which is 1 digit. Wait, the code checks that the day part is two digits. So, in this case, the day part is '0', which is length 1. So, the code returns False. Correct.
+
+Example 4: valid_date('06-04-2020') => True. The month is 6, day is 4. For June (month 6), max_day is 30. 4 is between 1 and 30. So returns True. Correct.
+
+Example 5: valid_date('06/04/2020') => False. The split on '-' would give parts as ['06/04/2020'], which is length 1. So returns False. Correct.
+
+Another test case: '02-29-2020' is valid. Because February 29 is allowed. But if the date is '02-29-2021', then the code would return True, but according to the problem's rules, it's allowed. Because the problem says that for February, the day is between 1 and 29. So, even if it's not a leap year, the code allows 29. So, the code is correct.
+
+Another test case: '02-30-2020' would be invalid. Because February has max_day 29. So, day is 30, which is invalid. So returns False.
+
+Another test case: '00-00-0000' would be invalid. Because the month is 0, which is less than 1. So returns False.
+
+Another case: '13-01-2020' would be invalid because month is 13. So returns False.
+
+What about '00-01-2020'? The month is 0, which is invalid. So returns False.
+
+What about '01-32-2020'? The day is 32, which is invalid for January (max 31). So returns False.
+
+So, the code seems to handle all these cases.
+
+But wait, the code checks that the parts are digits. So, for example, if the day is '0a', then the code would return False. So, that's correct.
+
+But what about leading zeros? Like '01-01-2000' is valid. The code allows that.
+
+So, the code seems to handle all the cases.
+
+But wait, the code checks that the parts are digits. So, for example, if the month is '03', that's okay. But if the month is '0a', then the code returns False.
+
+So, the code is correct.
+
+So, the code should be as written above.
+
+But wait, the code checks that the parts are digits. So, for example, if the parts are '03', '11', '2000', then they are digits. So, the code proceeds.
+
+But what about the year part? For example, '03-11-2000' is valid. The code checks that the year is four digits. So, the code is correct.
+
+So, the code should be correct.
+
+Now, let me code this in Python.
+
+But wait, the code has to be written as a function. So, the code is:
+
+def valid_date(date):
+    """You have to write a function which validates a given date string and
+    returns True if the date is valid otherwise False.
+    The date is valid if all of the following rules are satisfied:
+    1. The date string is not empty.
+    2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12. And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11. And, the number of days is not less than 1 or higher than 29 for the month 2.
+    3. The months should not be less than 1 or higher than 12.
+    4. The date should be in the format: mm-dd-yyyy
+    """
+    if not date:
+        return False
+    parts = date.split('-')
+    if len(parts) != 3:
+        return False
+    if len(parts[0]) != 2 or len(parts[1]) != 2 or len(parts[2]) != 4:
+        return False
+    for part in parts:
+        if not part.isdigit():
+            return False
+    month = int(parts[0])
+    day = int(parts[1])
+    year = int(parts[2])
+    if month < 1 or month > 12:
+        return False
+    if month in [1,3,5,7,8,10,12]:
+        max_day = 31
+    elif month in [4,6,9,11]:
+        max_day = 30
+    elif month == 2:
+        max_day = 29
+    else:
+        return False
+    if day < 1 or day > max_day:
+        return False
+    return True
+
+But wait, the code for the month in [4,6,9,11] is correct. But what about the case where the month is 2 and day is 29? The code allows that. So, that's correct.
+
+But what about the case where the day is 30 for a month that has 30 days? For example, April (4) has 30 days. So, if the day is 30, it's allowed. So, the code checks that.
+
+But what about the case where the day is 31 for a month that has 30 days? Like April 31. Then, the code would return False.
+
+So, the code is correct.
+
+Now, let's test the examples.
+
+Test case 1: '03-11-2000' → returns True. Correct.
+
+Test case 2: '15-01-2012' → month is 15 → returns False. Correct.
+
+Test case 3: '04-0-2040' → day is 0 → len(parts[1]) is 1 → returns False. Correct.
+
+Test case 4: '06-04-2020' → month 6, day 4. For June, max_day is 30. 4 is valid. So returns True. Correct.
+
+Test case 5: '06/04/2020' → split into parts would be ['06/04/2020'], len is 1 → returns False. Correct.
+
+Another test case: '02-29-2020' → returns True. Because month is 2, day is 29. Correct.
+
+Another test case: '02-30-2020' → day is 30, which is more than 29 → returns False. Correct.
+
+Another test case: '00-01-2020' → month is 0 → returns False. Correct.
+
+Another test case: '13-01-2020' → month is 13 → returns False. Correct.
+
+Another test case: '01-32-2020' → day is 32 → returns False. Correct.
+
+Another test case: '01-01-2020' → returns True. Correct.
+
+Another test case: '04-30-2020' → returns True. Correct.
+
+Another test case: '04-31-2020' → returns False. Correct.
+
+So, the code seems to handle all these cases.
+
+But wait, what about the case where the day is 29 for February, but the year is not a leap year? According to the problem's rules, the code allows it. But according to the problem's rules, the day is allowed to be 29. So, the code is correct.
+
+So, the code is correct.
+</think>
+
+Here's a complete and correct implementation of the `valid_date` function that adheres to the specified rules and passes all the test cases.
+
+---
+
+### ✅ Function Overview
+
+The function `valid_date` checks whether a given date string is valid based on the following rules:
+
+1. **Non-empty string**: The input must not be an empty string.
+2. **Format**: The string must be in the format `mm-dd-yyyy`, with exactly two hyphens.
+3. **Digit Check**: Each part (month, day, year) must be a valid number.
+4. **Length Check**: The month and day must be two digits, and the year must be four digits.
+5. **Month Validity**: The month must be between 1 and 12.
+6. **Day Validity**: The day must be valid for the given month:
+   - 1–31 for months 1, 3, 5, 7, 8, 10, 12
+   - 1–30 for months 4, 6, 9, 11
+   - 1–29 for February
+
+---
+
+### ✅ Python Implementation
+
+```python
+def valid_date(date):
+    """
+    You have to write a function which validates a given date string and
+    returns True if the date is valid otherwise False.
+    The date is valid if all of the following rules are satisfied:
+    1. The date string is not empty.
+    2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12. And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11. And, the number of days is not less than 1 or higher than 29 for the month 2.
+    3. The months should not be less than 1 or higher than 12.
+    4. The date should be in the format: mm-dd-yyyy
+    """
+    if not date:
+        return False
+
+    parts = date.split('-')
+    if len(parts) != 3:
+        return False
+
+    if len(parts[0]) != 2 or len(parts[1]) != 2 or len(parts[2]) != 4:
+        return False
+
+    for part in parts:
+        if not part.isdigit():
+            return False
+
+    month = int(parts[0])
+    day = int(parts[1])
+    year = int(parts[2])
+
+    if month < 1 or month > 12:
+        return False
+
+    if month in [1, 3, 5, 7, 8, 10, 12]:
+        max_day = 31
+    elif month in [4, 6, 9, 11]:
+        max_day = 30
+    elif month == 2:
+        max_day = 29
+    else:
+        return False
+
+    if day < 1 or day > max_day:
+        return False
+
+    return True
+```
+
+---
+
+### ✅ Example Test Cases
+
+```python
+print(valid_date('03-11-2000'))  # True
+print(valid_date('15-01-2012'))  # False
+print(valid_date('04-0-2040'))   # False
+print(valid_date('06-04-2020'))  # True
+print(valid_date('06/04/2020'))  # False
+```
+
+---
+
+### 🧠 Notes
+
+- The function is designed to be robust and handle edge cases such as invalid formats, incorrect lengths, and invalid day values for a given month.
+- It does **not** validate the year for leap years or other calendar-related rules, as per the problem's constraints.
+- The function is efficient and uses simple string and integer checks to validate the date.
+
+===== VISIBLE FINAL OUTPUT =====
+Here's a complete and correct implementation of the `valid_date` function that adheres to the specified rules and passes all the test cases.
+
+---
+
+### ✅ Function Overview
+
+The function `valid_date` checks whether a given date string is valid based on the following rules:
+
+1. **Non-empty string**: The input must not be an empty string.
+2. **Format**: The string must be in the format `mm-dd-yyyy`, with exactly two hyphens.
+3. **Digit Check**: Each part (month, day, year) must be a valid number.
+4. **Length Check**: The month and day must be two digits, and the year must be four digits.
+5. **Month Validity**: The month must be between 1 and 12.
+6. **Day Validity**: The day must be valid for the given month:
+   - 1–31 for months 1, 3, 5, 7, 8, 10, 12
+   - 1–30 for months 4, 6, 9, 11
+   - 1–29 for February
+
+---
+
+### ✅ Python Implementation
+
+```python
+def valid_date(date):
+    """
+    You have to write a function which validates a given date string and
+    returns True if the date is valid otherwise False.
+    The date is valid if all of the following rules are satisfied:
+    1. The date string is not empty.
+    2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12. And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11. And, the number of days is not less than 1 or higher than 29 for the month 2.
+    3. The months should not be less than 1 or higher than 12.
+    4. The date should be in the format: mm-dd-yyyy
+    """
+    if not date:
+        return False
+
+    parts = date.split('-')
+    if len(parts) != 3:
+        return False
+
+    if len(parts[0]) != 2 or len(parts[1]) != 2 or len(parts[2]) != 4:
+        return False
+
+    for part in parts:
+        if not part.isdigit():
+            return False
+
+    month = int(parts[0])
+    day = int(parts[1])
+    year = int(parts[2])
+
+    if month < 1 or month > 12:
+        return False
+
+    if month in [1, 3, 5, 7, 8, 10, 12]:
+        max_day = 31
+    elif month in [4, 6, 9, 11]:
+        max_day = 30
+    elif month == 2:
+        max_day = 29
+    else:
+        return False
+
+    if day < 1 or day > max_day:
+        return False
+
+    return True
+```
+
+---
+
+### ✅ Example Test Cases
+
+```python
+print(valid_date('03-11-2000'))  # True
+print(valid_date('15-01-2012'))  # False
+print(valid_date('04-0-2040'))   # False
+print(valid_date('06-04-2020'))  # True
+print(valid_date('06/04/2020'))  # False
+```
+
+---
+
+### 🧠 Notes
+
+- The function is designed to be robust and handle edge cases such as invalid formats, incorrect lengths, and invalid day values for a given month.
+- It does **not** validate the year for leap years or other calendar-related rules, as per the problem's constraints.
+- The function is efficient and uses simple string and integer checks to validate the date.
+
+===== EXTRACTED CANDIDATE CODE =====
+def valid_date(date):
+    """
+    You have to write a function which validates a given date string and
+    returns True if the date is valid otherwise False.
+    The date is valid if all of the following rules are satisfied:
+    1. The date string is not empty.
+    2. The number of days is not less than 1 or higher than 31 days for months 1,3,5,7,8,10,12. And the number of days is not less than 1 or higher than 30 days for months 4,6,9,11. And, the number of days is not less than 1 or higher than 29 for the month 2.
+    3. The months should not be less than 1 or higher than 12.
+    4. The date should be in the format: mm-dd-yyyy
+    """
+    if not date:
+        return False
+
+    parts = date.split('-')
+    if len(parts) != 3:
+        return False
+
+    if len(parts[0]) != 2 or len(parts[1]) != 2 or len(parts[2]) != 4:
+        return False
+
+    for part in parts:
+        if not part.isdigit():
+            return False
+
+    month = int(parts[0])
+    day = int(parts[1])
+    year = int(parts[2])
+
+    if month < 1 or month > 12:
+        return False
+
+    if month in [1, 3, 5, 7, 8, 10, 12]:
+        max_day = 31
+    elif month in [4, 6, 9, 11]:
+        max_day = 30
+    elif month == 2:
+        max_day = 29
+    else:
+        return False
+
+    if day < 1 or day > max_day:
+        return False
+
+    return True

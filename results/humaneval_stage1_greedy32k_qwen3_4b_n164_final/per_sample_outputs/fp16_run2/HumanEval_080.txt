@@ -1,0 +1,215 @@
+sample_id: HumanEval/80
+mode: fp16
+run_name: fp16_run2
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 162
+output_tokens: 1461
+output_cap_fraction: 0.044586
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 1286
+final_tokens: 175
+latency_seconds: 17.22230290621519
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+def is_happy(s):
+    """You are given a string s.
+    Your task is to check if the string is happy or not.
+    A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
+    For example:
+    is_happy(a) => False
+    is_happy(aa) => False
+    is_happy(abcd) => True
+    is_happy(aabb) => False
+    is_happy(adb) => True
+    is_happy(xyy) => False
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write the Python function is_happy according to the given docstring. Let me think about what the problem says.
+
+The function checks if a string is "happy". The conditions are: the string's length must be at least 3, and every three consecutive letters must be distinct. So, for example, in "abcd", every trio of consecutive letters is abc, bcd. Each of these has distinct characters. But in "aabb", the first three letters are 'aab' which has two 'a's, so it's not happy.
+
+So the steps I need to take are:
+
+First, check if the length of the string is less than 3. If so, return False.
+
+Otherwise, iterate through the string, checking each triplet of consecutive characters. For each triplet, check if all three are distinct.
+
+Wait, but how to check every three consecutive letters. For a string of length n, the triplets start at index 0, 1, ..., up to n-3. So for example, for a string of length 4 (like abcd), there are two triplets: 0-2 (abc) and 1-3 (bcd).
+
+So for each i from 0 to len(s) - 3, check the substring s[i], s[i+1], s[i+2]. If any of these triplets have duplicates, return False. If all are okay, return True.
+
+So the steps for the function:
+
+Check if len(s) < 3: return False.
+
+Else, loop from i=0 to len(s)-3:
+
+For each i, check if s[i], s[i+1], s[i+2] are all distinct.
+
+If any of these triplets have duplicates, return False.
+
+If all are okay, return True.
+
+Now, how to check if three characters are distinct. For example, for a triplet like 'aab', the set of them would have length 2, so not equal to 3. So for each triplet, check if len(set(triplet)) == 3.
+
+Yes. So for each i, take the substring s[i:i+3], then check if the length of the set of that substring is 3. If any of them is not, return False.
+
+So the code would be:
+
+def is_happy(s):
+    if len(s) < 3:
+        return False
+    for i in range(len(s) - 2):
+        triplet = s[i:i+3]
+        if len(set(triplet)) != 3:
+            return False
+    return True
+
+Wait, wait. Wait, the loop should run for i from 0 to len(s) - 3, inclusive. Because for example, if the string is length 3, then i can be 0 only. So the range is len(s) - 2? Because for len(s) = 3, len(s) - 2 is 1, so range(1) is 0. So that's correct.
+
+Wait, the range in Python is up to but not including the end. So for example, if the string is length 4, then len(s) - 2 is 2. So range(2) is 0 and 1. Which are the correct indices for the first and second triplet.
+
+Yes. So the loop is correct.
+
+Let me test the examples.
+
+Test case 1: is_happy('a') → returns False. Correct.
+
+Test case 2: is_happy('aa') → returns False. Correct.
+
+Test case 3: is_happy('abcd') → check triplets 'abc' (all distinct), 'bcd' (all distinct). So returns True. Correct.
+
+Test case 4: is_happy('aabb') → the first triplet is 'aab' which has two a's. So returns False. Correct.
+
+Test case 5: is_happy('adb') → triplet is 'adb' which is all distinct. So returns True. Correct.
+
+Test case 6: is_happy('xyy') → triplet is 'xyy' → the set is {'x', 'y'}, length 2. So returns False. Correct.
+
+So this code should work.
+
+But wait, what about a string like 'abca'? Let's see. The triplets are 'abc' (ok), 'bca' (ok). So returns True. But the string is length 4. So that's correct.
+
+Another example: 'abba' → triplets are 'abb' (has two b's) → returns False. Correct.
+
+So the code seems to handle all cases.
+
+So the code is as written above. Now, I need to write that in Python, with the correct function definition and docstring.
+
+Wait, the docstring says that the function is called is_happy, and the examples are given. So the code should be:
+
+def is_happy(s):
+    """You are given a string s.
+    Your task is to check if the string is happy or not.
+    A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
+    For example:
+    is_happy(a) => False
+    is_happy(aa) => False
+    is_happy(abcd) => True
+    is_happy(aabb) => False
+    is_happy(adb) => True
+    is_happy(xyy) => False
+    """
+    if len(s) < 3:
+        return False
+    for i in range(len(s) - 2):
+        triplet = s[i:i+3]
+        if len(set(triplet)) != 3:
+            return False
+    return True
+
+Yes. That's the code. Let me check the examples again.
+
+For example, is_happy('a') → returns False. Correct.
+
+Another example: 'ab' → returns False. Correct.
+
+What about 'abc'? The triplet is 'abc' → len 3. So returns True. Correct.
+
+What about 'abca'? The triplets are 'abc' and 'bca' → both have distinct letters. So returns True. Correct.
+
+Yes. So this should be the correct implementation.
+</think>
+
+```python
+def is_happy(s):
+    """You are given a string s.
+    Your task is to check if the string is happy or not.
+    A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
+    For example:
+    is_happy(a) => False
+    is_happy(aa) => False
+    is_happy(abcd) => True
+    is_happy(aabb) => False
+    is_happy(adb) => True
+    is_happy(xyy) => False
+    """
+    if len(s) < 3:
+        return False
+    for i in range(len(s) - 2):
+        triplet = s[i:i+3]
+        if len(set(triplet)) != 3:
+            return False
+    return True
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+def is_happy(s):
+    """You are given a string s.
+    Your task is to check if the string is happy or not.
+    A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
+    For example:
+    is_happy(a) => False
+    is_happy(aa) => False
+    is_happy(abcd) => True
+    is_happy(aabb) => False
+    is_happy(adb) => True
+    is_happy(xyy) => False
+    """
+    if len(s) < 3:
+        return False
+    for i in range(len(s) - 2):
+        triplet = s[i:i+3]
+        if len(set(triplet)) != 3:
+            return False
+    return True
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+def is_happy(s):
+    """You are given a string s.
+    Your task is to check if the string is happy or not.
+    A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
+    For example:
+    is_happy(a) => False
+    is_happy(aa) => False
+    is_happy(abcd) => True
+    is_happy(aabb) => False
+    is_happy(adb) => True
+    is_happy(xyy) => False
+    """
+    if len(s) < 3:
+        return False
+    for i in range(len(s) - 2):
+        triplet = s[i:i+3]
+        if len(set(triplet)) != 3:
+            return False
+    return True

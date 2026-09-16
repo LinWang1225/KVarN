@@ -1,0 +1,107 @@
+sample_id: HumanEval/7
+mode: fp16
+run_name: fp16_run2
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 134
+output_tokens: 626
+output_cap_fraction: 0.019104
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 520
+final_tokens: 106
+latency_seconds: 7.325336595997214
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """ Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function filter_by_substring. Let's see what the docstring says. The function is supposed to filter a list of strings, returning only those that contain the given substring. The examples show that for an empty list, it returns empty. For the second example, the input list is ['abc', 'bacd', 'cde', 'array'] and the substring is 'a', so the output is those that have 'a' in them. 
+
+So the task is to check each string in the input list and include it in the result if it contains the substring. How to do that in Python?
+
+First, the function takes a list of strings and a substring. For each string in the list, I need to check if the substring is present. The check can be done using the 'in' keyword. Like, if substring in string: then include it.
+
+So the steps are: iterate over each string in the input list, check if the substring is in that string, and collect those that meet the condition.
+
+So the code would be something like:
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    return [s for s in strings if substring in s]
+
+Wait, that seems straightforward. Let me check the examples. 
+
+First example: filter_by_substring([], 'a') returns [], which is correct. 
+
+Second example: the list is ['abc', 'bacd', 'cde', 'array'], substring 'a'. Let's check each:
+
+abc has 'a'? Yes. bacd has 'a'? Yes. cde has 'a'? No. array has 'a'? Yes. So the output is ['abc', 'bacd', 'array'], which matches the example. 
+
+So this code should work. But wait, what about case sensitivity? The examples don't mention it. The problem says "contain given substring"—assuming that it's case-sensitive. For example, if the substring is 'A', then 'a' would not be considered. But the examples use lowercase, so perhaps the function is intended to be case-sensitive. Since the examples don't have any issues, the code as written should be correct.
+
+So the implementation is a list comprehension that includes each string if the substring is in it. That's simple enough. Let me make sure that the function is properly typed. The parameters are List[str], and the return is List[str], which matches.
+
+So the final code is as I thought. Let me write that.
+</think>
+
+```python
+from typing import List
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """ Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """
+    return [s for s in strings if substring in s]
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+from typing import List
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """ Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """
+    return [s for s in strings if substring in s]
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+from typing import List
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """ Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """
+    return [s for s in strings if substring in s]

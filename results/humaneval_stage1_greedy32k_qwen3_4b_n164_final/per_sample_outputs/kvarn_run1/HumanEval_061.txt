@@ -1,0 +1,229 @@
+sample_id: HumanEval/61
+mode: kvarn
+run_name: kvarn_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 130
+output_tokens: 1228
+output_cap_fraction: 0.037476
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 843
+final_tokens: 385
+latency_seconds: 15.84240623190999
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def correct_bracketing(brackets: str):
+    """ brackets is a string of "(" and ")".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("(")
+    False
+    >>> correct_bracketing("()")
+    True
+    >>> correct_bracketing("(()())")
+    True
+    >>> correct_bracketing(")(()")
+    False
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write a Python function called correct_bracketing that checks if every opening bracket has a corresponding closing bracket. The docstring says that the input is a string of '(' and ')', and the function should return True if the brackets are properly closed. Let's think about how to approach this.
+
+Hmm, the classic way to check for balanced brackets is using a stack. For each character in the string, if it's an '(', we push it onto the stack. If it's a ')', we check if there's a matching '(' in the stack. If there isn't, then it's unbalanced. At the end, the stack should be empty.
+
+Wait, but maybe there's a simpler way. Like, we can track the balance. Let's think: we can keep a counter. For each '(', we add 1 to the counter. For each ')', we subtract 1. If at any point the counter goes negative, that means there's a closing bracket without a matching opening one. So return False. At the end, the counter must be zero.
+
+Yes, that's a common approach. Let me think of some examples.
+
+Take the first test case: "(", the counter would be 1. So return False. Which matches the example.
+
+Another example: "()". The counter starts at 0. Then '(', add 1 (counter 1). Then ')', subtract 1 (counter 0). So return True.
+
+Another example: "(()())". Let's track:
+
+Start at 0. '(', +1 → 1. '(', +1 → 2. ')', -1 → 1. '(', +1 → 2. ')', -1 → 1. ')', -1 → 0. So returns True.
+
+Another example: ")(()". The first character is ')', so counter becomes -1. So return False. Which matches the test.
+
+So the algorithm would be:
+
+Initialize a counter to 0.
+
+Loop through each character in the string:
+
+   if the character is '(', add 1 to counter.
+
+   else (it's ')'), subtract 1 from counter.
+
+   if at any point the counter is negative, return False.
+
+After processing all characters, check if counter is zero.
+
+If both conditions are met, return True.
+
+So implementing that in Python.
+
+Now, code:
+
+def correct_bracketing(brackets: str):
+    count = 0
+    for char in brackets:
+        if char == '(':
+            count += 1
+        else:
+            count -= 1
+        if count < 0:
+            return False
+    return count == 0
+
+Wait, but what about cases where there are more closing brackets than opening? Like "())". The counter would go to -1 after the second ')', so return False. Which is correct.
+
+Testing the examples:
+
+Test case 1: "(", the loop runs once. count is 1. After loop, check count ==0 → False. Correct.
+
+Test case 2: "()", loop runs twice. After first char, count is 1. After second, 0. Return True.
+
+Third test case: "(()())". The count goes 1, 2, 1, 2, 1, 0. So returns True.
+
+Fourth test case: ")(()". First char is ')', count becomes -1 → return False.
+
+Yes, that seems to handle all cases.
+
+So that's the code. Let me check if there are any edge cases. Like empty string? Well, according to the problem statement, the input is a string of brackets. But the function would return True for empty string, since count is 0. But according to the tests given, the examples include "(", which is length 1. But the problem says that the function should return True if every opening has a closing. So empty string is valid. But the tests don't cover that. But according to the problem's examples, the function is supposed to return True for "()", which is correct.
+
+So the code should be correct.
+</think>
+
+To determine whether a string of parentheses is correctly balanced, we can use a simple counter-based approach. The idea is to track the balance between opening and closing brackets as we iterate through the string. Here's how the logic works:
+
+- Initialize a counter to 0.
+- For each character in the string:
+  - If it's an opening bracket `'('`, increment the counter.
+  - If it's a closing bracket `')'`, decrement the counter.
+  - If at any point the counter becomes negative, it means there's a closing bracket without a matching opening one, so return `False`.
+- After processing all characters, check if the counter is zero. If it is, all opening brackets have been properly matched, so return `True`.
+
+This approach ensures that we handle all edge cases, including strings with more closing brackets than opening ones, or strings that start with a closing bracket.
+
+---
+
+Here is the complete and correct implementation of the function:
+
+```python
+def correct_bracketing(brackets: str):
+    """
+    brackets is a string of "(" and ")".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("(")
+    False
+    >>> correct_bracketing("()")
+    True
+    >>> correct_bracketing("(()())")
+    True
+    >>> correct_bracketing(")(()")
+    False
+    """
+    count = 0
+    for char in brackets:
+        if char == '(':
+            count += 1
+        else:
+            count -= 1
+        if count < 0:
+            return False
+    return count == 0
+```
+
+---
+
+This implementation is efficient with a time complexity of **O(n)**, where `n` is the length of the input string, and a space complexity of **O(1)**, as it only uses a single integer to track the balance.
+
+===== VISIBLE FINAL OUTPUT =====
+To determine whether a string of parentheses is correctly balanced, we can use a simple counter-based approach. The idea is to track the balance between opening and closing brackets as we iterate through the string. Here's how the logic works:
+
+- Initialize a counter to 0.
+- For each character in the string:
+  - If it's an opening bracket `'('`, increment the counter.
+  - If it's a closing bracket `')'`, decrement the counter.
+  - If at any point the counter becomes negative, it means there's a closing bracket without a matching opening one, so return `False`.
+- After processing all characters, check if the counter is zero. If it is, all opening brackets have been properly matched, so return `True`.
+
+This approach ensures that we handle all edge cases, including strings with more closing brackets than opening ones, or strings that start with a closing bracket.
+
+---
+
+Here is the complete and correct implementation of the function:
+
+```python
+def correct_bracketing(brackets: str):
+    """
+    brackets is a string of "(" and ")".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("(")
+    False
+    >>> correct_bracketing("()")
+    True
+    >>> correct_bracketing("(()())")
+    True
+    >>> correct_bracketing(")(()")
+    False
+    """
+    count = 0
+    for char in brackets:
+        if char == '(':
+            count += 1
+        else:
+            count -= 1
+        if count < 0:
+            return False
+    return count == 0
+```
+
+---
+
+This implementation is efficient with a time complexity of **O(n)**, where `n` is the length of the input string, and a space complexity of **O(1)**, as it only uses a single integer to track the balance.
+
+===== EXTRACTED CANDIDATE CODE =====
+def correct_bracketing(brackets: str):
+    """
+    brackets is a string of "(" and ")".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("(")
+    False
+    >>> correct_bracketing("()")
+    True
+    >>> correct_bracketing("(()())")
+    True
+    >>> correct_bracketing(")(()")
+    False
+    """
+    count = 0
+    for char in brackets:
+        if char == '(':
+            count += 1
+        else:
+            count -= 1
+        if count < 0:
+            return False
+    return count == 0

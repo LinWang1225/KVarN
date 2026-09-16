@@ -1,0 +1,159 @@
+sample_id: HumanEval/4
+mode: fp16
+run_name: fp16_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 158
+output_tokens: 945
+output_cap_fraction: 0.028839
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 793
+final_tokens: 152
+latency_seconds: 11.032220110297203
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """ For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function mean_absolute_deviation. Let me think about what this function is supposed to do. The docstring says it calculates the Mean Absolute Deviation around the mean of the dataset. So, the steps I need to take are:
+
+First, calculate the mean of the numbers list. Then, for each number in the list, subtract the mean and take the absolute value of that difference. Then, average all those absolute differences.
+
+Let me break it down. Let's see, the function takes a list of floats. So first, I need to compute the mean. The mean is the sum of all numbers divided by the count of numbers. Then, for each number in the list, compute the absolute difference between the number and the mean. Sum all those differences and divide by the number of elements to get the MAD.
+
+Wait, right. So the formula is MAD = (sum of |x - mean| for all x in numbers) / len(numbers).
+
+So, the steps in code:
+
+1. Calculate the mean of the numbers. Let's see, sum(numbers) / len(numbers). But wait, what if the list is empty? Well, the tests probably assume that the list is non-empty. The example given has four elements, so maybe the function is designed for non-empty lists. So I don't need to handle empty lists here.
+
+2. Then, iterate through each number in the list, compute the absolute difference between the number and the mean, sum all those.
+
+3. Divide that sum by the length of the list to get the MAD.
+
+So, coding that in Python.
+
+Let me think about the code structure. The function is already defined with the correct parameters. So inside the function:
+
+First, compute the mean. Let's calculate that.
+
+mean = sum(numbers) / len(numbers)
+
+Then, compute the sum of absolute differences. So:
+
+sum_abs_diff = sum( abs(x - mean) for x in numbers )
+
+Then, MAD is sum_abs_diff / len(numbers)
+
+Return that value.
+
+But wait, the example given: [1.0, 2.0, 3.0, 4.0]. Let's check.
+
+Mean is (1+2+3+4)/4 = 10/4 = 2.5. Then each element's difference:
+
+1-2.5 is -1.5, absolute is 1.5
+
+2-2.5 is -0.5 → 0.5
+
+3-2.5 is 0.5 → 0.5
+
+4-2.5 is 1.5 → 1.5
+
+Sum is 1.5 + 0.5 + 0.5 + 1.5 = 4.0. Divided by 4 → 1.0. Which matches the example. So the code should work.
+
+So the code would be:
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    mean = sum(numbers) / len(numbers)
+    sum_abs_diff = sum(abs(x - mean) for x in numbers)
+    return sum_abs_diff / len(numbers)
+
+Wait, but what about floating point precision? For example, if the sum is not exactly divisible, but the example returns 1.0. But the function is supposed to return a float, so that's okay.
+
+Testing with the example, it should return 1.0. Let me check.
+
+Yes, as per the example.
+
+So that's the code. Let me make sure that the code is correctly formatted. Also, the function is supposed to return a float. The code returns sum_abs_diff divided by len(numbers), which is a float.
+
+Yes. So that's the implementation. The docstring is already given, so the code should satisfy that.
+
+I think that's all. Let me write the code.
+</think>
+
+```python
+from typing import List
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """ For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+    mean = sum(numbers) / len(numbers)
+    sum_abs_diff = sum(abs(x - mean) for x in numbers)
+    return sum_abs_diff / len(numbers)
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+from typing import List
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """ For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+    mean = sum(numbers) / len(numbers)
+    sum_abs_diff = sum(abs(x - mean) for x in numbers)
+    return sum_abs_diff / len(numbers)
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+from typing import List
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """ For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+    mean = sum(numbers) / len(numbers)
+    sum_abs_diff = sum(abs(x - mean) for x in numbers)
+    return sum_abs_diff / len(numbers)

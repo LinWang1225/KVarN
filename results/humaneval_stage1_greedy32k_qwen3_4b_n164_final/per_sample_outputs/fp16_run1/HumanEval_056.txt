@@ -1,0 +1,300 @@
+sample_id: HumanEval/56
+mode: fp16
+run_name: fp16_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 133
+output_tokens: 1510
+output_cap_fraction: 0.046082
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 1034
+final_tokens: 476
+latency_seconds: 17.779480868950486
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def correct_bracketing(brackets: str):
+    """ brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write a Python function called correct_bracketing that checks if every opening bracket has a corresponding closing bracket. The input is a string of '<' and '>'. The function should return True if the brackets are correctly balanced, otherwise False. Let's think about how to approach this.
+
+Hmm, the problem seems similar to checking if a string of parentheses is valid. In those problems, a common approach is to use a stack. For each character in the string, if it's an opening bracket, push it onto the stack. If it's a closing bracket, check if the stack is not empty and the top element is an opening bracket. If so, pop the stack. Otherwise, return False. At the end, the stack should be empty for it to be valid.
+
+Wait, but in this case, the brackets are '<' and '>'. So, maybe the same logic applies. Let's think: each '<' is an opening bracket, and '>' is a closing bracket. So, for the string to be correct, every '>' must have a corresponding '<' before it, and the total number of '<' and '>' must be equal.
+
+But wait, maybe not. For example, the string "<<><>>" is valid. Let's see: the first two '<' are opened, then a '>', which closes the first '<', then another '>', which closes the second '<'. Then another '<' and '>'. So the total count is 3 '<' and 3 '>'. But in the case of "><<>", the first character is '>', which is a closing bracket but there's no opening bracket before it. So that's invalid.
+
+So the approach would be to track the balance of brackets. Let's think of a variable called balance. For each character in the string:
+
+- If it's '<', increment balance by 1.
+- If it's '>', decrement balance by 1.
+
+But during this process, if balance ever becomes negative, that means there's a closing bracket without a matching opening one. So we can return False immediately.
+
+At the end, the balance must be zero.
+
+Wait, but that's a simpler approach. Let me test this idea with the examples.
+
+First example: correct_bracketing("<") → balance starts at 0. Then, after processing '<', balance is 1. At the end, balance is 1, so return False. Which matches the first test case.
+
+Second example: "<>" → balance starts at 0. First character '<' → balance 1. Then '>' → balance 0. End of string, balance is 0 → return True. Correct.
+
+Third example: "<<><>>" → let's process each character:
+
+Start at 0.
+
+First '<' → 1.
+
+Second '<' → 2.
+
+Third '>' → 1.
+
+Fourth '<' → 2.
+
+Fifth '>' → 1.
+
+Sixth '>' → 0. So balance is 0. Return True. Correct.
+
+Fourth example: "><<>" → let's see. The string is '>', '<', '<', '>'.
+
+Processing first character '>', balance is -1. So return False. Which matches the test case.
+
+So this approach seems to work. So the algorithm is:
+
+Initialize balance to 0.
+
+For each char in brackets:
+
+   if char is '<', add 1 to balance.
+
+   else (it's '>'), subtract 1 from balance.
+
+   if balance is negative at any point, return False.
+
+At the end, check if balance is 0.
+
+If both conditions are met, return True else False.
+
+So implementing this in Python.
+
+Now, code:
+
+def correct_bracketing(brackets: str):
+    balance = 0
+    for char in brackets:
+        if char == '<':
+            balance += 1
+        else:
+            balance -= 1
+        if balance < 0:
+            return False
+    return balance == 0
+
+Wait, but what about cases where the balance is zero but there's a closing bracket without a matching opening? Like, for example, ">>" would have balance -1 after first '>', so returns False. Which is correct.
+
+Another example: "<<" → balance is 2, returns False. Correct.
+
+Another example: "<><>" → balance goes 1, 0, 1, 0. So returns True. Correct.
+
+Yes, this seems to handle all cases.
+
+Let me check the test cases:
+
+Test case 1: "<" → balance is 1. So returns False. Correct.
+
+Test case 2: "<>" → balance 0. Returns True. Correct.
+
+Test case 3: "<<><>>" → balance after each step:
+
+1, 2, 1, 2, 1, 0. So returns True. Correct.
+
+Test case 4: "><<>" → first character is '>', balance becomes -1 → returns False. Correct.
+
+Yes, this should work.
+
+So the code is as above. Let me write that.
+</think>
+
+To determine whether a string of `<` and `>` brackets is correctly balanced, we can use a **balance counter** approach. This method ensures that:
+
+- Every opening bracket `<` increases the balance.
+- Every closing bracket `>` decreases the balance.
+- If the balance ever becomes negative, it means there's a closing bracket without a matching opening one, so the string is invalid.
+- At the end of the string, the balance must be zero for the brackets to be correctly matched.
+
+---
+
+### ✅ Implementation
+
+```python
+def correct_bracketing(brackets: str) -> bool:
+    """
+    brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+    balance = 0
+    for char in brackets:
+        if char == '<':
+            balance += 1
+        else:
+            balance -= 1
+        if balance < 0:
+            return False
+    return balance == 0
+```
+
+---
+
+### 🧪 Explanation of the Logic
+
+- **Initialization**: Start with a `balance` of 0.
+- **Loop through each character**:
+  - If the character is `<`, increment `balance`.
+  - If the character is `>`, decrement `balance`.
+  - If at any point `balance < 0`, return `False` immediately (invalid closing bracket).
+- **Final Check**: After processing all characters, return `True` only if `balance == 0`.
+
+This approach ensures that the string is valid if and only if every opening bracket has a corresponding closing bracket in the correct order.
+
+---
+
+### 🧪 Example Walkthrough
+
+For the input `"<<><>>"`:
+
+- `balance` changes as follows: `1 → 2 → 1 → 2 → 1 → 0`
+- Final `balance` is 0 → return `True`
+
+For the input `"><><<>"`:
+
+- First character is `>`, `balance` becomes `-1` → return `False`
+
+This logic handles all edge cases and ensures correctness.
+
+===== VISIBLE FINAL OUTPUT =====
+To determine whether a string of `<` and `>` brackets is correctly balanced, we can use a **balance counter** approach. This method ensures that:
+
+- Every opening bracket `<` increases the balance.
+- Every closing bracket `>` decreases the balance.
+- If the balance ever becomes negative, it means there's a closing bracket without a matching opening one, so the string is invalid.
+- At the end of the string, the balance must be zero for the brackets to be correctly matched.
+
+---
+
+### ✅ Implementation
+
+```python
+def correct_bracketing(brackets: str) -> bool:
+    """
+    brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+    balance = 0
+    for char in brackets:
+        if char == '<':
+            balance += 1
+        else:
+            balance -= 1
+        if balance < 0:
+            return False
+    return balance == 0
+```
+
+---
+
+### 🧪 Explanation of the Logic
+
+- **Initialization**: Start with a `balance` of 0.
+- **Loop through each character**:
+  - If the character is `<`, increment `balance`.
+  - If the character is `>`, decrement `balance`.
+  - If at any point `balance < 0`, return `False` immediately (invalid closing bracket).
+- **Final Check**: After processing all characters, return `True` only if `balance == 0`.
+
+This approach ensures that the string is valid if and only if every opening bracket has a corresponding closing bracket in the correct order.
+
+---
+
+### 🧪 Example Walkthrough
+
+For the input `"<<><>>"`:
+
+- `balance` changes as follows: `1 → 2 → 1 → 2 → 1 → 0`
+- Final `balance` is 0 → return `True`
+
+For the input `"><><<>"`:
+
+- First character is `>`, `balance` becomes `-1` → return `False`
+
+This logic handles all edge cases and ensures correctness.
+
+===== EXTRACTED CANDIDATE CODE =====
+def correct_bracketing(brackets: str) -> bool:
+    """
+    brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+    balance = 0
+    for char in brackets:
+        if char == '<':
+            balance += 1
+        else:
+            balance -= 1
+        if balance < 0:
+            return False
+    return balance == 0

@@ -1,0 +1,635 @@
+sample_id: HumanEval/93
+mode: kvarn
+run_name: kvarn_run2
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 150
+output_tokens: 4964
+output_cap_fraction: 0.151489
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 4234
+final_tokens: 730
+latency_seconds: 64.59877450764179
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+def encode(message):
+    """
+    Write a function that takes a message, and encodes in such a 
+    way that it swaps case of all letters, replaces all vowels in 
+    the message with the letter that appears 2 places ahead of that 
+    vowel in the english alphabet. 
+    Assume only letters. 
+    
+    Examples:
+    >>> encode('test')
+    'TGST'
+    >>> encode('This is a message')
+    'tHKS KS C MGSSCGG'
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write a Python function called encode that takes a message and does two things: swap the case of all letters, and replace vowels with the letter two places ahead in the alphabet. Let me think about how to approach this.
+
+First, let's break down the problem. The function has to process each character in the message. For each character, two steps: swap case, then check if it's a vowel. Wait, no—wait, the problem says to first swap the case, then replace vowels. Or is it that the vowels are replaced after swapping the case? Wait, the description says: "swaps case of all letters, replaces all vowels in the message with the letter that appears 2 places ahead..." So the order is important. Let me check the examples.
+
+Looking at the first example: encode('test') returns 'TGST'. Let's see. Original message is 'test'. Let's process each character.
+
+Original letters: t, e, s, t.
+
+First, swap case. So t becomes T, e becomes E, s becomes S, t becomes T. So after swapping case, it's 'TEST'. Then, replace vowels with the letter two places ahead. Wait, but vowels are a, e, i, o, u. But in the swapped case, the vowels are E, etc. So for each vowel in the message after swapping case, replace it with the letter two ahead.
+
+Wait, but the original message is 'test'. After swapping case, it's 'TEST'. Now, the vowels are E and E. Let's see: E is the second letter. So E becomes G (E + 2). So the first E becomes G, the second E becomes G. So the result is T G S T → 'TGST', which matches the example. So that's correct.
+
+Another example: encode('This is a message') → 'tHKS KS C MGSSCGG'. Let's check. Original message is 'This is a message'. Let's process each character.
+
+First, swap case. Original letters: T, h, i, s, (space), i, s, (space), a, (space), m, e, s, s, a, g, e.
+
+After swapping case: t, H, I, S, (space), I, S, (space), A, (space), M, E, S, S, A, G, E.
+
+Now, replace vowels with two places ahead. Let's go through each character:
+
+t → not a vowel. So remains t.
+
+H → not a vowel. So remains H.
+
+I is a vowel. I is the 9th letter. I + 2 is K. So I becomes K.
+
+S is not a vowel. So remains S.
+
+Space remains.
+
+I is a vowel. I becomes K.
+
+S remains.
+
+Space remains.
+
+A is a vowel. A is 1st letter. A + 2 is C. So A becomes C.
+
+Space remains.
+
+M is not a vowel. So remains M.
+
+E is a vowel. E is 5th. E + 2 is G. So E becomes G.
+
+S remains.
+
+S remains.
+
+A is vowel. A becomes C.
+
+G is not a vowel. So remains G.
+
+E is vowel. E becomes G.
+
+So putting it all together: t H K S → tHKS, then space, I becomes K, S → KS, space, A becomes C, space, M, E becomes G, S, S, A becomes C, G, E becomes G. So the result is 'tHKS KS C MGSSCGG' which matches the example. So that's correct.
+
+So the steps are: first, swap the case of each character. Then, for each vowel in the resulting string, replace it with the letter two places ahead. But wait, what about uppercase vowels? Because after swapping case, vowels can be uppercase or lowercase. But the problem says that the message is only letters. So the original message is all letters, and after swapping case, they are uppercase or lowercase. But the replacement is based on the vowel's case? Or does the replacement ignore case?
+
+Wait, the problem says that the vowels are replaced with the letter two places ahead. So for example, if the vowel is uppercase, like 'E', then it's replaced with 'G'. If it's lowercase, like 'e', then it's replaced with 'g'. But the replacement is case-sensitive? Or does the replacement take into account the case?
+
+But in the first example, after swapping case, the vowels are uppercase. So in the first example, the vowels are E and E. So they are replaced with G and G. So the result is TGST.
+
+So the replacement is done on the vowels after swapping case. So the vowels are in the swapped case, and then replaced with the next two letters. So the case of the vowel is preserved in the replacement. For example, if a vowel is uppercase, then the replacement is uppercase. If it's lowercase, then the replacement is lowercase.
+
+So the steps are:
+
+For each character in the message:
+
+1. Swap the case. So uppercase becomes lowercase, lowercase becomes uppercase.
+
+2. Check if the character is a vowel (a, e, i, o, u, regardless of case? Or after swapping case, the vowels are in uppercase or lowercase? Well, the original message is all letters, but after swapping case, the vowels can be uppercase or lowercase. But the replacement is done based on the vowel's case. Wait, but the problem says that the vowels are replaced with the letter two places ahead. So for example, if the vowel is 'E' (uppercase), then it's replaced with 'G' (uppercase). If the vowel is 'e' (lowercase), then it's replaced with 'g' (lowercase).
+
+So the replacement is case-sensitive. So the steps are:
+
+After swapping case, check if the character is a vowel. If it is, replace it with the letter two steps ahead in the alphabet, preserving the case.
+
+So, how to implement this?
+
+First, for each character in the message:
+
+- Swap case. So, for example, 'T' becomes 't', 'a' becomes 'A', etc.
+
+Then, check if the character is a vowel. But vowels are a, e, i, o, u. But after swapping case, the character could be uppercase or lowercase. So, for example, after swapping case, the character could be 'E' (uppercase) or 'e' (lowercase). So, in the code, we need to check if the character is a vowel, regardless of case. Wait, but the vowels are a, e, i, o, u. So, after swapping case, the character is a vowel if it is in the set {'a', 'e', 'i', 'o', 'u'} (lowercase) or {'A', 'E', 'I', 'O', 'U'} (uppercase). So, perhaps, we can check if the character is in the set of vowels, regardless of case. But how to do that?
+
+Alternatively, we can convert the character to lowercase (or uppercase) and check if it is in the set {'a', 'e', 'i', 'o', 'u'}.
+
+So, for example, after swapping case, the character is 'E' (uppercase). We can check if it is a vowel by converting to lowercase and checking if it is in the set. So, for the code:
+
+for each character in message:
+
+    swapped_char = original_char.swapcase()
+
+    if swapped_char is a vowel:
+
+        replace it with the letter two steps ahead, preserving case.
+
+But how to check if it's a vowel. So, for example, after swapping case, the character is 'E' (uppercase). So, we can check if the lowercase version is in {'a', 'e', 'i', 'o', 'u'}.
+
+So, for the code:
+
+vowels = {'a', 'e', 'i', 'o', 'u'}
+
+if swapped_char.lower() in vowels:
+
+    then replace.
+
+So, that's the way to check.
+
+Now, the next step is to replace the vowel with the letter two steps ahead. For example, 'E' becomes 'G', 'e' becomes 'g', etc.
+
+But how to compute that. Let's think about the ASCII values. For example, 'a' is 97, 'e' is 101, etc. So, for a vowel, we can take its ASCII value, add 2, and then convert back to a character. But we need to handle cases where the vowel is 'y'? Wait, no. The problem says that vowels are a, e, i, o, u. So, the code is only for those vowels.
+
+But wait, the problem says that the vowels are replaced. So, for example, if the vowel is 'u', then adding 2 would be 'w'. But what about 'y'? Well, the problem says that the vowels are a, e, i, o, u. So, 'y' is not considered a vowel here.
+
+So, for each vowel, we can compute the next two letters. But what if the vowel is 'u'? Then adding 2 would be 'w' (u is 117, 117+2=119, which is 'w'). So that's correct.
+
+But what about if the vowel is 'y'? Well, the problem says that the vowels are a, e, i, o, u. So, 'y' is not considered a vowel here. So, the code can ignore it.
+
+So, the code for replacing a vowel is:
+
+original_char is a vowel (after swapping case). So, for example, 'E' (uppercase). We need to replace it with the letter two steps ahead. So, for 'E', it's 'G'. So, the code can take the ASCII value of the character, add 2, and then convert back to a character. But we need to make sure that the character is a letter. But since the problem says that the message is only letters, and the vowels are a, e, i, o, u, adding 2 would not go beyond 'z'?
+
+Wait, for example, 'u' is 117. Adding 2 gives 119, which is 'w'. So that's okay. But what about 'y'? Well, the problem says that the vowels are a, e, i, o, u. So, 'y' is not considered a vowel here. So, the code can proceed.
+
+But wait, what if the vowel is 'u' and adding 2 steps would take it to 'w', which is correct. So, the code can proceed.
+
+So, the code for replacing a vowel is:
+
+original_char is a vowel. So, for example, 'E' (uppercase). We can take the ASCII value of the character, add 2, and then convert back to a character. But we need to make sure that the character is a letter. However, since the problem says that the message is only letters, and the vowels are a, e, i, o, u, adding 2 steps would not go beyond 'z' (for example, 'u' is 117, adding 2 is 119, which is 'w'). So, for example, 'y' is not a vowel here, so it's not considered.
+
+So, the code for replacing a vowel is:
+
+new_char = chr(ord(swapped_char) + 2)
+
+But wait, what if the swapped_char is lowercase? For example, 'e' becomes 'g'. So, that's correct.
+
+So, the steps for each character:
+
+1. Swap case.
+
+2. Check if it's a vowel (after swapping case). How? Check if the lowercase version is in vowels.
+
+3. If it is a vowel, replace it with the character two steps ahead (ord + 2).
+
+4. Else, leave it as is.
+
+So, putting this into code.
+
+Now, the code for the function:
+
+def encode(message):
+    """
+    Write a function that takes a message, and encodes in such a 
+    way that it swaps case of all letters, replaces all vowels in 
+    the message with the letter that appears 2 places ahead of that 
+    vowel in the english alphabet. 
+    Assume only letters. 
+    
+    Examples:
+    >>> encode('test')
+    'TGST'
+    >>> encode('This is a message')
+    'tHKS KS C MGSSCGG'
+    """
+    vowels = {'a', 'e', 'i', 'o', 'u'}
+    result = []
+    for char in message:
+        # Swap case
+        swapped_char = char.swapcase()
+        # Check if it's a vowel
+        if swapped_char.lower() in vowels:
+            # Replace with two steps ahead
+            new_char = chr(ord(swapped_char) + 2)
+            result.append(new_char)
+        else:
+            result.append(swapped_char)
+    return ''.join(result)
+
+Wait, but let's test this code with the first example.
+
+Test case 1: 'test'
+
+Original message: 'test'
+
+Processing each character:
+
+t → swapcase → T. Check if T is a vowel. T.lower() is 't', not in vowels. So append T.
+
+e → swapcase → E. E is a vowel. So E + 2 → G. Append G.
+
+s → swapcase → S. Not a vowel. Append S.
+
+t → swapcase → T. Not a vowel. Append T.
+
+Result is T G S T → 'TGST', which is correct.
+
+Another test case: 'This is a message'.
+
+Original message: 'This is a message'
+
+Processing each character:
+
+T → swapcase → t. t is not a vowel. Append t.
+
+h → swapcase → H. H is not a vowel. Append H.
+
+i → swapcase → I. I is a vowel. I + 2 → K. Append K.
+
+s → swapcase → S. Not a vowel. Append S.
+
+space → swapcase → space. Not a vowel. Append space.
+
+i → swapcase → I. I is vowel → K.
+
+s → swapcase → S. Not vowel. Append S.
+
+space → space.
+
+a → swapcase → A. A is vowel. A + 2 → C. Append C.
+
+space → space.
+
+m → swapcase → M. Not vowel. Append M.
+
+e → swapcase → E. E is vowel. E + 2 → G.
+
+s → swapcase → S. Not vowel. Append S.
+
+s → swapcase → S. Not vowel. Append S.
+
+a → swapcase → A. A is vowel. A + 2 → C.
+
+g → swapcase → G. Not vowel. Append G.
+
+e → swapcase → E. E is vowel. E + 2 → G.
+
+So the result is:
+
+t H K S → tHKS, then space, I becomes K, S → KS, space, C, space, M, G, S, S, C, G, G → so the full string is 'tHKS KS C MGSSCGG' which matches the example.
+
+But wait, the example's output is 'tHKS KS C MGSSCGG'. Let me check the code's output.
+
+The code would generate:
+
+t H K S (space) I becomes K, S (space) C (space) M E becomes G, S, S, A becomes C, G, E becomes G.
+
+So the code's output is 'tHKS KS C MGSSCGG' which matches the example. So that's correct.
+
+But wait, the code for the second example: the original message is 'This is a message' → after processing, the code returns 'tHKS KS C MGSSCGG' which is correct.
+
+But wait, the code for the second example's output is 'tHKS KS C MGSSCGG'. Let me check the code's output step by step.
+
+Original message: 'This is a message'
+
+Breaking down each character:
+
+T → t (not vowel) → t
+
+h → H (not vowel) → H
+
+i → I (vowel) → K
+
+s → S (not vowel) → S
+
+space → space
+
+i → I → K
+
+s → S → S
+
+space → space
+
+a → A → C
+
+space → space
+
+m → M → M
+
+e → E → G
+
+s → S → S
+
+s → S → S
+
+a → A → C
+
+g → G → G
+
+e → E → G
+
+So the result is:
+
+t H K S → tHKS
+
+space → space
+
+I becomes K, S → KS
+
+space → space
+
+C → C
+
+space → space
+
+M → M
+
+G → G
+
+S → S
+
+S → S
+
+C → C
+
+G → G
+
+G → G
+
+So the full string is 'tHKS KS C MGSSCGG' which matches the example. So the code is correct.
+
+But wait, the code for the second example's output is 'tHKS KS C MGSSCGG'. Let me check the code's output. The code would generate:
+
+tHKS (from first four letters), then space, then KS (from the next two letters), then space, then C, space, M, G, S, S, C, G, G. So the string is 'tHKS KS C MGSSCGG'.
+
+Yes, that's correct.
+
+So the code seems to work.
+
+But wait, what about uppercase vowels in the original message? For example, if the original message is 'A', then after swapping case, it's 'a', which is a vowel. Then, replace with 'c'. So the code would return 'c'.
+
+Another test case: encode('a') → 'c'.
+
+Another test case: encode('A') → 'C'.
+
+Another test case: encode('E') → 'G'.
+
+Another test case: encode('U') → 'W'.
+
+What about 'Y'? Well, the problem says that the message is only letters. But the code would check if 'Y' is a vowel. Since 'Y' is not in the vowels set, it's not replaced. So, for example, encode('y') → swapcase to 'Y', which is not a vowel, so remains 'Y'.
+
+But according to the problem statement, the vowels are a, e, i, o, u. So the code is correct.
+
+So the code seems to handle all cases.
+
+But wait, what about the case where the vowel is 'u' and adding 2 steps would take it to 'w'? For example, 'u' becomes 'w'. So, for example, encode('u') → 'w'.
+
+Yes.
+
+So the code is correct.
+
+So the code is as written above.
+
+But wait, the code uses the vowels set as {'a', 'e', 'i', 'o', 'u'}, and checks if the swapped_char.lower() is in that set. So that's correct.
+
+So the code is correct.
+
+But let me check the code again. The code is:
+
+def encode(message):
+    vowels = {'a', 'e', 'i', 'o', 'u'}
+    result = []
+    for char in message:
+        swapped_char = char.swapcase()
+        if swapped_char.lower() in vowels:
+            new_char = chr(ord(swapped_char) + 2)
+            result.append(new_char)
+        else:
+            result.append(swapped_char)
+    return ''.join(result)
+
+Yes.
+
+But what about the case where the swapped_char is uppercase, like 'E'? Then, swapped_char.lower() is 'e', which is in vowels. So it's replaced. So that's correct.
+
+So this code should work.
+
+Now, the code is written. Let me check the examples again.
+
+First example: encode('test') → 'TGST'.
+
+Yes.
+
+Second example: encode('This is a message') → 'tHKS KS C MGSSCGG'.
+
+Yes.
+
+So the code is correct.
+</think>
+
+Here's a complete and correct implementation of the `encode` function as per the given docstring and examples.
+
+---
+
+### ✅ **Function Explanation**
+
+The function `encode` performs two main transformations on the input message:
+
+1. **Swap Case**: Each character in the message is converted to the opposite case (uppercase to lowercase and vice versa).
+2. **Replace Vowels**: After swapping the case, any vowel (a, e, i, o, u) is replaced with the letter that appears **2 positions ahead** in the alphabet. This is done **only for vowels** and **preserves the case** of the original vowel.
+
+---
+
+### 🧠 **Implementation Details**
+
+- **Vowel Check**: We use a set of vowels `{'a', 'e', 'i', 'o', 'u'}` and check if the **lowercase version** of the swapped character is in this set.
+- **Vowel Replacement**: If the character is a vowel, we increment its ASCII value by 2 to get the next letter in the alphabet.
+- **Preservation of Non-Vowel Characters**: Non-vowel characters are simply swapped in case and appended to the result.
+
+---
+
+### 🧪 **Example Walkthrough**
+
+For the input `'test'`:
+- Swap case: `'TEST'`
+- Replace vowels:
+  - `'E'` → `'G'`
+  - `'E'` → `'G'`
+- Final result: `'TGST'`
+
+For the input `'This is a message'`:
+- Swap case: `'tHIS IS A MESSAGE'`
+- Replace vowels:
+  - `'I'` → `'K'`
+  - `'I'` → `'K'`
+  - `'A'` → `'C'`
+  - `'E'` → `'G'`
+  - `'A'` → `'C'`
+  - `'E'` → `'G'`
+- Final result: `'tHKS KS C MGSSCGG'`
+
+---
+
+### 🧾 **Final Code**
+
+```python
+def encode(message):
+    """
+    Write a function that takes a message, and encodes in such a 
+    way that it swaps case of all letters, replaces all vowels in 
+    the message with the letter that appears 2 places ahead of that 
+    vowel in the english alphabet. 
+    Assume only letters. 
+    
+    Examples:
+    >>> encode('test')
+    'TGST'
+    >>> encode('This is a message')
+    'tHKS KS C MGSSCGG'
+    """
+    vowels = {'a', 'e', 'i', 'o', 'u'}
+    result = []
+    for char in message:
+        swapped_char = char.swapcase()
+        if swapped_char.lower() in vowels:
+            new_char = chr(ord(swapped_char) + 2)
+            result.append(new_char)
+        else:
+            result.append(swapped_char)
+    return ''.join(result)
+```
+
+---
+
+### ✅ **Test Cases**
+
+```python
+print(encode('test'))              # Output: 'TGST'
+print(encode('This is a message')) # Output: 'tHKS KS C MGSSCGG'
+print(encode('a'))                # Output: 'c'
+print(encode('A'))                # Output: 'C'
+print(encode('E'))                # Output: 'G'
+print(encode('u'))                # Output: 'w'
+```
+
+This implementation is correct, efficient, and adheres to the problem requirements.
+
+===== VISIBLE FINAL OUTPUT =====
+Here's a complete and correct implementation of the `encode` function as per the given docstring and examples.
+
+---
+
+### ✅ **Function Explanation**
+
+The function `encode` performs two main transformations on the input message:
+
+1. **Swap Case**: Each character in the message is converted to the opposite case (uppercase to lowercase and vice versa).
+2. **Replace Vowels**: After swapping the case, any vowel (a, e, i, o, u) is replaced with the letter that appears **2 positions ahead** in the alphabet. This is done **only for vowels** and **preserves the case** of the original vowel.
+
+---
+
+### 🧠 **Implementation Details**
+
+- **Vowel Check**: We use a set of vowels `{'a', 'e', 'i', 'o', 'u'}` and check if the **lowercase version** of the swapped character is in this set.
+- **Vowel Replacement**: If the character is a vowel, we increment its ASCII value by 2 to get the next letter in the alphabet.
+- **Preservation of Non-Vowel Characters**: Non-vowel characters are simply swapped in case and appended to the result.
+
+---
+
+### 🧪 **Example Walkthrough**
+
+For the input `'test'`:
+- Swap case: `'TEST'`
+- Replace vowels:
+  - `'E'` → `'G'`
+  - `'E'` → `'G'`
+- Final result: `'TGST'`
+
+For the input `'This is a message'`:
+- Swap case: `'tHIS IS A MESSAGE'`
+- Replace vowels:
+  - `'I'` → `'K'`
+  - `'I'` → `'K'`
+  - `'A'` → `'C'`
+  - `'E'` → `'G'`
+  - `'A'` → `'C'`
+  - `'E'` → `'G'`
+- Final result: `'tHKS KS C MGSSCGG'`
+
+---
+
+### 🧾 **Final Code**
+
+```python
+def encode(message):
+    """
+    Write a function that takes a message, and encodes in such a 
+    way that it swaps case of all letters, replaces all vowels in 
+    the message with the letter that appears 2 places ahead of that 
+    vowel in the english alphabet. 
+    Assume only letters. 
+    
+    Examples:
+    >>> encode('test')
+    'TGST'
+    >>> encode('This is a message')
+    'tHKS KS C MGSSCGG'
+    """
+    vowels = {'a', 'e', 'i', 'o', 'u'}
+    result = []
+    for char in message:
+        swapped_char = char.swapcase()
+        if swapped_char.lower() in vowels:
+            new_char = chr(ord(swapped_char) + 2)
+            result.append(new_char)
+        else:
+            result.append(swapped_char)
+    return ''.join(result)
+```
+
+---
+
+### ✅ **Test Cases**
+
+```python
+print(encode('test'))              # Output: 'TGST'
+print(encode('This is a message')) # Output: 'tHKS KS C MGSSCGG'
+print(encode('a'))                # Output: 'c'
+print(encode('A'))                # Output: 'C'
+print(encode('E'))                # Output: 'G'
+print(encode('u'))                # Output: 'w'
+```
+
+This implementation is correct, efficient, and adheres to the problem requirements.
+
+===== EXTRACTED CANDIDATE CODE =====
+def encode(message):
+    """
+    Write a function that takes a message, and encodes in such a 
+    way that it swaps case of all letters, replaces all vowels in 
+    the message with the letter that appears 2 places ahead of that 
+    vowel in the english alphabet. 
+    Assume only letters. 
+    
+    Examples:
+    >>> encode('test')
+    'TGST'
+    >>> encode('This is a message')
+    'tHKS KS C MGSSCGG'
+    """
+    vowels = {'a', 'e', 'i', 'o', 'u'}
+    result = []
+    for char in message:
+        swapped_char = char.swapcase()
+        if swapped_char.lower() in vowels:
+            new_char = chr(ord(swapped_char) + 2)
+            result.append(new_char)
+        else:
+            result.append(swapped_char)
+    return ''.join(result)

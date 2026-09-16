@@ -1,0 +1,214 @@
+sample_id: HumanEval/4
+mode: kvarn
+run_name: kvarn_run2
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 158
+output_tokens: 1469
+output_cap_fraction: 0.044830
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 980
+final_tokens: 489
+latency_seconds: 19.084094336256385
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """ For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function mean_absolute_deviation. Let me think about what this function is supposed to do. The docstring says it calculates the Mean Absolute Deviation around the mean of the dataset. So, the steps I need to take are:
+
+First, calculate the mean of the numbers list. Then, for each number in the list, subtract the mean and take the absolute value of that difference. Then, average all those absolute differences.
+
+Let me break it down. Let's see, the function takes a list of floats. So first, I need to compute the mean. The mean is the sum of all numbers divided by the count of numbers. Then, for each number in the list, compute the absolute difference from the mean. Then sum all those differences and divide by the number of elements.
+
+Wait, right. So the formula is MAD = (sum of |x - mean| for all x in numbers) / len(numbers).
+
+So, the steps in code:
+
+1. Calculate the mean of the numbers. Let's see, sum(numbers) / len(numbers). But wait, what if the list is empty? Oh, but the tests probably assume that the list is non-empty. The example given has four elements, so maybe the function is designed for non-empty lists. So I can proceed under that assumption.
+
+2. Then, iterate through each number in the list, compute the absolute difference between the number and the mean, sum all those.
+
+3. Divide that sum by the length of the list to get the MAD.
+
+So, let's code that.
+
+But wait, in Python, how to handle the division? For example, in the sample input [1.0, 2.0, 3.0, 4.0], the mean is (1+2+3+4)/4 = 10/4 = 2.5. Then each absolute difference is 1.5, 0.5, 0.5, 1.5. Sum is 1.5 + 0.5 + 0.5 + 1.5 = 4.0. Divided by 4 gives 1.0, which matches the sample output.
+
+So the code should be:
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    mean = sum(numbers) / len(numbers)
+    absolute_diffs = [abs(x - mean) for x in numbers]
+    return sum(absolute_diffs) / len(numbers)
+
+Wait, but what if the list is empty? Well, the problem says that the function is supposed to handle the given tests, which probably have non-empty lists. So the code should work.
+
+But let me check the sample input. Let's test the sample input. For [1.0, 2.0, 3.0, 4.0], the code would compute mean as 2.5. The absolute differences are 1.5, 0.5, 0.5, 1.5. Sum is 4.0. Divided by 4 gives 1.0. Which matches the sample. So that's correct.
+
+Another test case: what if all numbers are the same? Like [5.0, 5.0, 5.0]. Then mean is 5.0. All absolute differences are 0. Sum is 0. MAD is 0.0. That's correct.
+
+Another case: [0.0, 0.0, 10.0]. Mean is 10/3 ≈ 3.333. The absolute differences are 3.333, 3.333, 6.666. Sum is 13.332, divided by 3 is 4.444... So the function would return that.
+
+So the code seems correct.
+
+Now, the code needs to be written with the correct types. The function is supposed to take a list of floats and return a float. The code uses sum and len, which should work.
+
+So the code should be:
+
+from typing import List
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    mean = sum(numbers) / len(numbers)
+    absolute_diffs = [abs(x - mean) for x in numbers]
+    return sum(absolute_diffs) / len(numbers)
+
+But wait, what about division? In Python 3, dividing integers with / gives a float. So that's correct.
+
+Yes, this should work. Let me check the sample input again. The sample input returns 1.0, which is correct.
+
+So that's the code. The docstring is already provided, and the code should satisfy the tests.
+</think>
+
+To compute the **Mean Absolute Deviation (MAD)** of a list of numbers, we follow a clear, step-by-step process:
+
+1. **Compute the mean** of the list by summing all elements and dividing by the number of elements.
+2. **Calculate the absolute difference** between each element and the mean.
+3. **Sum all those absolute differences**.
+4. **Divide the total by the number of elements** to get the average absolute deviation.
+
+This approach ensures that we are measuring how far each data point is from the central tendency (mean), in absolute terms, and then averaging those distances.
+
+---
+
+Here is the complete and correct implementation of the function, which satisfies the provided docstring and test cases:
+
+```python
+from typing import List
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+    mean = sum(numbers) / len(numbers)
+    absolute_diffs = [abs(x - mean) for x in numbers]
+    return sum(absolute_diffs) / len(numbers)
+```
+
+---
+
+### Example Execution
+
+For the input `[1.0, 2.0, 3.0, 4.0]`:
+
+- Mean = (1.0 + 2.0 + 3.0 + 4.0) / 4 = 2.5
+- Absolute differences = [1.5, 0.5, 0.5, 1.5]
+- Sum of absolute differences = 4.0
+- MAD = 4.0 / 4 = **1.0**
+
+This matches the expected output in the docstring.
+
+---
+
+### Edge Cases
+
+- If all elements are the same, the MAD will be `0.0`.
+- If the list is empty, the function will raise an error (as `len(numbers)` would be zero), but the function is designed to work with non-empty lists as per the test cases.
+
+===== VISIBLE FINAL OUTPUT =====
+To compute the **Mean Absolute Deviation (MAD)** of a list of numbers, we follow a clear, step-by-step process:
+
+1. **Compute the mean** of the list by summing all elements and dividing by the number of elements.
+2. **Calculate the absolute difference** between each element and the mean.
+3. **Sum all those absolute differences**.
+4. **Divide the total by the number of elements** to get the average absolute deviation.
+
+This approach ensures that we are measuring how far each data point is from the central tendency (mean), in absolute terms, and then averaging those distances.
+
+---
+
+Here is the complete and correct implementation of the function, which satisfies the provided docstring and test cases:
+
+```python
+from typing import List
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+    mean = sum(numbers) / len(numbers)
+    absolute_diffs = [abs(x - mean) for x in numbers]
+    return sum(absolute_diffs) / len(numbers)
+```
+
+---
+
+### Example Execution
+
+For the input `[1.0, 2.0, 3.0, 4.0]`:
+
+- Mean = (1.0 + 2.0 + 3.0 + 4.0) / 4 = 2.5
+- Absolute differences = [1.5, 0.5, 0.5, 1.5]
+- Sum of absolute differences = 4.0
+- MAD = 4.0 / 4 = **1.0**
+
+This matches the expected output in the docstring.
+
+---
+
+### Edge Cases
+
+- If all elements are the same, the MAD will be `0.0`.
+- If the list is empty, the function will raise an error (as `len(numbers)` would be zero), but the function is designed to work with non-empty lists as per the test cases.
+
+===== EXTRACTED CANDIDATE CODE =====
+from typing import List
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+    mean = sum(numbers) / len(numbers)
+    absolute_diffs = [abs(x - mean) for x in numbers]
+    return sum(absolute_diffs) / len(numbers)

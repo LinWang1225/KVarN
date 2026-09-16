@@ -1,0 +1,109 @@
+sample_id: HumanEval/14
+mode: kvarn
+run_name: kvarn_run2
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 100
+output_tokens: 758
+output_cap_fraction: 0.023132
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 669
+final_tokens: 89
+latency_seconds: 9.825843898579478
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+from typing import List
+
+
+def all_prefixes(string: str) -> List[str]:
+    """ Return list of all prefixes from shortest to longest of the input string
+    >>> all_prefixes('abc')
+    ['a', 'ab', 'abc']
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function all_prefixes so that it returns a list of all prefixes of the input string, from shortest to longest. The example given is 'abc' which returns ['a', 'ab', 'abc']. Let me think about how to approach this.
+
+So, a prefix of a string is any substring that starts at the first character and ends at some position. For example, for 'abc', the prefixes are 'a', 'ab', 'abc'. So the function needs to generate all these prefixes in order.
+
+How to generate them? Well, for each index from 1 to the length of the string, take the substring from 0 to that index. Wait, wait. Let me think. For the first prefix, it's the first character. So for index 1 (assuming 1-based?), but in Python, strings are zero-based. Wait, the first character is at index 0. So for the first prefix, we take string[0:1], which is 'a'. Then the next is string[0:2], which is 'ab', and so on until the entire string.
+
+So the length of the string is n. Then for i in range 1 to n+1? Wait, no. Let's see. For a string of length 3, like 'abc', the prefixes are of lengths 1, 2, 3. So for i in 1 to len(string), inclusive. So for each i from 1 to len(string), take the substring from 0 to i. Wait, but in Python, string slicing is up to but not including the end index. So for example, string[0:i] would give the first i characters. So for i=1, it's the first character. For i=2, first two, etc.
+
+So the steps would be: take the input string, then for each i in 1 to len(string), inclusive, take the substring from 0 to i. Then collect all those substrings into a list.
+
+So for the example 'abc', len is 3. So i ranges from 1 to 3. For i=1: 'a', i=2: 'ab', i=3: 'abc'. So the list is ['a', 'ab', 'abc'] which matches the example.
+
+So the code would be something like:
+
+def all_prefixes(string: str) -> List[str]:
+    result = []
+    for i in range(1, len(string)+1):
+        result.append(string[:i])
+    return result
+
+Wait, but what if the string is empty? Well, the problem says that the input is a string, but the function is supposed to return all prefixes. For an empty string, the list would be empty. Which is correct.
+
+Let me test with the example. For 'abc', the loop runs for i=1, 2, 3. So yes.
+
+So the code seems correct. Let me check the docstring. The function is supposed to return the list from shortest to longest. Which is exactly what this code does. Because the first element is the shortest (length 1), then longer ones.
+
+So the code should be correct. Let me write that.
+</think>
+
+```python
+from typing import List
+
+def all_prefixes(string: str) -> List[str]:
+    """ Return list of all prefixes from shortest to longest of the input string
+    >>> all_prefixes('abc')
+    ['a', 'ab', 'abc']
+    """
+    result = []
+    for i in range(1, len(string) + 1):
+        result.append(string[:i])
+    return result
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+from typing import List
+
+def all_prefixes(string: str) -> List[str]:
+    """ Return list of all prefixes from shortest to longest of the input string
+    >>> all_prefixes('abc')
+    ['a', 'ab', 'abc']
+    """
+    result = []
+    for i in range(1, len(string) + 1):
+        result.append(string[:i])
+    return result
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+from typing import List
+
+def all_prefixes(string: str) -> List[str]:
+    """ Return list of all prefixes from shortest to longest of the input string
+    >>> all_prefixes('abc')
+    ['a', 'ab', 'abc']
+    """
+    result = []
+    for i in range(1, len(string) + 1):
+        result.append(string[:i])
+    return result

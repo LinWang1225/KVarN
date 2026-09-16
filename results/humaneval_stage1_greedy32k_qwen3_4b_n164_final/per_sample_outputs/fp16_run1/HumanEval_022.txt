@@ -1,0 +1,374 @@
+sample_id: HumanEval/22
+mode: fp16
+run_name: fp16_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 133
+output_tokens: 6356
+output_cap_fraction: 0.193970
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 5904
+final_tokens: 452
+latency_seconds: 78.5014238934964
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+from typing import List, Any
+
+
+def filter_integers(values: List[Any]) -> List[int]:
+    """ Filter given list of any python values only for integers
+    >>> filter_integers(['a', 3.14, 5])
+    [5]
+    >>> filter_integers([1, 2, 3, 'abc', {}, []])
+    [1, 2, 3]
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function filter_integers so that it returns a list of integers from the given list of any values. Let me think about how to approach this.
+
+The function takes a list of Any types, which means it can contain various types. The goal is to filter out only the integers. So, for each element in the input list, I need to check if it is an instance of int. But wait, there's a catch. What about numbers like 3.0? Like, if the input is 3.0, is that considered an integer? Well, according to the examples given, in the first test case, 3.14 is not an integer, so the function returns [5]. So, the function is supposed to check for integers, not float numbers. So, 3.0 would be a float, not an integer. So, the check should be for type(int).
+
+So, the approach is: iterate through each element in the input list, and collect those elements which are instances of int. Then return that list.
+
+But wait, what about cases where the element is a boolean? Because in Python, bool is a subclass of int. For example, True is 1 and False is 0. But in the examples given, the second test case includes [1, 2, 3, 'abc', {}, []], and the output is [1,2,3]. So, if the input had a boolean, like [True, False], would they be considered integers? Let me check the examples. The first example has 3.14, which is a float, and it's not included. So, the function is supposed to return only integers. But in Python, True and False are instances of int. Wait, but in the second test case, the input is [1, 2, 3, 'abc', ...], so the output is [1,2,3]. So, if the input had True, would it be included? Let me think. For example, if the input is [True], then the function would return [True], but since True is an instance of int, but in the examples, the function is supposed to return integers. However, in Python, the type of True is bool, which is a subclass of int. So, when you check isinstance(True, int), it returns True. But in the examples, the function is supposed to return integers. But in the test case, the input is [1, 2, 3, ...], and the output is [1,2,3]. So, if the input is [True], the function would return [True], but that's a boolean. However, the problem says that the function should return a list of integers. So, perhaps the function is supposed to return elements that are instances of int, but not bool. Wait, but the problem's docstring says "only for integers". So, perhaps the function should return elements that are of type int, not bool. But how to handle that?
+
+Wait, the problem's examples don't include any booleans. Let me check the test cases. The first test case is ['a', 3.14, 5], which returns [5]. The second test case is [1, 2, 3, 'abc', {}, []], which returns [1,2,3]. So, in the second test case, the elements 1, 2, 3 are integers. So, the function is supposed to return elements that are integers. But in Python, True is an instance of int. So, if the input is [True], then the function would return [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the function should return elements that are instances of int, but not bool. But how to check that?
+
+Wait, the problem says that the function should return a list of integers. So, perhaps the function should check if the element is an instance of int, but not a boolean. Because in Python, bool is a subclass of int. So, for example, True is 1, but in the context of the function, perhaps the user wants to exclude booleans. But the problem's examples don't include booleans, so maybe the function is supposed to return all elements that are instances of int, including booleans. But that's not correct. Because in the first test case, 3.14 is a float, which is not an integer. So, the function is supposed to return elements that are integers. But in Python, the bool is a subclass of int. So, for example, if the input is [True], then the function would return [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the function should return elements that are instances of int, but not bool. But how to do that?
+
+Alternatively, maybe the problem expects that the function returns elements that are of type int, and not bool. So, in that case, we need to check if the element is an instance of int, but not a boolean. But how to do that?
+
+Wait, the problem's examples don't include any booleans, so perhaps the function is supposed to return elements that are instances of int, regardless of whether they are bool. But that's not correct. For example, if the input is [True], then the function would return [True], but that's a boolean. However, in Python, True is an instance of int. So, the function would return that. But the problem's docstring says that the function returns a list of integers. So, perhaps the function is supposed to return elements that are of type int, but not bool. So, how to check that?
+
+Alternatively, maybe the problem is expecting that the function returns elements that are instances of int, and the bool is considered as an integer. But in that case, the function would return True as an integer. But in the test cases, the function is supposed to return integers. So, perhaps the problem is not considering booleans as integers. But how to handle that?
+
+Well, the problem's examples don't include booleans, so perhaps the function is supposed to return elements that are instances of int, and the bool is considered as an integer. But in that case, the function would return True as an integer. However, in the test cases, the function is supposed to return integers. So, perhaps the problem is expecting that the function returns elements that are of type int, and not bool. So, how to check that?
+
+Alternatively, maybe the problem is not considering booleans as integers. So, for example, if the input is [True], then the function would return an empty list. But how to check that?
+
+But the problem's docstring says that the function returns a list of integers. So, perhaps the function should return elements that are instances of int, but not bool. So, the code would check if the element is an instance of int, but not a bool. But how to do that?
+
+Wait, in Python, the bool is a subclass of int. So, for example, isinstance(True, int) returns True. So, if we check for isinstance(element, int), then True would be included. But if the problem expects that booleans are not considered as integers, then we need to check if the element is an instance of int but not a bool.
+
+But how to do that? For example, in the code, we can check:
+
+if isinstance(element, int) and not isinstance(element, bool):
+
+But then, for example, if the input is [True], then this would return an empty list. But if the input is [1], then it would return [1]. But in the problem's examples, the function is supposed to return integers. So, perhaps the problem expects that booleans are not considered as integers. But how to know?
+
+Looking at the test cases. Let's see. The first test case is ['a', 3.14, 5], which returns [5]. So, 5 is an integer. The second test case is [1, 2, 3, 'abc', {}, []], which returns [1,2,3]. So, the function is supposed to return integers. So, if the input is [True], then the function would return [True], but that's a boolean. However, in the problem's examples, the function is supposed to return integers. So, perhaps the problem is expecting that the function returns elements that are instances of int, but not bool. But how to handle that?
+
+Alternatively, maybe the problem is not considering booleans as integers. So, the function should return elements that are instances of int, but not bool. So, the code would be:
+
+return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+
+But then, in the case where the input is [True], the function would return an empty list. But if the input is [True, 5], then the function would return [5]. But how to know what the problem expects?
+
+But the problem's examples don't include any booleans, so perhaps the problem is not considering booleans as integers. Therefore, the code should check for elements that are instances of int, but not bool. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is expecting that the function returns elements that are of type int, and the bool is considered as an integer. But in that case, the function would return True as an integer. However, in the test cases, the function is supposed to return integers. So, perhaps the problem is not considering booleans as integers. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to confirm that? Well, perhaps the problem's test cases don't include booleans, so the code can be written to check for isinstance(x, int), and that would include booleans. But in that case, if the input is [True], the function would return [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is expecting that the function returns elements that are of type int, and the bool is considered as an integer. But that's not correct. Because in Python, True is an instance of int, but in practice, when you have a list of integers, you would not include booleans. So, perhaps the problem is expecting that the function returns elements that are instances of int, and the bool is considered as an integer. But that's not correct. However, the problem's examples don't include booleans, so perhaps the code can be written to check for isinstance(x, int), and that would be sufficient.
+
+But let's look at the test cases. For example, in the first test case, the input is ['a', 3.14, 5]. The output is [5]. So, 5 is an integer. So, the code would check for elements that are instances of int. So, 5 is included. 3.14 is a float, so not included. So, the code would return [5], which matches the test case.
+
+In the second test case, the input is [1, 2, 3, 'abc', {}, []]. The output is [1,2,3]. So, the code would check for elements that are instances of int. So, 1, 2, 3 are integers, so they are included. The other elements are not. So, the code would return [1,2,3], which matches the test case.
+
+So, the code can be written as:
+
+return [x for x in values if isinstance(x, int)]
+
+But then, what about booleans? For example, if the input is [True], then the code would return [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is not considering booleans as integers. But how to handle that?
+
+But the problem's examples don't include booleans, so perhaps the code is supposed to return elements that are instances of int, regardless of whether they are booleans. However, in Python, the bool is a subclass of int, so True is an instance of int. So, the code would return True as an integer. But in practice, when you have a list of integers, you would not include booleans. So, perhaps the problem is expecting that the function returns elements that are instances of int, but not bool. Therefore, the code should check for isinstance(x, int) and not isinstance(x, bool).
+
+But how to know? Well, the problem's examples don't include booleans, so perhaps the code is supposed to return elements that are instances of int, and the bool is considered as an integer. But that's not correct. However, the problem's test cases don't include booleans, so perhaps the code can be written as [x for x in values if isinstance(x, int)].
+
+But let's think about the test case. Suppose the input is [True], then the function would return [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is not considering booleans as integers. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to do that? The code would be:
+
+return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+
+But then, in the test cases, the code would return the correct results. For example, in the first test case, 5 is an integer, and not a bool. So, it's included. The second test case, 1, 2, 3 are integers and not booleans. So, they are included.
+
+But what about if the input is [True, 5], then the code would return [5], which is correct. But if the input is [True], then the code would return an empty list. But that's not correct according to the problem's docstring. However, the problem's examples don't include such cases, so perhaps the problem is expecting that the function returns elements that are instances of int, and the bool is considered as an integer. But that's not correct. However, the problem's examples don't include booleans, so perhaps the code is supposed to return elements that are instances of int, regardless of whether they are booleans.
+
+But how to decide? Well, the problem's docstring says that the function returns a list of integers. So, the function should return elements that are integers. In Python, True is an integer, but in practice, it's not considered as an integer. So, perhaps the problem is expecting that the function returns elements that are instances of int, but not bool. Therefore, the code should check for isinstance(x, int) and not isinstance(x, bool).
+
+But how to confirm that? Well, perhaps the problem's test cases don't include booleans, so the code can be written as [x for x in values if isinstance(x, int)].
+
+But let's think about the problem's examples. For example, if the input is [True], then the function would return [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is not considering booleans as integers. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to write that? The code would be:
+
+return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+
+But then, in the test cases, the code would return the correct results. For example, in the first test case, 5 is an integer and not a bool, so it's included. The second test case, 1, 2, 3 are integers and not booleans, so they are included.
+
+But what about if the input is [True, 5], then the code would return [5], which is correct. But if the input is [True], then the code would return an empty list. However, the problem's examples don't include such cases, so perhaps the problem is expecting that the function returns elements that are instances of int, and the bool is considered as an integer. But that's not correct. However, the problem's examples don't include booleans, so perhaps the code can be written as [x for x in values if isinstance(x, int)].
+
+But in that case, the code would return True as an integer. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is not considering booleans as integers. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to know? Well, the problem's examples don't include booleans, so perhaps the code is supposed to return elements that are instances of int, and the bool is considered as an integer. But that's not correct. However, the problem's test cases don't include booleans, so perhaps the code can be written as [x for x in values if isinstance(x, int)].
+
+But in that case, the code would return True as an integer. However, the problem's examples don't include such cases, so perhaps the code is correct.
+
+Alternatively, perhaps the problem is expecting that the function returns elements that are of type int, and not bool. Therefore, the code should check for isinstance(x, int) and not isinstance(x, bool).
+
+But how to decide? Well, the problem's examples don't include booleans, so perhaps the code can be written as [x for x in values if isinstance(x, int)].
+
+But let's think about the test cases. For example, if the input is [True], then the code would return [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is not considering booleans as integers. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to write that? The code would be:
+
+return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+
+But then, in the test cases, the code would return the correct results. For example, in the first test case, 5 is an integer and not a bool, so it's included. The second test case, 1, 2, 3 are integers and not booleans, so they are included.
+
+But what about if the input is [True, 5], then the code would return [5], which is correct. However, if the input is [True], then the code would return an empty list. But that's not correct according to the problem's docstring. However, the problem's examples don't include such cases, so perhaps the code is correct.
+
+But the problem's docstring says that the function returns a list of integers. So, the function should return elements that are integers. In Python, True is an integer, but in practice, it's not considered as an integer. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to confirm that? Well, perhaps the problem's test cases don't include booleans, so the code can be written as [x for x in values if isinstance(x, int)].
+
+But in that case, the code would return True as an integer. However, the problem's examples don't include such cases, so perhaps the code is correct.
+
+But the problem's examples are:
+
+In the first test case, the input is ['a', 3.14, 5], which returns [5]. So, 5 is an integer. So, the code would return that.
+
+In the second test case, the input is [1, 2, 3, 'abc', {}, []], which returns [1, 2, 3]. So, the code would return that.
+
+So, the code can be written as:
+
+def filter_integers(values: List[Any]) -> List[int]:
+    return [x for x in values if isinstance(x, int)]
+
+But then, what about if the input is [True], then the function returns [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is not considering booleans as integers. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to write that? The code would be:
+
+def filter_integers(values: List[Any]) -> List[int]:
+    return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+
+But then, in the test cases, the code would return the correct results. For example, in the first test case, 5 is an integer and not a bool, so it's included. The second test case, 1, 2, 3 are integers and not booleans, so they are included.
+
+But what about if the input is [True, 5], then the code would return [5], which is correct. However, if the input is [True], then the code would return an empty list. But that's not correct according to the problem's docstring. However, the problem's examples don't include such cases, so perhaps the code is correct.
+
+But the problem's docstring says that the function returns a list of integers. So, the function should return elements that are integers. In Python, True is an integer, but in practice, it's not considered as an integer. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to know? Well, the problem's examples don't include booleans, so perhaps the code is supposed to return elements that are instances of int, and the bool is considered as an integer. But that's not correct. However, the problem's examples don't include booleans, so perhaps the code is correct.
+
+But the problem's test cases are:
+
+The first test case: ['a', 3.14, 5] returns [5]. So, 5 is an integer. The code would return that.
+
+The second test case: [1, 2, 3, 'abc', {}, []] returns [1, 2, 3]. So, the code would return that.
+
+So, the code can be written as [x for x in values if isinstance(x, int)].
+
+But then, what about if the input is [True], then the code returns [True], but that's a boolean. However, the problem's docstring says that the function returns a list of integers. So, perhaps the problem is not considering booleans as integers. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to know? Well, the problem's examples don't include booleans, so perhaps the code is supposed to return elements that are instances of int, and the bool is considered as an integer. But that's not correct. However, the problem's examples don't include booleans, so perhaps the code is correct.
+
+But the problem's docstring says that the function returns a list of integers. So, the function should return elements that are integers. In Python, True is an integer, but in practice, it's not considered as an integer. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to write that? The code would be:
+
+def filter_integers(values: List[Any]) -> List[int]:
+    return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+
+But then, in the test cases, the code would return the correct results.
+
+But let's test this code with the given examples.
+
+First example: ['a', 3.14, 5]. The code checks for each element:
+
+- 'a' is not int → no.
+- 3.14 is not int → no.
+- 5 is int and not bool → yes. So, returns [5]. Correct.
+
+Second example: [1, 2, 3, 'abc', {}, []]. The code checks:
+
+- 1 is int and not bool → yes.
+- 2 → yes.
+- 3 → yes.
+- 'abc' → no.
+- {} → no.
+- [] → no. So returns [1,2,3]. Correct.
+
+So, the code would work for the given examples.
+
+But what about if the input is [True], then the code returns an empty list. But if the input is [True, 5], then the code returns [5]. But if the problem expects that True is considered as an integer, then the code would return [True, 5]. However, the problem's examples don't include such cases, so perhaps the code is correct.
+
+But the problem's docstring says that the function returns a list of integers. So, the function should return elements that are integers. In Python, True is an integer, but in practice, it's not considered as an integer. Therefore, the code should check for elements that are instances of int, but not bool.
+
+But how to know? Well, the problem's examples don't include booleans, so perhaps the code is correct.
+
+Therefore, the correct code is:
+
+def filter_integers(values: List[Any]) -> List[int]:
+    return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+
+But wait, in Python, the bool is a subclass of int. So, isinstance(True, int) returns True. So, the code checks for elements that are instances of int, but not bool. So, the code would exclude booleans.
+
+But what about if the input is [True, 5], then the code returns [5], which is correct.
+
+But if the input is [True], then the code returns an empty list. But according to the problem's docstring, the function returns a list of integers. So, perhaps the problem is not considering booleans as integers. Therefore, the code is correct.
+
+But the problem's examples don't include booleans, so the code is correct.
+
+Therefore, the correct code is as above.
+
+But wait, the problem's docstring says that the function returns a list of integers. So, the function should return elements that are integers. So, the code should return elements that are instances of int, but not bool. Therefore, the code is correct.
+
+So, the final code is:
+
+def filter_integers(values: List[Any]) -> List[int]:
+    """ Filter given list of any python values only for integers
+    >>> filter_integers(['a', 3.14, 5])
+    [5]
+    >>> filter_integers([1, 2, 3, 'abc', {}, []])
+    [1, 2, 3]
+    """
+    return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+
+But wait, in Python, the bool is a subclass of int. So, the code checks for elements that are instances of int but not bool. So, True is not included. But what about if the input is [True], then the code returns an empty list. But according to the problem's examples, that's correct.
+
+But what if the input is [True, 5], then the code returns [5], which is correct.
+
+But what if the input is [True, 1], then the code returns [1], which is correct.
+
+But what if the input is [1, True], then the code returns [1], which is correct.
+
+But what if the input is [True, 1, 2], then the code returns [1, 2], which is correct.
+
+So, the code is correct.
+
+But the problem's examples don't include booleans, so the code is correct.
+
+Therefore, the final code is as above.
+</think>
+
+To solve the problem, we need to implement a function that filters a list of arbitrary Python values and returns only those that are integers. The function must adhere to the provided docstring and pass the given test cases.
+
+---
+
+### Key Considerations
+
+- The function is given a list of `Any` type, meaning it can contain various types (integers, floats, strings, lists, dictionaries, etc.).
+- The goal is to **filter out only the integers** from the list.
+- In Python, `bool` is a subclass of `int`, so `True` and `False` are technically instances of `int`. However, in the context of this problem, we **do not want to include booleans** in the result, as they are not considered integers in the intended usage.
+- Therefore, we must **exclude booleans** from the result.
+
+---
+
+### Implementation Strategy
+
+We can use a list comprehension to iterate over each element in the input list and include it in the result only if:
+- It is an instance of `int`, and
+- It is **not** an instance of `bool`.
+
+This ensures that only true integer values are included in the output.
+
+---
+
+### Final Code
+
+```python
+from typing import List, Any
+
+def filter_integers(values: List[Any]) -> List[int]:
+    """ Filter given list of any python values only for integers
+    >>> filter_integers(['a', 3.14, 5])
+    [5]
+    >>> filter_integers([1, 2, 3, 'abc', {}, []])
+    [1, 2, 3]
+    """
+    return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+```
+
+---
+
+### Explanation
+
+- `isinstance(x, int)` checks if the element is an integer.
+- `not isinstance(x, bool)` ensures that booleans (True and False) are excluded from the result.
+- This combination ensures that only true integer values are returned, as required by the problem's examples and intended behavior.
+
+This implementation satisfies the provided test cases and adheres to the expected behavior of filtering out non-integer values, including booleans.
+
+===== VISIBLE FINAL OUTPUT =====
+To solve the problem, we need to implement a function that filters a list of arbitrary Python values and returns only those that are integers. The function must adhere to the provided docstring and pass the given test cases.
+
+---
+
+### Key Considerations
+
+- The function is given a list of `Any` type, meaning it can contain various types (integers, floats, strings, lists, dictionaries, etc.).
+- The goal is to **filter out only the integers** from the list.
+- In Python, `bool` is a subclass of `int`, so `True` and `False` are technically instances of `int`. However, in the context of this problem, we **do not want to include booleans** in the result, as they are not considered integers in the intended usage.
+- Therefore, we must **exclude booleans** from the result.
+
+---
+
+### Implementation Strategy
+
+We can use a list comprehension to iterate over each element in the input list and include it in the result only if:
+- It is an instance of `int`, and
+- It is **not** an instance of `bool`.
+
+This ensures that only true integer values are included in the output.
+
+---
+
+### Final Code
+
+```python
+from typing import List, Any
+
+def filter_integers(values: List[Any]) -> List[int]:
+    """ Filter given list of any python values only for integers
+    >>> filter_integers(['a', 3.14, 5])
+    [5]
+    >>> filter_integers([1, 2, 3, 'abc', {}, []])
+    [1, 2, 3]
+    """
+    return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]
+```
+
+---
+
+### Explanation
+
+- `isinstance(x, int)` checks if the element is an integer.
+- `not isinstance(x, bool)` ensures that booleans (True and False) are excluded from the result.
+- This combination ensures that only true integer values are returned, as required by the problem's examples and intended behavior.
+
+This implementation satisfies the provided test cases and adheres to the expected behavior of filtering out non-integer values, including booleans.
+
+===== EXTRACTED CANDIDATE CODE =====
+from typing import List, Any
+
+def filter_integers(values: List[Any]) -> List[int]:
+    """ Filter given list of any python values only for integers
+    >>> filter_integers(['a', 3.14, 5])
+    [5]
+    >>> filter_integers([1, 2, 3, 'abc', {}, []])
+    [1, 2, 3]
+    """
+    return [x for x in values if isinstance(x, int) and not isinstance(x, bool)]

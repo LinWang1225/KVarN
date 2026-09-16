@@ -1,0 +1,456 @@
+sample_id: HumanEval/26
+mode: fp16
+run_name: fp16_run2
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 125
+output_tokens: 4476
+output_cap_fraction: 0.136597
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 4059
+final_tokens: 417
+latency_seconds: 54.37805446051061
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+from typing import List
+
+
+def remove_duplicates(numbers: List[int]) -> List[int]:
+    """ From a list of integers, remove all elements that occur more than once.
+    Keep order of elements left the same as in the input.
+    >>> remove_duplicates([1, 2, 3, 2, 4])
+    [1, 3, 4]
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function remove_duplicates so that it removes all elements that occur more than once, while keeping the order of the remaining elements the same as in the input. Let me think about how to approach this.
+
+The docstring says that for example, remove_duplicates([1,2,3,2,4]) should return [1,3,4]. So the duplicates are 2 here. So the function needs to remove elements that appear more than once. But how to track which elements are duplicates?
+
+Hmm. The key is to keep the order, so we can't just use a set and then iterate in order. Wait, but maybe we can track the elements that have been seen once, and then check if the current element is in that set. Wait, but for elements that appear more than once, we need to remove them. So the approach is to go through the list, and for each element, check if it's been seen before. If it's not, add it to a new list and mark it as seen. If it has been seen, skip it.
+
+Wait, but that would only keep the first occurrence. But the problem says to remove all elements that occur more than once. So for example, if an element appears twice, both instances are removed. So the first occurrence is kept, and the second is removed. Wait, but the example given: [1,2,3,2,4] becomes [1,3,4]. So the 2 is removed. So the first occurrence is kept, and any subsequent occurrences are removed. So the approach is to keep the first occurrence of each element, and remove all others.
+
+So the way to do this is to iterate through the list, and for each element, check if it's already been added to the result list. If not, add it. Otherwise, skip. So the steps would be:
+
+- Initialize a set to keep track of elements we have already added.
+- Initialize a new list to store the result.
+- Iterate through each number in the input list:
+   - If the number is not in the set, add it to the result list and add it to the set.
+   - Else, skip it.
+- Return the result list.
+
+Yes, that makes sense. Because the first occurrence is kept, and subsequent duplicates are removed. So the order is preserved.
+
+Let me test this logic against the example. The input is [1,2,3,2,4]. Let's walk through:
+
+Start with empty set and empty result.
+
+1 is not in the set. Add to result, set becomes {1}.
+
+2 is not in the set. Add to result, set {1,2}.
+
+3 is not in set. Add, set {1,2,3}.
+
+2 is in the set. Skip.
+
+4 is not in set. Add, set {1,2,3,4}.
+
+Result is [1,2,3,4]. Wait, but the expected output is [1,3,4]. Wait, that's a problem. Wait, what's wrong here?
+
+Wait the example says that the output is [1,3,4]. But according to this approach, the 2 is kept. But in the example, the 2 is removed. Wait, why?
+
+Wait the problem says to remove all elements that occur more than once. So in the input list, the 2 occurs twice. So the 2 is removed. But according to the approach above, the first occurrence is kept. So the output would be [1,2,3,4], but the example expects [1,3,4]. So that's conflicting. Wait, what's the correct answer here?
+
+Wait the example given is remove_duplicates([1,2,3,2,4]) returns [1,3,4]. So the 2 is removed. But according to the approach I thought of, the first occurrence is kept. So why is the 2 being removed here?
+
+Wait maybe I misunderstood the problem. Let me re-read the docstring.
+
+The problem says: "remove all elements that occur more than once. Keep order of elements left the same as in the input."
+
+So, for example, in the input list, the 2 occurs twice. So the 2 is removed. But the first occurrence is kept? Or the 2 is removed entirely?
+
+Wait, the example shows that the 2 is removed. So the output is [1,3,4]. So the 2 is removed. So how does that work?
+
+Wait, perhaps the problem is that the function is supposed to remove all elements that occur more than once. So if an element occurs more than once, all instances of it are removed. So in the example, the 2 occurs twice. So both instances are removed. So the first occurrence is kept? Or not?
+
+Wait, the example shows that the 2 is removed. So the first occurrence is kept? But in the example, the output is [1,3,4]. So the 2 is not in the output. So that suggests that the 2 is removed. So how does that happen?
+
+Wait, maybe the problem is that the function is supposed to remove all elements that occur more than once. So if an element occurs more than once, all instances are removed. So in the example, the 2 occurs twice. So both instances are removed. So the output is [1,3,4]. But how to do that?
+
+But then, how to keep the order? Because if you remove all instances of elements that occur more than once, then the first occurrence is not kept. So how to do that?
+
+Wait, perhaps the problem is that the function is supposed to remove elements that are duplicates. So, for example, if an element occurs more than once, then all instances of it are removed. But then, the first occurrence is not kept. But that would not make sense. Because in the example, the 2 is removed. So the first occurrence is removed. But that's not possible. Because the first occurrence is part of the list. So perhaps the problem is that the function is supposed to remove elements that are duplicates, but keep the first occurrence. So the example is wrong? Or perhaps I'm misunderstanding the problem.
+
+Wait, the example given is remove_duplicates([1,2,3,2,4]) returns [1,3,4]. So the 2 is removed. But in the input list, the 2 occurs twice. So the first occurrence is kept, but the second is removed. But that would mean that the output is [1,2,3,4], but the example says [1,3,4]. So that's conflicting.
+
+Wait, maybe the problem is that the function is supposed to remove all elements that are duplicates, meaning that if an element occurs more than once, then all instances are removed. So in the example, the 2 occurs twice. So both instances are removed. So the output is [1,3,4]. But how to do that?
+
+But then, how to keep the order? Because if you remove all instances of elements that occur more than once, then the first occurrence is not kept. So for example, in the input list [1,2,3,2,4], the 2 occurs twice. So the first occurrence is 2, and the second is 2. So both are removed. So the output is [1,3,4]. But how to do that?
+
+So the approach would be to first count the frequency of each element. Then, for each element in the input list, if its frequency is more than one, then we remove it. But how to do that?
+
+But then, the problem says that the order should be kept. So for example, in the input list [1,2,3,2,4], the 2 occurs twice. So the first occurrence is 2, and the second is 2. So both are removed. So the output is [1,3,4].
+
+But how to do that? So the approach would be:
+
+- Create a frequency dictionary (count) of each element.
+
+- Then, iterate through the original list, and for each element, if the count is more than 1, then skip it. Otherwise, include it in the result.
+
+But that would not work. Because for example, if an element occurs once, it's included. If it occurs more than once, it's excluded. So in the example, the 2 occurs twice, so it's excluded. So the output is [1,3,4].
+
+But then, how to handle elements that occur once. For example, in the input [1,2,3,4], the output would be [1,2,3,4].
+
+But then, the problem says that the function should remove all elements that occur more than once. So the first occurrence is not kept. So the approach is to check for each element in the input list, if it occurs more than once. If so, remove it. But how to do that?
+
+But how to do that? Because for example, in the input list [1,2,3,2,4], the 2 occurs twice. So in the output, the 2 is not present. So the first occurrence is 2, but it's removed. So the output is [1,3,4].
+
+But how to do that? Because the first occurrence is 2, but it's removed. So the approach is to check for each element in the input list, if it occurs more than once. If it does, then we remove it. But how to do that?
+
+But how to do that? Because for example, in the input list, the 2 occurs twice. So when we process the first 2, we check if it occurs more than once. If yes, then we skip adding it. But then, how to process the second 2? Because it's also a duplicate.
+
+But the problem is that the function is supposed to remove all elements that occur more than once. So if an element occurs more than once, then all instances are removed. So the approach is to first count the frequency of each element. Then, for each element in the input list, if the frequency is more than one, then we do not include it in the result. Otherwise, include it.
+
+But that would be the case. So for example, in the input [1,2,3,2,4], the frequency of 2 is 2. So in the output, 2 is not included. So the output is [1,3,4].
+
+But then, how to do that? Let's think.
+
+So the steps would be:
+
+1. Count the frequency of each element in the input list.
+
+2. Iterate through the input list again, and for each element, if the frequency is more than 1, skip it. Otherwise, add it to the result list.
+
+But that would work. Let's test this approach with the example.
+
+For the input [1,2,3,2,4], the frequency counts are:
+
+1: 1
+
+2: 2
+
+3: 1
+
+4: 1
+
+So when we iterate through the list:
+
+1: frequency is 1 → include → result is [1]
+
+2: frequency is 2 → skip.
+
+3: frequency is 1 → include → [1,3]
+
+2: frequency is 2 → skip.
+
+4: frequency is 1 → include → [1,3,4]
+
+Which matches the example. So that's correct.
+
+But then, what about if an element occurs once? For example, input [1,2,3], the output is [1,2,3].
+
+Another example: input [1,1,1], the output is empty list.
+
+Another example: input [1,2,1,2], the frequency counts are 1:2, 2:2. So the output is empty list.
+
+But how to implement this?
+
+So the code would be:
+
+- Use a Counter to count the frequencies.
+
+- Then, iterate through the input list, and for each element, check if the count is more than 1. If not, add to the result.
+
+But that would work.
+
+But then, the problem says that the order should be kept. Which is the case here, because we are processing the elements in the original order.
+
+So the code would be:
+
+from collections import Counter
+
+def remove_duplicates(numbers: List[int]) -> List[int]:
+    counts = Counter(numbers)
+    result = []
+    for num in numbers:
+        if counts[num] > 1:
+            continue
+        else:
+            result.append(num)
+    return result
+
+Wait, but in the example, the 2 is in the input list twice. So counts[2] is 2. So in the loop, when we process the first 2, we check counts[2] is 2, so we skip. Then, when we process the second 2, we again check counts[2] is 2, so we skip. So the result is [1,3,4], which is correct.
+
+But what about if an element occurs once? For example, in the input [1,2,3,4], the counts are all 1. So all elements are added. So the output is the same as input.
+
+But what about if an element occurs once, but is in the list once. So that's correct.
+
+But what about if the input is [1,2,2,3]. The counts are 1:1, 2:2, 3:1. So the output would be [1,3].
+
+But the original list is [1,2,2,3]. So the output is [1,3], which is correct.
+
+But this approach would not keep the first occurrence. Wait, no. Because the code is checking for counts. So for example, if an element occurs once, it is added. So in the input [1,2,2,3], the first occurrence of 2 is added? No. Because counts[2] is 2, so it is skipped. So the code would not add any 2s. So the output is [1,3].
+
+But that's correct. Because the 2 occurs more than once, so all instances are removed.
+
+But then, the problem says that the function should remove all elements that occur more than once. So this approach is correct.
+
+But then, the original approach I thought of (keeping the first occurrence) is not correct. So why is the example given in the docstring [1,2,3,2,4] returns [1,3,4]?
+
+Because the code above would return that. So the code is correct.
+
+But then, why is the example given as [1,3,4]?
+
+Because the code is correct.
+
+So the code that uses the Counter and checks for counts is correct.
+
+But then, what about the case where an element occurs once. For example, [1,2,3,4], the code returns the same list.
+
+But what about if the input is [1,2,3,2,4], the code returns [1,3,4], which is correct.
+
+So this approach is correct.
+
+But then, the code would be:
+
+from typing import List
+from collections import Counter
+
+def remove_duplicates(numbers: List[int]) -> List[int]:
+    counts = Counter(numbers)
+    result = []
+    for num in numbers:
+        if counts[num] > 1:
+            continue
+        result.append(num)
+    return result
+
+But wait, the problem says that the function should return a list where all elements that occur more than once are removed. So this code does that.
+
+But let's test the example.
+
+Sample input: [1,2,3,2,4]
+
+counts is {1:1, 2:2, 3:1, 4:1}
+
+Loop:
+
+num=1: counts[1] is 1 → add to result → [1]
+
+num=2: counts[2] is 2 → skip.
+
+num=3: counts[3] is 1 → add → [1,3]
+
+num=2: counts[2] is 2 → skip.
+
+num=4: counts[4] is 1 → add → [1,3,4]
+
+Which is correct.
+
+Another test case: [1,1,1]. counts is {1:3}. So all elements are skipped. So result is empty list.
+
+Another test case: [1,2,1,2]. counts is {1:2, 2:2}. So all elements are skipped. So result is empty.
+
+Another test case: [1,2,3,4,5]. All counts are 1. So result is same as input.
+
+So this code seems to work.
+
+But then, the problem says that the function should return a list where elements that occur more than once are removed. So this code is correct.
+
+But why is the example given in the docstring [1,2,3,2,4] returns [1,3,4]?
+
+Yes, because the code does that.
+
+So the code is correct.
+
+But then, the code uses the Counter, which is from collections. But the original code may not have imported that. But the user's code has from typing import List, and the code is supposed to be written as a function.
+
+So the code would need to import Counter from collections.
+
+But the user's code may not have that. But the code is allowed to import it.
+
+So the code is correct.
+
+But the problem says that the function should return a list where elements that occur more than once are removed. So this code does that.
+
+But then, what about the order? The code preserves the order of the original list. Because it's processing the elements in the original order, and adding them to the result list only if they are not duplicates.
+
+Yes.
+
+So this code should work.
+
+But the original code may not have imported Counter. So the code should include that.
+
+So the final code is:
+
+from typing import List
+from collections import Counter
+
+def remove_duplicates(numbers: List[int]) -> List[int]:
+    counts = Counter(numbers)
+    result = []
+    for num in numbers:
+        if counts[num] > 1:
+            continue
+        result.append(num)
+    return result
+
+But wait, the problem says that the function should return a list where all elements that occur more than once are removed. So this code does that.
+
+But let me check the example again. The sample input is [1,2,3,2,4], and the output is [1,3,4]. Which is correct.
+
+Another example: [1,2,3,4,2,5]. The counts are 1:1, 2:2, 3:1, 4:1, 5:1. So the output would be [1,3,4,5].
+
+Yes.
+
+But what about if an element occurs once, but is in the list once. So the code adds it.
+
+So this code is correct.
+
+But then, the code is correct. So the answer is this code.
+
+But the user's code may not have imported Counter. But the code is allowed to import it.
+
+So the code is correct.
+
+But the problem says that the function should return a list where elements that occur more than once are removed. So this code does that.
+
+So the answer is the code above.
+</think>
+
+To solve the problem of removing all elements that occur more than once from a list while preserving the original order, we can use a frequency counting approach. The key idea is to first determine how many times each element appears in the list, and then iterate through the list again, including only those elements that appear exactly once.
+
+---
+
+### ✅ Approach
+
+1. **Count Frequencies**: Use the `collections.Counter` to count the frequency of each element in the input list.
+2. **Filter Elements**: Iterate through the original list again, and for each element, check if its frequency is greater than 1. If it is, skip it; otherwise, include it in the result list.
+3. **Preserve Order**: Since we process the list in the original order, the resulting list will maintain the same order as the input.
+
+This approach ensures that:
+- Only elements that appear **exactly once** are included in the result.
+- The **order** of the elements is preserved.
+- All **duplicates** (elements that appear more than once) are **removed**.
+
+---
+
+### ✅ Python Implementation
+
+```python
+from typing import List
+from collections import Counter
+
+def remove_duplicates(numbers: List[int]) -> List[int]:
+    """
+    From a list of integers, remove all elements that occur more than once.
+    Keep order of elements left the same as in the input.
+
+    >>> remove_duplicates([1, 2, 3, 2, 4])
+    [1, 3, 4]
+    """
+    counts = Counter(numbers)
+    result = []
+    for num in numbers:
+        if counts[num] > 1:
+            continue
+        result.append(num)
+    return result
+```
+
+---
+
+### 🧪 Example Test Case
+
+```python
+print(remove_duplicates([1, 2, 3, 2, 4]))  # Output: [1, 3, 4]
+```
+
+This implementation satisfies the requirements of the problem, including the provided docstring and test case.
+
+===== VISIBLE FINAL OUTPUT =====
+To solve the problem of removing all elements that occur more than once from a list while preserving the original order, we can use a frequency counting approach. The key idea is to first determine how many times each element appears in the list, and then iterate through the list again, including only those elements that appear exactly once.
+
+---
+
+### ✅ Approach
+
+1. **Count Frequencies**: Use the `collections.Counter` to count the frequency of each element in the input list.
+2. **Filter Elements**: Iterate through the original list again, and for each element, check if its frequency is greater than 1. If it is, skip it; otherwise, include it in the result list.
+3. **Preserve Order**: Since we process the list in the original order, the resulting list will maintain the same order as the input.
+
+This approach ensures that:
+- Only elements that appear **exactly once** are included in the result.
+- The **order** of the elements is preserved.
+- All **duplicates** (elements that appear more than once) are **removed**.
+
+---
+
+### ✅ Python Implementation
+
+```python
+from typing import List
+from collections import Counter
+
+def remove_duplicates(numbers: List[int]) -> List[int]:
+    """
+    From a list of integers, remove all elements that occur more than once.
+    Keep order of elements left the same as in the input.
+
+    >>> remove_duplicates([1, 2, 3, 2, 4])
+    [1, 3, 4]
+    """
+    counts = Counter(numbers)
+    result = []
+    for num in numbers:
+        if counts[num] > 1:
+            continue
+        result.append(num)
+    return result
+```
+
+---
+
+### 🧪 Example Test Case
+
+```python
+print(remove_duplicates([1, 2, 3, 2, 4]))  # Output: [1, 3, 4]
+```
+
+This implementation satisfies the requirements of the problem, including the provided docstring and test case.
+
+===== EXTRACTED CANDIDATE CODE =====
+from typing import List
+from collections import Counter
+
+def remove_duplicates(numbers: List[int]) -> List[int]:
+    """
+    From a list of integers, remove all elements that occur more than once.
+    Keep order of elements left the same as in the input.
+
+    >>> remove_duplicates([1, 2, 3, 2, 4])
+    [1, 3, 4]
+    """
+    counts = Counter(numbers)
+    result = []
+    for num in numbers:
+        if counts[num] > 1:
+            continue
+        result.append(num)
+    return result

@@ -1,0 +1,480 @@
+sample_id: HumanEval/94
+mode: kvarn
+run_name: kvarn_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 368
+output_tokens: 6293
+output_cap_fraction: 0.192047
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 5509
+final_tokens: 784
+latency_seconds: 84.16176159493625
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def skjkasdkd(lst):
+    """You are given a list of integers.
+    You need to find the largest prime value and return the sum of its digits.
+
+    Examples:
+    For lst = [0,3,2,1,3,5,7,4,5,5,5,2,181,32,4,32,3,2,32,324,4,3] the output should be 10
+    For lst = [1,0,1,8,2,4597,2,1,3,40,1,2,1,2,4,2,5,1] the output should be 25
+    For lst = [1,3,1,32,5107,34,83278,109,163,23,2323,32,30,1,9,3] the output should be 13
+    For lst = [0,724,32,71,99,32,6,0,5,91,83,0,5,6] the output should be 11
+    For lst = [0,81,12,3,1,21] the output should be 3
+    For lst = [0,8,1,2,1,7] the output should be 7
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete this Python function called skjkasdkd. The docstring says that given a list of integers, I have to find the largest prime value and return the sum of its digits. Let me think about how to approach this.
+
+First, I need to figure out the steps required. The function needs to process a list of integers. The main steps are:
+
+1. Find the largest prime number in the list.
+2. Calculate the sum of its digits.
+
+So, first, I need a way to check if a number is prime. Then, I need to find the maximum prime in the list. Then, sum the digits of that maximum prime.
+
+Let me start by writing a helper function to check if a number is prime. But wait, what about numbers less than 2? Those are not primes. So, for example, 0 and 1 are not primes. So, in the list, if there are no primes, then maybe the function should return 0? But looking at the examples, like the first example, the list includes 181 which is a prime. So the function must find the maximum prime in the list.
+
+So first, I need to iterate through the list, check which numbers are primes, then find the maximum among them. Then sum the digits of that maximum.
+
+So, the steps for the function:
+
+- Iterate through each element in the list.
+- For each element, check if it's a prime.
+- Collect all primes in the list.
+- If there are no primes, maybe return 0? But looking at the examples, maybe the list always has at least one prime? Or maybe not. For example, if the list is [0, 1, 4, 6], then there are no primes. But according to the problem statement, the examples given have primes. But the function's docstring doesn't mention handling such cases. However, the examples given have primes. So perhaps the function can assume that there is at least one prime in the list. But maybe I should handle the case where there are no primes. But the problem says that the function should return the sum of the digits of the largest prime. So if there are no primes, perhaps return 0? Or maybe the function is designed such that there is at least one prime. Well, the examples given have primes, but perhaps the function should handle cases where there are no primes. But the problem says that the tests are given, so maybe the function is supposed to handle that. But the examples don't have such cases. Let me check the examples.
+
+Looking at the first example: [0,3,2,1,3,5,7,4,5,5,5,2,181,32,4,32,3,2,32,324,4,3]. The largest prime is 181. Sum of digits is 1+8+1=10. Correct.
+
+So, the function needs to find the maximum prime in the list. So first, I need to find all primes in the list, then take the maximum. Then sum the digits.
+
+So, first, the helper function for checking primes.
+
+But wait, for numbers less than 2, they are not primes. So, for example, 0, 1, 2, etc. So, for a number to be prime, it must be greater than 1, and have no divisors other than 1 and itself.
+
+So, the helper function is_prime(n):
+
+def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5)+1, 2):
+        if n % i == 0:
+            return False
+    return True
+
+But wait, for n=3, it would check up to sqrt(3) which is ~1.7, so the loop doesn't run. So returns True. Correct.
+
+So that's the helper function.
+
+Now, for the given list, I need to find all primes, then take the maximum. Then sum the digits of that maximum.
+
+So, for example, in the first example, the primes are 3, 2, 3, 5, 7, 181, etc. The maximum is 181.
+
+So, the next step is to process the list, find all primes, then take the maximum. Then sum the digits.
+
+So, the code steps:
+
+In the function skjkasdkd:
+
+- Iterate through each number in lst.
+
+- For each number, check if it's a prime.
+
+- Collect all primes in a list.
+
+- If the list is empty, return 0? Or maybe the problem expects that there is at least one prime. But according to the examples, the function is supposed to return the sum of the digits of the largest prime. So if there are no primes, perhaps return 0? But the problem's examples don't have such cases. However, the function's tests may include such cases. But since the problem says that the tests are given, perhaps the function is supposed to handle that. But the examples given have primes. So perhaps the function can assume that there is at least one prime in the list. But maybe not. So, perhaps the code should handle the case where there are no primes. But the problem's examples don't have that. However, the function's docstring says that the list is given, but perhaps the function is supposed to return 0 in that case. But the problem's examples don't have that. However, the problem says that the function should return the sum of the digits of the largest prime. So if there are no primes, then there is no largest prime. So perhaps the function should return 0? Or maybe the problem expects that there is at least one prime. But the problem's examples have primes. So perhaps the code can assume that there is at least one prime. But perhaps the code should handle the case where there are no primes. But the problem's examples don't have that. So perhaps the code can proceed under the assumption that there is at least one prime. But maybe the code should check for that. However, the problem's examples don't have such cases, so perhaps the code can proceed.
+
+So, the code steps:
+
+- Find all primes in the list.
+
+- If there are none, return 0? Or maybe the problem expects that there is at least one. But the problem's examples have primes. So perhaps the code can proceed.
+
+Once the primes are found, take the maximum. Then sum the digits of that maximum.
+
+So, for example, for the first example, the maximum is 181. Sum is 1+8+1=10.
+
+Now, how to sum the digits of a number. For example, 181: 1 + 8 + 1 = 10.
+
+So, the function to sum digits can be done by converting the number to a string, then summing each digit as integer.
+
+Alternatively, using math operations.
+
+But for code, perhaps converting to string is easier.
+
+So, for example:
+
+def sum_digits(n):
+    return sum(int(d) for d in str(n))
+
+But what if n is 0? Well, in that case, the sum is 0. But in the case where the maximum prime is 0, but 0 is not a prime. So, the code would not have that.
+
+So, the code steps:
+
+In the function skjkasdkd:
+
+- Iterate through the list, collect all primes.
+
+- Find the maximum of those primes.
+
+- Sum the digits of that maximum.
+
+So, code:
+
+def skjkasdkd(lst):
+    # find all primes in lst
+    primes = []
+    for num in lst:
+        if is_prime(num):
+            primes.append(num)
+    if not primes:
+        return 0  # or maybe raise an error? But the examples don't have this case.
+    max_prime = max(primes)
+    return sum_digits(max_prime)
+
+But then, the helper functions is_prime and sum_digits need to be defined.
+
+But the problem says that the code should be a valid Python implementation. So, the code must include the helper functions.
+
+But the function is called skjkasdkd, and the code is supposed to be written as a single function. Wait, but the code is supposed to be a function that is called skjkasdkd. So, the code must include the helper functions inside, or perhaps the code is allowed to have helper functions.
+
+But in Python, the code can have helper functions inside. However, the code must be written as a single function. Wait, no. The code is supposed to be the function skjkasdkd. So, perhaps the helper functions are inside the function, or perhaps they are defined outside. But the code must be written as a single function. Wait, no. The code is supposed to be the function skjkasdkd. So, the code must be written as a function, and the helper functions can be inside it, or perhaps the code is allowed to have helper functions outside. But the problem says that the code must be a valid Python implementation. So, perhaps the code is written as follows:
+
+But the code must be written as a single function. So, perhaps the helper functions are inside the function. But that's not possible. Wait, no. The code can have helper functions inside the function. But in Python, functions can be nested. However, for code efficiency, perhaps it's better to have helper functions inside.
+
+But for the code to be valid, perhaps the code can have the helper functions inside the skjkasdkd function. But that's not possible. Wait, no. The code can have helper functions inside the function. But in Python, functions can be nested. However, for the code to be valid, perhaps the code can have the helper functions inside. But perhaps the code is supposed to be written as a single function, with helper functions inside.
+
+Alternatively, perhaps the code can have the helper functions defined inside the function. But that's possible.
+
+Alternatively, perhaps the code can have the helper functions as separate functions. But the code is supposed to be written as a single function. Wait, the problem says that the code should be a valid Python implementation. So, the code must be written as a function called skjkasdkd, and the helper functions can be inside it.
+
+But perhaps the code is supposed to be written as a single function. So, perhaps the code can have the helper functions inside the function. Let me think.
+
+But in Python, functions can be nested. So, for example:
+
+def skjkasdkd(lst):
+    def is_prime(n):
+        ...
+    def sum_digits(n):
+        ...
+    # rest of the code
+
+But that's possible. However, the code may be more efficient if the helper functions are defined outside. But for the purpose of this problem, perhaps the code can have the helper functions inside.
+
+But the problem says that the code must be a valid Python implementation. So, the code must be written as a function, and the helper functions can be inside.
+
+But perhaps the code is supposed to be written as a single function, with the helper functions inside. So, the code would be:
+
+def skjkasdkd(lst):
+    def is_prime(n):
+        if n < 2:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        for i in range(3, int(n**0.5) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+
+    def sum_digits(n):
+        return sum(int(d) for d in str(n))
+
+    primes = []
+    for num in lst:
+        if is_prime(num):
+            primes.append(num)
+    if not primes:
+        return 0
+    max_prime = max(primes)
+    return sum_digits(max_prime)
+
+But wait, what about the case where the list is empty? Well, the problem says that the list is given, but perhaps the code can handle that. However, the examples given have lists with elements.
+
+But according to the problem's examples, the function is supposed to return the sum of the digits of the largest prime. So, for example, in the first example, the code would return 10.
+
+But let's test the code with the first example.
+
+Sample input 1: [0,3,2,1,3,5,7,4,5,5,5,2,181,32,4,32,3,2,32,324,4,3]
+
+The primes in the list are 3, 2, 3, 5, 7, 181, etc. The maximum is 181. Sum of digits is 1+8+1=10. Correct.
+
+Another sample input: [1,0,1,8,2,4597,2,1,3,40,1,2,1,2,4,2,5,1]. The largest prime is 4597. Let's check if 4597 is a prime. Well, the sample output is 25. Sum of digits is 4+5+9+7 = 25. So that's correct.
+
+But how to check if 4597 is a prime? Well, the code's is_prime function would check that. Let's see. For 4597, the code would check up to sqrt(4597) which is about 67.8. So, check for divisors up to 67. Let's see. 4597 divided by 3? 3*1532 is 4596, so 4597-4596=1. So remainder 1. Not divisible by 3. Divided by 5? Ends with 7, so no. 7? Let's see 7*656 is 4592. 4597-4592=5. Not divisible by 7. 11? 11*417 is 4587. 4597-4587=10. Not divisible by 11. 13? Let's see 13*353 is 4589. 4597-4589=8. Not divisible. 17? 17*270 is 4590. 4597-4590=7. Not divisible. 19? 19*241 is 4579. 4597-4579=18. Not divisible. 23? 23*200 is 4600. 4600-23=4577. 4597-4577=20. Not divisible. 29? 29*158 is 4582. 4597-4582=15. Not divisible. 31? 31*148 is 4588. 4597-4588=9. Not divisible. 37? 37*124 is 4588. 4597-4588=9. Not divisible. 41? 41*112 is 4592. 4597-4592=5. Not divisible. 43? 43*107 is 4591. 4597-4591=6. Not divisible. 47? 47*97 is 4559. 4597-4559=38. Not divisible. 53? 53*86 is 4558. 4597-4558=39. Not divisible. 59? 59*77 is 4543. 4597-4543=54. Not divisible. 61? 61*75 is 4575. 4597-4575=22. Not divisible. 67? 67*68 is 4556. 4597-4556=41. Not divisible. So 4597 is a prime. So the code would return 4+5+9+7=25. Correct.
+
+So the code seems to handle that.
+
+Another sample input: [1,3,1,32,5107,34,83278,109,163,23,2323,32,30,1,9,3]. The largest prime is 5107? Or 109? Let's see. Wait, the sample output is 13. So the sum of digits of the largest prime is 13. Let's see. For example, 5107: 5+1+0+7=13. So that's the case. So the code would check if 5107 is a prime. Let's see. Well, the code would check for divisors up to sqrt(5107) which is about 71.46. So check up to 71. Let's see. 5107 divided by 3? 5+1+0+7=13, which is not divisible by 3. So 5107 is not divisible by 3. Divided by 5? Ends with 7, no. 7? 7*729 is 5103. 5107-5103=4. Not divisible. 11? 11*464 is 5104. 5107-5104=3. Not divisible. 13? 13*392 is 5096. 5107-5096=11. Not divisible. 17? 17*300 is 5100. 5107-5100=7. Not divisible. 19? 19*268 is 5092. 5107-5092=15. Not divisible. 23? 23*222 is 5106. 5107-5106=1. Not divisible. 29? 29*176 is 5104. 5107-5104=3. Not divisible. 31? 31*164 is 5084. 5107-5084=23. Not divisible. 37? 37*138 is 5086. 5107-5086=21. Not divisible. 41? 41*124 is 5104. 5107-5104=3. Not divisible. 43? 43*118 is 5074. 5107-5074=33. Not divisible. 47? 47*108 is 5076. 5107-5076=31. Not divisible. 53? 53*96 is 5088. 5107-5088=19. Not divisible. 59? 59*86 is 5074. 5107-5074=33. Not divisible. 61? 61*83 is 5063. 5107-5063=44. Not divisible. 67? 67*76 is 5092. 5107-5092=15. Not divisible. 71? 71*71 is 5041. 71*72 is 5112. Which is larger than 5107. So 5107 is a prime. So the code would take that as the maximum. Sum of digits is 5+1+0+7=13. Which matches the sample output.
+
+So the code seems to handle that.
+
+Another sample input: [0,724,32,71,99,32,6,0,5,91,83,0,5,6]. The largest prime is 83. Sum of digits is 8+3=11. Which matches the sample output.
+
+Another sample: [0,81,12,3,1,21]. The primes are 3. Sum is 3. Correct.
+
+Another sample: [0,8,1,2,1,7]. The primes are 2,7. Max is 7. Sum is 7. Correct.
+
+So the code seems to handle all the examples.
+
+But what about numbers like 2, which is a prime. For example, if the list is [2], then the code returns 2, which is correct.
+
+Now, what about the case where the list has multiple primes, but the maximum is not the first one. For example, [3, 5, 2], the code would return 5's sum, which is 5.
+
+So the code seems correct.
+
+Now, the code as written would have the helper functions inside the skjkasdkd function. But in Python, that's allowed.
+
+But the code must be written as a function. So the code is as follows.
+
+But wait, the code must be written as a function called skjkasdkd. So the code is:
+
+def skjkasdkd(lst):
+    def is_prime(n):
+        if n < 2:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        for i in range(3, int(n**0.5) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+
+    def sum_digits(n):
+        return sum(int(d) for d in str(n))
+
+    primes = []
+    for num in lst:
+        if is_prime(num):
+            primes.append(num)
+    if not primes:
+        return 0
+    max_prime = max(primes)
+    return sum_digits(max_prime)
+
+But wait, what about the case where the list is empty? Well, the problem says that the list is given, but perhaps the code should handle that. However, the examples given have non-empty lists. But the code returns 0 if there are no primes. But according to the problem's examples, the function is supposed to return the sum of the digits of the largest prime. So if there are no primes, then the function returns 0. But perhaps the problem expects that there is at least one prime. However, the code is written to handle that case.
+
+But according to the problem's examples, the code is correct.
+
+But let's check the sample input where the list is [0,8,1,2,1,7]. The primes are 2,7. The maximum is 7. Sum is 7. Correct.
+
+Another sample input: [0,81,12,3,1,21]. The primes are 3. Sum is 3. Correct.
+
+So the code seems to handle all the cases.
+
+But what about the case where the list has multiple primes, but the maximum is not the first one. For example, [5, 3, 7], the code would find 7 as the maximum. Correct.
+
+Now, the code is written as per the problem's instructions. The helper functions are inside the main function. The code is valid Python.
+
+But wait, the code for the sum_digits function. For example, if the max_prime is 0, but that's not possible because 0 is not a prime. So the code is safe.
+
+But what about the case where the list has a prime number 2, which is the maximum. Then sum_digits(2) is 2. Correct.
+
+So, the code should be correct.
+
+Now, the code must be written as a single function. The code is as written above.
+
+But the problem says that the code must be a valid Python implementation. So the code is correct.
+
+But let me check for possible errors.
+
+In the is_prime function, for n=2, returns True. Correct.
+
+For n=3, the loop runs from 3 to sqrt(3) which is ~1.7, so the range is 3 to 1+1=2, so the loop doesn't run. So returns True. Correct.
+
+For n=4, the code checks if it's even. Yes, returns False. Correct.
+
+For n=9, the code checks 3. 3 divides 9, returns False. Correct.
+
+So the is_prime function is correct.
+
+The sum_digits function converts the number to a string, then sums each digit. For example, 181 becomes '181', sum 1+8+1=10. Correct.
+
+So the code is correct.
+
+Therefore, the final code is as written above.
+</think>
+
+To solve the problem, we need to implement a function that takes a list of integers and returns the **sum of the digits of the largest prime number** in the list. The function must be named `skjkasdkd`, and it must adhere to the provided docstring and test cases.
+
+---
+
+### ✅ Key Steps in the Solution
+
+1. **Identify Prime Numbers**: A number is prime if it is greater than 1 and has no divisors other than 1 and itself. We define a helper function `is_prime(n)` to check this.
+
+2. **Filter Primes from the List**: Iterate through the input list and collect all prime numbers.
+
+3. **Handle Edge Cases**: If no primes are found, return `0` (as per the problem's implicit assumption that the list contains at least one prime).
+
+4. **Find the Largest Prime**: Use the `max()` function to find the largest prime in the filtered list.
+
+5. **Sum the Digits of the Largest Prime**: Convert the largest prime to a string, iterate over each character, and sum the integer values of the digits.
+
+---
+
+### ✅ Final Python Implementation
+
+```python
+def skjkasdkd(lst):
+    def is_prime(n):
+        if n < 2:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        for i in range(3, int(n**0.5) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+
+    def sum_digits(n):
+        return sum(int(d) for d in str(n))
+
+    primes = [num for num in lst if is_prime(num)]
+    if not primes:
+        return 0
+    max_prime = max(primes)
+    return sum_digits(max_prime)
+```
+
+---
+
+### 🧪 Example Test Cases
+
+Let's verify the function with the provided examples:
+
+- `skjkasdkd([0,3,2,1,3,5,7,4,5,5,5,2,181,32,4,32,3,2,32,324,4,3])` → `10`
+- `skjkasdkd([1,0,1,8,2,4597,2,1,3,40,1,2,1,2,4,2,5,1])` → `25`
+- `skjkasdkd([1,3,1,32,5107,34,83278,109,163,23,2323,32,30,1,9,3])` → `13`
+- `skjkasdkd([0,724,32,71,99,32,6,0,5,91,83,0,5,6])` → `11`
+- `skjkasdkd([0,81,12,3,1,21])` → `3`
+- `skjkasdkd([0,8,1,2,1,7])` → `7`
+
+All of these return the expected results.
+
+---
+
+### 🧠 Notes
+
+- The helper functions `is_prime` and `sum_digits` are defined inside the main function to keep the code modular and readable.
+- The function assumes that the input list contains at least one prime number, as per the examples. If no primes are found, it returns `0`.
+- The code is efficient for the given constraints and handles all edge cases correctly.
+
+===== VISIBLE FINAL OUTPUT =====
+To solve the problem, we need to implement a function that takes a list of integers and returns the **sum of the digits of the largest prime number** in the list. The function must be named `skjkasdkd`, and it must adhere to the provided docstring and test cases.
+
+---
+
+### ✅ Key Steps in the Solution
+
+1. **Identify Prime Numbers**: A number is prime if it is greater than 1 and has no divisors other than 1 and itself. We define a helper function `is_prime(n)` to check this.
+
+2. **Filter Primes from the List**: Iterate through the input list and collect all prime numbers.
+
+3. **Handle Edge Cases**: If no primes are found, return `0` (as per the problem's implicit assumption that the list contains at least one prime).
+
+4. **Find the Largest Prime**: Use the `max()` function to find the largest prime in the filtered list.
+
+5. **Sum the Digits of the Largest Prime**: Convert the largest prime to a string, iterate over each character, and sum the integer values of the digits.
+
+---
+
+### ✅ Final Python Implementation
+
+```python
+def skjkasdkd(lst):
+    def is_prime(n):
+        if n < 2:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        for i in range(3, int(n**0.5) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+
+    def sum_digits(n):
+        return sum(int(d) for d in str(n))
+
+    primes = [num for num in lst if is_prime(num)]
+    if not primes:
+        return 0
+    max_prime = max(primes)
+    return sum_digits(max_prime)
+```
+
+---
+
+### 🧪 Example Test Cases
+
+Let's verify the function with the provided examples:
+
+- `skjkasdkd([0,3,2,1,3,5,7,4,5,5,5,2,181,32,4,32,3,2,32,324,4,3])` → `10`
+- `skjkasdkd([1,0,1,8,2,4597,2,1,3,40,1,2,1,2,4,2,5,1])` → `25`
+- `skjkasdkd([1,3,1,32,5107,34,83278,109,163,23,2323,32,30,1,9,3])` → `13`
+- `skjkasdkd([0,724,32,71,99,32,6,0,5,91,83,0,5,6])` → `11`
+- `skjkasdkd([0,81,12,3,1,21])` → `3`
+- `skjkasdkd([0,8,1,2,1,7])` → `7`
+
+All of these return the expected results.
+
+---
+
+### 🧠 Notes
+
+- The helper functions `is_prime` and `sum_digits` are defined inside the main function to keep the code modular and readable.
+- The function assumes that the input list contains at least one prime number, as per the examples. If no primes are found, it returns `0`.
+- The code is efficient for the given constraints and handles all edge cases correctly.
+
+===== EXTRACTED CANDIDATE CODE =====
+def skjkasdkd(lst):
+    def is_prime(n):
+        if n < 2:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        for i in range(3, int(n**0.5) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+
+    def sum_digits(n):
+        return sum(int(d) for d in str(n))
+
+    primes = [num for num in lst if is_prime(num)]
+    if not primes:
+        return 0
+    max_prime = max(primes)
+    return sum_digits(max_prime)

@@ -1,0 +1,580 @@
+sample_id: HumanEval/39
+mode: fp16
+run_name: fp16_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 140
+output_tokens: 6490
+output_cap_fraction: 0.198059
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 5906
+final_tokens: 584
+latency_seconds: 80.27351968176663
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def prime_fib(n: int):
+    """
+    prime_fib returns n-th number that is a Fibonacci number and it's also prime.
+    >>> prime_fib(1)
+    2
+    >>> prime_fib(2)
+    3
+    >>> prime_fib(3)
+    5
+    >>> prime_fib(4)
+    13
+    >>> prime_fib(5)
+    89
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write a Python function called prime_fib(n) that returns the nth number which is both a Fibonacci number and a prime. The docstring has some test cases, like prime_fib(1) is 2, which is the first Fibonacci prime. Let me think about how to approach this.
+
+First, I need to generate Fibonacci numbers and check if they are prime. Then collect those numbers and return the nth one. But how to generate Fibonacci numbers and check for primes efficiently?
+
+Let me recall the Fibonacci sequence. The Fibonacci numbers start with 0 and 1, and each subsequent number is the sum of the previous two. But wait, the first few Fibonacci numbers are 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, etc. However, primes are numbers greater than 1 that have no divisors other than 1 and themselves. So 0 and 1 are not primes. So the Fibonacci numbers that are primes would be 2, 3, 5, 13, 89, etc. Looking at the test cases, the first five are 2,3,5,13,89. So the function needs to return these in order.
+
+So the approach is to generate Fibonacci numbers, check each for primality, collect those that are primes, and then return the nth one.
+
+But how to generate the Fibonacci numbers? Let's think about generating them in order. Let's start with the first few terms. Let's see:
+
+Fibonacci sequence:
+
+Term 1: 0
+
+Term 2: 1
+
+Term 3: 1
+
+Term 4: 2
+
+Term 5: 3
+
+Term 6: 5
+
+Term 7: 8
+
+Term 8: 13
+
+Term 9: 21
+
+Term 10: 34
+
+Term 11: 55
+
+Term 12: 89
+
+So the primes in this sequence are 2 (term 4), 3 (term5), 5 (term6), 13 (term8), 89 (term12), etc. So the first five primes are as per the test cases.
+
+So the function needs to generate Fibonacci numbers, check if they are primes, collect them in a list, and then return the nth element (index n-1, since the first element is 1st).
+
+But how to generate the Fibonacci numbers? Let's think of generating them in order, and for each, check if it's a prime. Then collect those that are primes.
+
+But generating Fibonacci numbers up to a certain point. However, for larger n, the numbers can get very big. But for the test cases given, n is up to 5, so maybe we can generate up to the 12th term. But for the function to work for any n, we need to generate enough terms.
+
+But how to generate the Fibonacci numbers and check for primes. Let's think about the steps:
+
+1. Generate Fibonacci numbers in order.
+
+2. For each Fibonacci number, check if it is a prime.
+
+3. Collect those that are primes in a list.
+
+4. Return the nth element (index n-1) of this list.
+
+But how to generate the Fibonacci numbers. Let's think of generating them in a loop. Let's start with a and b as the first two terms. Then generate each next term as a + b. But for the first few terms, the initial terms are 0, 1, 1, 2, etc. However, 0 and 1 are not primes. So the first Fibonacci prime is 2 (term 4), then 3 (term5), 5 (term6), 13 (term8), 89 (term12), etc.
+
+So the steps for the function:
+
+- Generate Fibonacci numbers in order, starting from 0, 1, 1, 2, etc.
+
+- For each generated number, check if it is a prime. If yes, add to the list.
+
+- Once the list has at least n elements, return the nth element (index n-1).
+
+But how to generate the Fibonacci numbers. Let's think of generating them in a loop. Let's start with a=0, b=1. Then next term is a + b. Then a becomes b, b becomes next term. But for the first few terms, the sequence is 0, 1, 1, 2, 3, 5, etc.
+
+But for the first few terms, the numbers are 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, etc.
+
+So the code can generate these numbers, and for each, check if it's a prime. But how to check for primes.
+
+Implementing a prime check function. Let's think: for a number x, check if it's less than 2, return False. Else, check for divisors up to sqrt(x). For each i from 2 to sqrt(x), if x mod i is 0, then not prime. Else, prime.
+
+But for numbers up to, say, 1e6, this is manageable. However, for larger numbers, this could be slow. But given that the test cases are small, perhaps this is acceptable.
+
+So, the plan is:
+
+Implement a helper function is_prime(x) that returns True if x is a prime.
+
+Then, generate Fibonacci numbers in order, check each for primality, collect them in a list. Then return the nth element.
+
+But how to generate the Fibonacci numbers. Let's think of generating them in a loop. Let's start with a list of Fibonacci numbers. Let's start with the first two terms as 0 and 1. Then generate the next terms.
+
+But for the first few terms, the numbers are 0, 1, 1, 2, 3, 5, 8, 13, etc. So the code can generate them in a loop, and for each term, check if it's a prime. But since 0 and 1 are not primes, we can skip them.
+
+So the code can generate the Fibonacci numbers, and for each, check if it's a prime. Then collect those that are primes.
+
+But how to generate the Fibonacci numbers. Let's think of generating them in a loop. Let's start with a=0, b=1. Then the next term is a + b. Then a becomes b, b becomes the new term. But for each term, we can check if it's a prime.
+
+But for the first few terms:
+
+Term 1: 0 → not prime.
+
+Term 2: 1 → not prime.
+
+Term 3: 1 → not prime.
+
+Term 4: 2 → prime → add to list.
+
+Term 5: 3 → prime → add.
+
+Term 6: 5 → prime → add.
+
+Term 7: 8 → not prime.
+
+Term 8: 13 → prime → add.
+
+Term 9: 21 → not prime.
+
+Term 10: 34 → not.
+
+Term 11: 55 → not.
+
+Term 12: 89 → prime → add.
+
+So the list of primes would be [2,3,5,13,89,...], which matches the test cases.
+
+So the code can generate the Fibonacci numbers in order, check each for primality, and collect them in a list. Then return the nth element.
+
+Now, the code structure:
+
+def prime_fib(n: int):
+
+    # generate Fibonacci numbers, check for primes, collect them in a list.
+
+    # then return the nth element (index n-1)
+
+But how to generate the Fibonacci numbers. Let's think of generating them in a loop. Let's start with a=0, b=1. Then generate the next terms.
+
+But for the first few terms, the code can generate them. Let's think of the code:
+
+Initialize a list of primes_fib = []
+
+a, b = 0, 1
+
+then, generate each term:
+
+for each term in the sequence:
+
+    current = a + b
+
+    check if current is prime.
+
+    if yes, add to primes_fib.
+
+    then, a = b, b = current.
+
+Wait, but the initial terms are 0, 1, 1, 2, etc. So perhaps the code should generate the terms in order, and for each term, check if it's a prime.
+
+But how to generate the terms. Let's think of the first few steps:
+
+Initially, a=0, b=1. The next term is a + b = 1. Then a becomes 1, b becomes 1. Next term is 2. Then a becomes 1, b becomes 2. Next term is 3. Then a becomes 2, b becomes 3. Next term is 5. Then a becomes 3, b becomes 5. Next term is 8. Then a becomes 5, b becomes 8. Next term is 13. Etc.
+
+But the code needs to generate each term, and check if it's a prime. However, the initial terms (0, 1, 1) are not primes. So the code can generate the terms, and for each term, check if it's a prime. But how to generate the terms. Let's think of the code:
+
+Initialize a list of primes_fib = []
+
+a, b = 0, 1
+
+then, generate the next terms:
+
+But perhaps the code should generate the terms in order, and for each term, check if it's a prime. However, the first term is 0, then 1, then 1, then 2, etc.
+
+But perhaps the code can generate the terms in a loop, and for each term, check if it's a prime. Let's think of the code:
+
+primes_fib = []
+
+a, b = 0, 1
+
+while len(primes_fib) < n:
+
+    current = a + b
+
+    if is_prime(current):
+
+        primes_fib.append(current)
+
+    a, b = b, current
+
+Wait, but that's not correct. Because the initial a and b are 0 and 1. The first current is 0 + 1 = 1. Then a becomes 1, b becomes 1. Then current is 1 + 1 = 2. Then a becomes 1, b becomes 2. Then current is 1 + 2 = 3. Then a becomes 2, b becomes 3. Then current is 2 + 3 = 5. Then a becomes 3, b becomes 5. Then current is 3 + 5 = 8. Then a becomes 5, b becomes 8. Then current is 5 + 8 = 13. Etc.
+
+But in this code, the current is generated as a + b. But the initial a and b are 0 and 1. So the first current is 1. Then the next current is 2, then 3, then 5, etc. But the first term is 0, then 1, then 1, then 2, etc. So the code is generating the terms starting from 1, but the first term is 0. So perhaps the code is missing the first few terms.
+
+Wait, the code as written would generate the terms starting from 1, then 2, then 3, etc. But the first Fibonacci numbers are 0, 1, 1, 2, 3, 5, etc. So the code is generating the terms starting from 1, then 2, etc. So the code is generating the Fibonacci numbers starting from the third term (1) as the first term. But the code is generating the terms as follows:
+
+Initially, a=0, b=1. Then current = a + b = 1. Then a becomes 1, b becomes 1. Then current is 1 + 1 = 2. Then a becomes 1, b becomes 2. Then current is 1 + 2 = 3. Then a becomes 2, b becomes 3. Then current is 2 + 3 = 5. Then a becomes 3, b becomes 5. Then current is 3 + 5 = 8. Then a becomes 5, b becomes 8. Then current is 5 + 8 = 13. So the current is the next term in the sequence. But the first term is 0, then 1, then 1, then 2, etc. So the code is generating the terms starting from 1, then 2, then 3, etc. So the code is generating the Fibonacci numbers starting from the second term (1) and then the third term (1), then fourth term (2), etc. But the code is generating the current as the next term. So the code is generating the terms starting from the third term (1) as the first current. But the code is not including the first two terms (0 and 1) in the list. So the code would generate the current as 1, then 2, then 3, etc. But the first term (0) is not considered. So the code would generate the Fibonacci numbers starting from the third term (1) as the first current. But the first Fibonacci primes are 2, 3, 5, etc. So the code would generate the current as 1 (which is not prime), then 2 (prime), then 3 (prime), then 5 (prime), etc.
+
+But in the code above, the current is generated as a + b, and then a and b are updated. So the code would generate the current as 1 (from 0 and 1), then 2 (from 1 and 1), then 3 (from 1 and 2), then 5 (from 2 and 3), etc. So the code is generating the Fibonacci numbers starting from the third term (1) as the first current. But the first term (0) is not considered. So the code would generate the current as 1, then 2, then 3, etc. So the code would check if 1 is prime (no), then 2 (yes), then 3 (yes), then 5 (yes), etc. So the primes_fib list would be [2,3,5, ...], which is correct. But the first term in the list is 2, which is the first Fibonacci prime. So for n=1, the function returns 2. Which matches the test case.
+
+But wait, the code as written would generate the current as 1 (from a=0 and b=1). Then check if 1 is prime. It's not. Then a becomes 1, b becomes 1. Then current is 1 + 1 = 2. Check if 2 is prime. Yes. So primes_fib is [2]. Then a becomes 1, b becomes 2. Next current is 1 + 2 = 3. Check if 3 is prime. Yes. primes_fib is [2,3]. Then a becomes 2, b becomes 3. Next current is 2 + 3 = 5. Check if 5 is prime. Yes. primes_fib is [2,3,5]. Then a becomes 3, b becomes 5. Next current is 3 + 5 = 8. Not prime. Then a becomes 5, b becomes 8. Next current is 5 + 8 = 13. Prime. So primes_fib becomes [2,3,5,13]. Then a becomes 8, b becomes 13. Next current is 8 + 13 = 21. Not prime. Then a becomes 13, b becomes 21. Next current is 13 + 21 = 34. Not prime. Then a becomes 21, b becomes 34. Next current is 21 + 34 = 55. Not prime. Then a becomes 34, b becomes 55. Next current is 34 + 55 = 89. Prime. So primes_fib becomes [2,3,5,13,89]. So for n=5, returns 89. Which matches the test case.
+
+So the code would generate the correct list. But the code is generating the current as a + b, and then a and b are updated. So the code is generating the Fibonacci numbers in order, starting from the third term (1) as the first current. But the code is generating the current as 1, then 2, then 3, etc. So the code is correct.
+
+But the code as written would generate the current as a + b, and then a and b are updated. However, the initial a and b are 0 and 1. So the first current is 0 + 1 = 1. Then a becomes 1, b becomes 1. Then current is 1 + 1 = 2. Then a becomes 1, b becomes 2. Then current is 1 + 2 = 3. Then a becomes 2, b becomes 3. Then current is 2 + 3 = 5. So the code is generating the Fibonacci numbers correctly.
+
+But the code is generating the current as a + b, and then a and b are updated. So the code is generating the next term. So the code is correct.
+
+So the code would generate the current terms, check if they are primes, and collect them. Then, the primes_fib list is built. The loop continues until the length of primes_fib is at least n. Then return primes_fib[n-1].
+
+But how to generate the terms. The code would need to generate the terms until the primes_fib list has at least n elements. So the code would have a loop that continues until the primes_fib list has enough elements.
+
+But how to implement that. Let's think of the code:
+
+def prime_fib(n: int):
+
+    def is_prime(x):
+
+        if x < 2:
+
+            return False
+
+        for i in range(2, int(x**0.5) + 1):
+
+            if x % i == 0:
+
+                return False
+
+        return True
+
+    primes_fib = []
+
+    a, b = 0, 1
+
+    while len(primes_fib) < n:
+
+        current = a + b
+
+        if is_prime(current):
+
+            primes_fib.append(current)
+
+        a, b = b, current
+
+    return primes_fib[n-1]
+
+Wait, but let's test this code with the test cases.
+
+For n=1, the loop runs until primes_fib has 1 element.
+
+Let's see:
+
+Initially, primes_fib is empty.
+
+Loop:
+
+current = 0 + 1 = 1. is_prime(1) is False. primes_fib remains empty.
+
+a becomes 1, b becomes 1.
+
+Loop again: len(primes_fib) is 0 < 1.
+
+current = 1 + 1 = 2. is_prime(2) is True. primes_fib becomes [2]. Now len is 1, so loop stops. return primes_fib[0] → 2. Correct.
+
+For n=2:
+
+primes_fib is [2]. Then loop continues.
+
+current is 1 + 2 = 3. is_prime(3) → yes. primes_fib becomes [2,3]. len is 2. return 3. Correct.
+
+n=3: primes_fib is [2,3]. Then current is 2 + 3 = 5. is_prime(5) → yes. primes_fib becomes [2,3,5]. return 5. Correct.
+
+n=4: primes_fib is [2,3,5]. Then current is 3 + 5 = 8. Not prime. primes_fib remains. Then a becomes 5, b becomes 8. Next current is 5 + 8 = 13. is_prime(13) → yes. primes_fib becomes [2,3,5,13]. return 13. Correct.
+
+n=5: primes_fib is [2,3,5,13]. Then current is 8 + 13 = 21. Not prime. Then a becomes 13, b becomes 21. Next current is 13 + 21 = 34. Not prime. Then a becomes 21, b becomes 34. Next current is 21 + 34 = 55. Not prime. Then a becomes 34, b becomes 55. Next current is 34 + 55 = 89. is_prime(89) → yes. primes_fib becomes [2,3,5,13,89]. return 89. Correct.
+
+So the code seems to work for the test cases.
+
+But wait, what about the initial terms? For example, the first current is 1, which is not prime. Then the next current is 2, which is prime. So the code is correct.
+
+But what about the Fibonacci numbers that are primes but are generated later? For example, 233 is a Fibonacci prime. But the code would generate it when it comes up.
+
+But the code is generating the Fibonacci numbers in order, checking each for primality, and collecting them. So the code should work.
+
+But what about the initial a and b? Let's think: the code starts with a=0, b=1. Then current is a + b = 1. Then a becomes 1, b becomes 1. Then current is 1 + 1 = 2. Then a becomes 1, b becomes 2. Then current is 1 + 2 = 3. Then a becomes 2, b becomes 3. Then current is 2 + 3 = 5. Then a becomes 3, b becomes 5. Then current is 3 + 5 = 8. Then a becomes 5, b becomes 8. Then current is 5 + 8 = 13. Then a becomes 8, b becomes 13. Then current is 8 + 13 = 21. Then a becomes 13, b becomes 21. Then current is 13 + 21 = 34. Then a becomes 21, b becomes 34. Then current is 21 + 34 = 55. Then a becomes 34, b becomes 55. Then current is 34 + 55 = 89. Then a becomes 55, b becomes 89. Then current is 55 + 89 = 144. Not prime. Then a becomes 89, b becomes 144. Then current is 89 + 144 = 233. Which is a prime. So for n=6, the code would return 233.
+
+So the code is correct.
+
+But what about the initial terms? For example, the first Fibonacci number is 0, which is not prime. The second is 1, not prime. Third is 1, not prime. Fourth is 2, which is prime. So the code is correct.
+
+So the code seems to work.
+
+Now, the code for the helper function is_prime. Let's think about the edge cases. For x=2, it returns True. For x=1, returns False. For x=0, returns False. For x=3, returns True. For x=4, returns False. For x=5, returns True. So the helper function is correct.
+
+But what about when x is 2? The loop in is_prime would run from 2 to sqrt(2) which is ~1.414. So the range is 2 to 1 + 1 = 2. So the range is 2 to 2, which is not executed. So returns True. Correct.
+
+Another case: x=9. sqrt(9) is 3. So the loop runs from 2 to 3. i=2: 9%2 is 1. i=3: 9%3 is 0. So returns False. Correct.
+
+So the helper function is correct.
+
+Now, the code for the function prime_fib. But the code as written may have a problem. Because the loop is while len(primes_fib) < n. So for example, if the code is generating the current terms, but the primes_fib list may not have enough elements. So the loop continues until it has n elements.
+
+But what if the code is generating the current terms, but the primes_fib list is not filled yet. For example, for n=5, the code would generate until the primes_fib has 5 elements.
+
+But the code is correct.
+
+So the code should work.
+
+Now, the code as written is:
+
+def prime_fib(n: int):
+    def is_prime(x):
+        if x < 2:
+            return False
+        for i in range(2, int(x**0.5) + 1):
+            if x % i == 0:
+                return False
+        return True
+    primes_fib = []
+    a, b = 0, 1
+    while len(primes_fib) < n:
+        current = a + b
+        if is_prime(current):
+            primes_fib.append(current)
+        a, b = b, current
+    return primes_fib[n-1]
+
+But wait, the code is generating current as a + b. But the initial a and b are 0 and 1. So the first current is 1. Then a and b are updated to 1 and 1. Then current is 2. Then a and b are 1 and 2. Then current is 3. Then a and b are 2 and 3. Then current is 5. Then a and b are 3 and 5. Then current is 8. Then a and b are 5 and 8. Then current is 13. So the code is generating the Fibonacci numbers correctly.
+
+But the code is generating the current as a + b, and then a and b are updated. So the code is correct.
+
+But what about the first term (0) and the second term (1)? The code is not considering them. But since they are not primes, they are not added to the primes_fib list. So the code is correct.
+
+So the code should work.
+
+Testing the test cases:
+
+prime_fib(1) → returns 2. Correct.
+
+prime_fib(2) → returns 3. Correct.
+
+prime_fib(3) → returns 5. Correct.
+
+prime_fib(4) → returns 13. Correct.
+
+prime_fib(5) → returns 89. Correct.
+
+So the code should pass the test cases.
+
+But wait, in the code, the first current is 1 (a=0, b=1). Then a and b are updated to 1 and 1. Then current is 2. So the code is generating the current as 1, then 2, then 3, etc. So the primes_fib list is built correctly.
+
+But what about the first Fibonacci number (0) and the second (1)? They are not primes, so they are not added. So the code is correct.
+
+Thus, the code should be correct.
+</think>
+
+To solve the problem of finding the `n`-th Fibonacci number that is also a prime, we need to generate Fibonacci numbers in sequence and check each for primality. The key is to generate the Fibonacci sequence and filter out the primes, then return the `n`-th such prime.
+
+---
+
+### ✅ Key Steps
+
+1. **Generate Fibonacci Numbers**: Start with the first two Fibonacci numbers (0 and 1), and generate subsequent numbers by summing the previous two.
+2. **Check for Primality**: For each generated Fibonacci number, check if it is a prime number.
+3. **Collect Primes**: Maintain a list of Fibonacci numbers that are also prime.
+4. **Return the n-th Prime**: Once the list has at least `n` elements, return the `n`-th element (index `n-1`).
+
+---
+
+### 🧠 Helper Function: `is_prime`
+
+This function checks whether a number is prime by testing divisibility up to the square root of the number.
+
+---
+
+### 🧩 Implementation
+
+```python
+def prime_fib(n: int):
+    """
+    Returns the n-th Fibonacci number that is also a prime.
+    
+    >>> prime_fib(1)
+    2
+    >>> prime_fib(2)
+    3
+    >>> prime_fib(3)
+    5
+    >>> prime_fib(4)
+    13
+    >>> prime_fib(5)
+    89
+    """
+    def is_prime(x):
+        if x < 2:
+            return False
+        for i in range(2, int(x**0.5) + 1):
+            if x % i == 0:
+                return False
+        return True
+
+    primes_fib = []
+    a, b = 0, 1
+
+    while len(primes_fib) < n:
+        current = a + b
+        if is_prime(current):
+            primes_fib.append(current)
+        a, b = b, current
+
+    return primes_fib[n - 1]
+```
+
+---
+
+### 🧪 Example Execution
+
+For `n = 5`, the function will generate the Fibonacci sequence and check each number for primality. The first five Fibonacci primes are:
+
+- 2 (Fibonacci index 4)
+- 3 (Fibonacci index 5)
+- 5 (Fibonacci index 6)
+- 13 (Fibonacci index 8)
+- 89 (Fibonacci index 12)
+
+Thus, `prime_fib(5)` returns `89`.
+
+---
+
+### ✅ Conclusion
+
+This implementation efficiently generates Fibonacci numbers and filters out the primes, ensuring that the `n`-th prime Fibonacci number is returned correctly. The code is both readable and efficient for the given problem constraints.
+
+===== VISIBLE FINAL OUTPUT =====
+To solve the problem of finding the `n`-th Fibonacci number that is also a prime, we need to generate Fibonacci numbers in sequence and check each for primality. The key is to generate the Fibonacci sequence and filter out the primes, then return the `n`-th such prime.
+
+---
+
+### ✅ Key Steps
+
+1. **Generate Fibonacci Numbers**: Start with the first two Fibonacci numbers (0 and 1), and generate subsequent numbers by summing the previous two.
+2. **Check for Primality**: For each generated Fibonacci number, check if it is a prime number.
+3. **Collect Primes**: Maintain a list of Fibonacci numbers that are also prime.
+4. **Return the n-th Prime**: Once the list has at least `n` elements, return the `n`-th element (index `n-1`).
+
+---
+
+### 🧠 Helper Function: `is_prime`
+
+This function checks whether a number is prime by testing divisibility up to the square root of the number.
+
+---
+
+### 🧩 Implementation
+
+```python
+def prime_fib(n: int):
+    """
+    Returns the n-th Fibonacci number that is also a prime.
+    
+    >>> prime_fib(1)
+    2
+    >>> prime_fib(2)
+    3
+    >>> prime_fib(3)
+    5
+    >>> prime_fib(4)
+    13
+    >>> prime_fib(5)
+    89
+    """
+    def is_prime(x):
+        if x < 2:
+            return False
+        for i in range(2, int(x**0.5) + 1):
+            if x % i == 0:
+                return False
+        return True
+
+    primes_fib = []
+    a, b = 0, 1
+
+    while len(primes_fib) < n:
+        current = a + b
+        if is_prime(current):
+            primes_fib.append(current)
+        a, b = b, current
+
+    return primes_fib[n - 1]
+```
+
+---
+
+### 🧪 Example Execution
+
+For `n = 5`, the function will generate the Fibonacci sequence and check each number for primality. The first five Fibonacci primes are:
+
+- 2 (Fibonacci index 4)
+- 3 (Fibonacci index 5)
+- 5 (Fibonacci index 6)
+- 13 (Fibonacci index 8)
+- 89 (Fibonacci index 12)
+
+Thus, `prime_fib(5)` returns `89`.
+
+---
+
+### ✅ Conclusion
+
+This implementation efficiently generates Fibonacci numbers and filters out the primes, ensuring that the `n`-th prime Fibonacci number is returned correctly. The code is both readable and efficient for the given problem constraints.
+
+===== EXTRACTED CANDIDATE CODE =====
+def prime_fib(n: int):
+    """
+    Returns the n-th Fibonacci number that is also a prime.
+    
+    >>> prime_fib(1)
+    2
+    >>> prime_fib(2)
+    3
+    >>> prime_fib(3)
+    5
+    >>> prime_fib(4)
+    13
+    >>> prime_fib(5)
+    89
+    """
+    def is_prime(x):
+        if x < 2:
+            return False
+        for i in range(2, int(x**0.5) + 1):
+            if x % i == 0:
+                return False
+        return True
+
+    primes_fib = []
+    a, b = 0, 1
+
+    while len(primes_fib) < n:
+        current = a + b
+        if is_prime(current):
+            primes_fib.append(current)
+        a, b = b, current
+
+    return primes_fib[n - 1]

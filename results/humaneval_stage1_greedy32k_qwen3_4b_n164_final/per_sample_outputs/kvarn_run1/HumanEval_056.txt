@@ -1,0 +1,206 @@
+sample_id: HumanEval/56
+mode: kvarn
+run_name: kvarn_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 133
+output_tokens: 1144
+output_cap_fraction: 0.034912
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 1010
+final_tokens: 134
+latency_seconds: 14.775740623474121
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def correct_bracketing(brackets: str):
+    """ brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write a Python function called correct_bracketing that checks if every opening bracket has a corresponding closing bracket. The input is a string of '<' and '>'. The function should return True if the brackets are correctly balanced, otherwise False. Let's think about how to approach this.
+
+Hmm, the problem seems similar to checking if a string of parentheses is valid. In those problems, a common approach is to use a stack. For each character in the string, if it's an opening bracket, push it onto the stack. If it's a closing bracket, check if the stack is not empty and the top element is an opening bracket. If so, pop the stack. Otherwise, return False. At the end, the stack should be empty for it to be valid.
+
+Wait, but in this case, the brackets are '<' and '>'. So, maybe the same logic applies. Let's think: each '<' is an opening bracket, and '>' is a closing. So, for the string to be correct, every '>' must have a corresponding '<' before it. So, the stack approach should work here.
+
+Let me think about the test cases. For example, the first test case is "<", which is just one opening bracket. Since there's no closing, it's False. The second test case is "<>", which is one opening and one closing. The stack would push '<', then when we see '>', we pop, leaving the stack empty. So return True.
+
+Another test case is "<<><>>". Let's break it down. The string is '<', '<', '>', '<', '>', '>'. Let's track the stack:
+
+- First '<' is pushed. Stack: ['<']
+- Second '<' is pushed. Stack: ['<', '<']
+- Third '>' is encountered. Pop the top '<', stack becomes ['<']
+- Fourth '<' is pushed. Stack: ['<', '<']
+- Fifth '>' is encountered. Pop, stack becomes ['<']
+- Sixth '>' is encountered. Pop, stack is empty. So returns True.
+
+Another test case is "><<>>". Wait, the third example is "><<>>", which is the fourth test case. Let's see: the string is '>', '<', '<', '>', '>'. Let's process:
+
+- First character is '>', which is a closing bracket. The stack is empty, so return False. So the function returns False, which matches the test case.
+
+So the stack approach should work here.
+
+So the plan is:
+
+Initialize a stack (could be a list in Python). Iterate through each character in the brackets string.
+
+For each character:
+
+- If it's '<', append to stack.
+- If it's '>', check if the stack is not empty. If it's empty, return False. Otherwise, pop the top element.
+
+After processing all characters, check if the stack is empty. If yes, return True; else, False.
+
+Wait, but in the case where there are more closing brackets than opening ones, the stack would be empty before processing all characters. For example, in the case of ">", the stack is empty, so return False.
+
+So implementing this logic.
+
+Now, let's code this.
+
+The function correct_bracketing takes a string brackets. Let's code:
+
+def correct_bracketing(brackets: str):
+    stack = []
+    for char in brackets:
+        if char == '<':
+            stack.append(char)
+        else:
+            if not stack:
+                return False
+            stack.pop()
+    return not stack
+
+Wait, that's the core logic. Let me test this against the test cases.
+
+Test case 1: correct_bracketing("<") → stack is ['<'], returns not stack → False. Correct.
+
+Test case 2: "<>" → stack after processing: first '<' is added. Then '>', so pop. Stack is empty. Return not stack → True. Correct.
+
+Third test case: "<<><>>" → process each character:
+
+First '<' → stack [ '<' ]
+
+Second '<' → stack ['<', '<']
+
+Third '>' → pop → stack ['<']
+
+Fourth '<' → stack ['<', '<']
+
+Fifth '>' → pop → stack ['<']
+
+Sixth '>' → pop → stack empty. Return True. Correct.
+
+Fourth test case: "><<>>" → first character is '>', stack is empty → return False. Correct.
+
+Another test case: "<<<>>>" → stack would be filled with three '<', then three '>', popping each. Stack is empty. Return True.
+
+Another case: ">>><<<" → first two '>' would cause return False.
+
+So this logic seems correct.
+
+So the code should be as written. Let me check the docstring. The function is supposed to return True if every opening bracket has a corresponding closing bracket. So the code should work.
+
+So the final code is as above. Let me write that.
+</think>
+
+```python
+def correct_bracketing(brackets: str):
+    """ brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+    stack = []
+    for char in brackets:
+        if char == '<':
+            stack.append(char)
+        else:
+            if not stack:
+                return False
+            stack.pop()
+    return not stack
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+def correct_bracketing(brackets: str):
+    """ brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+    stack = []
+    for char in brackets:
+        if char == '<':
+            stack.append(char)
+        else:
+            if not stack:
+                return False
+            stack.pop()
+    return not stack
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+def correct_bracketing(brackets: str):
+    """ brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+    stack = []
+    for char in brackets:
+        if char == '<':
+            stack.append(char)
+        else:
+            if not stack:
+                return False
+            stack.pop()
+    return not stack

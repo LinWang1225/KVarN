@@ -1,0 +1,675 @@
+sample_id: HumanEval/147
+mode: fp16
+run_name: fp16_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 209
+output_tokens: 5999
+output_cap_fraction: 0.183075
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 5099
+final_tokens: 900
+latency_seconds: 74.0251009836793
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+def get_max_triples(n):
+    """
+    You are given a positive integer n. You have to create an integer array a of length n.
+        For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+        Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
+    and a[i] + a[j] + a[k] is a multiple of 3.
+
+    Example :
+        Input: n = 5
+        Output: 1
+        Explanation: 
+        a = [1, 3, 7, 13, 21]
+        The only valid triple is (1, 7, 13).
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to solve this problem where I have to find the number of triples (a[i], a[j], a[k]) in an array such that their sum is a multiple of 3. The array is generated with a[i] = i*i -i +1. Let me think about how to approach this.
+
+First, let me understand the problem. For a given n, generate the array a where each element is calculated as i² -i +1. Then, count all possible triples (i<j<k) where the sum of a[i], a[j], a[k] is divisible by 3.
+
+The example given is n=5. The array is [1,3,7,13,21]. The only valid triple is (1,7,13) which sums to 21, divisible by 3. So the output is 1.
+
+So the challenge is to compute this efficiently, especially for larger n. Since the brute-force approach of checking all possible triples would be O(n^3), which is not feasible for large n (like n=1e5 or something), but maybe the constraints here are manageable? Wait, the problem doesn't specify the constraints on n. But given that the example is small, perhaps the intended solution is to find a mathematical pattern based on the residues modulo 3 of the elements.
+
+Because when considering the sum of three numbers modulo 3, the possible combinations that sum to 0 mod 3 are:
+
+- All three are 0 mod 3.
+- All three are 1 mod 3 (since 1+1+1=3 ≡0 mod3).
+- All three are 2 mod 3 (since 2+2+2=6 ≡0 mod3).
+- Or one of each: 0,1,2 mod3.
+
+So the total number of valid triples is the sum of the counts of these four cases.
+
+So the plan is:
+
+1. For each element in the array, compute its value mod 3. Then count how many elements are in each residue class (0, 1, 2).
+
+2. Then compute the number of valid triples based on the counts of each residue.
+
+But how to compute the counts?
+
+Let me think. Let's denote:
+
+count0 = number of elements with a[i] ≡0 mod3.
+
+count1 = number of elements with a[i] ≡1 mod3.
+
+count2 = number of elements with a[i] ≡2 mod3.
+
+Then the total number of valid triples is:
+
+number of triples with all 0s: C(count0, 3)
+
+plus number of triples with all 1s: C(count1, 3)
+
+plus number of triples with all 2s: C(count2, 3)
+
+plus the number of triples with one of each residue: count0 * count1 * count2.
+
+So the problem reduces to calculating these four terms and summing them.
+
+But wait, how do I compute the residues of a[i] mod3?
+
+Let me find a[i] mod3. Since a[i] = i² -i +1.
+
+Let me compute this for i from 1 to n.
+
+But perhaps there's a pattern in the residues. Let's see.
+
+Let me compute a[i] mod3 for i mod3.
+
+Let me consider i mod3. Let me compute for i=1,2,3,4,5,6, etc.
+
+For i mod3:
+
+Case 1: i ≡0 mod3. Let i=3k.
+
+Then a[i] = (3k)^2 -3k +1 = 9k² -3k +1. Mod3, this is 0 -0 +1 = 1 mod3. So residue 1.
+
+Case 2: i ≡1 mod3. Let i=3k+1.
+
+a[i] = (3k+1)^2 - (3k+1) +1 = 9k² +6k +1 -3k -1 +1 = 9k² +3k +1. Mod3, this is 0 +0 +1 = 1 mod3. So residue 1.
+
+Case3: i ≡2 mod3. Let i=3k+2.
+
+a[i] = (3k+2)^2 - (3k+2) +1 = 9k² +12k +4 -3k -2 +1 = 9k² +9k +3. Mod3, this is 0 +0 +0 = 0 mod3. So residue 0.
+
+Wait, that's interesting. So for i mod3:
+
+If i mod3 is 0 or 1, then a[i] mod3 is 1.
+
+If i mod3 is 2, then a[i] mod3 is 0.
+
+Wait, let me check with the example given.
+
+In the example, n=5. The array is [1,3,7,13,21].
+
+Let me compute each a[i] mod3:
+
+i=1: 1 mod3 is 1. a[1] is 1 → 1 mod3. Correct.
+
+i=2: 3 → 0 mod3. But according to the above, i=2 mod3 is 2, so residue 0. Correct.
+
+i=3: 7 mod3 is 1. Because 7/3 is 2*3=6, 7-6=1. So yes. i=3 mod3 is 0. According to the earlier analysis, i mod3 is 0 → residue 1. Correct.
+
+i=4: 13 mod3 is 1 (since 12 is 0 mod3, 13 is 1). i=4 mod3 is 1. So residue 1. Correct.
+
+i=5: 21 mod3 is 0. i=5 mod3 is 2. So residue 0. Correct.
+
+So the residues for the example are:
+
+i=1: 1 → residue 1.
+
+i=2: 0 → residue 0.
+
+i=3: 1 → residue 1.
+
+i=4: 1 → residue 1.
+
+i=5: 0 → residue 0.
+
+So the counts for residues are:
+
+count0 = 2 (i=2 and 5)
+
+count1 = 3 (i=1,3,4)
+
+count2 = 0.
+
+So the valid triples are:
+
+all 0s: C(2,3) = 0.
+
+all 1s: C(3,3) = 1.
+
+all 2s: 0.
+
+one of each: 2*3*0=0.
+
+Total is 1, which matches the example. So the approach is correct.
+
+So the key is to compute count0, count1, count2 based on the residues of the elements.
+
+Now, how to compute count0, count1, count2 for a given n.
+
+As per the analysis, for each i from 1 to n:
+
+if i mod3 is 0 or 1 → residue 1.
+
+if i mod3 is 2 → residue 0.
+
+So for each i, the residue is:
+
+residue = 1 if i mod3 is 0 or 1, else 0.
+
+Wait, but for i mod3 is 0 or 1, the residue is 1. For i mod3 is 2, residue is 0.
+
+So how many numbers in 1..n have i mod3 = 0, 1, 2?
+
+Let me think. For numbers from 1 to n:
+
+The count of numbers congruent to 0 mod3 is floor(n/3) if n mod3 is 0, else floor(n/3).
+
+Wait, more accurately, the count of numbers ≡0 mod3 is (n - (n%3))//3.
+
+Similarly for numbers ≡1 mod3: it's (n + 2 - (n%3))//3 ?
+
+Alternatively, for each residue:
+
+count0 = number of i in 1..n where i mod3 == 0.
+
+count1 = number of i in 1..n where i mod3 == 1.
+
+count2 = number of i in 1..n where i mod3 == 2.
+
+But for the residues of a[i], we have:
+
+for each i:
+
+if i mod3 is 0 or 1 → residue 1.
+
+if i mod3 is 2 → residue 0.
+
+So the count of elements with residue 1 is count0_i + count1_i, where count0_i is the count of i mod3=0, count1_i is count of i mod3=1.
+
+Wait, no. For each i, the residue of a[i] is 1 if i mod3 is 0 or 1. So the total count of elements with residue 1 is (count0_i + count1_i). And the count of elements with residue 0 is count2_i.
+
+So for the counts:
+
+count0 = count2_i (number of i's where i mod3 is 2).
+
+count1 = count0_i + count1_i.
+
+count2 = 0? Wait, no. Wait, the residues for a[i] are 0 or 1. So the count of elements with residue 0 is count2_i (number of i's where i mod3 is 2). The count of elements with residue 1 is count0_i + count1_i (number of i's where i mod3 is 0 or 1).
+
+So for the problem, the residues of a[i] are:
+
+residue 0: count2_i.
+
+residue 1: count0_i + count1_i.
+
+residue 2: 0.
+
+So, for the counts:
+
+count0 = count2_i.
+
+count1 = count0_i + count1_i.
+
+count2 = 0.
+
+Wait, but that's not possible. Because for the residues of a[i], there are only 0 and 1. So the count of residue 2 is zero. So the four cases for the triples are:
+
+- All three residues 0: C(count0, 3).
+
+- All three residues 1: C(count1, 3).
+
+- All three residues 2: 0.
+
+- One of each: count0 * count1 * count2 (which is zero).
+
+So the total is C(count0,3) + C(count1,3).
+
+But wait, in the example, count0 is 2 (i=2 and 5), count1 is 3 (i=1,3,4). So the total is C(2,3) + C(3,3) = 0 +1=1. Which is correct.
+
+So the problem reduces to calculating count0 and count1, which are the counts of i's where i mod3 is 2, and i's where i mod3 is 0 or 1.
+
+So how to compute count0 and count1?
+
+count0 is the number of i in 1..n where i mod3 is 2.
+
+count1 is the number of i in 1..n where i mod3 is 0 or 1.
+
+But count0 + count1 = n.
+
+So, for count0:
+
+count0 = floor((n + 1)/3) ?
+
+Wait, let's think. For numbers from 1 to n, how many are congruent to 2 mod3?
+
+Let me think of n as 3k + r, where r is 0,1,2.
+
+For example:
+
+If n=5, which is 3*1 + 2. So numbers congruent to 2 mod3 are 2,5 → count is 2.
+
+Which is (n + 1) // 3 ?
+
+(5+1)/3 = 2 → yes.
+
+Another example: n=3 → 3 is 3*1 +0. Numbers congruent to 2 mod3 are 2 → count is 1. (3+1)/3 = 1.333 → floor is 1. So yes.
+
+n=4: 3*1 +1. Numbers congruent to 2 mod3 are 2, 5? No, n=4. So 2 is 2 mod3. 5 is beyond. So count is 1. (4+1)/3 is 5/3=1.666 → floor is 1. Correct.
+
+Another example: n=2 → 2 mod3 is 2. So count is 1. (2+1)/3=1 → correct.
+
+n=6: 3*2 +0. Numbers congruent to 2 mod3 are 2,5 → count is 2. (6+1)/3=7/3=2.333 → floor is 2. Correct.
+
+So the formula for count0 is (n + 1) // 3 ?
+
+Wait, no. Wait, for n=3, (3+1)//3 is 4//3=1. Which is correct. For n=3, numbers congruent to 2 mod3 is 2 → count 1.
+
+Yes. So count0 is (n + 1) // 3 ?
+
+Wait, no. Let me think again. The number of numbers in 1..n congruent to 2 mod3 is equal to floor( (n - 2)/3 ) + 1 ?
+
+For example, n=5: (5-2)/3 = 1 → floor is 1. +1 → 2. Correct.
+
+n=2: (2-2)/3=0 → +1 → 1. Correct.
+
+n=3: (3-2)/3=0.333 → floor is 0 → +1 → 1. Correct.
+
+n=4: (4-2)/3=0.666 → floor 0 → +1 → 1. Correct.
+
+n=6: (6-2)/3=4/3=1.333 → floor 1 → +1 → 2. Correct.
+
+So the formula is floor( (n - 2)/3 ) + 1. Which is equivalent to (n + 1) // 3 ?
+
+Let me check for n=5: (5 +1)/3 = 2 → yes. For n=6: (6+1)/3=7/3=2.333 → floor is 2. Which is correct. So yes, count0 is (n +1) //3 ?
+
+Yes. Because (n -2) //3 +1 = (n -2 +3) //3 = (n +1) //3.
+
+So count0 = (n +1) //3.
+
+Wait, but for n=2, (2+1)//3 = 1 → correct.
+
+So count0 is (n +1) //3.
+
+Then count1 is the number of i's where i mod3 is 0 or 1. Which is n - count0.
+
+Because count0 is the number of i's where i mod3 is 2. So the rest are 0 or 1 mod3.
+
+So count1 = n - count0.
+
+So count0 = (n +1) //3.
+
+count1 = n - count0.
+
+So now, the problem is to compute the number of triples as:
+
+C(count0, 3) + C(count1, 3).
+
+But wait, what about the case where we have one of each residue? But according to our earlier analysis, there are no elements with residue 2. So that term is zero.
+
+So the total is C(count0,3) + C(count1,3).
+
+But wait, let me check with the example. For n=5, count0 is (5+1)//3 = 2. count1 is 5-2=3. So C(2,3) is 0, C(3,3) is 1. Total 1. Correct.
+
+Another example: let's take n=3. The array is [1,3,7]. a[1]=1, a[2]=3, a[3]=7. The residues are 1,0,1. So count0 is 1 (i=2), count1 is 2 (i=1,3). So the total is C(1,3) + C(2,3) = 0 + 0 = 0. But what is the actual number of valid triples?
+
+For n=3, the only possible triple is (1,3,7). Sum is 1+3+7=11. 11 mod3 is 2. So not a multiple of 3. So the answer is 0. Which matches the calculation.
+
+Another example: n=6. Let's compute count0 = (6+1)//3 = 7//3=2. count1=6-2=4. So C(2,3) is 0, C(4,3) is 4. So total is 4. Let's check.
+
+The array for n=6 is:
+
+i=1: 1 → 1 mod3.
+
+i=2: 3 → 0 mod3.
+
+i=3: 7 → 1 mod3.
+
+i=4: 13 → 1 mod3.
+
+i=5: 21 → 0 mod3.
+
+i=6: 37 → 37 mod3 is 1 (since 36 is 0 mod3). So residues are [1,0,1,1,0,1].
+
+count0 is 2 (i=2,5). count1 is 4 (i=1,3,4,6).
+
+So the valid triples are:
+
+all 0s: C(2,3) = 0.
+
+all 1s: C(4,3) =4.
+
+so total 4.
+
+But what about the other case? Are there any triples with one of each residue? Well, since there are no elements with residue 2, that term is zero. So the answer is 4.
+
+But let's check the actual possible triples. For example, the triples that are all 1s. How many are there? The elements with residue 1 are 1,3,4,6. So the number of triples is C(4,3) =4. So yes.
+
+So the formula seems correct.
+
+So the problem reduces to computing count0 and count1, then compute C(count0,3) + C(count1,3).
+
+But how to compute combinations. For C(k,3) = k*(k-1)*(k-2)/6, but only if k >=3. Else 0.
+
+So the code can be written as follows:
+
+def get_max_triples(n):
+    count0 = (n + 1) // 3
+    count1 = n - count0
+    # compute C(count0,3) + C(count1,3)
+    def comb3(k):
+        if k <3:
+            return 0
+        return k * (k-1) * (k-2) // 6
+    return comb3(count0) + comb3(count1)
+
+Wait, but let me test this with the example.
+
+For n=5, count0 is (5+1)//3 = 2. count1 is 5-2=3. comb3(2) is 0, comb3(3) is 1. So total 1. Correct.
+
+Another test case: n=3. count0 is (3+1)//3 = 1. count1 is 3-1=2. comb3(1) is 0, comb3(2) is 0. So total 0. Correct.
+
+Another test case: n=6. count0 is 7//3=2. count1 is 4. comb3(2) is 0, comb3(4) is 4. So total 4. Correct.
+
+Another test case: n=2. count0 is (2+1)//3=1. count1 is 1. comb3(1) is 0, comb3(1) is 0. So total 0. Which is correct.
+
+Another test case: n=4. count0 is (4+1)//3=1. count1 is 3. comb3(1) is 0, comb3(3) is 1. So total 1. Let's check.
+
+n=4: array is [1,3,7,13]. The possible triples are (1,3,7) sum 11 → 11 mod3 is 2. (1,3,13) sum 17 → 2. (1,7,13) sum 21 → 0. So that's one valid triple. So output is 1. Correct.
+
+So the code seems to work.
+
+But wait, what about when count0 is 3? For example, n=8. Let's compute count0 = (8+1)//3 = 3. count1 = 8-3=5. So comb3(3) is 1, comb3(5) is 10. So total 11.
+
+But let's check. For n=8, the residues are:
+
+i from 1 to 8:
+
+i mod3:
+
+1 → 1 → residue 1.
+
+2 → 2 → residue 0.
+
+3 → 0 → residue 1.
+
+4 → 1 → residue 1.
+
+5 → 2 → residue 0.
+
+6 → 0 → residue 1.
+
+7 → 1 → residue 1.
+
+8 → 2 → residue 0.
+
+So count0 is 3 (i=2,5,8). count1 is 5 (i=1,3,4,6,7).
+
+So the number of triples is C(3,3) + C(5,3) = 1 + 10 = 11. Which is correct.
+
+So the code seems to work.
+
+So the code is as follows.
+
+But wait, the problem says that the array is of length n. So for n=5, the array is of length 5. So the code is correct.
+
+So the Python function can be written as:
+
+def get_max_triples(n):
+    """
+    You are given a positive integer n. You have to create an integer array a of length n.
+        For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+        Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
+    and a[i] + a[j] + a[k] is a multiple of 3.
+    """
+    count0 = (n + 1) // 3
+    count1 = n - count0
+    def comb3(k):
+        if k < 3:
+            return 0
+        return k * (k-1) * (k-2) // 6
+    return comb3(count0) + comb3(count1)
+
+But wait, let me check for n=0? But the problem says n is a positive integer. So no problem.
+
+But let me check for n=1. Then count0 is (1+1)//3=0. count1=1. So comb3(0) is 0, comb3(1) is 0. So returns 0. Which is correct, since there are no triples.
+
+Another test case: n=6. The code returns 4. Which is correct.
+
+So this should be the correct solution.
+
+But why is the code not considering the case where there are elements with residue 2? Because according to our analysis, there are none. Because for any i, a[i] mod3 is 0 or 1. So the code is correct.
+
+Thus, the code should work.
+</think>
+
+To solve the problem of counting the number of valid triples `(a[i], a[j], a[k])` such that their sum is divisible by 3, we can leverage the properties of modular arithmetic and combinatorics.
+
+---
+
+### **Problem Breakdown**
+
+Given a positive integer `n`, we are to construct an array `a` of length `n` where:
+
+```
+a[i] = i * i - i + 1
+```
+
+We are to count the number of **triples** `(i, j, k)` such that `i < j < k` and the sum `a[i] + a[j] + a[k]` is divisible by 3.
+
+---
+
+### **Key Observations**
+
+1. **Modular Pattern of `a[i]`**:
+   - For any `i`, the value of `a[i] % 3` can be determined based on `i % 3`.
+   - If `i % 3 == 0` or `i % 3 == 1`, then `a[i] % 3 == 1`.
+   - If `i % 3 == 2`, then `a[i] % 3 == 0`.
+
+2. **Residue Classes**:
+   - The sum of three numbers is divisible by 3 if:
+     - All three are congruent to 0 mod 3.
+     - All three are congruent to 1 mod 3.
+     - All three are congruent to 2 mod 3.
+     - One of each residue class (0, 1, 2).
+
+   However, based on the above pattern, **no element of `a` is congruent to 2 mod 3**. So the only valid combinations are:
+   - All three elements are congruent to 0 mod 3.
+   - All three elements are congruent to 1 mod 3.
+
+3. **Counting Elements by Residue**:
+   - Let `count0` be the number of elements in `a` that are congruent to 0 mod 3.
+   - Let `count1` be the number of elements in `a` that are congruent to 1 mod 3.
+
+   These can be computed as:
+   - `count0 = (n + 1) // 3`
+   - `count1 = n - count0`
+
+4. **Combinatorics**:
+   - The number of ways to choose 3 elements from `count0` is `C(count0, 3)`.
+   - The number of ways to choose 3 elements from `count1` is `C(count1, 3)`.
+
+   The total number of valid triples is the sum of these two values.
+
+---
+
+### **Python Implementation**
+
+```python
+def get_max_triples(n):
+    """
+    You are given a positive integer n. You have to create an integer array a of length n.
+        For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+        Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
+    and a[i] + a[j] + a[k] is a multiple of 3.
+    """
+    count0 = (n + 1) // 3
+    count1 = n - count0
+
+    def comb3(k):
+        if k < 3:
+            return 0
+        return k * (k - 1) * (k - 2) // 6
+
+    return comb3(count0) + comb3(count1)
+```
+
+---
+
+### **Example**
+
+For `n = 5`:
+
+- `count0 = (5 + 1) // 3 = 2`
+- `count1 = 5 - 2 = 3`
+- `C(2, 3) = 0`
+- `C(3, 3) = 1`
+- Total = `0 + 1 = 1`
+
+Which matches the expected output.
+
+---
+
+### **Time Complexity**
+
+- The function runs in **O(1)** time, as it only performs a few arithmetic operations and a constant number of combinatorial calculations.
+
+This solution is efficient and works for all valid values of `n`.
+
+===== VISIBLE FINAL OUTPUT =====
+To solve the problem of counting the number of valid triples `(a[i], a[j], a[k])` such that their sum is divisible by 3, we can leverage the properties of modular arithmetic and combinatorics.
+
+---
+
+### **Problem Breakdown**
+
+Given a positive integer `n`, we are to construct an array `a` of length `n` where:
+
+```
+a[i] = i * i - i + 1
+```
+
+We are to count the number of **triples** `(i, j, k)` such that `i < j < k` and the sum `a[i] + a[j] + a[k]` is divisible by 3.
+
+---
+
+### **Key Observations**
+
+1. **Modular Pattern of `a[i]`**:
+   - For any `i`, the value of `a[i] % 3` can be determined based on `i % 3`.
+   - If `i % 3 == 0` or `i % 3 == 1`, then `a[i] % 3 == 1`.
+   - If `i % 3 == 2`, then `a[i] % 3 == 0`.
+
+2. **Residue Classes**:
+   - The sum of three numbers is divisible by 3 if:
+     - All three are congruent to 0 mod 3.
+     - All three are congruent to 1 mod 3.
+     - All three are congruent to 2 mod 3.
+     - One of each residue class (0, 1, 2).
+
+   However, based on the above pattern, **no element of `a` is congruent to 2 mod 3**. So the only valid combinations are:
+   - All three elements are congruent to 0 mod 3.
+   - All three elements are congruent to 1 mod 3.
+
+3. **Counting Elements by Residue**:
+   - Let `count0` be the number of elements in `a` that are congruent to 0 mod 3.
+   - Let `count1` be the number of elements in `a` that are congruent to 1 mod 3.
+
+   These can be computed as:
+   - `count0 = (n + 1) // 3`
+   - `count1 = n - count0`
+
+4. **Combinatorics**:
+   - The number of ways to choose 3 elements from `count0` is `C(count0, 3)`.
+   - The number of ways to choose 3 elements from `count1` is `C(count1, 3)`.
+
+   The total number of valid triples is the sum of these two values.
+
+---
+
+### **Python Implementation**
+
+```python
+def get_max_triples(n):
+    """
+    You are given a positive integer n. You have to create an integer array a of length n.
+        For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+        Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
+    and a[i] + a[j] + a[k] is a multiple of 3.
+    """
+    count0 = (n + 1) // 3
+    count1 = n - count0
+
+    def comb3(k):
+        if k < 3:
+            return 0
+        return k * (k - 1) * (k - 2) // 6
+
+    return comb3(count0) + comb3(count1)
+```
+
+---
+
+### **Example**
+
+For `n = 5`:
+
+- `count0 = (5 + 1) // 3 = 2`
+- `count1 = 5 - 2 = 3`
+- `C(2, 3) = 0`
+- `C(3, 3) = 1`
+- Total = `0 + 1 = 1`
+
+Which matches the expected output.
+
+---
+
+### **Time Complexity**
+
+- The function runs in **O(1)** time, as it only performs a few arithmetic operations and a constant number of combinatorial calculations.
+
+This solution is efficient and works for all valid values of `n`.
+
+===== EXTRACTED CANDIDATE CODE =====
+def get_max_triples(n):
+    """
+    You are given a positive integer n. You have to create an integer array a of length n.
+        For each i (1 ≤ i ≤ n), the value of a[i] = i * i - i + 1.
+        Return the number of triples (a[i], a[j], a[k]) of a where i < j < k, 
+    and a[i] + a[j] + a[k] is a multiple of 3.
+    """
+    count0 = (n + 1) // 3
+    count1 = n - count0
+
+    def comb3(k):
+        if k < 3:
+            return 0
+        return k * (k - 1) * (k - 2) // 6
+
+    return comb3(count0) + comb3(count1)

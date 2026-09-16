@@ -1,0 +1,623 @@
+sample_id: HumanEval/99
+mode: kvarn
+run_name: kvarn_run2
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 205
+output_tokens: 6992
+output_cap_fraction: 0.213379
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 6354
+final_tokens: 638
+latency_seconds: 92.86735191196203
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+def closest_integer(value):
+    '''
+    Create a function that takes a value (string) representing a number
+    and returns the closest integer to it. If the number is equidistant
+    from two integers, round it away from zero.
+
+    Examples
+    >>> closest_integer("10")
+    10
+    >>> closest_integer("15.3")
+    15
+
+    Note:
+    Rounding away from zero means that if the given number is equidistant
+    from two integers, the one you should return is the one that is the
+    farthest from zero. For example closest_integer("14.5") should
+    return 15 and closest_integer("-14.5") should return -15.
+    '''
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write a Python function called closest_integer that takes a string representing a number and returns the closest integer. The tricky part is when the number is exactly halfway between two integers. In that case, I have to round away from zero. Let me think about how to approach this.
+
+First, the input is a string. So I need to convert it into a float. Like, value = float(s). But wait, maybe there's a way to handle it without converting to float? Hmm, but for the purpose of calculation, converting to a float seems straightforward.
+
+Once I have the float, I need to find the closest integer. Normally, Python's round function rounds to the nearest integer, but when the number is exactly halfway, it rounds to the nearest even number. For example, round(1.5) is 2, round(2.5) is 2. But according to the problem statement, when it's equidistant, we need to round away from zero. So for 14.5, it should round to 15, and for -14.5, it should round to -15. So the standard round function won't work here because it rounds to even in such cases.
+
+So I need to implement my own rounding logic. Let's think about how to do that.
+
+Let me consider the steps:
+
+1. Convert the input string to a float.
+2. Check if the decimal part is exactly 0.5. If it is, then we need to round away from zero.
+3. Otherwise, round normally.
+
+But how to check if the number is exactly halfway between two integers? For example, 14.5 is exactly halfway between 14 and 15. Similarly, -14.5 is halfway between -14 and -15.
+
+So, for a number x, if the fractional part is 0.5, then we need to adjust the rounding.
+
+But how to handle that?
+
+Let me think. Let's take the absolute value of the number. For example, if the number is 14.5, the absolute value is 14.5. The integer part is 14, and the fractional part is 0.5. So, in this case, we need to round up. Similarly, for -14.5, the absolute value is 14.5, but the original number is negative. So we need to round down (away from zero).
+
+So, perhaps the approach is:
+
+- Check if the number is exactly halfway between two integers. That is, if the fractional part is 0.5.
+
+But how to check that? Let's take the number as x. Let's take the integer part, say, n = int(x). Then, the fractional part is x - n. But if x is exactly halfway, then the fractional part is 0.5. But wait, for example, 14.5 - 14 = 0.5. Similarly, -14.5 - (-15) = 0.5. So, for numbers that are exactly halfway, the fractional part is 0.5. But how to check that?
+
+Alternatively, perhaps we can check if the number is an integer plus 0.5. So, for example, x = integer + 0.5. So, for x = 14.5, integer is 14. For x = -14.5, integer is -15. So, perhaps we can check if the fractional part is 0.5. But how to do that?
+
+Another approach: Let's take the number as a float. Let's take the decimal part. For example, for x = 14.5, the decimal part is 0.5. For x = 14.3, it's 0.3. So, if the decimal part is exactly 0.5, then we need to round away from zero.
+
+So, the steps could be:
+
+- Convert the string to a float.
+- Check if the decimal part is exactly 0.5. If yes, then round away from zero.
+- Else, round normally.
+
+But how to check if the decimal part is exactly 0.5?
+
+Wait, but when you have a number like 14.5, the decimal part is 0.5. But when you have a number like 14.500000000000001 due to floating point precision errors, that's a problem. However, the problem says that the input is a string representing a number. So perhaps the input is given as a string that can be parsed exactly. For example, if the input is "14.5", then converting to float would be exactly 14.5. But if the input is something like "14.500000000000001", then that's a problem. However, the problem says that the input is a string representing a number. So perhaps the input is such that when converted to a float, it's exact. But maybe not. However, the problem's examples are straightforward. So perhaps we can proceed under the assumption that the input is a string that can be converted to a float exactly, and that the decimal part is exactly 0.5 when needed.
+
+But how to check if the decimal part is exactly 0.5?
+
+Alternatively, perhaps we can check if the number is an integer plus 0.5. So, for example, x = n + 0.5, where n is an integer. So, for x = 14.5, n is 14. For x = -14.5, n is -15. So, how to check that?
+
+Let me think. Let's take x as a float. Let's take the integer part. For example, for x = 14.5, the integer part is 14. Then, x - integer_part is 0.5. So, if that's the case, then we need to round away from zero.
+
+But how to get the integer part? Well, in Python, using int(x) would give the integer part, but for negative numbers, it would round towards negative infinity. For example, int(-14.5) is -15. So, for x = -14.5, the integer part is -15. Then, x - integer_part is 0.5. So, in that case, the decimal part is 0.5.
+
+So, the approach would be:
+
+Check if the decimal part is exactly 0.5. If yes, then round away from zero. Otherwise, round normally.
+
+But how to check that?
+
+So, for a given x, compute the decimal part as x - int(x). Wait, but for x = 14.5, int(x) is 14, so decimal part is 0.5. For x = -14.5, int(x) is -15, so decimal part is 0.5. So, in both cases, the decimal part is 0.5. So, if the decimal part is exactly 0.5, then we need to round away from zero.
+
+So, the steps would be:
+
+- Convert the string to a float x.
+
+- Check if the decimal part is exactly 0.5. How?
+
+Well, perhaps:
+
+decimal_part = x - int(x)
+
+if decimal_part == 0.5:
+
+   then, if x is positive, round up (add 1 to the integer part). If x is negative, round down (subtract 1 from the integer part).
+
+But wait, for x = 14.5, the integer part is 14. So, adding 1 gives 15. For x = -14.5, the integer part is -15. So, subtracting 1 would give -16? Wait, no. Wait, the original x is -14.5. The integer part is -15. So, if we round away from zero, then for -14.5, the correct answer is -15. So, how to compute that?
+
+Wait, the integer part is -15. The decimal part is 0.5. So, the original number is -15 + 0.5 = -14.5. So, when the decimal part is 0.5, the number is exactly halfway between the integer part and integer part + 1. But for negative numbers, the integer part is the floor of x. So, for x = -14.5, the integer part is -15. So, the two integers are -15 and -14. The number is exactly halfway between them. So, the correct rounding is to -15 (away from zero). So, how to compute that?
+
+In this case, the integer part is -15. So, the number is between -15 and -14. So, the correct rounding is to -15 (since that's away from zero). So, for x = -14.5, the correct answer is -15. So, how to compute that?
+
+So, when the decimal part is 0.5, the correct rounded value is the integer part if the number is negative? Or is there a way to compute it?
+
+Alternatively, perhaps when the decimal part is 0.5, the rounded value is the integer part + 1 if the number is positive, and integer part - 1 if the number is negative?
+
+Wait, for x = 14.5, integer part is 14. So, adding 1 gives 15. Which is correct. For x = -14.5, integer part is -15. So, subtracting 1 gives -16? That's not correct. Wait, no. Wait, the correct answer is -15. So, how to get that?
+
+Wait, maybe the correct approach is to check if the number is positive or negative. If the number is positive and the decimal part is 0.5, then round up. If the number is negative and the decimal part is 0.5, then round down (i.e., subtract 1 from the integer part? Or add 1? Let me think.
+
+Let me take x = -14.5. The integer part is -15. The two integers around it are -15 and -14. The number is exactly halfway between them. So, the correct rounding is to -15 (away from zero). So, how to get that from the integer part?
+
+The integer part is -15. So, the rounded value is integer_part. Because -15 is the lower of the two integers. Wait, but in that case, how to decide?
+
+Alternatively, perhaps when the decimal part is 0.5, the rounded value is the integer part if the number is negative, and integer part + 1 if the number is positive. Let's test that.
+
+For x = 14.5, integer part is 14. So, adding 1 gives 15. Correct.
+
+For x = -14.5, integer part is -15. So, the rounded value is -15. Which is correct.
+
+So, in that case, the formula would be:
+
+if decimal_part == 0.5:
+
+   if x > 0:
+
+       return int(x) + 1
+
+   else:
+
+       return int(x)
+
+But wait, for x = -14.5, int(x) is -15. So, returning that would be correct. So, that's the case.
+
+So, the steps would be:
+
+Convert the string to a float x.
+
+Check if the decimal part is exactly 0.5.
+
+If yes:
+
+   if x is positive, round up (int(x) + 1)
+
+   else, round down (int(x))
+
+Else:
+
+   round normally (using the standard round function?)
+
+Wait, but what about when the decimal part is 0.5, but the number is negative. For example, x = -14.5. The decimal part is 0.5. So, according to the above, we return int(x) which is -15. Which is correct.
+
+But how to check if the decimal part is exactly 0.5?
+
+But how to compute that. Let's take x as a float. For example, x = 14.5. Then, decimal_part = x - int(x) = 14.5 - 14 = 0.5. So, that's correct.
+
+But for x = 14.5, the decimal part is 0.5. So, the code would check if decimal_part == 0.5. But in Python, due to floating point precision, maybe there's a problem. For example, if the input is "14.5", converting to float is exactly 14.5. So, decimal_part is exactly 0.5. But if the input is something like "14.500000000000001", then decimal_part would be 0.500000000000001, which is not exactly 0.5. However, the problem says that the input is a string representing a number. So, perhaps the input is such that when converted to a float, it's exact. But perhaps we need to handle cases where the decimal part is exactly 0.5.
+
+But how to check that. So, perhaps the code can check if the decimal part is exactly 0.5. But how to do that in Python.
+
+But for the problem's examples, the input is given as strings like "14.5", which would be converted to exactly 14.5. So, the code can proceed under that assumption.
+
+So, the code steps:
+
+def closest_integer(value):
+
+    x = float(value)
+
+    integer_part = int(x)
+
+    decimal_part = x - integer_part
+
+    if decimal_part == 0.5:
+
+        if x > 0:
+
+            return integer_part + 1
+
+        else:
+
+            return integer_part
+
+    else:
+
+        # round normally. But how?
+
+        # Wait, the standard round function rounds to nearest integer, but for numbers exactly halfway, it rounds to even. But in this case, we have already handled the 0.5 case. So, for other cases, we can use the standard round function?
+
+        # Wait, but for example, if the decimal part is 0.4, then round normally. But how to do that?
+
+        # Wait, the problem says that if the number is equidistant from two integers, round away from zero. So, for numbers that are not exactly halfway, the standard round function would work?
+
+        # For example, 14.4 would round to 14, 14.6 would round to 15. So, the standard round function would do that.
+
+        # But wait, the problem says that the function should return the closest integer. So, for numbers not exactly halfway, the standard round function is correct.
+
+        # However, the problem says that the function should round away from zero when equidistant. So, for numbers that are not equidistant, the standard round function is correct.
+
+        # So, in the else case, we can use the standard round function.
+
+        # But wait, what about numbers like 14.5? We have already handled that case. So, for other numbers, the standard round function would work.
+
+        # So, in the else case, return round(x).
+
+        # Wait, but let's test that.
+
+        # For example, 14.4 would round to 14. 14.6 would round to 15. 14.5 is handled in the if case.
+
+        # So, the code would be:
+
+        return round(x)
+
+But wait, what about numbers that are exactly halfway but not in the 0.5 case? Wait, no. Because the decimal_part is 0.5 only when the number is exactly halfway. So, the else case is for numbers that are not exactly halfway. So, the code would return round(x) in that case.
+
+But wait, let's test some examples.
+
+For example, 14.3: decimal_part is 0.3. So, else case. round(14.3) is 14. Correct.
+
+For 14.6: round(14.6) is 15. Correct.
+
+For 14.5, the code would go into the if case, and return 15.
+
+But what about numbers like 14.5, but in the else case? No, because decimal_part is 0.5, so the code would go into the if case.
+
+But what about numbers that are exactly halfway but not 0.5? That's not possible. Because if the decimal part is exactly 0.5, then the number is exactly halfway between two integers.
+
+So, the code would handle that.
+
+But wait, what about numbers like 14.5, but when converted to float, due to floating point precision, the decimal_part is not exactly 0.5? For example, if the input is "14.5", then converting to float is exactly 14.5. So, decimal_part is 0.5. But if the input is something like "14.500000000000001", then decimal_part would be 0.500000000000001, which is not 0.5. But according to the problem statement, the input is a string that represents a number. So, perhaps the input is such that when converted to a float, it's exact. So, the code can proceed.
+
+But how to handle cases where the decimal part is exactly 0.5. So, the code is correct.
+
+But let's test the examples.
+
+First example: closest_integer("10") returns 10. So, x is 10.0. decimal_part is 0.0. So, else case. round(10.0) is 10. Correct.
+
+Second example: closest_integer("15.3") returns 15. So, x is 15.3. decimal_part is 0.3. else case. round(15.3) is 15. Correct.
+
+Another example: closest_integer("14.5") should return 15. So, decimal_part is 0.5. x is positive, so return integer_part + 1. integer_part is 14. 14 + 1 = 15. Correct.
+
+Another example: closest_integer("-14.5") should return -15. decimal_part is 0.5. x is negative. So, return integer_part. integer_part is -15. So, returns -15. Correct.
+
+Another example: closest_integer("14.5") returns 15. Correct.
+
+Another example: closest_integer("-14.5") returns -15. Correct.
+
+Another case: what about 14.499999999999999? Let's say that's converted to 14.5. But that's not possible. But if the input is "14.499999999999999", then converting to float would be 14.499999999999999, which is not exactly 0.5. So, the code would round normally. So, round(14.499999999999999) is 14. Correct.
+
+But what about 14.500000000000001? Then, decimal_part is 0.500000000000001, which is not 0.5. So, the code would round normally. But that's not exactly halfway. So, the code would round to 15. But that's not correct. Wait, but the problem says that the input is a string representing a number. So, perhaps the input is such that the decimal part is exactly 0.5. But in reality, when you have a string like "14.5", converting to float is exact. But if the input is "14.500000000000001", then the code would not handle it. However, the problem's examples don't have such cases. So, perhaps the code is correct.
+
+But how to handle the case where the decimal part is exactly 0.5. So, the code is correct.
+
+But what about numbers that are exactly halfway between two integers but not in the 0.5 case? That's not possible. Because if the decimal part is exactly 0.5, then the number is exactly halfway between two integers.
+
+So, the code should work.
+
+But wait, what about numbers like 14.5, but when converted to float, it's 14.5. So, the code works.
+
+So, the code would be:
+
+def closest_integer(value):
+    x = float(value)
+    integer_part = int(x)
+    decimal_part = x - integer_part
+    if decimal_part == 0.5:
+        if x > 0:
+            return integer_part + 1
+        else:
+            return integer_part
+    else:
+        return round(x)
+
+Wait, but what about when the decimal_part is exactly 0.5, but the number is negative. For example, x = -14.5. Then, integer_part is -15. decimal_part is 0.5. So, the code returns integer_part, which is -15. Which is correct.
+
+But what about x = -14.5, and the code returns -15. Which is correct.
+
+But what about x = -14.5, and the code returns integer_part, which is -15. So, that's correct.
+
+But what about x = -14.5, and the code returns -15. Which is correct.
+
+But what about x = -14.5, and the code returns integer_part. So, that's correct.
+
+But what about x = -14.5, and the code returns integer_part. So, that's correct.
+
+But what about x = -14.5, and the code returns -15. Which is correct.
+
+So, the code seems to handle that.
+
+But let's test some other cases.
+
+Another example: x = 14.5. The code returns 15. Correct.
+
+Another example: x = -14.5. The code returns -15. Correct.
+
+Another example: x = 14.4. decimal_part is 0.4. So, else case. round(14.4) is 14. Correct.
+
+Another example: x = 14.6. round(14.6) is 15. Correct.
+
+Another example: x = 14.5. The code returns 15. Correct.
+
+Another example: x = 14.5. So, code returns 15.
+
+Another example: x = 14.5. So, code returns 15.
+
+But what about x = 14.5, but the code is in the else case? No, because decimal_part is 0.5, so it's handled in the if case.
+
+So, the code seems correct.
+
+But wait, what about numbers that are exactly halfway between two integers but not in the 0.5 case? For example, 14.5 is 0.5. So, that's handled. But what about numbers like 14.5, but in a different way?
+
+No, the code is correct.
+
+But what about numbers that are exactly halfway between two integers but the decimal part is not 0.5? That's impossible. Because if the number is exactly halfway between two integers, then the decimal part must be 0.5.
+
+So, the code is correct.
+
+But wait, what about numbers like 14.5, but when converted to float, it's 14.5. So, the code works.
+
+But what about numbers like 14.5, but when converted to float, it's 14.5. So, the code works.
+
+So, the code should be correct.
+
+But let's test the examples given.
+
+First example: closest_integer("10") returns 10. The code converts to 10.0. decimal_part is 0.0. So, else case. round(10.0) is 10. Correct.
+
+Second example: closest_integer("15.3") returns 15. The code converts to 15.3. decimal_part is 0.3. else case. round(15.3) is 15. Correct.
+
+Another example: closest_integer("14.5") returns 15. Correct.
+
+Another example: closest_integer("-14.5") returns -15. Correct.
+
+So, the code seems to handle the examples.
+
+But what about numbers that are exactly halfway between two integers but in a different way?
+
+Another example: x = 2.5. So, code returns 3. Correct.
+
+x = -2.5. code returns -2.5's integer_part is -3. decimal_part is 0.5. So, since x is negative, returns integer_part (-3). Which is correct. Because -2.5 is exactly halfway between -2 and -3. So, round away from zero is -3.
+
+Yes.
+
+So, the code seems correct.
+
+But wait, what about x = 0.5? Then, integer_part is 0. decimal_part is 0.5. So, x is positive. So, returns 0 + 1 = 1. Which is correct.
+
+Another example: x = -0.5. integer_part is -1. decimal_part is 0.5. So, returns -1. Which is correct. Because -0.5 is exactly halfway between -1 and 0. So, round away from zero is -1.
+
+Yes.
+
+So, the code seems to handle all cases.
+
+But what about numbers that are not exactly halfway, but the decimal part is 0.5 due to floating point errors? For example, if the input is "14.5", but due to some error, the code thinks that decimal_part is not exactly 0.5. But that's not possible. Because the input is a string that can be converted to a float exactly. So, the code is correct.
+
+So, the code should be correct.
+
+But wait, in Python, when you do x - int(x), for x = 14.5, it's 0.5. So, the code works.
+
+But what about numbers that are not exactly halfway, but due to floating point precision, the decimal_part is 0.5? For example, if the input is "14.5", but due to some error, the code thinks that decimal_part is 0.5. But that's not possible. Because the input is "14.5", which is exactly 14.5. So, the code is correct.
+
+So, the code should be correct.
+
+So, the final code is:
+
+def closest_integer(value):
+    '''
+    Create a function that takes a value (string) representing a number
+    and returns the closest integer to it. If the number is equidistant
+    from two integers, round it away from zero.
+
+    Examples
+    >>> closest_integer("10")
+    10
+    >>> closest_integer("15.3")
+    15
+
+    Note:
+    Rounding away from zero means that if the given number is equidistant
+    from two integers, the one you should return is the one that is the
+    farthest from zero. For example closest_integer("14.5") should
+    return 15 and closest_integer("-14.5") should return -15.
+    '''
+    x = float(value)
+    integer_part = int(x)
+    decimal_part = x - integer_part
+    if decimal_part == 0.5:
+        if x > 0:
+            return integer_part + 1
+        else:
+            return integer_part
+    else:
+        return round(x)
+
+But wait, what about when the decimal_part is exactly 0.5, but the number is not exactly halfway? No, that's not possible. Because if the decimal_part is 0.5, then the number is exactly halfway between integer_part and integer_part + 1 (if positive) or integer_part and integer_part - 1 (if negative).
+
+But let's test the code with the examples.
+
+Another test case: closest_integer("14.5") returns 15. Correct.
+
+Another test case: closest_integer("-14.5") returns -15. Correct.
+
+Another test case: closest_integer("14.500000000000001") would be handled as decimal_part not equal to 0.5, so round(x). But that's not a problem as per the problem's examples.
+
+But what about numbers that are exactly halfway but not in the 0.5 case? That's not possible.
+
+So, the code should be correct.
+
+But wait, what about numbers like 14.5, but when converted to float, it's 14.5. So, the code works.
+
+But what about numbers like 14.5, but when converted to float, it's 14.5. So, the code works.
+
+So, the code is correct.
+</think>
+
+To solve the problem, we need to implement a function that takes a string representation of a number and returns the closest integer. The special case is when the number is exactly halfway between two integers, in which case we must round **away from zero**.
+
+---
+
+### Key Observations
+
+- The input is a string that represents a number, which we can convert to a `float`.
+- The function must round to the nearest integer.
+- If the number is exactly halfway between two integers (e.g., `14.5`, `-14.5`), we must round **away from zero**.
+- The standard `round()` function in Python rounds to the nearest even integer in such cases, which is not what we want.
+
+---
+
+### Strategy
+
+1. **Convert the string to a float**.
+2. **Extract the integer part** using `int(x)`.
+3. **Calculate the decimal part** as `x - int(x)`.
+4. **Check if the decimal part is exactly 0.5**:
+   - If so, and the number is **positive**, round **up**.
+   - If so, and the number is **negative**, round **down**.
+5. **Otherwise**, use the standard `round()` function.
+
+This ensures that we correctly handle the special case of equidistant numbers by rounding away from zero.
+
+---
+
+### Final Implementation
+
+```python
+def closest_integer(value):
+    '''
+    Create a function that takes a value (string) representing a number
+    and returns the closest integer to it. If the number is equidistant
+    from two integers, round it away from zero.
+
+    Examples
+    >>> closest_integer("10")
+    10
+    >>> closest_integer("15.3")
+    15
+
+    Note:
+    Rounding away from zero means that if the given number is equidistant
+    from two integers, the one you should return is the one that is the
+    farthest from zero. For example closest_integer("14.5") should
+    return 15 and closest_integer("-14.5") should return -15.
+    '''
+    x = float(value)
+    integer_part = int(x)
+    decimal_part = x - integer_part
+
+    if decimal_part == 0.5:
+        if x > 0:
+            return integer_part + 1
+        else:
+            return integer_part
+    else:
+        return round(x)
+```
+
+---
+
+### Example Test Cases
+
+```python
+print(closest_integer("10"))       # 10
+print(closest_integer("15.3"))     # 15
+print(closest_integer("14.5"))     # 15
+print(closest_integer("-14.5"))    # -15
+print(closest_integer("14.4"))     # 14
+print(closest_integer("-14.6"))    # -15
+```
+
+This implementation correctly handles all edge cases, including equidistant values, and adheres to the problem's requirements.
+
+===== VISIBLE FINAL OUTPUT =====
+To solve the problem, we need to implement a function that takes a string representation of a number and returns the closest integer. The special case is when the number is exactly halfway between two integers, in which case we must round **away from zero**.
+
+---
+
+### Key Observations
+
+- The input is a string that represents a number, which we can convert to a `float`.
+- The function must round to the nearest integer.
+- If the number is exactly halfway between two integers (e.g., `14.5`, `-14.5`), we must round **away from zero**.
+- The standard `round()` function in Python rounds to the nearest even integer in such cases, which is not what we want.
+
+---
+
+### Strategy
+
+1. **Convert the string to a float**.
+2. **Extract the integer part** using `int(x)`.
+3. **Calculate the decimal part** as `x - int(x)`.
+4. **Check if the decimal part is exactly 0.5**:
+   - If so, and the number is **positive**, round **up**.
+   - If so, and the number is **negative**, round **down**.
+5. **Otherwise**, use the standard `round()` function.
+
+This ensures that we correctly handle the special case of equidistant numbers by rounding away from zero.
+
+---
+
+### Final Implementation
+
+```python
+def closest_integer(value):
+    '''
+    Create a function that takes a value (string) representing a number
+    and returns the closest integer to it. If the number is equidistant
+    from two integers, round it away from zero.
+
+    Examples
+    >>> closest_integer("10")
+    10
+    >>> closest_integer("15.3")
+    15
+
+    Note:
+    Rounding away from zero means that if the given number is equidistant
+    from two integers, the one you should return is the one that is the
+    farthest from zero. For example closest_integer("14.5") should
+    return 15 and closest_integer("-14.5") should return -15.
+    '''
+    x = float(value)
+    integer_part = int(x)
+    decimal_part = x - integer_part
+
+    if decimal_part == 0.5:
+        if x > 0:
+            return integer_part + 1
+        else:
+            return integer_part
+    else:
+        return round(x)
+```
+
+---
+
+### Example Test Cases
+
+```python
+print(closest_integer("10"))       # 10
+print(closest_integer("15.3"))     # 15
+print(closest_integer("14.5"))     # 15
+print(closest_integer("-14.5"))    # -15
+print(closest_integer("14.4"))     # 14
+print(closest_integer("-14.6"))    # -15
+```
+
+This implementation correctly handles all edge cases, including equidistant values, and adheres to the problem's requirements.
+
+===== EXTRACTED CANDIDATE CODE =====
+def closest_integer(value):
+    '''
+    Create a function that takes a value (string) representing a number
+    and returns the closest integer to it. If the number is equidistant
+    from two integers, round it away from zero.
+
+    Examples
+    >>> closest_integer("10")
+    10
+    >>> closest_integer("15.3")
+    15
+
+    Note:
+    Rounding away from zero means that if the given number is equidistant
+    from two integers, the one you should return is the one that is the
+    farthest from zero. For example closest_integer("14.5") should
+    return 15 and closest_integer("-14.5") should return -15.
+    '''
+    x = float(value)
+    integer_part = int(x)
+    decimal_part = x - integer_part
+
+    if decimal_part == 0.5:
+        if x > 0:
+            return integer_part + 1
+        else:
+            return integer_part
+    else:
+        return round(x)

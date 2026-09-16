@@ -1,0 +1,327 @@
+sample_id: HumanEval/31
+mode: fp16
+run_name: fp16_run2
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 147
+output_tokens: 3868
+output_cap_fraction: 0.118042
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 3677
+final_tokens: 191
+latency_seconds: 46.74705805815756
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def is_prime(n):
+    """Return true if a given number is prime, and false otherwise.
+    >>> is_prime(6)
+    False
+    >>> is_prime(101)
+    True
+    >>> is_prime(11)
+    True
+    >>> is_prime(13441)
+    True
+    >>> is_prime(61)
+    True
+    >>> is_prime(4)
+    False
+    >>> is_prime(1)
+    False
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to write a Python function called is_prime that checks if a number is prime. The docstring has several test cases, so I need to make sure it passes all of them. Let me think about how to approach this.
+
+First, what's a prime number? A prime is a number greater than 1 that has no divisors other than 1 and itself. So, the function should return False for numbers less than or equal to 1. That's covered in the tests, like is_prime(1) returns False.
+
+So the first step is to handle those edge cases. If n is less than 2, return False. Then, for numbers 2 and above, check if they are divisible by any number from 2 up to the square root of n. If any of them divide n, it's not prime. Otherwise, it is.
+
+Wait, how do I efficiently check for divisors? Let's think. For a number n, if it's not prime, it must have a factor less than or equal to its square root. So I can loop from 2 to sqrt(n), inclusive. For each i in that range, check if n mod i is 0. If yes, return False. If none divide n, return True.
+
+But how to compute the square root? Well, in Python, I can use math.sqrt, but maybe I should import math. Also, since the loop is up to sqrt(n), I can iterate i from 2 to int(math.sqrt(n)) + 1. Wait, because the range in Python is exclusive on the upper end. So for example, if n is 25, sqrt is 5. So I need to check up to 5. So the loop would be from 2 to int(math.sqrt(n)) + 1. Wait, no. Let me think. Let's say n is 25. The square root is 5. So checking up to 5. So the range would be 2 to 5+1? Wait, no. Because in Python, range is up to but not including the end. So if I do range(2, int(math.sqrt(n)) + 1), then for n=25, math.sqrt(25) is 5. So int(5) is 5. Adding 1 makes it 6. So the range is 2 to 6, which is 2,3,4,5. So that's correct. Because 5 is included. So that's the way to go.
+
+But wait, what if n is a square of a prime? Like 25. Then 5 is a divisor. So the loop would check up to 5, which is correct.
+
+So the steps for the function:
+
+- Check if n is less than 2: return False.
+- Check if n is 2: return True (since 2 is the first prime).
+- Check if n is even (n % 2 == 0): return False, since even numbers greater than 2 can't be prime.
+- Then, check for divisors from 3 up to sqrt(n), stepping by 2 (since even numbers are already handled). Wait, but maybe that's an optimization. For example, after checking 2, we can check only odd numbers. Because if n is even and greater than 2, it's not prime. So after checking 2, we can loop from 3 to sqrt(n), stepping by 2. That would save some steps.
+
+But for the sake of simplicity, maybe start with the basic approach. Let's first write the code that checks all numbers from 2 to sqrt(n). But maybe that's not efficient for large numbers, but given the test cases, perhaps it's acceptable.
+
+Wait, the test case includes 13441, which is a prime. Let me check if that's correct. Well, 13441 is a prime? Let me think. Well, maybe it's a large prime, but the code should handle it.
+
+So, the code:
+
+import math
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    max_divisor = int(math.sqrt(n)) + 1
+    for i in range(3, max_divisor, 2):
+        if n % i == 0:
+            return False
+    return True
+
+Wait, but wait. The range in Python is up to but not including the end. So if max_divisor is int(math.sqrt(n)) + 1, then for example, if n is 25, sqrt is 5, so max_divisor is 5 + 1 = 6. So the range is from 3 to 6, step 2. So 3 and 5. Which is correct. Because 25 is divisible by 5. So the loop would check 3 and 5. So 25%3 is 1, then 25%5 is 0. So returns False. Which is correct.
+
+But what if the sqrt(n) is not an integer? For example, n=7. sqrt(7) is approx 2.645. int(math.sqrt(7)) is 2. So max_divisor is 2 + 1 = 3. So the range is from 3 to 3, step 2. Which is empty. So the loop doesn't run. So returns True. Which is correct, since 7 is prime.
+
+Another example: n=9. sqrt(9) is 3. So max_divisor is 3 + 1 =4. So range(3,4,2) is 3. So check 3. 9%3 is 0, returns False. Correct.
+
+Another example: n=15. sqrt(15) is ~3.87. int is 3. max_divisor is 4. So range(3,4,2) is 3. Check 15%3 is 0. Return False. Correct.
+
+But wait, what about n=3? Let's see. n is 3. The code checks if n is 2? No. Then checks if n is even? 3%2 is 1, so no. Then max_divisor is sqrt(3) ~1.732, int is 1. So max_divisor is 1 +1=2. So range(3, 2, 2) is empty. So returns True. Which is correct.
+
+So that seems to work.
+
+But wait, what about n=2? The code returns True. Correct.
+
+What about n=4? The code checks if n is even (yes), returns False. Correct.
+
+What about n=1? returns False. Correct.
+
+So the code seems to handle all the test cases.
+
+But let me check the test cases given in the docstring.
+
+Test case 1: is_prime(6) returns False. 6 is even, so code returns False. Correct.
+
+Test case 2: is_prime(101) returns True. Let's see. 101 is a prime. Let's check. The code would check up to sqrt(101) which is ~10.04. So max_divisor is 10 +1=11. So the loop runs from 3 to 11, step 2. So 3,5,7,9,11? Wait, no. The range is 3 to 11, step 2. So the numbers are 3,5,7,9. Because 3,5,7,9, then next is 11, but the end is 11, which is not included. So the loop checks 3,5,7,9. Let's see:
+
+101 divided by 3? 3*33=99, 101-99=2. So remainder 2. Not divisible. Then 5: 5*20=100, 101-100=1. Not divisible. 7: 7*14=98, 101-98=3. Not divisible. 9: 9*11=99, 101-99=2. Not divisible. So returns True. Correct.
+
+Another test case: is_prime(11) returns True. sqrt(11) is ~3.316. So max_divisor is 3 +1=4. So range(3,4,2) is 3. Check 11%3 is 2. So returns True. Correct.
+
+Test case is_prime(13441) returns True. Well, that's a big number. But the code would check up to sqrt(13441). Let me compute sqrt(13441). Well, 116^2 is 13456. So sqrt(13441) is a bit less than 116. So the code would check up to 116. So for example, if 13441 is a prime, then none of the numbers up to 116 would divide it. So the code would return True. But how do I know that 13441 is a prime? Well, maybe it's a known prime. But the code would handle it correctly.
+
+Another test case: is_prime(61) returns True. Let's see. sqrt(61) is ~7.8. So max_divisor is 7 +1=8. So the loop runs from 3 to 8, step 2. So 3,5,7. Check 61 divided by 3? 3*20=60, remainder 1. 5? 5*12=60, remainder 1. 7? 7*8=56, 61-56=5. So returns True. Correct.
+
+Test case is_prime(4) returns False. Correct.
+
+Test case is_prime(1) returns False. Correct.
+
+So the code seems to handle all the test cases.
+
+But wait, what about numbers like 9? The code would check 3, which divides 9, returns False. Correct.
+
+Another case: n=25. The code checks 3, 5. 3 doesn't divide 25. 5 divides 25, returns False. Correct.
+
+But what about n=2? The code returns True. Correct.
+
+So the code seems correct.
+
+But wait, in the code, the loop is from 3 to max_divisor, step 2. But what if the max_divisor is 3? For example, n=3. Then the loop is range(3, 3, 2) which is empty. So returns True. Correct.
+
+Another case: n=5. sqrt(5) is ~2.236. int is 2. max_divisor is 2+1=3. So range(3,3,2) is empty. So returns True. Correct.
+
+So the code seems to handle all cases.
+
+But wait, what about n=9? The code checks 3. So 9%3 is 0, returns False. Correct.
+
+So the code should be correct.
+
+Now, the code needs to import math. So the code should have import math. But the original code didn't have that. So the function is_prime would need to import math. But in Python, the code must have that.
+
+So the code would be:
+
+import math
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    max_divisor = int(math.sqrt(n)) + 1
+    for i in range(3, max_divisor, 2):
+        if n % i == 0:
+            return False
+    return True
+
+But wait, what about when n is 3? Let's see. The code checks for n == 2? No. Then checks if n is even? 3%2 is 1, so no. Then max_divisor is sqrt(3) ~1.732, int is 1. So max_divisor is 1 +1 = 2. So the loop is range(3, 2, 2) which is empty. So returns True. Correct.
+
+Another case: n=5. The code returns True. Correct.
+
+But what about n=7? The code returns True. Correct.
+
+But what about n=15? The code checks 3, which divides 15. So returns False. Correct.
+
+So this code should work.
+
+But wait, the loop is from 3 to max_divisor, step 2. But what if the max_divisor is 3? For example, n=5. Then the loop is range(3, 3, 2) which is empty. So returns True. Correct.
+
+But what if the max_divisor is 4? For example, n=9. Then the loop is range(3, 4, 2) which is 3. So check 3. 9%3 is 0. Return False. Correct.
+
+So the code is correct.
+
+But wait, in the code, the max_divisor is int(math.sqrt(n)) + 1. Let me think. Suppose n is a perfect square. For example, n=25. sqrt(n) is 5. So max_divisor is 5 +1 =6. So the loop runs from 3 to 6, step 2. So 3,5. So 3 and 5. Which is correct. Because 5 is a divisor. So the code checks 3 and 5. So 25%3 is 1, 25%5 is 0. So returns False. Correct.
+
+But what if the max_divisor is not enough? For example, n= 25. Suppose the code had max_divisor as int(math.sqrt(n)) instead of +1. Then, for n=25, sqrt is 5. So max_divisor is 5. So the range is 3 to 5, step 2. So 3 and 5. So same as before. So the code would check 3 and 5. So the code is correct. But why do we add 1?
+
+Because in Python, the range is exclusive of the end. So for example, if the sqrt(n) is exactly an integer, say 5, then the code needs to check up to 5. So the range is from 3 to 5+1=6. So that the loop includes 5. Because range(3, 6, 2) is 3,5. So that's correct.
+
+But if we have max_divisor as int(math.sqrt(n)), then for n=25, it's 5. So range(3,5,2) is 3. So 3 is checked. But 5 is not checked. So that would be a problem. Because 25 is divisible by 5. So the code would return True, which is wrong.
+
+So adding 1 is important. So the code is correct.
+
+So the code is correct.
+
+Now, the code must be written with the import math. But the original code didn't have that. So the code must include that.
+
+But the user's code is supposed to be a function. So the code must have the import math statement.
+
+But in the code, the function is_prime is written. So the code should be:
+
+import math
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    max_divisor = int(math.sqrt(n)) + 1
+    for i in range(3, max_divisor, 2):
+        if n % i == 0:
+            return False
+    return True
+
+But wait, what about when n is 3? The code returns True. Correct.
+
+Another thing: the code checks for even numbers. So for example, 4 is even, returns False. Correct.
+
+So this code should pass all the test cases.
+
+But let me check the test case for 13441. Well, the code would check up to sqrt(13441). Let me compute sqrt(13441). Let me see, 116^2 is 13456. So sqrt(13441) is 115.9... So int(math.sqrt(13441)) is 115. So max_divisor is 115 +1 = 116. So the loop runs from 3 to 116, step 2. So all odd numbers up to 115. So if 13441 is a prime, then none of those numbers would divide it. So the code returns True. Which is correct.
+
+So the code should be correct.
+
+Therefore, the final code is as written above.
+</think>
+
+```python
+import math
+
+def is_prime(n):
+    """Return true if a given number is prime, and false otherwise.
+    >>> is_prime(6)
+    False
+    >>> is_prime(101)
+    True
+    >>> is_prime(11)
+    True
+    >>> is_prime(13441)
+    True
+    >>> is_prime(61)
+    True
+    >>> is_prime(4)
+    False
+    >>> is_prime(1)
+    False
+    """
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    max_divisor = int(math.sqrt(n)) + 1
+    for i in range(3, max_divisor, 2):
+        if n % i == 0:
+            return False
+    return True
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+import math
+
+def is_prime(n):
+    """Return true if a given number is prime, and false otherwise.
+    >>> is_prime(6)
+    False
+    >>> is_prime(101)
+    True
+    >>> is_prime(11)
+    True
+    >>> is_prime(13441)
+    True
+    >>> is_prime(61)
+    True
+    >>> is_prime(4)
+    False
+    >>> is_prime(1)
+    False
+    """
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    max_divisor = int(math.sqrt(n)) + 1
+    for i in range(3, max_divisor, 2):
+        if n % i == 0:
+            return False
+    return True
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+import math
+
+def is_prime(n):
+    """Return true if a given number is prime, and false otherwise.
+    >>> is_prime(6)
+    False
+    >>> is_prime(101)
+    True
+    >>> is_prime(11)
+    True
+    >>> is_prime(13441)
+    True
+    >>> is_prime(61)
+    True
+    >>> is_prime(4)
+    False
+    >>> is_prime(1)
+    False
+    """
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    max_divisor = int(math.sqrt(n)) + 1
+    for i in range(3, max_divisor, 2):
+        if n % i == 0:
+            return False
+    return True

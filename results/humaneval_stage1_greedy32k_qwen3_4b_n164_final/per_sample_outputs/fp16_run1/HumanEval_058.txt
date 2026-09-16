@@ -1,0 +1,290 @@
+sample_id: HumanEval/58
+mode: fp16
+run_name: fp16_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 164
+output_tokens: 1917
+output_cap_fraction: 0.058502
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 1391
+final_tokens: 526
+latency_seconds: 22.683367231860757
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def common(l1: list, l2: list):
+    """Return sorted unique common elements for two lists.
+    >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+    [1, 5, 653]
+    >>> common([5, 3, 2, 8], [3, 2])
+    [2, 3]
+
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the common function so that it returns the sorted list of unique common elements between two lists. Let's think about how to approach this.
+
+First, the function takes two lists, l1 and l2. The goal is to find elements that are present in both lists, make sure they are unique (so duplicates in either list don't matter), and then return them sorted in ascending order.
+
+So, the steps I need to do are:
+
+1. Find the intersection of the two lists. That is, elements that are in both l1 and l2.
+2. Remove duplicates from the resulting elements. Wait, but if the lists have duplicates, like if l1 has [1, 1, 2] and l2 has [1, 2], the common elements should be [1, 2], but the function needs to return unique elements. So the intersection should be unique.
+
+But how to do that in Python?
+
+Well, one way is to convert both lists to sets. Because sets automatically handle uniqueness. So, set(l1) and set(l2) would give the unique elements of each list. Then the intersection of these two sets would be the common elements. Then, we can sort the result.
+
+So the steps would be:
+
+- Convert l1 to a set, l2 to a set.
+- Find the intersection of these two sets.
+- Convert the intersection to a sorted list.
+
+Wait, but the order? The problem says to return the sorted list. So after getting the common elements, we need to sort them.
+
+So the code would be something like:
+
+return sorted(set(l1) & set(l2))
+
+Wait, but wait. Let me check with the examples.
+
+First example:
+
+common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+
+Set of l1 is {1,4,3,34,653,2,5}, set of l2 is {5,7,1,9,653,121}. The intersection is {1,5,653}, sorted becomes [1,5,653], which matches the example.
+
+Second example:
+
+common([5,3,2,8], [3,2]) → set l1 is {5,3,2,8}, set l2 is {3,2}. Intersection is {2,3}, sorted is [2,3], which matches the example.
+
+So that seems to work. But wait, what if the lists have elements that are not unique but are in both? Like l1 is [1, 1, 2], l2 is [1, 2, 2]. The set conversion would take care of duplicates, so the intersection would be {1,2}, sorted as [1,2], which is correct.
+
+So the function can be written as:
+
+def common(l1: list, l2: list):
+    """Return sorted unique common elements for two lists."""
+    return sorted(set(l1) & set(l2))
+
+Wait, but wait. What about the order of elements? Because sets are unordered, but when you convert to a list and sort, it's in order. So the sorted function will arrange them in ascending order, which is what the examples show.
+
+But let me check the first example. The intersection is {1,5,653}, sorted becomes [1,5,653], which is correct.
+
+Yes. So this code should work.
+
+But wait, what if the lists are empty? Well, the function would return an empty list, which is correct.
+
+But wait, what if the lists have different elements? Like l1 is [1,2], l2 is [3,4]. Then the intersection is empty, so return empty list.
+
+So this seems to handle all cases.
+
+But wait, the problem says "sorted unique common elements". So the code is correct.
+
+But wait, the function is supposed to return a list. The sorted() function returns a list, so that's correct.
+
+So the code is as simple as that. Let me check the docstring. The docstring says that the function returns the sorted list. So the code should be correct.
+
+But wait, the function is called common, and the examples show that the output is sorted. So yes.
+
+So the code is:
+
+def common(l1: list, l2: list):
+    """Return sorted unique common elements for two lists.
+    >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+    [1, 5, 653]
+    >>> common([5, 3, 2, 8], [3, 2])
+    [2, 3]
+    """
+    return sorted(set(l1) & set(l2))
+
+Wait, but in Python, the set intersection can be done with & operator. So yes.
+
+But wait, what about the order of elements in the original lists? For example, if the common elements are [3, 1], but after sorting, it's [1,3]. Which is correct.
+
+So this code should work. Let me test the examples.
+
+First example:
+
+l1 is [1,4,3,34,653,2,5], set is {1,2,3,4,34,653,5}
+
+l2 is [5,7,1,5,9,653,121], set is {5,7,1,9,653,121}
+
+intersection is {1,5,653}, sorted is [1,5,653]. Correct.
+
+Second example:
+
+l1 is [5,3,2,8], set is {5,3,2,8}
+
+l2 is [3,2], set is {3,2}
+
+intersection is {2,3}, sorted is [2,3]. Correct.
+
+Yes. So this code should work.
+
+But wait, what if the lists have elements that are not hashable? Well, the problem says that the function is for lists, and the elements are presumably hashable. Since the function is using set, which requires elements to be hashable. But the problem says that the function is to be written, and the tests are given. So the code is correct.
+
+Therefore, the correct implementation is as above.
+</think>
+
+To solve the problem of finding the **sorted list of unique common elements** between two lists, we can leverage Python's built-in data structures and operations for efficiency and clarity.
+
+---
+
+### ✅ Key Requirements
+
+- **Return only elements that are present in both lists.**
+- **Ensure the result contains only unique elements.**
+- **Return the elements in sorted order.**
+
+---
+
+### 🧠 Approach
+
+1. **Convert both lists to sets**:
+   - This automatically removes duplicates from each list.
+   - Sets are unordered, but we will sort the result later.
+
+2. **Find the intersection of the two sets**:
+   - This gives us the elements that are common to both lists.
+
+3. **Sort the resulting elements**:
+   - The `sorted()` function will return the elements in ascending order.
+
+---
+
+### 🧪 Example Walkthrough
+
+For the input:
+```python
+common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+```
+
+- `set(l1)` → `{1, 2, 3, 4, 34, 653, 5}`
+- `set(l2)` → `{5, 7, 1, 9, 653, 121}`
+- Intersection → `{1, 5, 653}`
+- Sorted → `[1, 5, 653]`
+
+This matches the expected output.
+
+---
+
+### ✅ Final Implementation
+
+```python
+def common(l1: list, l2: list):
+    """Return sorted unique common elements for two lists.
+    >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+    [1, 5, 653]
+    >>> common([5, 3, 2, 8], [3, 2])
+    [2, 3]
+    """
+    return sorted(set(l1) & set(l2))
+```
+
+---
+
+### 🧪 Test Cases
+
+```python
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+```
+
+This implementation is concise, efficient, and satisfies all the requirements specified in the docstring and test cases.
+
+===== VISIBLE FINAL OUTPUT =====
+To solve the problem of finding the **sorted list of unique common elements** between two lists, we can leverage Python's built-in data structures and operations for efficiency and clarity.
+
+---
+
+### ✅ Key Requirements
+
+- **Return only elements that are present in both lists.**
+- **Ensure the result contains only unique elements.**
+- **Return the elements in sorted order.**
+
+---
+
+### 🧠 Approach
+
+1. **Convert both lists to sets**:
+   - This automatically removes duplicates from each list.
+   - Sets are unordered, but we will sort the result later.
+
+2. **Find the intersection of the two sets**:
+   - This gives us the elements that are common to both lists.
+
+3. **Sort the resulting elements**:
+   - The `sorted()` function will return the elements in ascending order.
+
+---
+
+### 🧪 Example Walkthrough
+
+For the input:
+```python
+common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+```
+
+- `set(l1)` → `{1, 2, 3, 4, 34, 653, 5}`
+- `set(l2)` → `{5, 7, 1, 9, 653, 121}`
+- Intersection → `{1, 5, 653}`
+- Sorted → `[1, 5, 653]`
+
+This matches the expected output.
+
+---
+
+### ✅ Final Implementation
+
+```python
+def common(l1: list, l2: list):
+    """Return sorted unique common elements for two lists.
+    >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+    [1, 5, 653]
+    >>> common([5, 3, 2, 8], [3, 2])
+    [2, 3]
+    """
+    return sorted(set(l1) & set(l2))
+```
+
+---
+
+### 🧪 Test Cases
+
+```python
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+```
+
+This implementation is concise, efficient, and satisfies all the requirements specified in the docstring and test cases.
+
+===== EXTRACTED CANDIDATE CODE =====
+def common(l1: list, l2: list):
+    """Return sorted unique common elements for two lists.
+    >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+    [1, 5, 653]
+    >>> common([5, 3, 2, 8], [3, 2])
+    [2, 3]
+    """
+    return sorted(set(l1) & set(l2))

@@ -1,0 +1,134 @@
+sample_id: HumanEval/60
+mode: kvarn
+run_name: kvarn_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 145
+output_tokens: 797
+output_cap_fraction: 0.024323
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 679
+final_tokens: 118
+latency_seconds: 10.29233131930232
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def sum_to_n(n: int):
+    """sum_to_n is a function that sums numbers from 1 to n.
+    >>> sum_to_n(30)
+    465
+    >>> sum_to_n(100)
+    5050
+    >>> sum_to_n(5)
+    15
+    >>> sum_to_n(10)
+    55
+    >>> sum_to_n(1)
+    1
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function sum_to_n so that it meets the docstring and the test cases. Let me think about what this function is supposed to do. The docstring says it sums numbers from 1 to n. Oh right, that's the sum of the first n natural numbers.
+
+So the standard formula for this is n*(n+1)/2. That's much more efficient than looping through each number and adding them up, especially for large n. Let me check the test cases to make sure.
+
+For example, when n is 30, the sum should be 30*31/2 = 465. Which matches the first test case. Similarly, 100 gives 100*101/2 = 5050. The other test cases also align with this formula. So the function can be implemented using that formula.
+
+Wait, but what if n is 0 or negative? The docstring doesn't mention that, but the test cases start from n=1. So maybe the function is intended to handle positive integers. The parameters are specified as int, but the examples all have positive n. So the function can safely use the formula.
+
+So the code would be straightforward. The function takes n as input, returns n*(n+1)//2. Wait, but in Python, using integer division with // is better here to avoid floating point inaccuracies. Because if n is even, then n*(n+1) is even, so dividing by 2 gives an integer. But using integer division ensures that it's correct.
+
+Let me test with the sample inputs. For n=5: 5*6//2 = 30//2 =15. Correct. For n=10: 10*11//2 = 55. Correct. So yes, that's the way to go.
+
+So the implementation is simple. The function sum_to_n would return n*(n+1)//2.
+
+Now, I need to write that in the code. The function is already defined, so just implement the return statement.
+
+So the code would be:
+
+def sum_to_n(n: int):
+    """sum_to_n is a function that sums numbers from 1 to n.
+    >>> sum_to_n(30)
+    465
+    >>> sum_to_n(100)
+    5050
+    >>> sum_to_n(5)
+    15
+    >>> sum_to_n(10)
+    55
+    >>> sum_to_n(1)
+    1
+    """
+    return n * (n + 1) // 2
+
+Wait, but what about when n is 0? Well, according to the problem statement, the tests don't cover that, and the function is supposed to sum from 1 to n. So if n is 0, perhaps it returns 0? But the function's parameters are int, so maybe it's up to the user to pass valid inputs. The test cases don't have that, so the code is correct as is.
+
+Yes, this should work. Let me check the test cases again. All of them are covered by the formula. So this should be the correct implementation.
+</think>
+
+```python
+def sum_to_n(n: int):
+    """sum_to_n is a function that sums numbers from 1 to n.
+    >>> sum_to_n(30)
+    465
+    >>> sum_to_n(100)
+    5050
+    >>> sum_to_n(5)
+    15
+    >>> sum_to_n(10)
+    55
+    >>> sum_to_n(1)
+    1
+    """
+    return n * (n + 1) // 2
+```
+
+===== VISIBLE FINAL OUTPUT =====
+```python
+def sum_to_n(n: int):
+    """sum_to_n is a function that sums numbers from 1 to n.
+    >>> sum_to_n(30)
+    465
+    >>> sum_to_n(100)
+    5050
+    >>> sum_to_n(5)
+    15
+    >>> sum_to_n(10)
+    55
+    >>> sum_to_n(1)
+    1
+    """
+    return n * (n + 1) // 2
+```
+
+===== EXTRACTED CANDIDATE CODE =====
+def sum_to_n(n: int):
+    """sum_to_n is a function that sums numbers from 1 to n.
+    >>> sum_to_n(30)
+    465
+    >>> sum_to_n(100)
+    5050
+    >>> sum_to_n(5)
+    15
+    >>> sum_to_n(10)
+    55
+    >>> sum_to_n(1)
+    1
+    """
+    return n * (n + 1) // 2

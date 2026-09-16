@@ -1,0 +1,489 @@
+sample_id: HumanEval/40
+mode: kvarn
+run_name: kvarn_run1
+seed: 2026
+max_tokens: 32768
+max_model_len: 40960
+input_tokens: 200
+output_tokens: 5726
+output_cap_fraction: 0.174744
+finish_reason: stop
+stop_reason: None
+thinking_boundary_detected: True
+thinking_tokens: 4859
+final_tokens: 867
+latency_seconds: 76.55346488766372
+execution_result: passed
+execution_passed: True
+candidate_source: fenced_entry_point
+contains_entry_point_definition: True
+inspection_flags: NONE
+
+===== PROMPT =====
+<|im_start|>user
+Complete the following Python function so that it satisfies its docstring and tests. Return a valid Python implementation. You may reason before the final answer, but the final answer should contain executable Python code.
+
+
+
+def triples_sum_to_zero(l: list):
+    """
+    triples_sum_to_zero takes a list of integers as an input.
+    it returns True if there are three distinct elements in the list that
+    sum to zero, and False otherwise.
+
+    >>> triples_sum_to_zero([1, 3, 5, 0])
+    False
+    >>> triples_sum_to_zero([1, 3, -2, 1])
+    True
+    >>> triples_sum_to_zero([1, 2, 3, 7])
+    False
+    >>> triples_sum_to_zero([2, 4, -5, 3, 9, 7])
+    True
+    >>> triples_sum_to_zero([1])
+    False
+    """
+<|im_end|>
+<|im_start|>assistant
+
+
+===== FULL MODEL OUTPUT =====
+<think>
+Okay, I need to complete the Python function triples_sum_to_zero. The docstring says that the function should return True if there are three distinct elements in the list that sum to zero, and False otherwise. Let me think about how to approach this.
+
+First, the problem is similar to the classic 3-sum problem. But with a twist: the three elements must be distinct. Wait, but wait, the problem says "three distinct elements". Does that mean that the three elements themselves must be different values, or that they are distinct in the list (i.e., their positions are different)? Well, the problem says "three distinct elements in the list", so I think that means that the three elements are different in value. But wait, maybe the problem allows for the same value as long as they are different elements. For example, if the list has [0, 0, 0], then the three elements are same but they are distinct elements. But according to the problem's examples, like the first test case [1,3,5,0], the answer is False. Let me check that. The sum of any three elements would be 1+3+5=9, 1+3+0=4, 1+5+0=6, 3+5+0=8. None sum to zero. So the function returns False. But if the list had [0,0,0], then the sum is zero. But the problem says that the three elements must be distinct. Wait, the problem says "three distinct elements in the list that sum to zero". So the elements must be distinct in value? Or just that they are different elements in the list (even if their values are same)?
+
+Wait, the problem says "three distinct elements in the list". So, for example, if the list is [0, 0, 0], then there are three elements, but they are not distinct. So the function would return False. But if the list is [0, 0, 1], then there are three elements, but two are same. So the function would return False? Or maybe the problem considers that the three elements are distinct in the list (i.e., their positions are different), but their values can be same. Wait, the problem says "three distinct elements" which is a bit ambiguous. But looking at the examples:
+
+In the second test case, [1,3,-2,1], the answer is True. Let's see: 1 + 3 + (-2) = 2? Wait no. Wait 1 + 3 + (-2) is 2. Wait maybe another combination. Oh, maybe 1 + (-2) + 1 = 0. Oh right! So the three elements are 1, -2, 1. But the values are not distinct. Wait, but the problem says that the three elements must be distinct. Wait, but in this case, the three elements are 1, -2, 1. So two of them are same. But the function returns True. So that suggests that the problem allows for the same value as long as they are different elements. So the problem's definition of "distinct elements" refers to their positions in the list, not their values. Wait, but the problem's docstring says "three distinct elements in the list that sum to zero". So maybe the problem is that the three elements are distinct in the list (i.e., they are different elements, even if their values are same). But that's not possible. Because in the example [1,3,-2,1], the three elements 1, -2, 1 are in the list. So the function returns True. But according to the problem's description, the three elements must be distinct. So perhaps the problem's wording is incorrect, and the actual requirement is that the three elements are distinct in value. Or maybe the problem allows for the same value as long as they are different elements. But that's conflicting with the example.
+
+Wait, the example [1,3,-2,1] returns True. Let's check the sum. Let's see: 1 + 3 + (-2) = 2. No. But 1 + (-2) + 1 = 0. So that's three elements. But two of them are 1. So the problem's docstring says that the three elements must be distinct. But in this case, they are not. So perhaps the problem's wording is wrong, and the actual requirement is that the three elements are different in the list (i.e., they are three different elements, even if their values are same). But that's not possible. Because in that case, the example would be valid. But the problem's docstring says that the three elements must be distinct. So perhaps the problem's wording is incorrect, and the actual requirement is that the three elements are different in the list (i.e., they are three different elements, not necessarily different in value). But that's not clear.
+
+Alternatively, maybe the problem requires that the three elements are distinct in value. So in the example [1,3,-2,1], the three elements are 1, -2, 1. But their values are not distinct. So why does the test case return True? That's a contradiction. Therefore, perhaps the problem's wording is incorrect, and the actual requirement is that the three elements are different in the list (i.e., they are three different elements, even if their values are same). So the problem's docstring is wrong. But how to proceed?
+
+Looking at the test case [1,3,-2,1], the answer is True. So the function returns True. So the three elements are 1, -2, 1. So the sum is 0. So the function returns True. Therefore, the problem's requirement is that the three elements are different elements in the list (i.e., their positions are different), but their values can be same. So the problem's docstring is wrong. But the function must return True in that case. Therefore, the problem's actual requirement is that there are three elements (not necessarily distinct in value) that sum to zero. But the docstring says "three distinct elements in the list that sum to zero". So perhaps the problem's docstring is wrong, and the actual requirement is that the three elements are different in the list (i.e., they are three different elements, not necessarily distinct in value). But that's conflicting with the docstring.
+
+Alternatively, maybe the problem requires that the three elements are distinct in value. But in that case, the example [1,3,-2,1] would not have such a triplet. Because the triplet would be 1, 3, -2. Their sum is 2. But the example returns True. So that's not possible. Therefore, the problem's docstring is incorrect. But the user says that the function must satisfy the docstring and tests. So the function must return True for the example [1,3,-2,1], which implies that the three elements can have same values. Therefore, the problem's docstring is wrong, but the function must be written according to the tests.
+
+So the problem is to find three elements (not necessarily distinct in value) that sum to zero. But the docstring says "three distinct elements in the list that sum to zero". So perhaps the problem's wording is wrong, and the actual requirement is that the three elements are different in the list (i.e., they are three different elements, not necessarily distinct in value). Therefore, the function should return True if there exists three elements (different positions) that sum to zero.
+
+So the problem is similar to the 3-sum problem, but with the possibility of duplicates. So the approach is to find three elements in the list that sum to zero, regardless of their values. But the problem's docstring says "three distinct elements", but the example shows that the same value can be used. Therefore, the problem's docstring is incorrect, but the function must pass the given tests.
+
+So the function needs to check if there exists three elements (not necessarily distinct in value) that sum to zero. But the problem's docstring says "three distinct elements in the list that sum to zero". So perhaps the problem's wording is wrong, and the actual requirement is that the three elements are different in the list (i.e., they are three different elements, not necessarily distinct in value). Therefore, the function should return True if there are three elements (different positions) that sum to zero.
+
+So the approach is to find three elements in the list that sum to zero. So the standard 3-sum approach.
+
+But how to implement this efficiently?
+
+The standard approach for 3-sum is to sort the list, then for each element, use two pointers to find the other two elements. But for the problem, the list can have duplicates, but the three elements can be same as long as they are different elements.
+
+But the problem's test case [1,3,-2,1] returns True. Let's see: the three elements are 1, -2, 1. So the sum is 0. So the function should return True. So the code must find that.
+
+So the code needs to check for any three elements (not necessarily distinct in value) that sum to zero.
+
+So the approach is to check all possible triplets. However, for large lists, this would be O(n^3), which is not efficient. But given that the problem's test cases may not be too big, perhaps a brute-force approach is acceptable.
+
+But for the given test cases, the list is small. However, for a general solution, the code should be efficient.
+
+But the problem says that the function must return True if there are three elements (distinct in the list, i.e., different positions) that sum to zero. So the code can be written with a triple nested loop, checking all possible triplets. However, for larger lists, this would be slow. But given that the problem's test cases are small, perhaps this is acceptable.
+
+But let's think about the test case [1,3,-2,1]. The code would check all possible triplets. Let's see:
+
+The list is [1,3,-2,1]. The possible triplets are:
+
+1,3,-2 → sum 2 → no.
+
+1,3,1 → sum 5 → no.
+
+1, -2, 1 → sum 0 → yes. So returns True.
+
+So the code would return True.
+
+But the problem's docstring says that the three elements must be distinct. But in this case, the three elements are 1, -2, 1. So the values are not distinct. But the function returns True. Therefore, the problem's docstring is wrong, and the actual requirement is that the three elements are different in the list (i.e., different positions), not that their values are distinct.
+
+So the code should check for any three elements (different positions) that sum to zero.
+
+So the code can be written with a triple loop. However, for larger lists, this is O(n^3), which is not efficient. But for the given test cases, it's acceptable.
+
+But perhaps the problem expects a more efficient solution. Let's think.
+
+But the problem's test cases may not be too big. So for the code, perhaps the triple loop is acceptable.
+
+But let's think about the code.
+
+The function is given a list l. So the code can iterate through all possible triplets (i, j, k) where i < j < k. Then check if l[i] + l[j] + l[k] == 0. If any such triplet exists, return True. Otherwise, return False.
+
+But wait, the problem says that the three elements must be distinct. Wait, but in the example [1,3,-2,1], the triplet is (i=0, j=2, k=3). So the elements are 1, -2, 1. So the code would return True. So the code is correct.
+
+But the problem's docstring says that the three elements must be distinct. But according to the example, that's not the case. Therefore, the problem's docstring is wrong. But the code must pass the given tests. Therefore, the code should check for any three elements (different positions) that sum to zero.
+
+So the code can be written with a triple loop. However, for a list with n elements, this is O(n^3) time. For small n, this is acceptable.
+
+But for larger n, this is not efficient. However, given that the problem's test cases are small, perhaps this is acceptable.
+
+But perhaps the problem expects a more efficient solution. Let's think about the 3-sum approach.
+
+The standard approach is to sort the list, then for each element, use two pointers to find the other two elements. But in this case, the code can be written as follows:
+
+Sort the list. Then for each element i in 0 to len(l)-3:
+
+   left = i+1
+
+   right = len(l)-1
+
+   while left < right:
+
+       sum = l[i] + l[left] + l[right]
+
+       if sum == 0: return True
+
+       elif sum < 0: left += 1
+
+       else: right -= 1
+
+But this approach would find three elements that sum to zero. However, this approach would not work if there are duplicates. But in the example [1,3,-2,1], after sorting, the list is [-2, 1, 1, 3]. So for i=0 (value -2), left=1 (1), right=3 (3). Sum is -2 + 1 + 3 = 2. So sum is positive. So right decreases to 2. Now left is 1, right is 2. Sum is -2 + 1 + 1 = 0. So returns True. So this approach would work.
+
+But in this case, the code would return True. So the code would work for the example.
+
+But the problem is that the code may have duplicates. However, the code is designed to find any three elements that sum to zero, regardless of their values. So the code would work.
+
+But the problem's docstring says that the three elements must be distinct. But according to the example, the code is allowed to have duplicates. Therefore, the code should be written with the 3-sum approach.
+
+But the problem's docstring says that the three elements must be distinct. However, the example shows that the code can have duplicates. Therefore, the problem's docstring is incorrect. But the code must pass the given tests.
+
+So the code should be written to find any three elements (different positions) that sum to zero.
+
+So the code can be written with the 3-sum approach. Let's proceed with that.
+
+But the code must return True if there are three elements (different positions) that sum to zero. So the code can be written as follows:
+
+Sort the list. Then for each i in 0 to len(l)-3:
+
+   left = i+1
+
+   right = len(l)-1
+
+   while left < right:
+
+       sum = l[i] + l[left] + l[right]
+
+       if sum == 0: return True
+
+       elif sum < 0: left += 1
+
+       else: right -= 1
+
+But wait, this approach would miss some cases where the same element is used multiple times. For example, if the list is [0, 0, 0], then the code would return True. But in this case, the three elements are same, but they are different positions. So the code would return True. Which is correct.
+
+But the problem's docstring says that the three elements must be distinct. But according to the example, the code is allowed to have duplicates. Therefore, the code should proceed with this approach.
+
+But the problem's docstring says that the three elements must be distinct. However, the example shows that the code can have duplicates. Therefore, the problem's docstring is wrong. But the code must pass the given tests.
+
+So the code should be written with the 3-sum approach.
+
+But the code must also handle the case where the list has less than three elements. For example, the test case [1] returns False. So the code must check if the length of the list is less than 3, return False.
+
+So the code steps:
+
+- Check if the length of the list is less than 3: return False.
+
+- Sort the list.
+
+- Iterate through each element as the first element of the triplet.
+
+- For each first element, use two pointers (left and right) to find the other two elements.
+
+- If any triplet is found, return True.
+
+- Otherwise, after checking all possibilities, return False.
+
+But in the code, the two pointers approach may have duplicates. But the code would still find the triplet.
+
+But in the example [1,3,-2,1], after sorting, the list is [-2, 1, 1, 3]. The code would check i=0 (value -2), left=1 (1), right=3 (3). Sum is -2 + 1 + 3 = 2. So sum is positive. So right decreases to 2. Now left is 1, right is 2. Sum is -2 + 1 + 1 = 0. So returns True.
+
+So the code would work.
+
+But what about the case where the same element is used multiple times? For example, [0,0,0]. The code would return True. Which is correct.
+
+But according to the problem's docstring, the three elements must be distinct. But according to the example, the code is allowed to have duplicates. Therefore, the code is correct.
+
+So the code can be written as follows.
+
+But the code must also handle the case where the same element is used multiple times. For example, [0,0,0], the code returns True.
+
+But the problem's docstring says that the three elements must be distinct. However, the example shows that the code is allowed to have duplicates. Therefore, the code is correct.
+
+So the code can be written with the 3-sum approach.
+
+Now, let's code this.
+
+But the code must be written in Python.
+
+So the function is:
+
+def triples_sum_to_zero(l: list):
+    """
+    triples_sum_to_zero takes a list of integers as an input.
+    it returns True if there are three distinct elements in the list that
+    sum to zero, and False otherwise.
+
+    >>> triples_sum_to_zero([1, 3, 5, 0])
+    False
+    >>> triples_sum_to_zero([1, 3, -2, 1])
+    True
+    >>> triples_sum_to_zero([1, 2, 3, 7])
+    False
+    >>> triples_sum_to_zero([2, 4, -5, 3, 9, 7])
+    True
+    >>> triples_sum_to_zero([1])
+    False
+    """
+    if len(l) < 3:
+        return False
+    l.sort()
+    for i in range(len(l) - 2):
+        left = i + 1
+        right = len(l) - 1
+        while left < right:
+            current_sum = l[i] + l[left] + l[right]
+            if current_sum == 0:
+                return True
+            elif current_sum < 0:
+                left += 1
+            else:
+                right -= 1
+    return False
+
+But wait, this code would return True for the example [1,3,-2,1], which is correct. Let's test the test cases.
+
+Test case 1: [1,3,5,0]. After sorting, [0,1,3,5]. The code checks i=0 (0), left=1 (1), right=3 (5). Sum is 0+1+5=6>0. So right decreases to 2. Now left=1, right=2. Sum is 0+1+3=4>0. right decreases to 1. Now left is 1, right is 1. So loop ends. Then i=1 (1), left=2 (3), right=3 (5). Sum is 1+3+5=9>0. So right decreases. Then left=2, right=2. Loop ends. So returns False. Which matches the first test case.
+
+Test case 2: [1,3,-2,1]. After sorting, [-2,1,1,3]. i=0 (value -2). left=1 (1), right=3 (3). sum is -2+1+3=2>0. So right decreases to 2. Now left=1, right=2. sum is -2+1+1=0. So returns True. Correct.
+
+Test case 3: [1,2,3,7]. sorted [1,2,3,7]. i=0 (1), left=1 (2), right=3 (7). sum is 1+2+7=10>0. right decreases. left=1, right=2. sum 1+2+3=6>0. right decreases. left=1, right=1. loop ends. i=1 (2), left=2 (3), right=3 (7). sum 2+3+7=12>0. right decreases. loop ends. returns False. Correct.
+
+Test case 4: [2,4,-5,3,9,7]. sorted [-5, 2, 3, 4, 7, 9]. i=0 (value -5). left=1 (2), right=5 (9). sum is -5+2+9=6>0. right decreases to 4 (7). sum is -5+2+7=4>0. right decreases to 3 (4). sum is -5+2+4=1>0. right decreases to 2 (3). sum is -5+2+3=0. So returns True. Correct.
+
+Test case 5: [1]. returns False. Correct.
+
+So the code seems to pass all the test cases.
+
+But wait, the problem's docstring says that the three elements must be distinct. However, the code allows for the same elements. But according to the test case 2, the code returns True for [1,3,-2,1], which is correct. So the code is correct.
+
+But the problem's docstring says that the three elements must be distinct. However, the code is written to return True for cases where the three elements are not distinct. But according to the test case, that's acceptable. Therefore, the code is correct.
+
+But why does the problem's docstring say "three distinct elements"? Maybe the problem's wording is incorrect, and the actual requirement is that the three elements are different in the list (i.e., different positions). Therefore, the code is correct.
+
+Therefore, the code is correct.
+</think>
+
+To solve the problem of determining whether there exist three distinct elements in a list that sum to zero, we can use an efficient approach inspired by the classic **3-sum** problem. The key is to find three elements in the list (not necessarily distinct in value) that sum to zero, and return `True` if such a triplet exists, or `False` otherwise.
+
+The function must also handle edge cases, such as when the list has fewer than three elements, in which case it's impossible to form a triplet, and thus the function should return `False`.
+
+---
+
+### ✅ Key Points of the Solution
+
+- **Input**: A list of integers.
+- **Output**: A boolean indicating whether three elements in the list sum to zero.
+- **Constraints**:
+  - The three elements must be **distinct in position** (i.e., different indices in the list).
+  - The values of the elements can be the same, as long as they are at different positions.
+- **Efficiency**: The solution uses a **two-pointer technique** after sorting the list, which reduces the time complexity to **O(n²)**, making it efficient for reasonably sized lists.
+
+---
+
+### 🧠 Implementation Strategy
+
+1. **Edge Case Check**: If the list has fewer than 3 elements, return `False`.
+2. **Sort the List**: Sorting helps in efficiently finding the triplet using the two-pointer technique.
+3. **Iterate with a Fixed First Element**: For each element in the list (up to the third last element), treat it as the first element of the triplet.
+4. **Two-Pointer Search**: Use two pointers (`left` and `right`) to find the other two elements such that the sum of the three is zero.
+5. **Return Early**: If a valid triplet is found, return `True` immediately.
+6. **Final Return**: If no triplet is found after all iterations, return `False`.
+
+---
+
+### ✅ Final Python Code
+
+```python
+def triples_sum_to_zero(l: list):
+    """
+    triples_sum_to_zero takes a list of integers as an input.
+    it returns True if there are three distinct elements in the list that
+    sum to zero, and False otherwise.
+
+    >>> triples_sum_to_zero([1, 3, 5, 0])
+    False
+    >>> triples_sum_to_zero([1, 3, -2, 1])
+    True
+    >>> triples_sum_to_zero([1, 2, 3, 7])
+    False
+    >>> triples_sum_to_zero([2, 4, -5, 3, 9, 7])
+    True
+    >>> triples_sum_to_zero([1])
+    False
+    """
+    if len(l) < 3:
+        return False
+
+    l.sort()
+    for i in range(len(l) - 2):
+        left = i + 1
+        right = len(l) - 1
+        while left < right:
+            current_sum = l[i] + l[left] + l[right]
+            if current_sum == 0:
+                return True
+            elif current_sum < 0:
+                left += 1
+            else:
+                right -= 1
+    return False
+```
+
+---
+
+### 🧪 Example Walkthrough
+
+For the input `[1, 3, -2, 1]`:
+
+- After sorting: `[-2, 1, 1, 3]`
+- Try `i = 0` (value -2), `left = 1` (value 1), `right = 3` (value 3)
+  - Sum = -2 + 1 + 3 = 2 → too big → move right left
+  - Now `left = 1`, `right = 2` → sum = -2 + 1 + 1 = 0 → return `True`
+
+This matches the expected output.
+
+---
+
+### 🧪 Time and Space Complexity
+
+- **Time Complexity**: O(n²) due to the two-pointer approach after sorting.
+- **Space Complexity**: O(1) (excluding the input list and sorting).
+
+This solution is efficient and passes all the provided test cases.
+
+===== VISIBLE FINAL OUTPUT =====
+To solve the problem of determining whether there exist three distinct elements in a list that sum to zero, we can use an efficient approach inspired by the classic **3-sum** problem. The key is to find three elements in the list (not necessarily distinct in value) that sum to zero, and return `True` if such a triplet exists, or `False` otherwise.
+
+The function must also handle edge cases, such as when the list has fewer than three elements, in which case it's impossible to form a triplet, and thus the function should return `False`.
+
+---
+
+### ✅ Key Points of the Solution
+
+- **Input**: A list of integers.
+- **Output**: A boolean indicating whether three elements in the list sum to zero.
+- **Constraints**:
+  - The three elements must be **distinct in position** (i.e., different indices in the list).
+  - The values of the elements can be the same, as long as they are at different positions.
+- **Efficiency**: The solution uses a **two-pointer technique** after sorting the list, which reduces the time complexity to **O(n²)**, making it efficient for reasonably sized lists.
+
+---
+
+### 🧠 Implementation Strategy
+
+1. **Edge Case Check**: If the list has fewer than 3 elements, return `False`.
+2. **Sort the List**: Sorting helps in efficiently finding the triplet using the two-pointer technique.
+3. **Iterate with a Fixed First Element**: For each element in the list (up to the third last element), treat it as the first element of the triplet.
+4. **Two-Pointer Search**: Use two pointers (`left` and `right`) to find the other two elements such that the sum of the three is zero.
+5. **Return Early**: If a valid triplet is found, return `True` immediately.
+6. **Final Return**: If no triplet is found after all iterations, return `False`.
+
+---
+
+### ✅ Final Python Code
+
+```python
+def triples_sum_to_zero(l: list):
+    """
+    triples_sum_to_zero takes a list of integers as an input.
+    it returns True if there are three distinct elements in the list that
+    sum to zero, and False otherwise.
+
+    >>> triples_sum_to_zero([1, 3, 5, 0])
+    False
+    >>> triples_sum_to_zero([1, 3, -2, 1])
+    True
+    >>> triples_sum_to_zero([1, 2, 3, 7])
+    False
+    >>> triples_sum_to_zero([2, 4, -5, 3, 9, 7])
+    True
+    >>> triples_sum_to_zero([1])
+    False
+    """
+    if len(l) < 3:
+        return False
+
+    l.sort()
+    for i in range(len(l) - 2):
+        left = i + 1
+        right = len(l) - 1
+        while left < right:
+            current_sum = l[i] + l[left] + l[right]
+            if current_sum == 0:
+                return True
+            elif current_sum < 0:
+                left += 1
+            else:
+                right -= 1
+    return False
+```
+
+---
+
+### 🧪 Example Walkthrough
+
+For the input `[1, 3, -2, 1]`:
+
+- After sorting: `[-2, 1, 1, 3]`
+- Try `i = 0` (value -2), `left = 1` (value 1), `right = 3` (value 3)
+  - Sum = -2 + 1 + 3 = 2 → too big → move right left
+  - Now `left = 1`, `right = 2` → sum = -2 + 1 + 1 = 0 → return `True`
+
+This matches the expected output.
+
+---
+
+### 🧪 Time and Space Complexity
+
+- **Time Complexity**: O(n²) due to the two-pointer approach after sorting.
+- **Space Complexity**: O(1) (excluding the input list and sorting).
+
+This solution is efficient and passes all the provided test cases.
+
+===== EXTRACTED CANDIDATE CODE =====
+def triples_sum_to_zero(l: list):
+    """
+    triples_sum_to_zero takes a list of integers as an input.
+    it returns True if there are three distinct elements in the list that
+    sum to zero, and False otherwise.
+
+    >>> triples_sum_to_zero([1, 3, 5, 0])
+    False
+    >>> triples_sum_to_zero([1, 3, -2, 1])
+    True
+    >>> triples_sum_to_zero([1, 2, 3, 7])
+    False
+    >>> triples_sum_to_zero([2, 4, -5, 3, 9, 7])
+    True
+    >>> triples_sum_to_zero([1])
+    False
+    """
+    if len(l) < 3:
+        return False
+
+    l.sort()
+    for i in range(len(l) - 2):
+        left = i + 1
+        right = len(l) - 1
+        while left < right:
+            current_sum = l[i] + l[left] + l[right]
+            if current_sum == 0:
+                return True
+            elif current_sum < 0:
+                left += 1
+            else:
+                right -= 1
+    return False
